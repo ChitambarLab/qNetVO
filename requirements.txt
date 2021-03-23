@@ -1,0 +1,13 @@
+# dependencies with no version specifiers
+matplotlib
+pennylane
+pennylane-sf
+pennylane-qiskit
+pennylane-cirq
+pennylane-forest
+pennylane-qsharp
+autograd
+tensorflow>=1.13.2
+jax
+jaxlib
+cirq
