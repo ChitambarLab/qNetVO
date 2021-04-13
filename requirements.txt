@@ -8,6 +8,7 @@ pennylane-forest
 pennylane-qsharp
 autograd
 tensorflow>=1.13.2
+torch
 jax
 jaxlib
 cirq
