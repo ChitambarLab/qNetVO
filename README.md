@@ -15,6 +15,15 @@
 
 ## Install Project Dependencies
 
+Navigate to project root directory and create the `pennylane-nonlocality` environment
+from the `enviroment.yml`:
+
 ```
-pip install -r requirements.txt --upgrade
+conda env create
+```
+
+Activate the created environment:
+
+```
+conda activate pennylane-nonlocality
 ```
