@@ -19,7 +19,7 @@ Navigate to project root directory and create the `pennylane-nonlocality` enviro
 from the `enviroment.yml`:
 
 ```
-conda env create
+conda env create -f environment.yml
 ```
 
 Activate the created environment:
