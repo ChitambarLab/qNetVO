@@ -1,7 +1,10 @@
 import pennylane as qml
 
-def gradient_descent(cost, init_settings, num_steps=150, step_size=0.1, sample_width=25, grad_fn=None,verbose=True):
-    opt = qml.GradientDescentOptimizer(stepsize=step_size)    
+
+def gradient_descent(
+    cost, init_settings, num_steps=150, step_size=0.1, sample_width=25, grad_fn=None, verbose=True
+):
+    opt = qml.GradientDescentOptimizer(stepsize=step_size)
 
     settings = init_settings
     scores = []
@@ -10,27 +13,27 @@ def gradient_descent(cost, init_settings, num_steps=150, step_size=0.1, sample_w
 
     # performing gradient descent
     for i in range(num_steps):
-        if i%sample_width == 0:
+        if i % sample_width == 0:
             score = -(cost(settings))
             scores.append(score)
             samples.append(i)
 
             if verbose:
-                print("iteration : ",i, ", score : ", score)
+                print("iteration : ", i, ", score : ", score)
                 print("settings :\n", settings, "\n")
 
         settings = opt.step(cost, settings, grad_fn=grad_fn)
         settings_history.append(settings)
-    
+
     opt_score = -(cost(settings))
-    
+
     scores.append(opt_score)
-    samples.append(num_steps-1)
-    
+    samples.append(num_steps - 1)
+
     return {
         "opt_score": opt_score,
         "opt_settings": settings,
         "scores": scores,
         "samples": samples,
-        "settings_history": settings_history
+        "settings_history": settings_history,
     }
