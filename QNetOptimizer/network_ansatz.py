@@ -1,5 +1,6 @@
 from functools import wraps
 import pennylane as qml
+from pennylane import numpy as np
 
 
 class PrepareNode:
@@ -84,3 +85,31 @@ class NetworkAnsatz:
             )
 
         return all_wires
+
+    def zero_scenario_settings(self):
+        prepare_settings = []
+        for node in self.prepare_nodes:
+            settings_dims = (node.num_in, node.num_settings)
+            prepare_settings.append(np.zeros(settings_dims))
+
+        measure_settings = []
+        for node in self.measure_nodes:
+            settings_dims = (node.num_in, node.num_settings)
+            measure_settings.append(np.zeros(settings_dims))
+
+        return [prepare_settings, measure_settings]
+
+    def rand_scenario_settings(self):
+        prepare_settings = []
+        for node in self.prepare_nodes:
+            settings_dims = (node.num_in, node.num_settings)
+            node_settings = 2 * np.pi * np.random.random(settings_dims) - np.pi
+            prepare_settings.append(node_settings)
+
+        measure_settings = []
+        for node in self.measure_nodes:
+            settings_dims = (node.num_in, node.num_settings)
+            node_settings = 2 * np.pi * np.random.random(settings_dims) - np.pi
+            measure_settings.append(node_settings)
+
+        return [prepare_settings, measure_settings]
