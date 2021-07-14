@@ -13,7 +13,7 @@
     2. Construct accurate noise models for near-term quantum network simulations. 
     3. Evaluate the noise robustness of quantum network nonlocality.
 
-## Install Project Dependencies
+## Installing Project Dependencies
 
 Navigate to project root directory and create the `pennylane-nonlocality` environment
 from the `enviroment.yml`:
@@ -27,3 +27,19 @@ Activate the created environment:
 ```
 conda activate pennylane-nonlocality
 ```
+
+## Documentation
+
+*Coming Soon*
+
+## Development
+
+### Tests
+
+Run tests from the root directory with with `$ python -m pytest`. All test are found in the `./test` directory.
+
+### Code Formatting
+
+To format code run `$ black -l 100 QNetOptimizer test`. This requires the [black](https://black.readthedocs.io/en/stable/) code formatter which can be installed with `$ pip install black`.
+
+
