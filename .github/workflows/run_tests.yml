@@ -32,4 +32,4 @@ jobs:
         $CONDA/bin/conda env update --file environment.yml --name base
     - name: Run pytest
       run: |
-        $CONDA/bin/pytest
+        python -m pytest
