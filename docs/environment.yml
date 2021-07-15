@@ -1,6 +1,0 @@
-name: pennylane-nonlocality-docs
-channels:
-  - defaults
-dependencies:
-  - python=3.8
-  - sphinx

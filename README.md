@@ -13,52 +13,42 @@
     2. Construct accurate noise models for near-term quantum network simulations. 
     3. Evaluate the noise robustness of quantum network nonlocality.
 
-## Installing Project Dependencies
+## Development
 
-Navigate to project root directory and create the `pennylane-nonlocality` environment
-from the `enviroment.yml`:
+### Environment
 
-```
-conda env create -f environment.yml
-```
+For convenience a dev environment can be setup from the `environment.yml`.
 
-Activate the created environment:
+1. Create the `pennylane-nonlocality-dev` enviroment:
 
 ```
-conda activate pennylane-nonlocality
+(base) $ conda env create -f environment.yml
 ```
 
-## Documentation
-
-The project documentation must be built and viewed. 
-It cannot currently be hosted by GitHub because the repository is private and hosting
-services are not available for free accounts. 
-
-1. Create the `pennylane-nonlocality-docs` conda enviroment:
-
-```
-(base) $ conda env create -f docs/environment.yml
-```
-
-2. Activate the `pennylane-nonlocality-docs` conda environment:
+2. Activate the `pennylane-nonlocality-dev` environment:
 
 ```
 (base) $ conda activate pennylane-nonlocality-docs
 ```
 
-3. Build documentation:
+### Documentation
+
+To view the project documentation it must be built and served locally. 
+It cannot currently be hosted by GitHub because the repository is private and hosting
+services are not available for free accounts.
+
+
+1. Build documentation:
 
 ```
 (pennylane-nonlocality-docs) $ sphinx-build -b html docs/source/ docs/build/html
 ```
 
-4. Locally serve documentation by navigating to the `./docs/build/html` directory and running:
+2. Locally serve documentation by navigating to the `./docs/build/html` directory and running:
 
 ```
 (pennylane-nonlocality-docs) $ python -m http.server --bind localhost
 ``` 
-
-## Development
 
 ### Tests
 
@@ -66,6 +56,6 @@ Run tests from the root directory with with `$ python -m pytest`. All test are f
 
 ### Code Formatting
 
-To format code run `$ black -l 100 QNetOptimizer test`. This requires the [black](https://black.readthedocs.io/en/stable/) code formatter which can be installed with `$ pip install black`.
+To format code run `$ black -l 100 QNetOptimizer test docs`. This uses the [black](https://black.readthedocs.io/en/stable/) code formatter.
 
 
