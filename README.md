@@ -1,6 +1,6 @@
-# pennylane-nonlocality-optimization
+# QNetOptimizer
 
-*Tune quantum networks with variational quantum optimization.*
+*A Python library for tuning quantum networks with variational quantum optimization.*
 
 ## Project Goals
 
@@ -30,7 +30,33 @@ conda activate pennylane-nonlocality
 
 ## Documentation
 
-*Coming Soon*
+The project documentation must be built and viewed. 
+It cannot currently be hosted by GitHub because the repository is private and hosting
+services are not available for free accounts. 
+
+1. Create the `pennylane-nonlocality-docs` conda enviroment:
+
+```
+(base) $ conda env create -f docs/environment.yml
+```
+
+2. Activate the `pennylane-nonlocality-docs` conda environment:
+
+```
+(base) $ conda activate pennylane-nonlocality-docs
+```
+
+3. Build documentation:
+
+```
+(pennylane-nonlocality-docs) $ sphinx-build -b html docs/source/ docs/build/html
+```
+
+4. Locally serve documentation by navigating to the `./docs/build/html` directory and running:
+
+```
+(pennylane-nonlocality-docs) $ python -m http.server --bind localhost
+``` 
 
 ## Development
 
