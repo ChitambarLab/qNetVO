@@ -36,52 +36,6 @@ class TestMeasureNode:
         assert measure_node.settings_dims() == (3, 2)
 
 
-class TestPrepareLayer:
-    def test_basic_use(self):
-        def ansatz_circuit(settings, wires):
-            qml.RY(settings[0], wires=wires[0])
-
-        node1 = QNopt.PrepareNode(1, [0], ansatz_circuit, 1)
-        node2 = QNopt.PrepareNode(1, [1], ansatz_circuit, 1)
-
-        dev = qml.device("default.qubit", wires=[0, 1])
-
-        @qml.qnode(dev)
-        def test_circuit(settings):
-            QNopt.prepare_layer([node1, node2])(settings)
-
-            return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
-
-        assert test_circuit([[0], [0]]) == 1
-        assert test_circuit([[np.pi], [0]]) == -1
-
-        val = test_circuit([[np.pi / 4], [-np.pi / 4]])
-        assert np.isclose(val, 0.5)
-
-
-class TestMeasureLayer:
-    def test_basic_use(self):
-        def ansatz_circuit(settings, wires):
-            qml.RY(settings[0], wires=wires[0])
-
-        node1 = QNopt.MeasureNode(1, 2, [0], ansatz_circuit, 1)
-        node2 = QNopt.MeasureNode(1, 2, [1], ansatz_circuit, 1)
-
-        dev = qml.device("default.qubit", wires=[0, 1])
-
-        @qml.qnode(dev)
-        def test_circuit(settings):
-            QNopt.measure_layer([node1, node2])(settings)
-
-            return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
-
-        assert test_circuit([[0], [0]]) == 1
-        assert test_circuit([[np.pi], [0]]) == -1
-
-        val = test_circuit([[np.pi / 4], [-np.pi / 4]])
-        assert np.isclose(val, 0.5)
-
-
 class TestNetworkAnsatz:
     def test_init(self):
         # setup test
@@ -122,6 +76,48 @@ class TestNetworkAnsatz:
 
         assert test_circuit([[0], [0], [0]], [[0], [0]]) == 1
         assert test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]) == 1
+
+    def test_prepare_layer(self):
+        def ansatz_circuit(settings, wires):
+            qml.RY(settings[0], wires=wires[0])
+
+        node1 = QNopt.PrepareNode(1, [0], ansatz_circuit, 1)
+        node2 = QNopt.PrepareNode(1, [1], ansatz_circuit, 1)
+
+        network_ansatz = QNopt.NetworkAnsatz([node1, node2], [])
+
+        @qml.qnode(network_ansatz.dev)
+        def test_circuit(settings):
+            network_ansatz.prepare_layer()(settings)
+
+            return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
+
+        assert test_circuit([[0], [0]]) == 1
+        assert test_circuit([[np.pi], [0]]) == -1
+
+        val = test_circuit([[np.pi / 4], [-np.pi / 4]])
+        assert np.isclose(val, 0.5)
+
+    def test_measure_layer(self):
+        def ansatz_circuit(settings, wires):
+            qml.RY(settings[0], wires=wires[0])
+
+        node1 = QNopt.MeasureNode(1, 2, [0], ansatz_circuit, 1)
+        node2 = QNopt.MeasureNode(1, 2, [1], ansatz_circuit, 1)
+
+        network_ansatz = QNopt.NetworkAnsatz([], [node1, node2])
+
+        @qml.qnode(network_ansatz.dev)
+        def test_circuit(settings):
+            network_ansatz.measure_layer()(settings)
+
+            return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
+
+        assert test_circuit([[0], [0]]) == 1
+        assert test_circuit([[np.pi], [0]]) == -1
+
+        val = test_circuit([[np.pi / 4], [-np.pi / 4]])
+        assert np.isclose(val, 0.5)
 
     def test_collect_wires(self):
         def ansatz_circuit(settings, wires):

@@ -3,14 +3,27 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to QNetOptimizer's documentation!
-=========================================
+QNetOptimizer
+=============
+
+*Apply variational quantum optimization techniques to quantum networks.*
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+.. currentmodule:: QNetOptimizer
 
+.. autoclass:: PrepareNode
+	:members:
+
+.. autoclass:: MeasureNode
+	:members:
+
+.. autoclass:: NetworkAnsatz
+	:members:
+
+.. autofunction:: gradient_descent
 
 Indices and tables
 ==================
