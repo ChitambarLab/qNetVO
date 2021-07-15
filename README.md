@@ -2,6 +2,8 @@
 
 *A Python library for tuning quantum networks with variational quantum optimization.*
 
+[![Test Status](https://github.com/ChitambarLab/pennylane-nonlocality-optimization/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/pennylane-nonlocality-optimization/actions/workflows/run_tests.yml)
+
 ## Project Goals
 
 1. Develop a variational quantum optimziation framework for quantum networks:
