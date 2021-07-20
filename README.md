@@ -30,7 +30,7 @@ For convenience a dev environment can be setup from the `environment.yml`.
 2. Activate the `pennylane-nonlocality-dev` environment:
 
 ```
-(base) $ conda activate pennylane-nonlocality-docs
+(base) $ conda activate pennylane-nonlocality-dev
 ```
 
 ### Documentation
@@ -43,13 +43,13 @@ services are not available for free accounts.
 1. Build documentation:
 
 ```
-(pennylane-nonlocality-docs) $ sphinx-build -b html docs/source/ docs/build/html
+(pennylane-nonlocality-dev) $ sphinx-build -b html docs/source/ docs/build/html
 ```
 
 2. Locally serve documentation by navigating to the `./docs/build/html` directory and running:
 
 ```
-(pennylane-nonlocality-docs) $ python -m http.server --bind localhost
+(pennylane-nonlocality-dev) $ python -m http.server --bind localhost
 ``` 
 
 ### Tests
