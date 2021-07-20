@@ -30,7 +30,7 @@ class PrepareNode:
         self.settings_dims = (num_in, num_settings)
 
 
-class MeasureNode:
+class MeasureNode(PrepareNode):
     """A class that configures each measurement node in the quantum network.
 
     :param num_in: The number of classical inputs for the node.
@@ -54,12 +54,8 @@ class MeasureNode:
     """
 
     def __init__(self, num_in, num_out, wires, quantum_fn, num_settings):
-        self.num_in = num_in
+        super().__init__(num_in, wires, quantum_fn, num_settings)
         self.num_out = num_out
-        self.wires = wires
-        self.ansatz_fn = quantum_fn
-        self.num_settings = num_settings
-        self.settings_dims = (num_in, num_settings)
 
 
 class NetworkAnsatz:
