@@ -17,7 +17,7 @@ class TestPrepareNode:
         assert prep_node.wires == [0, 1]
         assert prep_node.ansatz_fn == circuit
         assert prep_node.num_settings == 2
-        assert prep_node.settings_dims() == (3, 2)
+        assert prep_node.settings_dims == (3, 2)
 
 
 class TestMeasureNode:
@@ -33,7 +33,7 @@ class TestMeasureNode:
         assert measure_node.wires == [0, 1]
         assert measure_node.ansatz_fn == circuit
         assert measure_node.num_settings == 2
-        assert measure_node.settings_dims() == (3, 2)
+        assert measure_node.settings_dims == (3, 2)
 
 
 class TestNetworkAnsatz:
@@ -77,39 +77,17 @@ class TestNetworkAnsatz:
         assert test_circuit([[0], [0], [0]], [[0], [0]]) == 1
         assert test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]) == 1
 
-    def test_prepare_layer(self):
+    def test_circuit_layer(self):
         def ansatz_circuit(settings, wires):
             qml.RY(settings[0], wires=wires[0])
 
         node1 = QNopt.PrepareNode(1, [0], ansatz_circuit, 1)
         node2 = QNopt.PrepareNode(1, [1], ansatz_circuit, 1)
 
-        network_ansatz = QNopt.NetworkAnsatz([node1, node2], [])
-
-        @qml.qnode(network_ansatz.dev)
+        @qml.qnode(qml.device("default.qubit", wires=2))
         def test_circuit(settings):
-            network_ansatz.prepare_layer()(settings)
-
-            return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
-
-        assert test_circuit([[0], [0]]) == 1
-        assert test_circuit([[np.pi], [0]]) == -1
-
-        val = test_circuit([[np.pi / 4], [-np.pi / 4]])
-        assert np.isclose(val, 0.5)
-
-    def test_measure_layer(self):
-        def ansatz_circuit(settings, wires):
-            qml.RY(settings[0], wires=wires[0])
-
-        node1 = QNopt.MeasureNode(1, 2, [0], ansatz_circuit, 1)
-        node2 = QNopt.MeasureNode(1, 2, [1], ansatz_circuit, 1)
-
-        network_ansatz = QNopt.NetworkAnsatz([], [node1, node2])
-
-        @qml.qnode(network_ansatz.dev)
-        def test_circuit(settings):
-            network_ansatz.measure_layer()(settings)
+            # network_ansatz.prepare_layer()(settings)
+            QNopt.NetworkAnsatz.circuit_layer([node1, node2])(settings)
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 

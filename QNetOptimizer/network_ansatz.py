@@ -27,15 +27,7 @@ class PrepareNode:
         self.wires = wires
         self.ansatz_fn = quantum_fn
         self.num_settings = num_settings
-
-    def settings_dims(self):
-        """Returns the dimensions of the ``PrepareNode``'s settings array.
-
-        :returns: A tuple containing the number of rows (``self.num_in``) and columns
-            (``self.num_settings``) for the ``PrepareNode``'s settings array.
-        :rtype: tuple[int,int]
-        """
-        return (self.num_in, self.num_settings)
+        self.settings_dims = (num_in, num_settings)
 
 
 class MeasureNode:
@@ -67,15 +59,7 @@ class MeasureNode:
         self.wires = wires
         self.ansatz_fn = quantum_fn
         self.num_settings = num_settings
-
-    def settings_dims(self):
-        """Returns the dimensions of the ``MeasureNode``'s settings array.
-
-        :returns: A tuple containing the number of rows (``self.num_in``) and columns
-            (``self.num_settings``) for the ``MeasureNode``'s settings array.
-        :rtype: tuple[int,int]
-        """
-        return (self.num_in, self.num_settings)
+        self.settings_dims = (num_in, num_settings)
 
 
 class NetworkAnsatz:
@@ -116,8 +100,8 @@ class NetworkAnsatz:
         self.fn = self.construct_ansatz_circuit()
 
     def construct_ansatz_circuit(self):
-        prep_layer = self.prepare_layer()
-        meas_layer = self.measure_layer()
+        prep_layer = self.circuit_layer(self.prepare_nodes)
+        meas_layer = self.circuit_layer(self.measure_nodes)
 
         def ansatz_circuit(prepare_settings_array, measure_settings_array):
             prep_layer(prepare_settings_array)
@@ -147,52 +131,31 @@ class NetworkAnsatz:
 
         return all_wires
 
-    def prepare_layer(self):
-        """Construct the prepare layer ansatz from a set of ``PrepareNode``'s."""
+    @staticmethod
+    def circuit_layer(network_nodes):
+        """Constructs a quantum function for an ansatz layer of provided network nodes."""
 
-        def prepare_circuit(settings_array):
-            for node_id in range(len(self.prepare_nodes)):
-                node = self.prepare_nodes[node_id]
+        def circuit(settings_array):
+            for node_id in range(len(network_nodes)):
+                node = network_nodes[node_id]
                 node.ansatz_fn(settings_array[node_id], node.wires)
 
-        return prepare_circuit
-
-    def measure_layer(self):
-        """Construct the measure layer ansatz from a set of ``MeasureNode``'s."""
-
-        def measure_circuit(settings_array):
-            for node_id in range(len(self.measure_nodes)):
-                node = self.measure_nodes[node_id]
-                node.ansatz_fn(settings_array[node_id], node.wires)
-
-        return measure_circuit
-
-    def zero_scenario_settings(self):
-        """Creates a settings array for the network ansatz that consists of zeros."""
-        prepare_settings = []
-        for node in self.prepare_nodes:
-            settings_dims = (node.num_in, node.num_settings)
-            prepare_settings.append(np.zeros(settings_dims))
-
-        measure_settings = []
-        for node in self.measure_nodes:
-            settings_dims = (node.num_in, node.num_settings)
-            measure_settings.append(np.zeros(settings_dims))
-
-        return [prepare_settings, measure_settings]
+        return circuit
 
     def rand_scenario_settings(self):
         """Creates a randomized settings array for the network ansatz."""
-        prepare_settings = []
-        for node in self.prepare_nodes:
-            settings_dims = (node.num_in, node.num_settings)
-            node_settings = 2 * np.pi * np.random.random(settings_dims) - np.pi
-            prepare_settings.append(node_settings)
+        prepare_settings = [
+            2 * np.pi * np.random.random(node.settings_dims) - np.pi for node in self.prepare_nodes
+        ]
+        measure_settings = [
+            2 * np.pi * np.random.random(node.settings_dims) - np.pi for node in self.measure_nodes
+        ]
 
-        measure_settings = []
-        for node in self.measure_nodes:
-            settings_dims = (node.num_in, node.num_settings)
-            node_settings = 2 * np.pi * np.random.random(settings_dims) - np.pi
-            measure_settings.append(node_settings)
+        return [prepare_settings, measure_settings]
+
+    def zero_scenario_settings(self):
+        """Creates a settings array for the network ansatz that consists of zeros."""
+        prepare_settings = [np.zeros(node.settings_dims) for node in self.prepare_nodes]
+        measure_settings = [np.zeros(node.settings_dims) for node in self.measure_nodes]
 
         return [prepare_settings, measure_settings]
