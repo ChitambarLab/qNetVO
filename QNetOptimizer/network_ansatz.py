@@ -128,6 +128,18 @@ class NetworkAnsatz:
         return all_wires
 
     @staticmethod
+    def layer_settings(scenario_settings, node_inputs):
+        """Constructs the list of settings for a circuit layer in the network ansatz.
+        
+        :param scenario_settings: A list containing the settings for all classical inputs.
+        :type network_nodes: list[np.array[float]]
+
+        :param node_inputs: A list of the classical inputs supplied to each network node.
+        :type node_inputs: list[int]
+        """
+        return [scenario_settings[i][node_inputs[i]] for i in range(len(node_inputs))]
+
+    @staticmethod
     def circuit_layer(network_nodes):
         """Constructs a quantum function for an ansatz layer of provided network nodes."""
 
