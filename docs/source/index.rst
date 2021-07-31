@@ -25,6 +25,8 @@ QNetOptimizer
 
 .. autofunction:: gradient_descent
 
+.. autofunction:: ghz_state_preparation
+
 Indices and tables
 ==================
 
