@@ -9,11 +9,17 @@ def parity_vector(n_qubits):
 
     :param n_qubits: The number of qubits for which to consider the parity vector.
     :type n_qubits: int
+
+    :raises ValueError: If ``n_qubits < 1``.
     """
     if n_qubits < 1:
         raise ValueError("Input `n_qubits` must satisfy `n_qubits >= 1`.")
 
-    return [1, -1] if n_qubits == 1 else np.kron([1, -1], parity_vector(n_qubits - 1))
+    return (
+        np.array([1, -1], dtype=int)
+        if n_qubits == 1
+        else np.kron([1, -1], parity_vector(n_qubits - 1))
+    )
 
 
 def even_parity_ids(n_qubits):

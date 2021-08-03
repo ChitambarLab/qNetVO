@@ -4,6 +4,18 @@ Ansatz Library
 
 .. currentmodule:: QNetOptimizer
 
-.. autofunction:: ghz_state_preparation
 
-.. autofunction:: local_parity_observables
+State Preparations
+------------------
+
+.. autofunction:: bell_state_copies
+
+.. autofunction:: ghz_state
+
+
+Unitary Layers
+--------------
+
+.. autofunction:: local_RY
+
+.. autofunction:: local_RXRY

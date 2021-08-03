@@ -1,7 +1,25 @@
 import pennylane as qml
 
 
-def ghz_state_preparation(settings, wires):
+def bell_state_copies(settings, wires):
+    """Initializes :math:`n` Bell states on :math:`2n` wires.
+    The first :math:`n` wires represent Alice's half of the entangled
+    state while Bob's half consists of the remaining :math:`n` wires.
+    Entanglement is shared between Alice and Bob, however, the independent
+    Bell states are not initially entangled with each other.
+
+    :param settings: A placeholder parameter that is not used.
+    :type settings: list[empty]
+
+    :param wires: The wires on which the bell states are prepared.
+    :type wires: qml.Wires
+    """
+    for i in range(len(wires) // 2):
+        qml.Hadamard(wires=wires[i])
+        qml.CNOT(wires=[wires[i], wires[i + len(wires) // 2]])
+
+
+def ghz_state(settings, wires):
     """Initializes a GHZ state on the provided wires.
 
     :param settings: A placeholder parameter that is not used.
@@ -16,24 +34,30 @@ def ghz_state_preparation(settings, wires):
         qml.CNOT(wires=[wires[0], wires[i]])
 
 
-def local_parity_observables(measure_nodes):
-    """Constructs a list of dichotomic observables for each measurement node.
-    The observables are constructed as products of ``qml.PauliZ`` qubit operators and
-    therefore, a :math:`+1` outcome corresponds to an *Even* parity bit string whereas a
-    :math:`-1` outcome corresponds to an *Odd* parity bit string.
+def local_RY(settings, wires):
+    """Performs a rotation about :math:`y`-axis on each qubit
+    specified by wires.
+    
+    :param settings: A list of ``len(wires)`` real values.
+    :type settings: list[float]
 
-	:param measure_nodes: A list of ``MeasureNode`` classes for which to construct the observables.
-	:type measure_nodes: list[ MeasureNode ]
+    :param wires: The wires on which the rotations are applied.
+    :type wires: qml.Wires
     """
-    obs_list = []
-    for node in measure_nodes:
-        obs = None
-        for wire in node.wires:
-            if obs == None:
-                obs = qml.PauliZ(wire)
-            else:
-                obs = obs @ qml.PauliZ(wire)
+    for i, wire in enumerate(wires):
+        qml.RY(settings[i], wires=wire)
 
-        obs_list.append(obs)
 
-    return obs_list
+def local_RXRY(settings, wires):
+    """Performs a rotation about the :math:`x` and :math:`y` axes on
+    each qubit specified by ``wires``.
+
+    :param settings: A list of ``2*len(wires)`` real values.
+    :type settings: list[float]
+
+    :param wires: The wires on which the rotations are applied.
+    :type wires: qml.Wires
+    """
+    for i, wire in enumerate(wires):
+        qml.RX(settings[2 * i], wires=wire)
+        qml.RY(settings[2 * i + 1], wires=wire)

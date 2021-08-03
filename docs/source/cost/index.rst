@@ -5,5 +5,6 @@ Cost Functions
    :maxdepth: 2
    :caption: Contents:
 
+   qnodes
    postprocessing
-   I_3322
+   I_3322_bell_inequality

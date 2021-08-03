@@ -1,6 +1,6 @@
 import pytest
-import numpy as np
 import pennylane as qml
+from pennylane import numpy as np
 
 from context import QNetOptimizer as QNopt
 
