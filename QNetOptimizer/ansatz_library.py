@@ -36,7 +36,7 @@ def ghz_state(settings, wires):
 
 def local_RY(settings, wires):
     """Performs a rotation about :math:`y`-axis on each qubit
-    specified by wires.
+    specified by ``wires``.
     
     :param settings: A list of ``len(wires)`` real values.
     :type settings: list[float]
@@ -44,8 +44,7 @@ def local_RY(settings, wires):
     :param wires: The wires on which the rotations are applied.
     :type wires: qml.Wires
     """
-    for i, wire in enumerate(wires):
-        qml.RY(settings[i], wires=wire)
+    qml.broadcast(qml.RY, wires, "single", settings)
 
 
 def local_RXRY(settings, wires):

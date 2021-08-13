@@ -24,7 +24,10 @@ def parity_vector(n_qubits):
 
 def even_parity_ids(n_qubits):
     """Constructs the list ids corresponding to even parity bit strings with respect
-    to the vector returned by `parity_vector`.
+    to the vector returned by ``parity_vector``.
+
+    :param n_qubits: The number of qubits for which to consider the parity vector.
+    :type n_qubits: int
     """
     p_vec = parity_vector(n_qubits)
     return np.argwhere(p_vec == 1).flatten()

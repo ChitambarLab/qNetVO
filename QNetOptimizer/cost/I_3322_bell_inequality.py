@@ -3,20 +3,20 @@ from .postprocessing import even_parity_ids
 from .qnodes import joint_probs_qnode, local_parity_expval_qnode
 
 
-def post_process_I_3322_joint_probs(n_qubits, probs_vec):
+def post_process_I_3322_joint_probs(probs_vec):
     """Applies post-processing to multi-qubit probabilities in order to coarse-grain
-    them into the dichotomic parity observabels required by the :math:`I_{3322}` inequality.
+    them into the dichotomic parity observables required by the :math:`I_{3322}` inequality.
 
     An :math:`N`-qubit circuit has :math:`2^N` measurement outcomes.
     To construct the joint probabilitye :math:`P(00|xy)` for binary outputs, the joint 
     probabilities can be partitioned into two sets, :math:`\\{Even\\}` and :math`\\{Odd\\}` which
     denote the set of *Even* and *Odd* parity bit strings. 
-    The $2^N$ joint probabilities are expressed as :math:`P(\\vec{a},\\vec{b}|x,y)` where
+    The :math:`2^N` joint probabilities are expressed as :math:`P(\\vec{a},\\vec{b}|x,y)` where
     :math:`\\vec{a}` and :math:`\\vec{b}` are each :math:`N`-bit strings.
     Since the :math:`I_{3322}` inequality only requires dichotomic probabilities :math:`P(00|xy)`,
     our post-processing only needs to calculate this value. 
     To reduce the joint probabilities :math:`P(\\vec{a},\\vec{b}|x,y)` to dichotomic probabilities
-    :math:`P(00|x,y)` we aggrete the probabilities of even parity bit strings with
+    :math:`P(00|x,y)` we aggregate the probabilities of even parity bit strings with
 
     .. math::
 
@@ -29,9 +29,12 @@ def post_process_I_3322_joint_probs(n_qubits, probs_vec):
     :param probs_vec: A probability vector obtained by measuring all wires in the
         computational basis.
     :type probs_vec: list[float]
+
+    :returns: The dichotomic probability :math:`P(00|xy)`.
     """
-    probs = np.reshape(probs_vec, (2 ** n_qubits, 2 ** n_qubits))
-    even_ids = even_parity_ids(n_qubits)
+    n_local_qubits = int(np.log2(len(probs_vec)) / 2)
+    probs = np.reshape(probs_vec, (2 ** n_local_qubits, 2 ** n_local_qubits))
+    even_ids = even_parity_ids(n_local_qubits)
 
     return sum([sum([probs[a, b] for b in even_ids]) for a in even_ids])
 
@@ -41,8 +44,11 @@ def I_3322_bell_inequality_cost(network_ansatz):
     
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
-    """
 
+    :returns: A cost function evaluated as ``cost(scenario_settings)`` where
+              the ``scenario_settings`` are obtained from the provided
+              ``network_ansatz`` class.
+    """
     I_3322_joint_probs_qnode = joint_probs_qnode(network_ansatz)
     I_3322_local_expval_qnode = local_parity_expval_qnode(network_ansatz)
 
@@ -63,9 +69,7 @@ def I_3322_bell_inequality_cost(network_ansatz):
             ϕ = network_ansatz.layer_settings(scenario_settings[1], [x, y])
 
             probs_vec_xy = I_3322_joint_probs_qnode(θ, ϕ)
-            prob00_xy = post_process_I_3322_joint_probs(
-                len(network_ansatz.measure_wires) // 2, probs_vec_xy
-            )
+            prob00_xy = post_process_I_3322_joint_probs(probs_vec_xy)
 
             score += mult * prob00_xy
 
