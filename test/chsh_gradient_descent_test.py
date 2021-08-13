@@ -38,13 +38,12 @@ class TestCHSHGradientDescent:
 
         def chsh_cost(scenario_settings):
             score = 0
+            prep_settings = chsh_ansatz.layer_settings(scenario_settings[0], [0])
             for x in [0, 1]:
                 for y in [0, 1]:
-                    prep_settings = scenario_settings[0][0]
-                    A_meas_settings = scenario_settings[1][0][x]
-                    B_meas_settings = scenario_settings[1][1][y]
+                    meas_settings = chsh_ansatz.layer_settings(scenario_settings[1], [x, y])
 
-                    run = chsh_circuit(prep_settings, [A_meas_settings, B_meas_settings])
+                    run = chsh_circuit(prep_settings, meas_settings)
                     scalar = (-1) ** (x * y)
 
                     score += scalar * run
