@@ -1,3 +1,4 @@
+from QNetOptimizer.utilities import *
 from QNetOptimizer.network_ansatz import *
 from QNetOptimizer.ansatz_library import *
 from QNetOptimizer.cost.qnodes import *
