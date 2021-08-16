@@ -5,7 +5,7 @@ from pennylane import numpy as np
 from context import QNetOptimizer as QNopt
 
 
-class TestI3322BellInequality:
+class TestCostI3322BellInequality:
     def test_post_process_I_3322_joint_probs(self):
 
         probs_vec = np.array([0.1, 0.2, 0.3, 0.4])
