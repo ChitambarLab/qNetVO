@@ -21,7 +21,7 @@ def magic_squares_game_cost(network_ansatz):
         winning_probability = 0
         for x in [0,1,2]:
             for y in [0,1,2]:
-                probs = probs_qnode(state_settings, [A_settings[x], B_settings[y]])
+                probs = probs_qnode(state_settings[0], [A_settings[x], B_settings[y]])
 
                 for i in range(16):
                     bit_string = [int(x) for x in np.binary_repr(i,4)]
