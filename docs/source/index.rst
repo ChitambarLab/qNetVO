@@ -12,18 +12,9 @@ QNetOptimizer
    :maxdepth: 2
    :caption: Contents:
 
-.. currentmodule:: QNetOptimizer
-
-.. autoclass:: PrepareNode
-	:members:
-
-.. autoclass:: MeasureNode
-	:members:
-
-.. autoclass:: NetworkAnsatz
-	:members:
-
-.. autofunction:: gradient_descent
+   network_ansatzes/index
+   cost/index
+   optimization
 
 Indices and tables
 ==================

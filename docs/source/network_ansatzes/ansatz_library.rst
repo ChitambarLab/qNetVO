@@ -1,0 +1,21 @@
+Ansatz Library
+==============
+
+
+.. currentmodule:: QNetOptimizer
+
+
+State Preparations
+------------------
+
+.. autofunction:: bell_state_copies
+
+.. autofunction:: ghz_state
+
+
+Unitary Layers
+--------------
+
+.. autofunction:: local_RY
+
+.. autofunction:: local_RXRY

@@ -1,6 +1,6 @@
 import pytest
-import numpy as np
 import pennylane as qml
+from pennylane import numpy as np
 
 from context import QNetOptimizer as QNopt
 
@@ -76,6 +76,32 @@ class TestNetworkAnsatz:
 
         assert test_circuit([[0], [0], [0]], [[0], [0]]) == 1
         assert test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]) == 1
+
+    def test_layer_settings(self):
+        # setup
+        def ansatz_circuit(settings, wires):
+            qml.RY(settings[0], wires=wires[0])
+
+        nodes = [
+            QNopt.PrepareNode(3, [0], ansatz_circuit, 1),
+            QNopt.PrepareNode(3, [1], ansatz_circuit, 1),
+            QNopt.PrepareNode(3, [2], ansatz_circuit, 1),
+            QNopt.PrepareNode(3, [3], ansatz_circuit, 1),
+        ]
+
+        ansatz = QNopt.NetworkAnsatz(nodes, nodes)
+
+        # test
+        np.random.seed(123)
+        scenario_settings = ansatz.rand_scenario_settings()
+
+        layer_settings = ansatz.layer_settings(scenario_settings[0], [0, 1, 2, 1])
+
+        assert len(layer_settings) == 4
+        assert np.isclose(layer_settings[0][0], 1.2344523)
+        assert np.isclose(layer_settings[1][0], 1.37896421)
+        assert np.isclose(layer_settings[2][0], -0.1198084)
+        assert np.isclose(layer_settings[3][0], -0.98534158)
 
     def test_circuit_layer(self):
         def ansatz_circuit(settings, wires):

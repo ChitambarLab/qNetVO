@@ -66,7 +66,6 @@ def gradient_descent(
 
             if verbose:
                 print("iteration : ", i, ", score : ", score)
-                print("settings :\n", settings, "\n")
 
         settings = opt.step(cost, settings, grad_fn=grad_fn)
         settings_history.append(settings)

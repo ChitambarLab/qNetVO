@@ -1,5 +1,5 @@
 import pytest
-import numpy as np
+from pennylane import numpy as np
 
 from context import QNetOptimizer as QNopt
 
