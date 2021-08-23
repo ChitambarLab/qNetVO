@@ -89,6 +89,9 @@ class NetworkAnsatz:
     :param measure_nodes: A list of ``MeasureNode`` classes.
     :type measure_nodes: list[MeasureNode]
 
+    :param noise_nodes: A list of ``NoiseNode`` classes.
+    :type noise_nodes: *optional* list[NoiseNode]
+
     :returns: An instantiated ``NetworkAnsatz`` class with the following fields:
 
     * **prepare_nodes** - The list of ``PrepareNode`` classes.
@@ -102,23 +105,36 @@ class NetworkAnsatz:
     :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
     """
 
-    def __init__(self, prepare_nodes, measure_nodes):
+    def __init__(self, prepare_nodes, measure_nodes, noise_nodes=[]):
         self.prepare_nodes = prepare_nodes
         self.measure_nodes = measure_nodes
+        self.noise_nodes = noise_nodes
 
         self.prepare_wires = self.collect_wires(prepare_nodes)
         self.measure_wires = self.collect_wires(measure_nodes)
-        self.network_wires = qml.wires.Wires.all_wires([self.prepare_wires, self.measure_wires])
+        self.noise_wires = (
+            qml.wires.Wires([]) if self.noise_nodes == [] else self.collect_wires(noise_nodes)
+        )
 
-        self.dev = qml.device("default.qubit", wires=self.network_wires)
+        self.network_wires = qml.wires.Wires.all_wires(
+            [self.prepare_wires, self.measure_wires, self.noise_wires]
+        )
+
+        dev_type = "default.qubit" if self.noise_nodes == [] else "default.mixed"
+        self.dev = qml.device(dev_type, wires=self.network_wires)
+
         self.fn = self.construct_ansatz_circuit()
 
     def construct_ansatz_circuit(self):
         prep_layer = self.circuit_layer(self.prepare_nodes)
+        noise_layer = self.circuit_layer(self.noise_nodes)
         meas_layer = self.circuit_layer(self.measure_nodes)
+
+        noise_settings = [[] for i in range(len(self.noise_nodes))]
 
         def ansatz_circuit(prepare_settings_array, measure_settings_array):
             prep_layer(prepare_settings_array)
+            noise_layer(noise_settings)
             meas_layer(measure_settings_array)
 
         return ansatz_circuit
