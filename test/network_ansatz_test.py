@@ -5,6 +5,18 @@ from pennylane import numpy as np
 from context import QNetOptimizer as QNopt
 
 
+class TestNoiseNode:
+    def test_init(self):
+        def circuit(settings, wires=[0, 1]):
+            qml.AmplitudeDamping(0.7, wires=[0])
+            qml.AmplitudeDamping(0.3, wires=[1])
+
+        noise_node = QNopt.NoiseNode([0, 1], circuit)
+
+        assert noise_node.wires == [0, 1]
+        assert noise_node.ansatz_fn == circuit
+
+
 class TestPrepareNode:
     def test_init(self):
         def circuit(settings, wires=[0, 1]):

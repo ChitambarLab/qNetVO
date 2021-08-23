@@ -8,3 +8,6 @@ Network Nodes
 
 .. autoclass:: MeasureNode
 	:members:
+
+.. autoclass:: NoiseNode
+    :members:
