@@ -13,7 +13,7 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
     :param num_wires: The number of wires needed by ``circuit``.
     :type num_wires: Int
 
-    :param circ_args: Passthrough arguements for ``circuit``.
+    :param circ_args: Passthrough arguments for ``circuit``.
     :type circ_args: Positional Arguments
 
     :param circ_kwargs: Passthrough keyword arguements for ``circuit``.
