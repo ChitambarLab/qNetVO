@@ -46,8 +46,9 @@ def nlocal_chain_cost_22(network_ansatz):
     num_interior_nodes = len(network_ansatz.measure_nodes) - 2
 
     def cost(scenario_settings):
+        prep_settings, meas_settings = scenario_settings
 
-        prep_settings = network_ansatz.layer_settings(scenario_settings[0], [0, 0])
+        static_prep_settings = network_ansatz.layer_settings(prep_settings, [0, 0])
 
         I22_score = 0
         J22_score = 0
@@ -55,15 +56,15 @@ def nlocal_chain_cost_22(network_ansatz):
         for x_a, x_b in [(0, 0), (0, 1), (1, 0), (1, 1)]:
 
             I22_inputs = [x_a] + [0 for i in range(num_interior_nodes)] + [x_b]
-            I22_meas_settings = network_ansatz.layer_settings(scenario_settings[1], I22_inputs)
-            I22_score += nlocal_chain_qnode(prep_settings, I22_meas_settings)
+            I22_meas_settings = network_ansatz.layer_settings(meas_settings, I22_inputs)
+            I22_score += nlocal_chain_qnode(static_prep_settings, I22_meas_settings)
 
             J22_inputs = [x_a] + [1 for i in range(num_interior_nodes)] + [x_b]
-            J22_meas_settings = network_ansatz.layer_settings(scenario_settings[1], J22_inputs)
+            J22_meas_settings = network_ansatz.layer_settings(meas_settings, J22_inputs)
             J22_score += ((-1) ** (x_a + x_b)) * nlocal_chain_qnode(
-                prep_settings, J22_meas_settings
+                static_prep_settings, J22_meas_settings
             )
 
-        return -(np.sqrt(abs(I22_score) / 4) + np.sqrt(abs(J22_score) / 4))
+        return -(np.sqrt(np.abs(I22_score) / 4) + np.sqrt(np.abs(J22_score) / 4))
 
     return cost
