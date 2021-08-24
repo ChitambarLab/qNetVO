@@ -16,7 +16,7 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
     :param circ_args: Passthrough arguments for ``circuit``.
     :type circ_args: Positional Arguments
 
-    :param circ_kwargs: Passthrough keyword arguements for ``circuit``.
+    :param circ_kwargs: Passthrough keyword arguments for ``circuit``.
     :type circ_kwargs: keyword Arguments
 
     :reurn: A unitary matrix representing the provided ``circuit``.
