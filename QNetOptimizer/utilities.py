@@ -19,7 +19,7 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
     :param circ_kwargs: Passthrough keyword arguments for ``circuit``.
     :type circ_kwargs: keyword Arguments
 
-    :reurn: A unitary matrix representing the provided ``circuit``.
+    :returns: A unitary matrix representing the provided ``circuit``.
     :rtype: Numpy Array
     """
     dev = qml.device("default.qubit", wires=range(num_wires))
