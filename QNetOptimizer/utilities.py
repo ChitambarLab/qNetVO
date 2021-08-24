@@ -7,7 +7,7 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
     """Constructs the unitary matrix representation of a quantum
     circuit in the computational basis.
 
-    :param circuit: A quantum function that accepts no inputs.
+    :param circuit: A quantum function.
     :type circuit: Function
 
     :param num_wires: The number of wires needed by ``circuit``.
