@@ -10,7 +10,7 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
     :param circuit: A quantum function that accepts no inputs.
     :type circuit: Function
 
-    :param num_wires: The number of wires wires needed by ``circuit``.
+    :param num_wires: The number of wires needed by ``circuit``.
     :type num_wires: Int
 
     :param circ_args: Passthrough arguements for ``circuit``.
