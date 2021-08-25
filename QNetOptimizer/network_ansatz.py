@@ -19,6 +19,7 @@ class NoiseNode:
     def __init__(self, wires, quantum_fn):
         self.wires = wires
         self.ansatz_fn = quantum_fn
+        self.num_settings = 0
 
 
 class PrepareNode(NoiseNode):
@@ -126,16 +127,16 @@ class NetworkAnsatz:
         self.fn = self.construct_ansatz_circuit()
 
     def construct_ansatz_circuit(self):
-        prep_layer = self.circuit_layer(self.prepare_nodes)
+        prepare_layer = self.circuit_layer(self.prepare_nodes)
         noise_layer = self.circuit_layer(self.noise_nodes)
-        meas_layer = self.circuit_layer(self.measure_nodes)
+        measure_layer = self.circuit_layer(self.measure_nodes)
 
-        noise_settings = [[] for i in range(len(self.noise_nodes))]
+        noise_settings = [np.array([]) for i in range(len(self.noise_nodes))]
 
         def ansatz_circuit(prepare_settings_array, measure_settings_array):
-            prep_layer(prepare_settings_array)
+            prepare_layer(prepare_settings_array)
             noise_layer(noise_settings)
-            meas_layer(measure_settings_array)
+            measure_layer(measure_settings_array)
 
         return ansatz_circuit
 
@@ -170,22 +171,51 @@ class NetworkAnsatz:
 
         :param node_inputs: A list of the classical inputs supplied to each network node.
         :type node_inputs: list[int]
+
+        :returns: A 1D array of all settings for the circuit layer.
+        :rtype: np.array[float]
         """
-        return [scenario_settings[i][node_inputs[i]] for i in range(len(node_inputs))]
+        settings = np.array([])
+        for i in range(len(node_inputs)):
+            settings = np.append(settings, scenario_settings[i][node_inputs[i]])
+
+        return settings
 
     @staticmethod
     def circuit_layer(network_nodes):
-        """Constructs a quantum function for an ansatz layer of provided network nodes."""
+        """Constructs a quantum function for an ansatz layer of provided network nodes.
+        
+        :param network_nodes: A list of network nodes which can be either
+                              ``NoiseNode``, ``PrepareNode``, or ``MeasureNode``
+        :type network_nodes: list[NetworkNode]
 
-        def circuit(settings_array):
+        :returns: A quantum function evaluated as ``circuit(settings)`` where ``settings``
+                  is an array constructed via the ``layer_settings`` function.
+        :rtype: function
+        """
+
+        def circuit(settings):
+            current_id = 0
             for node_id in range(len(network_nodes)):
                 node = network_nodes[node_id]
-                node.ansatz_fn(settings_array[node_id], node.wires)
+                node_settings = settings[current_id : current_id + node.num_settings]
+
+                current_id += node.num_settings
+
+                node.ansatz_fn(node_settings, node.wires)
 
         return circuit
 
     def rand_scenario_settings(self):
-        """Creates a randomized settings array for the network ansatz."""
+        """Creates a randomized settings array for the network ansatz.
+        
+        :returns: A nested list containing settings for each network node.
+                  ``PreparNode`` settings are listed under index ``0`` while
+                  ``MeasureNode`` settings are listed under index ``1``.
+                  The measure and prepare layers settings are a list of numpy arrays
+                  where the dimension of each array is ``(num_inputs, num_settings)``.
+        :rtype: list[list[np.array]]
+        """
         prepare_settings = [
             2 * np.pi * np.random.random(node.settings_dims) - np.pi for node in self.prepare_nodes
         ]
@@ -196,7 +226,15 @@ class NetworkAnsatz:
         return [prepare_settings, measure_settings]
 
     def zero_scenario_settings(self):
-        """Creates a settings array for the network ansatz that consists of zeros."""
+        """Creates a settings array for the network ansatz that consists of zeros.
+        
+        :returns: A nested list containing settings for each network node.
+                  ``PreparNode`` settings are listed under index ``0`` while
+                  ``MeasureNode`` settings are listed under index ``1``.
+                  The measure and prepare layers settings are a list of numpy arrays
+                  where the dimension of each array is ``(num_inputs, num_settings)``.
+        :rtype: list[list[np.array]]
+        """
         prepare_settings = [np.zeros(node.settings_dims) for node in self.prepare_nodes]
         measure_settings = [np.zeros(node.settings_dims) for node in self.measure_nodes]
 

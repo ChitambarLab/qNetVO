@@ -132,15 +132,11 @@ class TestNetworkAnsatz:
         )
 
     def test_layer_settings(self):
-        # setup
-        def ansatz_circuit(settings, wires):
-            qml.RY(settings[0], wires=wires[0])
-
         nodes = [
-            QNopt.PrepareNode(3, [0], ansatz_circuit, 1),
-            QNopt.PrepareNode(3, [1], ansatz_circuit, 1),
-            QNopt.PrepareNode(3, [2], ansatz_circuit, 1),
-            QNopt.PrepareNode(3, [3], ansatz_circuit, 1),
+            QNopt.PrepareNode(3, [0], QNopt.local_RY, 1),
+            QNopt.PrepareNode(3, [1], QNopt.local_RY, 1),
+            QNopt.PrepareNode(3, [2], QNopt.local_RY, 1),
+            QNopt.PrepareNode(3, [3], QNopt.local_RY, 1),
         ]
 
         ansatz = QNopt.NetworkAnsatz(nodes, nodes)
@@ -152,10 +148,10 @@ class TestNetworkAnsatz:
         layer_settings = ansatz.layer_settings(scenario_settings[0], [0, 1, 2, 1])
 
         assert len(layer_settings) == 4
-        assert np.isclose(layer_settings[0][0], 1.2344523)
-        assert np.isclose(layer_settings[1][0], 1.37896421)
-        assert np.isclose(layer_settings[2][0], -0.1198084)
-        assert np.isclose(layer_settings[3][0], -0.98534158)
+        assert np.isclose(layer_settings[0], 1.2344523)
+        assert np.isclose(layer_settings[1], 1.37896421)
+        assert np.isclose(layer_settings[2], -0.1198084)
+        assert np.isclose(layer_settings[3], -0.98534158)
 
     def test_circuit_layer(self):
         def ansatz_circuit(settings, wires):
