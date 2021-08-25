@@ -165,7 +165,7 @@ class NetworkAnsatz:
     @staticmethod
     def layer_settings(scenario_settings, node_inputs):
         """Constructs the list of settings for a circuit layer in the network ansatz.
-        
+
         :param scenario_settings: A list containing the settings for all classical inputs.
         :type network_nodes: list[np.array[float]]
 
@@ -184,7 +184,7 @@ class NetworkAnsatz:
     @staticmethod
     def circuit_layer(network_nodes):
         """Constructs a quantum function for an ansatz layer of provided network nodes.
-        
+
         :param network_nodes: A list of network nodes which can be either
                               ``NoiseNode``, ``PrepareNode``, or ``MeasureNode``
         :type network_nodes: list[NetworkNode]
@@ -208,7 +208,7 @@ class NetworkAnsatz:
 
     def rand_scenario_settings(self):
         """Creates a randomized settings array for the network ansatz.
-        
+
         :returns: A nested list containing settings for each network node.
                   ``PreparNode`` settings are listed under index ``0`` while
                   ``MeasureNode`` settings are listed under index ``1``.
@@ -227,7 +227,7 @@ class NetworkAnsatz:
 
     def zero_scenario_settings(self):
         """Creates a settings array for the network ansatz that consists of zeros.
-        
+
         :returns: A nested list containing settings for each network node.
                   ``PreparNode`` settings are listed under index ``0`` while
                   ``MeasureNode`` settings are listed under index ``1``.

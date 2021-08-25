@@ -48,7 +48,9 @@ def nlocal_chain_cost_22(network_ansatz):
     def cost(scenario_settings):
         prep_settings, meas_settings = scenario_settings
 
-        static_prep_settings = network_ansatz.layer_settings(prep_settings, [0, 0])
+        static_prep_settings = network_ansatz.layer_settings(
+            prep_settings, [0] * len(network_ansatz.prepare_nodes)
+        )
 
         I22_score = 0
         J22_score = 0

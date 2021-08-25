@@ -8,13 +8,13 @@ def post_process_I_3322_joint_probs(probs_vec):
     them into the dichotomic parity observables required by the :math:`I_{3322}` inequality.
 
     An :math:`N`-qubit circuit has :math:`2^N` measurement outcomes.
-    To construct the joint probabilitye :math:`P(00|xy)` for binary outputs, the joint 
+    To construct the joint probabilitye :math:`P(00|xy)` for binary outputs, the joint
     probabilities can be partitioned into two sets, :math:`\\{Even\\}` and :math`\\{Odd\\}` which
-    denote the set of *Even* and *Odd* parity bit strings. 
+    denote the set of *Even* and *Odd* parity bit strings.
     The :math:`2^N` joint probabilities are expressed as :math:`P(\\vec{a},\\vec{b}|x,y)` where
     :math:`\\vec{a}` and :math:`\\vec{b}` are each :math:`N`-bit strings.
     Since the :math:`I_{3322}` inequality only requires dichotomic probabilities :math:`P(00|xy)`,
-    our post-processing only needs to calculate this value. 
+    our post-processing only needs to calculate this value.
     To reduce the joint probabilities :math:`P(\\vec{a},\\vec{b}|x,y)` to dichotomic probabilities
     :math:`P(00|x,y)` we aggregate the probabilities of even parity bit strings with
 
@@ -41,7 +41,7 @@ def post_process_I_3322_joint_probs(probs_vec):
 
 def I_3322_bell_inequality_cost(network_ansatz):
     """Constructs a cost function that maximizes the score of the :math:`I_{3322}` Bell inequality.
-    
+
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
 

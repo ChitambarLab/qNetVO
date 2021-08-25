@@ -4,7 +4,7 @@ from .qnodes import joint_probs_qnode
 
 def magic_squares_game_cost(network_ansatz):
     """Constructs a cost function that maximizes the winning probability for the magic squares game.
-    
+
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
 

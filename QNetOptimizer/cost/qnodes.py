@@ -3,7 +3,7 @@ import pennylane as qml
 
 def parity_observable(wires):
     """Constructs the parity observable for the provided ``wires`` in the computational basis.
-    
+
     :param wires: A list of ``MeasureNode`` classes for which to construct the observables.
     :type wires: qml.wires.Wires
 
