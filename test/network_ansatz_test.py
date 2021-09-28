@@ -124,7 +124,6 @@ class TestNetworkAnsatz:
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-        print(noisy_test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]))
 
         assert noisy_test_circuit([[0], [0], [0]], [[0], [0]]) == 0.5
         assert np.isclose(
