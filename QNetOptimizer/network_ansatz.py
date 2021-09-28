@@ -229,7 +229,7 @@ class NetworkAnsatz:
         """Creates a settings array for the network ansatz that consists of zeros.
 
         :returns: A nested list containing settings for each network node.
-                  ``PreparNode`` settings are listed under index ``0`` while
+                  ``PrepareNode`` settings are listed under index ``0`` while
                   ``MeasureNode`` settings are listed under index ``1``.
                   The measure and prepare layers settings are a list of numpy arrays
                   where the dimension of each array is ``(num_inputs, num_settings)``.
