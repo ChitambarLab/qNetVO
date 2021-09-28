@@ -1,6 +1,8 @@
 import pennylane as qml
 from pennylane import numpy as np
 
+import torch
+
 
 class NoiseNode:
     """A class that configures each noise node in the quantum network.
@@ -121,8 +123,8 @@ class NetworkAnsatz:
             [self.prepare_wires, self.measure_wires, self.noise_wires]
         )
 
-        dev_type = "default.qubit" if self.noise_nodes == [] else "default.mixed"
-        self.dev = qml.device(dev_type, wires=self.network_wires)
+        self.default_dev = "default.qubit" if self.noise_nodes == [] else "default.mixed"
+        self.dev = qml.device(self.default_dev, wires=self.network_wires)
 
         self.fn = self.construct_ansatz_circuit()
 
@@ -205,6 +207,14 @@ class NetworkAnsatz:
                 node.ansatz_fn(node_settings, node.wires)
 
         return circuit
+
+    def device(self, name):
+        self.dev = qml.device(
+            name if name else self.default_dev,
+            wires=self.network_wires
+        )
+        return self.dev
+
 
     def rand_scenario_settings(self):
         """Creates a randomized settings array for the network ansatz.

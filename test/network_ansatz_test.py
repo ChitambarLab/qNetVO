@@ -86,6 +86,7 @@ class TestNetworkAnsatz:
         assert network_ansatz.network_wires.tolist() == [0, 1, 2]
 
         # verify device
+        assert network_ansatz.default_dev == "default.qubit"
         assert network_ansatz.dev.wires.tolist() == [0, 1, 2]
         assert network_ansatz.dev.short_name == "default.qubit"
 
@@ -98,6 +99,11 @@ class TestNetworkAnsatz:
 
         assert test_circuit([[0], [0], [0]], [[0], [0]]) == 1
         assert test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]) == 1
+
+        # verify device update
+        dev = network_ansatz.device("default.qubit.jax")
+        assert network_ansatz.dev.short_name == "default.qubit.jax"
+        assert dev.short_name == "default.qubit.jax"
 
         # Noisy network Case
         noisy_network_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
@@ -129,6 +135,7 @@ class TestNetworkAnsatz:
         assert np.isclose(
             noisy_test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]), 0.5
         )
+
 
     def test_layer_settings(self):
         nodes = [
