@@ -29,7 +29,7 @@ def nlocal_chain_cost_22(network_ansatz):
        \\langle B^1_{y_1}\\dots B^{n+1}_{y_{n+1}} \\rangle_{22} = \\text{Tr}\\left[\\left(
        \\bigotimes_{j=1}^{n+1} B^j_{y_j}\\right) \\bigotimes_{i=1}^n \\rho^{A^iA^{i+1}} \\right],
     
-    with :math:`B^j_{y_j}` being a dichotmic parity observable at the :math:`j^{th}` measurement node.
+    with :math:`B^j_{y_j}` being a dichotomic parity observable at the :math:`j^{th}` measurement node.
     Note that the :math:`n`-local correlator is simply a parity measurement distrubed across
     all measurement nodes in the network.
 
