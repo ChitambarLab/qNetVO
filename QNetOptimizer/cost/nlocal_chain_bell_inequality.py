@@ -36,7 +36,7 @@ def nlocal_chain_cost_22(network_ansatz):
     The maximal score for the dichotomic :math:`n` -local Bell inequality is known to be
     :math:`\\sqrt{2} \\approx 1.414 213`.
 
-    :returns: A cost function that can be evaluated as ``cost(scenario_settings)`` where are
+    :returns: A cost function that can be evaluated as ``cost(scenario_settings)`` where
               ``scenario_settings`` have the appropriate dimensions for the provided ``network_ansatz``
     :rtype: Function
     """
