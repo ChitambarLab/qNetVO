@@ -1,25 +1,33 @@
 import pennylane as qml
 
 
+def parity_observable(wires):
+    """Constructs the parity observable for the provided ``wires`` in the computational basis.
+
+    :param wires: A list of ``MeasureNode`` classes for which to construct the observables.
+    :type wires: qml.wires.Wires
+
+    :returns: A parity ``qml.Observable`` across all wires.
+    """
+    obs = qml.PauliZ(wires=wires[0])
+    for wire in wires[1:]:
+        obs = obs @ qml.PauliZ(wires=wire)
+
+    return obs
+
+
 def local_parity_observables(measure_nodes):
     """Constructs a list of dichotomic observables for each measurement node.
     The observables are constructed as products of ``qml.PauliZ`` qubit operators and
     therefore, a :math:`+1` outcome corresponds to an *Even* parity bit string whereas a
     :math:`-1` outcome corresponds to an *Odd* parity bit string.
 
-	:param measure_nodes: A list of ``MeasureNode`` classes for which to construct the observables.
-	:type measure_nodes: list[ MeasureNode ]
+    :param measure_nodes: A list of ``MeasureNode`` classes for which to construct the observables.
+    :type measure_nodes: list[ MeasureNode ]
     """
     obs_list = []
     for node in measure_nodes:
-        obs = None
-        for wire in node.wires:
-            if obs == None:
-                obs = qml.PauliZ(wire)
-            else:
-                obs = obs @ qml.PauliZ(wire)
-
-        obs_list.append(obs)
+        obs_list.append(parity_observable(node.wires))
 
     return obs_list
 
@@ -30,6 +38,10 @@ def local_parity_expval_qnode(network_ansatz):
 
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
+
+    :returns: A qnode that performs a local parity measurement at measurement nodes.
+              The qnode is called as ``qnode(prepare_settings, measure_settings)``.
+    :rtype: ``qml.QNode``
     """
     observables = local_parity_observables(network_ansatz.measure_nodes)
 
@@ -38,6 +50,28 @@ def local_parity_expval_qnode(network_ansatz):
         network_ansatz.fn(prepare_settings, measure_settings)
 
         return [qml.expval(obs) for obs in observables]
+
+    return circuit
+
+
+def global_parity_expval_qnode(network_ansatz):
+    """Constructs a qnode that computes expectation values for the local parity observable
+    at each measurement node.
+
+    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
+    :type network_ansatz: NetworkAnsatz
+
+    :returns: A qnode the performs a global parity measurement and can be tuned over
+              ``prepare_settings`` and ``measure_settings``.
+    :rtype: ``qml.QNode``
+    """
+    parity_obs = parity_observable(network_ansatz.measure_wires)
+
+    @qml.qnode(network_ansatz.dev)
+    def circuit(prepare_settings, measure_settings):
+        network_ansatz.fn(prepare_settings, measure_settings)
+
+        return qml.expval(parity_obs)
 
     return circuit
 

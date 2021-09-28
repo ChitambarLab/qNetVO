@@ -37,7 +37,7 @@ def ghz_state(settings, wires):
 def local_RY(settings, wires):
     """Performs a rotation about :math:`y`-axis on each qubit
     specified by ``wires``.
-    
+
     :param settings: A list of ``len(wires)`` real values.
     :type settings: list[float]
 
