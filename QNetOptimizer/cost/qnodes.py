@@ -39,7 +39,7 @@ def local_parity_expval_qnode(network_ansatz):
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
 
-    :returns: A qnode the performs a local parity measurement at measurement nodes.
+    :returns: A qnode that performs a local parity measurement at measurement nodes.
               The qnode is called as ``qnode(prepare_settings, measure_settings)``.
     :rtype: ``qml.QNode``
     """
