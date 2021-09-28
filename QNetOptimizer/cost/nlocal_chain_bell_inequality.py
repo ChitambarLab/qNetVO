@@ -30,7 +30,7 @@ def nlocal_chain_cost_22(network_ansatz):
        \\bigotimes_{j=1}^{n+1} B^j_{y_j}\\right) \\bigotimes_{i=1}^n \\rho^{A^iA^{i+1}} \\right],
     
     with :math:`B^j_{y_j}` being a dichotomic parity observable at the :math:`j^{th}` measurement node.
-    Note that the :math:`n`-local correlator is simply a parity measurement distrubed across
+    Note that the :math:`n`-local correlator is simply a parity measurement distributed across
     all measurement nodes in the network.
 
     The maximal score for the dichotomic :math:`n` -local Bell inequality is known to be
