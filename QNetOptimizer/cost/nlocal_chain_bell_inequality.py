@@ -2,7 +2,7 @@ from pennylane import numpy as np
 from .qnodes import global_parity_expval_qnode
 
 
-def nlocal_chain_cost_22(network_ansatz):
+def nlocal_chain_cost_22(network_ansatz, **qnode_kwargs):
     """For the provided ``network_ansatz``, constructs the cost function for the
     :math:`n`-local chain Bell inequality for binary inputs and outputs.
 
@@ -41,7 +41,7 @@ def nlocal_chain_cost_22(network_ansatz):
     :rtype: Function
     """
 
-    nlocal_chain_qnode = global_parity_expval_qnode(network_ansatz)
+    nlocal_chain_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     num_interior_nodes = len(network_ansatz.measure_nodes) - 2
 

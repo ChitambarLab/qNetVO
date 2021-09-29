@@ -1,3 +1,0 @@
-pennylane==0.16
-jax
-jaxlib
