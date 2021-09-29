@@ -1,9 +1,6 @@
 import pennylane as qml
 from pennylane import numpy as np
 
-import torch
-
-
 class NoiseNode:
     """A class that configures each noise node in the quantum network.
 
