@@ -101,6 +101,7 @@ class NetworkAnsatz:
     * **measure_wires** - The list of wires used by the ``measure_nodes``.
     * **network_wires** - The list of wires used by the network ansatz.
     * **dev** (*qml.device*) - A PennyLane ``"default.qubit"`` device for the network ansatz.
+                               If noise nodes are provided, ``"default.mixed"`` is used instead.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
 
     :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
@@ -121,8 +122,8 @@ class NetworkAnsatz:
             [self.prepare_wires, self.measure_wires, self.noise_wires]
         )
 
-        dev_type = "default.qubit" if self.noise_nodes == [] else "default.mixed"
-        self.dev = qml.device(dev_type, wires=self.network_wires)
+        default_dev_name = "default.qubit" if self.noise_nodes == [] else "default.mixed"
+        self.dev = qml.device(default_dev_name, wires=self.network_wires)
 
         self.fn = self.construct_ansatz_circuit()
 

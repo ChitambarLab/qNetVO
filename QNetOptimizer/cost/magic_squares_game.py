@@ -2,7 +2,7 @@ import pennylane.numpy as np
 from .qnodes import joint_probs_qnode
 
 
-def magic_squares_game_cost(network_ansatz):
+def magic_squares_game_cost(network_ansatz, **qnode_kwargs):
     """Constructs a cost function that maximizes the winning probability for the magic squares game.
 
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
@@ -13,7 +13,7 @@ def magic_squares_game_cost(network_ansatz):
               ``network_ansatz`` class.
     :rtype: Function
     """
-    probs_qnode = joint_probs_qnode(network_ansatz)
+    probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
 
     def cost(settings):
         prepare_settings = network_ansatz.layer_settings(settings[0], [0])
