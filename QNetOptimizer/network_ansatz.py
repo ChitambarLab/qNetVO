@@ -1,6 +1,7 @@
 import pennylane as qml
 from pennylane import numpy as np
 
+
 class NoiseNode:
     """A class that configures each noise node in the quantum network.
 
