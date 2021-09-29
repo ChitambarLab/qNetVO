@@ -1,4 +1,4 @@
-import pennylane.numpy as np
+from pennylane import math
 from .qnodes import joint_probs_qnode
 
 
@@ -26,7 +26,7 @@ def magic_squares_game_cost(network_ansatz, **qnode_kwargs):
                 probs = probs_qnode(prepare_settings, measure_settings)
 
                 for i in range(16):
-                    bit_string = [int(x) for x in np.binary_repr(i, 4)]
+                    bit_string = [int(x) for x in math.binary_repr(i, 4)]
 
                     A_parity_bit = 0 if (bit_string[0] + bit_string[1]) % 2 == 0 else 1
                     B_parity_bit = 1 if (bit_string[2] + bit_string[3]) % 2 == 0 else 0
