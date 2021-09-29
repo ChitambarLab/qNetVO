@@ -2,6 +2,10 @@ import pennylane as qml
 from pennylane import numpy as np
 
 
+import tensorflow as tf
+from pennylane import math
+
+
 class NoiseNode:
     """A class that configures each noise node in the quantum network.
 
@@ -168,19 +172,16 @@ class NetworkAnsatz:
         """Constructs the list of settings for a circuit layer in the network ansatz.
 
         :param scenario_settings: A list containing the settings for all classical inputs.
-        :type network_nodes: list[np.array[float]]
+        :type network_nodes: list[array[float]]
 
         :param node_inputs: A list of the classical inputs supplied to each network node.
         :type node_inputs: list[int]
 
         :returns: A 1D array of all settings for the circuit layer.
-        :rtype: np.array[float]
+        :rtype: array[float]
         """
-        settings = np.array([])
-        for i in range(len(node_inputs)):
-            settings = np.append(settings, scenario_settings[i][node_inputs[i]])
-
-        return settings
+        return math.concatenate([scenario_settings[i][node_inputs[i]] for i in range(len(node_inputs))])
+ 
 
     @staticmethod
     def circuit_layer(network_nodes):

@@ -45,6 +45,8 @@ def nlocal_chain_cost_22(network_ansatz, **qnode_kwargs):
 
     num_interior_nodes = len(network_ansatz.measure_nodes) - 2
 
+    interface = qnode_kwargs["interface"] if "interface" in qnode_kwargs else "autograd"
+
     def cost(scenario_settings):
         prep_settings, meas_settings = scenario_settings
 
