@@ -60,7 +60,7 @@ def gradient_descent(
         commit by having ``gradient_descent`` return the minimized cost rather than the maximized
         reward. The resolution is to wrap ``gradient_descent`` with a ``gradient_ascent`` function
         which maximizes a reward function equivalent to ``-(cost)``.
-    
+
     :raises ValueError: If the ``interface`` is not supported.
     """
     opt = (
@@ -91,7 +91,7 @@ def gradient_descent(
             tf_cost = lambda: cost(settings)
             opt.minimize(tf_cost, settings)
         else:
-            raise ValueError('interface "' + interface + '" is  not supported.')
+            raise ValueError('Interface "' + interface + '" is not supported.')
 
         settings_history.append(settings)
 
