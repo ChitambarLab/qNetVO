@@ -31,6 +31,9 @@ def gradient_descent(
     :param verbose: If ``True``, progress is printed during the optimization, defaults to ``True``.
     :type verbose: bool, optional
 
+    :param interface: Specifies the optimizer software either ``"autograd"`` or ``"tf"`` (TensorFlow).
+    :type interface: string, default ``"autograd``"
+
     :return: Data regarding the gradient descent optimization.
     :rtype: dictionary, contains the following keys:
 
@@ -50,6 +53,8 @@ def gradient_descent(
         commit by having ``gradient_descent`` return the minimized cost rather than the maximized
         reward. The resolution is to wrap ``gradient_descent`` with a ``gradient_ascent`` function
         which maximizes a reward function equivalent to ``-(cost)``.
+    
+    :raises ValueError: If the ``interface`` is not supported.
     """
     opt = qml.GradientDescentOptimizer(stepsize=step_size) if interface == "autograd" else tf.keras.optimizers.SGD(learning_rate=step_size)
 
@@ -75,7 +80,7 @@ def gradient_descent(
             tf_cost = lambda: cost(settings)     
             opt.minimize(tf_cost, settings)
         else:
-            raise ValueError("interface \"" + interface + "\" is  not accepted.")
+            raise ValueError("interface \"" + interface + "\" is  not supported.")
 
         settings_history.append(settings)
 
