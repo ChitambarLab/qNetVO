@@ -1,9 +1,7 @@
 import pennylane as qml
 from pennylane import numpy as np
-
-
-import tensorflow as tf
 from pennylane import math
+import tensorflow as tf
 
 
 class NoiseNode:
@@ -170,6 +168,8 @@ class NetworkAnsatz:
     @staticmethod
     def layer_settings(scenario_settings, node_inputs):
         """Constructs the list of settings for a circuit layer in the network ansatz.
+        The type of tensor used for the returned layer settings matches the tensor
+        type of the elements of ``scenario_settings``.
 
         :param scenario_settings: A list containing the settings for all classical inputs.
         :type network_nodes: list[array[float]]
@@ -180,7 +180,7 @@ class NetworkAnsatz:
         :returns: A 1D array of all settings for the circuit layer.
         :rtype: array[float]
         """
-        return math.concatenate([scenario_settings[i][node_inputs[i]] for i in range(len(node_inputs))])
+        return math.concatenate([scenario_settings[i][node_input] for i, node_input in enumerate(node_inputs)])
  
 
     @staticmethod
@@ -226,6 +226,20 @@ class NetworkAnsatz:
         ]
 
         return [prepare_settings, measure_settings]
+
+    def tf_rand_scenario_settings(self):
+        """Creates a randomized settings array for the network ansatz using TensorFlow
+        tensor types.
+
+        :returns: See :meth:`QNetOptimizer.NetworkAnsatz.rand_scenario_settings` for details.
+        :rtype: list[list[tf.Tensor]]
+        """
+        np_settings = self.rand_scenario_settings() 
+
+        return [
+            [tf.Variable(settings) for settings in np_settings[0]],
+            [tf.Variable(settings) for settings in np_settings[1]],
+        ]
 
     def zero_scenario_settings(self):
         """Creates a settings array for the network ansatz that consists of zeros.

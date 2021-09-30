@@ -1,6 +1,7 @@
 import pytest
 import pennylane as qml
 from pennylane import numpy as np
+import tensorflow as tf
 
 from context import QNetOptimizer as QNopt
 
@@ -151,6 +152,17 @@ class TestNetworkAnsatz:
         assert np.isclose(layer_settings[2], -0.1198084)
         assert np.isclose(layer_settings[3], -0.98534158)
 
+        np.random.seed(123)
+        tf_scenario_settings = ansatz.tf_rand_scenario_settings()
+
+        layer_settings = ansatz.layer_settings(tf_scenario_settings[0], [0, 1, 2, 1])
+
+        assert len(layer_settings) == 4
+        assert np.isclose(layer_settings[0], 1.2344523)
+        assert np.isclose(layer_settings[1], 1.37896421)
+        assert np.isclose(layer_settings[2], -0.1198084)
+        assert np.isclose(layer_settings[3], -0.98534158)
+
     def test_circuit_layer(self):
         def ansatz_circuit(settings, wires):
             qml.RY(settings[0], wires=wires[0])
@@ -261,3 +273,20 @@ class TestNetworkAnsatz:
         assert len(rand_settings[1]) == 2
         assert np.allclose(rand_settings[1][0], match_settings[1][0])
         assert np.allclose(rand_settings[1][1], match_settings[1][1])
+
+        # tensorflow types
+        np.random.seed(123)
+        tf_rand_settings = network_ansatz.tf_rand_scenario_settings()
+
+        assert isinstance(tf_rand_settings[0][0], tf.Variable)
+
+        assert len(tf_rand_settings[0]) == 2
+        assert np.allclose(tf_rand_settings[0][0], match_settings[0][0])
+        assert np.allclose(tf_rand_settings[0][1], match_settings[0][1])
+
+        assert len(rand_settings[1]) == 2
+        assert np.allclose(tf_rand_settings[1][0], match_settings[1][0])
+        assert np.allclose(tf_rand_settings[1][1], match_settings[1][1])
+
+        # assert False
+
