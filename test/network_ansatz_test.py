@@ -289,4 +289,3 @@ class TestNetworkAnsatz:
         assert np.allclose(tf_rand_settings[1][1], match_settings[1][1])
 
         # assert False
-

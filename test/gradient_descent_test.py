@@ -16,7 +16,10 @@ class TestGradientDescent:
         assert len(opt_dict["scores"]) == 3
         assert len(opt_dict["settings_history"]) == 50
 
-        tf_opt_dict = QNopt.gradient_descent(cost, tf.Variable(2.0), num_steps=50, step_size=0.1, verbose=False, interface="tf")
+        # tensor flow interface
+        tf_opt_dict = QNopt.gradient_descent(
+            cost, tf.Variable(2.0), num_steps=50, step_size=0.1, verbose=False, interface="tf"
+        )
 
         assert np.isclose(tf_opt_dict["opt_score"], 0, atol=1e-6)
         assert np.isclose(tf_opt_dict["opt_settings"], 0, atol=1e-4)

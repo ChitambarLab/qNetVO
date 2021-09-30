@@ -180,8 +180,9 @@ class NetworkAnsatz:
         :returns: A 1D array of all settings for the circuit layer.
         :rtype: array[float]
         """
-        return math.concatenate([scenario_settings[i][node_input] for i, node_input in enumerate(node_inputs)])
- 
+        return math.concatenate(
+            [scenario_settings[i][node_input] for i, node_input in enumerate(node_inputs)]
+        )
 
     @staticmethod
     def circuit_layer(network_nodes):
@@ -234,7 +235,7 @@ class NetworkAnsatz:
         :returns: See :meth:`QNetOptimizer.NetworkAnsatz.rand_scenario_settings` for details.
         :rtype: list[list[tf.Tensor]]
         """
-        np_settings = self.rand_scenario_settings() 
+        np_settings = self.rand_scenario_settings()
 
         return [
             [tf.Variable(settings) for settings in np_settings[0]],
