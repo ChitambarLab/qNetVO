@@ -1,5 +1,6 @@
 from pennylane import math
-from .qnodes import joint_probs_qnode
+from pennylane import numpy as np
+from .qnodes import joint_probs_qnode, global_parity_expval_qnode
 
 
 def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
@@ -22,6 +23,7 @@ def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
     """
 
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
+    parity_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     # find non-zero columns of game matrix
     num_in_prep_nodes = [node.num_in for node in network_ansatz.prepare_nodes]
@@ -50,9 +52,17 @@ def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
                 scenario_settings[1], input_id_set[len(network_ansatz.prepare_nodes) :]
             )
 
-            probs = probs_qnode(prep_settings, meas_settings)
+            if game.shape[0] == 2:
+                exp_val = parity_qnode(prep_settings, meas_settings)
 
-            score += math.sum(game[:, i] * probs)
+                prob0 = (exp_val + 1)/2
+                probs = np.array([prob0, 1-prob0])
+
+                score += math.sum(game[:, i] * probs)
+
+            else:
+                probs = probs_qnode(prep_settings, meas_settings)
+                score += math.sum(game[:, i] * probs)
 
         return -(score)
 
