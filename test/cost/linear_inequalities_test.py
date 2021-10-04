@@ -26,7 +26,7 @@ class TestLinearInequalityCost:
         zero_settings = network_ansatz.zero_scenario_settings()
         assert np.isclose(cost(zero_settings), -1)
 
-        settings = zero_settings
+        settings = network_ansatz.zero_scenario_settings()
         settings[0][0][1, 0] = np.pi
         assert np.isclose(cost(settings), -2)
 
@@ -38,6 +38,23 @@ class TestLinearInequalityCost:
 
         settings[0][1][3, :] = [np.pi, np.pi]
         assert np.isclose(cost(settings), -8)
+
+        dichotomic_game = np.array([[1, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]])
+        dichotomic_cost = QNopt.linear_probs_cost(network_ansatz, dichotomic_game)
+
+        assert np.isclose(dichotomic_cost(zero_settings), -1)
+        assert np.isclose(dichotomic_cost(settings), -2)
+
+        # value erros
+        with pytest.raises(
+            ValueError,
+            match="``linear_probs_cost`` does not currently support coarse-graining from 8 -> 3 outputs.",
+        ):
+            game = np.array(
+                [[1, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0]]
+            )
+            cost = QNopt.linear_probs_cost(network_ansatz, game)
+            cost(zero_settings)
 
     def test_mixed_base_convert(self):
 
