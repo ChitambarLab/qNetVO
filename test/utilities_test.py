@@ -29,3 +29,10 @@ class TestUtilities:
 
         U = QNopt.unitary_matrix(circ_cnot, 2)
         assert np.allclose(U, [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]])
+
+    def test_mixed_base_num(self):
+
+        assert np.all(QNopt.mixed_base_num(0, [2, 2]) == [0, 0])
+        assert np.all(QNopt.mixed_base_num(2, [2, 2]) == [1, 0])
+        assert np.all(QNopt.mixed_base_num(9, [2, 3, 4]) == [0, 2, 1])
+        assert np.all(QNopt.mixed_base_num(119, [5, 4, 3, 2, 1]) == [4, 3, 2, 1, 0])
