@@ -49,14 +49,11 @@ class TestMeasureNode:
 
 
 class TestNetworkAnsatz:
-
     def chsh_ansatz(self):
-        prepare_nodes = [
-            QNopt.PrepareNode(1,[0,1],QNopt.local_RY, 2)
-        ]
+        prepare_nodes = [QNopt.PrepareNode(1, [0, 1], QNopt.local_RY, 2)]
         measure_nodes = [
-            QNopt.MeasureNode(2,2,[0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2,2,[1], QNopt.local_RY, 1)
+            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
+            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
         ]
 
         return QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
@@ -165,7 +162,7 @@ class TestNetworkAnsatz:
         assert np.isclose(layer_settings[3], -0.98534158)
 
     def test_network_ansatz_device(self):
-        
+
         chsh_ansatz = self.chsh_ansatz()
         assert chsh_ansatz.dev.short_name == "default.qubit"
 
