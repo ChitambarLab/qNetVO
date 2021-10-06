@@ -49,6 +49,18 @@ class TestMeasureNode:
 
 
 class TestNetworkAnsatz:
+
+    def chsh_ansatz(self):
+        prepare_nodes = [
+            QNopt.PrepareNode(1,[0,1],QNopt.local_RY, 2)
+        ]
+        measure_nodes = [
+            QNopt.MeasureNode(2,2,[0], QNopt.local_RY, 1),
+            QNopt.MeasureNode(2,2,[1], QNopt.local_RY, 1)
+        ]
+
+        return QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
+
     def test_init(self):
         # setup test
         def ansatz_circuit(settings, wires):
@@ -86,6 +98,7 @@ class TestNetworkAnsatz:
         assert network_ansatz.network_wires.tolist() == [0, 1, 2]
 
         # verify device
+        assert network_ansatz.default_dev_name == "default.qubit"
         assert network_ansatz.dev.wires.tolist() == [0, 1, 2]
         assert network_ansatz.dev.short_name == "default.qubit"
 
@@ -150,6 +163,17 @@ class TestNetworkAnsatz:
         assert np.isclose(layer_settings[1], 1.37896421)
         assert np.isclose(layer_settings[2], -0.1198084)
         assert np.isclose(layer_settings[3], -0.98534158)
+
+    def test_network_ansatz_device(self):
+        
+        chsh_ansatz = self.chsh_ansatz()
+        assert chsh_ansatz.dev.short_name == "default.qubit"
+
+        updated_dev = chsh_ansatz.device("default.mixed", shots=5)
+
+        assert updated_dev == chsh_ansatz.dev
+        assert chsh_ansatz.dev.short_name == "default.mixed"
+        assert chsh_ansatz.dev.shots == 5
 
     def test_circuit_layer(self):
         def ansatz_circuit(settings, wires):

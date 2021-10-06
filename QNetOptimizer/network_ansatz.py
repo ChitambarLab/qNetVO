@@ -122,10 +122,14 @@ class NetworkAnsatz:
             [self.prepare_wires, self.measure_wires, self.noise_wires]
         )
 
-        default_dev_name = "default.qubit" if self.noise_nodes == [] else "default.mixed"
-        self.dev = qml.device(default_dev_name, wires=self.network_wires)
+        self.default_dev_name = "default.qubit" if self.noise_nodes == [] else "default.mixed"
+        self.dev = self.device(self.default_dev_name)
 
         self.fn = self.construct_ansatz_circuit()
+
+    def device(self, name, **kwargs):
+        self.dev = qml.device(name, wires=self.network_wires, **kwargs)
+        return self.dev
 
     def construct_ansatz_circuit(self):
         prepare_layer = self.circuit_layer(self.prepare_nodes)
