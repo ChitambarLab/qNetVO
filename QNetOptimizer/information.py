@@ -1,6 +1,7 @@
 from pennylane import math
 from .cost.qnodes import joint_probs_qnode
 from .utilities import mixed_base_num
+from pennylane import numpy as np
 
 
 def network_behavior_fn(network_ansatz, **qnode_kwargs):
@@ -32,7 +33,7 @@ def network_behavior_fn(network_ansatz, **qnode_kwargs):
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
 
     def network_behavior(scenario_settings):
-        net_behavior = math.zeros((net_num_out, net_num_in))
+        net_behavior = np.zeros((net_num_out, net_num_in))
         for (i, input_id_set) in enumerate(node_input_ids):
             prep_layer_settings = network_ansatz.layer_settings(
                 scenario_settings[0], input_id_set[0 : len(num_in_prep_nodes)]
@@ -41,7 +42,8 @@ def network_behavior_fn(network_ansatz, **qnode_kwargs):
                 scenario_settings[1], input_id_set[len(num_in_prep_nodes) :]
             )
 
-            net_behavior[:, i] = probs_qnode(prep_layer_settings, meas_layer_settings)
+            probs = probs_qnode(prep_layer_settings, meas_layer_settings)
+            net_behavior[:, i] += probs
 
         return net_behavior
 
