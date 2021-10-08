@@ -1,12 +1,12 @@
 import pytest
-import pennylane as qml
 from pennylane import numpy as np
 
 from context import QNetOptimizer as QNopt
 
 
 class TestCHSHInequalityCost:
-    def test_chsh_inequality_cost(self):
+    @pytest.mark.parametrize("parallel_flag", [False, True])
+    def test_chsh_inequality_cost(self, parallel_flag):
 
         prep_nodes = [QNopt.PrepareNode(1, [0, 1], QNopt.ghz_state, 0)]
         meas_nodes = [
@@ -16,7 +16,7 @@ class TestCHSHInequalityCost:
 
         chsh_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        chsh_cost = QNopt.chsh_inequality_cost(chsh_ansatz)
+        chsh_cost = QNopt.chsh_inequality_cost(chsh_ansatz, parallel=parallel_flag)
 
         zero_settings = chsh_ansatz.zero_scenario_settings()
         assert np.isclose(chsh_cost(zero_settings), -2)

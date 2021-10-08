@@ -5,3 +5,5 @@ CHSH Bell Inequality
 
 
 .. autofunction:: chsh_inequality_cost
+
+.. autofunction:: parallel_chsh_grad_fn
