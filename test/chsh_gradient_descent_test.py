@@ -23,25 +23,7 @@ class TestCHSHGradientDescent:
         ]
 
         chsh_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
-
-        @qml.qnode(chsh_ansatz.dev)
-        def chsh_circuit(prepare_settings, measure_settings):
-            chsh_ansatz.fn(prepare_settings, measure_settings)
-
-            return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
-
-        def chsh_cost(scenario_settings):
-            score = 0
-            prep_settings = chsh_ansatz.layer_settings(scenario_settings[0], [0])
-            for x in [0, 1]:
-                for y in [0, 1]:
-                    meas_settings = chsh_ansatz.layer_settings(scenario_settings[1], [x, y])
-
-                    run = chsh_circuit(prep_settings, meas_settings)
-                    scalar = (-1) ** (x * y)
-
-                    score += scalar * run
-            return -(score)
+        chsh_cost = QNopt.chsh_inequality_cost(chsh_ansatz)
 
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
@@ -61,26 +43,7 @@ class TestCHSHGradientDescent:
         ]
 
         chsh_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
-
-        @qml.qnode(chsh_ansatz.dev)
-        def chsh_circuit(prepare_settings, measure_settings):
-            chsh_ansatz.fn(prepare_settings, measure_settings)
-
-            return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
-
-        def chsh_cost(scenario_settings):
-            score = 0
-            prep_settings = chsh_ansatz.layer_settings(scenario_settings[0], [0])
-
-            for x in [0, 1]:
-                for y in [0, 1]:
-                    meas_settings = chsh_ansatz.layer_settings(scenario_settings[1], [x, y])
-
-                    run = chsh_circuit(prep_settings, meas_settings)
-                    scalar = (-1) ** (x * y)
-
-                    score += scalar * run
-            return -(score)
+        chsh_cost = QNopt.chsh_inequality_cost(chsh_ansatz)
 
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
