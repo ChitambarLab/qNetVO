@@ -1,5 +1,6 @@
 import pennylane as qml
 from pennylane import numpy as np
+from pennylane import math
 
 
 class NoiseNode:
@@ -93,6 +94,11 @@ class NetworkAnsatz:
     :param noise_nodes: A list of ``NoiseNode`` classes.
     :type noise_nodes: *optional* list[NoiseNode]
 
+    :param dev_kwargs: Keyword arguments for the `pennylane.device`_ function.
+    :type dev_kwargs: *optional* dict
+
+    .. _pennylane.device: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.device.html?highlight=device#qml-device
+
     :returns: An instantiated ``NetworkAnsatz`` class with the following fields:
 
     * **prepare_nodes** - The list of ``PrepareNode`` classes.
@@ -100,14 +106,16 @@ class NetworkAnsatz:
     * **prepare_wires** - The list of wires used by the ``prepare_nodes``.
     * **measure_wires** - The list of wires used by the ``measure_nodes``.
     * **network_wires** - The list of wires used by the network ansatz.
-    * **dev** (*qml.device*) - A PennyLane ``"default.qubit"`` device for the network ansatz.
-                               If noise nodes are provided, ``"default.mixed"`` is used instead.
+    * **default_dev_name** - ``"default.qubit"`` for noiseless networks and ``"default.mixed"``
+                             for noisy networks.
+    * **dev_kwargs** - *mutable*, the keyword args to pass to the `pennylane.device`_ function.
+    * **dev** (*qml.device*) - *mutable*, the most recently device constructed for the ansatz.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
 
     :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
     """
 
-    def __init__(self, prepare_nodes, measure_nodes, noise_nodes=[]):
+    def __init__(self, prepare_nodes, measure_nodes, noise_nodes=[], dev_kwargs=None):
         self.prepare_nodes = prepare_nodes
         self.measure_nodes = measure_nodes
         self.noise_nodes = noise_nodes
@@ -122,13 +130,38 @@ class NetworkAnsatz:
             [self.prepare_wires, self.measure_wires, self.noise_wires]
         )
 
-        self.default_dev_name = "default.qubit" if self.noise_nodes == [] else "default.mixed"
-        self.dev = self.device(self.default_dev_name)
+        self.default_dev_name = "default.qubit" if len(self.noise_nodes) == 0 else "default.mixed"
+        self.dev_kwargs = dev_kwargs if dev_kwargs != None else {"name": self.default_dev_name}
+        self.dev_kwargs["wires"] = self.network_wires
+        self.dev = self.device()
 
         self.fn = self.construct_ansatz_circuit()
 
-    def device(self, name, **kwargs):
-        self.dev = qml.device(name, wires=self.network_wires, **kwargs)
+    def set_device(self, name, **kwargs):
+        """Configures a new PennyLane device for executing the network ansatz circuit.
+        For more details on parameters see `pennylane.device`_.
+        This method updates the values stored in ``self.dev_kwargs`` and ``self.dev``.
+
+        :returns: The instantiated device.
+        :rtype: ``pennylane.device``
+        """
+
+        dev_kwargs = kwargs.copy() if kwargs else {}
+        dev_kwargs["name"] = name
+        dev_kwargs["wires"] = self.network_wires
+
+        self.dev_kwargs = dev_kwargs
+        self.dev = qml.device(**self.dev_kwargs)
+        return self.dev
+
+    def device(self):
+        """Instantiates a new PennyLane device configured using the ``self.dev_kwargs`` parameters.
+        A distinct device is created each time this function runs.
+
+        :returns: The instantiated device.
+        :rtype: ``pennylane.device``
+        """
+        self.dev = qml.device(**self.dev_kwargs)
         return self.dev
 
     def construct_ansatz_circuit(self):
@@ -139,9 +172,12 @@ class NetworkAnsatz:
         noise_settings = [np.array([]) for i in range(len(self.noise_nodes))]
 
         def ansatz_circuit(prepare_settings_array, measure_settings_array):
-            prepare_layer(prepare_settings_array)
+            prep_settings = prepare_settings_array
+            meas_settings = measure_settings_array
+
+            prepare_layer(prep_settings)
             noise_layer(noise_settings)
-            measure_layer(measure_settings_array)
+            measure_layer(meas_settings)
 
         return ansatz_circuit
 

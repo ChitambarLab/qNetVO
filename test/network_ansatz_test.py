@@ -110,7 +110,9 @@ class TestNetworkAnsatz:
         assert test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]) == 1
 
         # Noisy network Case
+        print("probe")
         noisy_network_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
+        print(noisy_network_ansatz.default_dev_name)
 
         # verify network nodes
         assert noisy_network_ansatz.prepare_nodes == prepare_nodes
@@ -125,6 +127,7 @@ class TestNetworkAnsatz:
 
         # verify device
         assert noisy_network_ansatz.dev.wires.tolist() == [0, 1, 2]
+        print(noisy_network_ansatz.dev_kwargs)
         assert noisy_network_ansatz.dev.short_name == "default.mixed"
 
         # verify qnode construction and execution
@@ -165,12 +168,22 @@ class TestNetworkAnsatz:
 
         chsh_ansatz = self.chsh_ansatz()
         assert chsh_ansatz.dev.short_name == "default.qubit"
+        assert chsh_ansatz.dev_kwargs["name"] == "default.qubit"
 
-        updated_dev = chsh_ansatz.device("default.mixed", shots=5)
-
+        updated_dev = chsh_ansatz.set_device("default.mixed", shots=5)
         assert updated_dev == chsh_ansatz.dev
         assert chsh_ansatz.dev.short_name == "default.mixed"
+        assert chsh_ansatz.dev_kwargs["name"] == "default.mixed"
         assert chsh_ansatz.dev.shots == 5
+        assert chsh_ansatz.dev_kwargs["shots"] == 5
+
+        # device() instantiates a new device
+        dev1 = chsh_ansatz.device()
+        dev2 = chsh_ansatz.device()
+
+        assert dev1 != dev2
+        assert dev1.short_name == dev2.short_name
+        assert dev1.shots == dev2.shots
 
     def test_circuit_layer(self):
         def ansatz_circuit(settings, wires):

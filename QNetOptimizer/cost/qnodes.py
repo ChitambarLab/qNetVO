@@ -1,4 +1,5 @@
 import pennylane as qml
+from pennylane import math
 
 
 def parity_observable(wires):
@@ -45,7 +46,7 @@ def local_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     """
     observables = local_parity_observables(network_ansatz.measure_nodes)
 
-    @qml.qnode(network_ansatz.dev, **qnode_kwargs)
+    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
     def circuit(prepare_settings, measure_settings):
         network_ansatz.fn(prepare_settings, measure_settings)
 
@@ -67,7 +68,7 @@ def global_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     """
     parity_obs = parity_observable(network_ansatz.measure_wires)
 
-    @qml.qnode(network_ansatz.dev, **qnode_kwargs)
+    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
     def circuit(prepare_settings, measure_settings):
         network_ansatz.fn(prepare_settings, measure_settings)
 
@@ -84,7 +85,7 @@ def joint_probs_qnode(network_ansatz, **qnode_kwargs):
     :type network_ansatz: NetworkAnsatz
     """
 
-    @qml.qnode(network_ansatz.dev, **qnode_kwargs)
+    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
     def circuit(prepare_settings, measure_settings):
         network_ansatz.fn(prepare_settings, measure_settings)
 
