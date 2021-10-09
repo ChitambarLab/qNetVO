@@ -80,8 +80,11 @@ class TestCHSHGradientDescent:
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
 
     def test_parallel_chsh_natural_gradient_descent(self):
+        # prepare_nodes = [
+        #     QNopt.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
+        # ]
         prepare_nodes = [
-            QNopt.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
+            QNopt.PrepareNode(1, [0, 1], QNopt.ghz_state, 0),
         ]
         measure_nodes = [
             QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
@@ -104,3 +107,5 @@ class TestCHSHGradientDescent:
         )
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
+
+        assert True

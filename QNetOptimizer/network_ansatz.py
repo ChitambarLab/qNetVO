@@ -222,6 +222,12 @@ class NetworkAnsatz:
 
         return settings
 
+    def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
+
+        prep_settings = self.layer_settings(scenario_settings[0], prep_inputs)
+        meas_settings = self.layer_settings(scenario_settings[1], meas_inputs)
+        return math.append(prep_settings, meas_settings)
+
     @staticmethod
     def circuit_layer(network_nodes):
         """Constructs a quantum function for an ansatz layer of provided network nodes.

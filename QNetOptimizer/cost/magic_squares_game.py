@@ -15,15 +15,12 @@ def magic_squares_game_cost(network_ansatz, **qnode_kwargs):
     """
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
 
-    def cost(settings):
-        prepare_settings = network_ansatz.layer_settings(settings[0], [0])
-
+    def cost(scenario_settings):
         winning_probability = 0
         for x in [0, 1, 2]:
             for y in [0, 1, 2]:
-                measure_settings = network_ansatz.layer_settings(settings[1], [x, y])
-
-                probs = probs_qnode(prepare_settings, measure_settings)
+                settings = network_ansatz.qnode_settings(scenario_settings, [0], [x, y])
+                probs = probs_qnode(settings)
 
                 for i in range(16):
                     bit_string = [int(x) for x in np.binary_repr(i, 4)]

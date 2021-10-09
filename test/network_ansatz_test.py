@@ -142,6 +142,16 @@ class TestNetworkAnsatz:
             noisy_test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]), 0.5
         )
 
+    def test_qnode_settings(self):
+        chsh_ansatz = self.chsh_ansatz()
+
+        np.random.seed(123)
+        scenario_settings = chsh_ansatz.rand_scenario_settings()
+
+        settings = chsh_ansatz.qnode_settings(scenario_settings, [0], [0, 1])
+
+        assert np.allclose(settings, [1.2344523, -1.34372619, -1.71624293, -0.48313636])
+
     def test_layer_settings(self):
         nodes = [
             QNopt.PrepareNode(3, [0], QNopt.local_RY, 1),
