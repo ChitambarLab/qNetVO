@@ -171,9 +171,11 @@ class NetworkAnsatz:
 
         noise_settings = [np.array([]) for i in range(len(self.noise_nodes))]
 
-        def ansatz_circuit(prepare_settings_array, measure_settings_array):
-            prep_settings = prepare_settings_array
-            meas_settings = measure_settings_array
+        num_prep_settings = math.sum([node.num_settings for node in self.prepare_nodes])
+
+        def ansatz_circuit(settings):
+            prep_settings = settings[0:num_prep_settings]
+            meas_settings = settings[num_prep_settings:]
 
             prepare_layer(prep_settings)
             noise_layer(noise_settings)

@@ -142,7 +142,7 @@ def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
 
         def _ng(settings, qnode):
             grad = qml.grad(qnode)(settings)
-            ginv = pinvh(chsh_qnode.metric_tensor(settings))
+            ginv = pinvh(qnode.metric_tensor(settings))
 
             return ginv @ grad
 
@@ -169,7 +169,6 @@ def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
             grad[1][1][y] += scalar * nat_grad[num_prep_settings + num_settings_A :]
 
             grad_id += 1
-
         return grad
 
     return natural_grad

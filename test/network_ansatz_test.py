@@ -101,18 +101,16 @@ class TestNetworkAnsatz:
 
         # verify qnode construction and execution
         @qml.qnode(network_ansatz.dev)
-        def test_circuit(prepare_settings_array, measure_settings_array):
-            network_ansatz.fn(prepare_settings_array, measure_settings_array)
+        def test_circuit(settings):
+            network_ansatz.fn(settings)
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-        assert test_circuit([[0], [0], [0]], [[0], [0]]) == 1
-        assert test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]) == 1
+        assert test_circuit([0, 0, 0, 0, 0]) == 1
+        assert test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]) == 1
 
         # Noisy network Case
-        print("probe")
         noisy_network_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
-        print(noisy_network_ansatz.default_dev_name)
 
         # verify network nodes
         assert noisy_network_ansatz.prepare_nodes == prepare_nodes
@@ -132,14 +130,14 @@ class TestNetworkAnsatz:
 
         # verify qnode construction and execution
         @qml.qnode(noisy_network_ansatz.dev)
-        def noisy_test_circuit(prepare_settings_array, measure_settings_array):
-            noisy_network_ansatz.fn(prepare_settings_array, measure_settings_array)
+        def noisy_test_circuit(settings):
+            noisy_network_ansatz.fn(settings)
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-        assert noisy_test_circuit([[0], [0], [0]], [[0], [0]]) == 0.5
+        assert noisy_test_circuit([0, 0, 0, 0, 0]) == 0.5
         assert np.isclose(
-            noisy_test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]), 0.5
+            noisy_test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]), 0.5
         )
 
     def test_qnode_settings(self):

@@ -45,13 +45,10 @@ def local_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     :rtype: ``qml.QNode``
     """
     observables = local_parity_observables(network_ansatz.measure_nodes)
-    num_prep_settings = math.sum([node.num_settings for node in network_ansatz.prepare_nodes])
 
     @qml.qnode(network_ansatz.device(), **qnode_kwargs)
     def circuit(settings):
-        prepare_settings = settings[0:num_prep_settings]
-        measure_settings = settings[num_prep_settings:]
-        network_ansatz.fn(prepare_settings, measure_settings)
+        network_ansatz.fn(settings)
 
         return [qml.expval(obs) for obs in observables]
 
@@ -69,13 +66,10 @@ def global_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     :rtype: ``qml.QNode``
     """
     parity_obs = parity_observable(network_ansatz.measure_wires)
-    num_prep_settings = math.sum([node.num_settings for node in network_ansatz.prepare_nodes])
 
     @qml.qnode(network_ansatz.device(), **qnode_kwargs)
     def circuit(settings):
-        prepare_settings = settings[0:num_prep_settings]
-        measure_settings = settings[num_prep_settings:]
-        network_ansatz.fn(prepare_settings, measure_settings)
+        network_ansatz.fn(settings)
 
         return qml.expval(parity_obs)
 
@@ -94,13 +88,9 @@ def joint_probs_qnode(network_ansatz, **qnode_kwargs):
     :rtype: ``pennylane.QNode``
     """
 
-    num_prep_settings = math.sum([node.num_settings for node in network_ansatz.prepare_nodes])
-
     @qml.qnode(network_ansatz.device(), **qnode_kwargs)
     def circuit(settings):
-        prepare_settings = settings[0:num_prep_settings]
-        measure_settings = settings[num_prep_settings:]
-        network_ansatz.fn(prepare_settings, measure_settings)
+        network_ansatz.fn(settings)
 
         return qml.probs(wires=network_ansatz.measure_wires)
 
