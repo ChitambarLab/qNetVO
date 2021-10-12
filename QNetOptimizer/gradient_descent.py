@@ -1,8 +1,16 @@
 import pennylane as qml
+import tensorflow as tf
 
 
 def gradient_descent(
-    cost, init_settings, num_steps=150, step_size=0.1, sample_width=25, grad_fn=None, verbose=True
+    cost,
+    init_settings,
+    num_steps=150,
+    step_size=0.1,
+    sample_width=25,
+    grad_fn=None,
+    verbose=True,
+    interface="autograd",
 ):
     """Performs a numerical gradient descent optimization on the provided ``cost`` function.
     The optimization is seeded with (random) ``init_settings`` which are then varied to
@@ -30,6 +38,9 @@ def gradient_descent(
     :param verbose: If ``True``, progress is printed during the optimization, defaults to ``True``.
     :type verbose: bool, optional
 
+    :param interface: Specifies the optimizer software either ``"autograd"`` or ``"tf"`` (TensorFlow).
+    :type interface: string, default ``"autograd``"
+
     :return: Data regarding the gradient descent optimization.
     :rtype: dictionary, contains the following keys:
 
@@ -49,8 +60,14 @@ def gradient_descent(
         commit by having ``gradient_descent`` return the minimized cost rather than the maximized
         reward. The resolution is to wrap ``gradient_descent`` with a ``gradient_ascent`` function
         which maximizes a reward function equivalent to ``-(cost)``.
+
+    :raises ValueError: If the ``interface`` is not supported.
     """
-    opt = qml.GradientDescentOptimizer(stepsize=step_size)
+    opt = (
+        qml.GradientDescentOptimizer(stepsize=step_size)
+        if interface == "autograd"
+        else tf.keras.optimizers.SGD(learning_rate=step_size)
+    )
 
     settings = init_settings
     scores = []
@@ -67,7 +84,15 @@ def gradient_descent(
             if verbose:
                 print("iteration : ", i, ", score : ", score)
 
-        settings = opt.step(cost, settings, grad_fn=grad_fn)
+        if interface == "autograd":
+            settings = opt.step(cost, settings, grad_fn=grad_fn)
+        elif interface == "tf":
+            # opt.minimize updates settings in place
+            tf_cost = lambda: cost(settings)
+            opt.minimize(tf_cost, settings)
+        else:
+            raise ValueError('Interface "' + interface + '" is not supported.')
+
         settings_history.append(settings)
 
     opt_score = -(cost(settings))
