@@ -29,7 +29,7 @@ chsh_cost = QNopt.chsh_inequality_cost(local_chsh_ansatz)
 natural_grad = QNopt.chsh_natural_grad(ibm_belem_chsh_ansatz, diff_method="parameter-shift")
 
 opt_dict = QNopt.gradient_descent(
-    chsh_cost, rand_settings, step_size=0.2, num_steps=20, sample_width=1, grad_fn=natural_grad
+    chsh_cost, rand_settings, step_size=0.15, num_steps=15, sample_width=1, grad_fn=natural_grad
 )
 
 datetime_ext = datetime.utcnow().strftime("%Y-%m-%dT%H-%M-%SZ")

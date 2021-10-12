@@ -172,7 +172,7 @@ class TestNetworkAnsatz:
         assert np.isclose(layer_settings[1], 1.37896421)
         assert np.isclose(layer_settings[2], -0.1198084)
         assert np.isclose(layer_settings[3], -0.98534158)
-        
+
         np.random.seed(123)
         tf_scenario_settings = ansatz.tf_rand_scenario_settings()
 
@@ -204,7 +204,6 @@ class TestNetworkAnsatz:
         assert dev1 != dev2
         assert dev1.short_name == dev2.short_name
         assert dev1.shots == dev2.shots
-
 
     def test_circuit_layer(self):
         def ansatz_circuit(settings, wires):

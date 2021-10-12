@@ -92,7 +92,7 @@ def gradient_descent(
 
             if verbose:
                 print("iteration : ", i, ", score : ", score)
-      
+
         start = time.time()
         if interface == "autograd":
             settings = opt.step(cost, settings, grad_fn=grad_fn)
@@ -103,7 +103,7 @@ def gradient_descent(
         else:
             raise ValueError('Interface "' + interface + '" is not supported.')
         elapsed = time.time() - start
-        
+
         if i % sample_width == 0:
             step_times.append(elapsed)
 
