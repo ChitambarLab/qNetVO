@@ -168,6 +168,7 @@ class NetworkAnsatz:
     @staticmethod
     def layer_settings(scenario_settings, node_inputs):
         """Constructs the list of settings for a circuit layer in the network ansatz.
+
         The type of tensor used for the returned layer settings matches the tensor
         type of the elements of ``scenario_settings``.
 
