@@ -1,6 +1,7 @@
 import pennylane as qml
 from pennylane import numpy as np
 from pennylane import math
+import tensorflow as tf
 
 
 class NoiseNode:
@@ -209,20 +210,21 @@ class NetworkAnsatz:
     def layer_settings(scenario_settings, node_inputs):
         """Constructs the list of settings for a circuit layer in the network ansatz.
 
+        The type of tensor used for the returned layer settings matches the tensor
+        type of the elements of ``scenario_settings``.
+
         :param scenario_settings: A list containing the settings for all classical inputs.
-        :type network_nodes: list[np.array[float]]
+        :type network_nodes: list[array[float]]
 
         :param node_inputs: A list of the classical inputs supplied to each network node.
         :type node_inputs: list[int]
 
         :returns: A 1D array of all settings for the circuit layer.
-        :rtype: np.array[float]
+        :rtype: array[float]
         """
-        settings = np.array([])
-        for i in range(len(node_inputs)):
-            settings = np.append(settings, scenario_settings[i][node_inputs[i]])
-
-        return settings
+        return math.concatenate(
+            [scenario_settings[i][node_input] for i, node_input in enumerate(node_inputs)]
+        )
 
     def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
 
@@ -273,6 +275,20 @@ class NetworkAnsatz:
         ]
 
         return [prepare_settings, measure_settings]
+
+    def tf_rand_scenario_settings(self):
+        """Creates a randomized settings array for the network ansatz using TensorFlow
+        tensor types.
+
+        :returns: See :meth:`QNetOptimizer.NetworkAnsatz.rand_scenario_settings` for details.
+        :rtype: list[list[tf.Tensor]]
+        """
+        np_settings = self.rand_scenario_settings()
+
+        return [
+            [tf.Variable(settings) for settings in np_settings[0]],
+            [tf.Variable(settings) for settings in np_settings[1]],
+        ]
 
     def zero_scenario_settings(self):
         """Creates a settings array for the network ansatz that consists of zeros.

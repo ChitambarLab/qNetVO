@@ -1,4 +1,4 @@
-from pennylane import numpy as np
+from pennylane import math
 from .qnodes import global_parity_expval_qnode
 
 
@@ -69,6 +69,6 @@ def nlocal_chain_cost_22(network_ansatz, **qnode_kwargs):
             J22_settings = network_ansatz.qnode_settings(scenario_settings, [0], J22_inputs)
             J22_score += ((-1) ** (x_a + x_b)) * nlocal_chain_qnode(J22_settings)
 
-        return -(np.sqrt(np.abs(I22_score) / 4) + np.sqrt(np.abs(J22_score) / 4))
+        return -(math.sqrt(math.abs(I22_score) / 4) + math.sqrt(math.abs(J22_score) / 4))
 
     return cost
