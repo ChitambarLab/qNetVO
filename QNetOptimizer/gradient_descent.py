@@ -1,4 +1,5 @@
 import pennylane as qml
+from datetime import datetime
 
 
 def gradient_descent(
@@ -55,7 +56,9 @@ def gradient_descent(
     settings = init_settings
     scores = []
     samples = []
-    settings_history = []
+    settings_history = [init_settings]
+
+    start_datetime = datetime.utcnow()
 
     # performing gradient descent
     for i in range(num_steps):
@@ -76,6 +79,7 @@ def gradient_descent(
     samples.append(num_steps - 1)
 
     return {
+        "datetime": start_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "opt_score": opt_score,
         "opt_settings": settings,
         "scores": scores,
