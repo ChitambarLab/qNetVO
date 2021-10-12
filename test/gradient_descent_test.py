@@ -32,7 +32,7 @@ class TestGradientDescent:
         assert np.isclose(tf_opt_dict["opt_settings"], 0, atol=1e-4)
         assert tf_opt_dict["samples"] == [0, 25, 49]
         assert len(tf_opt_dict["scores"]) == 3
-        assert len(tf_opt_dict["settings_history"]) == 50
+        assert len(tf_opt_dict["settings_history"]) == 51
 
         with pytest.raises(ValueError, match='Interface "jax" is not supported.'):
             QNopt.gradient_descent(
