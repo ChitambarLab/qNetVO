@@ -1,6 +1,7 @@
 from pennylane import math
 from pennylane import numpy as np
 from .qnodes import joint_probs_qnode, global_parity_expval_qnode
+from ..utilities import mixed_base_num
 
 
 def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
@@ -41,7 +42,7 @@ def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
 
     # convert coefficient ids into a list of prep/meas node inputs
     base_digits = num_in_prep_nodes + num_in_meas_nodes
-    node_input_ids = [mixed_base_convert(i, base_digits) for i in range(num_inputs)]
+    node_input_ids = [mixed_base_num(i, base_digits) for i in range(num_inputs)]
 
     def cost(scenario_settings):
         score = 0
@@ -78,29 +79,3 @@ def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
         return -(score)
 
     return cost
-
-
-def mixed_base_convert(n, base_digits):
-    """Converts a base-10 number ``n`` into a mixed base number with digit
-    values described by the ``base_digits`` array.
-
-    :param n: A base-10 number
-    :type n: int
-
-    :param base_digits: A list of integers representing the largest value for each
-                        digit in the mixed base number
-    :type base_digits: list[int]
-
-    :returns: A list of integers representing the mixed base number.
-    :rtype: list[int]
-
-    """
-    mixed_base_values = []
-    n_tmp = n
-    for i in range(len(base_digits)):
-        place = int(math.prod(base_digits[i + 1 :]))
-
-        mixed_base_values += [n_tmp // place]
-        n_tmp = n_tmp % place
-
-    return mixed_base_values
