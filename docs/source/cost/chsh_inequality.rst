@@ -11,7 +11,7 @@ classical case and entanglement in the quantum case.
     
    **Bipartite Non-Signaling Scenario.** 
 
-The set of classical behaviors is bound by the CHSH inequality
+The set of classical behaviors is bound by the CHSH inequality [Clauser1969]_
 
 .. math::
 
@@ -31,6 +31,9 @@ Quantum entanglement yields a maximal CHSH score of of :math:`I_{CHSH}=\leq \bet
 
 References
 ----------
+
+.. [Clauser1969] Clauser, John F., et al. "Proposed experiment to test local hidden-variable theories."
+   Physical review letters 23.15 (1969): 880.
 
 .. [Cirelson1980] Cirel'son, Boris S. "Quantum generalizations of Bell's inequality."
    Letters in Mathematical Physics 4.2 (1980): 93-100.

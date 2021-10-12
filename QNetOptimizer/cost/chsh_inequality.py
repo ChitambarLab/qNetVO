@@ -117,6 +117,24 @@ def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
     cost function.
     The parallelization is achieved through multithreading and intended to improve the
     efficiency of remote qnode execution.
+    The natural gradient
+
+    .. math::
+
+        \\nabla_{ng}I_{CHSH}(\\vec{\\theta}):= g^{-1}(\\vec{\\theta})\\nabla I_{CHSH}(\\vec{\\theta})
+    
+    scales the euclidean gradient :math:`\\nabla` by the pseudo-inverse of the Fubini-Study metric tensor
+    :math:`g^{-1}(\\vec{\\theta})`.
+    The natural gradient of the :math:`-I_{CHSH}(\\vec{\\theta})` cost function is evaluated directly as
+
+    .. math::
+
+        -\\nabla_{ng}I_{CHSH}(\\vec{\\theta})  &= -\\nabla_{ng}\\sum_{x,y=0}^1 (-1)^{x \\wedge y}\\langle A_x B_y\\rangle(\\vec{\\theta}_{x,y}) \\\\
+        &= -\\sum_{x,y=0}^1 (-1)^{x \\wedge y}\\nabla_{ng}\\langle A_x B_y \\rangle(\\vec{\\theta_{x,y}}) \\\\
+        &= -\\sum_{x,y=0}^1(-1)^{x \\wedge y}g^{-1}(\\vec{\\theta}_{x,y})\\nabla\\langle A_x B_y \\rangle(\\vec{\\theta}_{x,y})
+
+    where :math:`\\langle A_x B_y \\rangle(\\vec{\\theta}_{x,y})` is the expectation value of observables
+    :math:`A_x` and :math:`B_y` parameterized by the settings :math:`\\vec{\\theta}_{x,y}`.
 
     :param chsh_ansatz: The ansatz describing the network for which the CHSH inequality considered.
     :type chsh_ansatz: NetworkAnsatz
