@@ -85,7 +85,7 @@ class TestOptimzationFileIO:
 
         filename = self.filename()
 
-        QNopt.write_optimization_json(opt_dict, filename)
+        assert QNopt.write_optimization_json(opt_dict, filename)
 
         assert os.path.exists(filename + ".json")
 
@@ -112,7 +112,9 @@ class TestOptimzationFileIO:
 
         filename = self.filename()
 
-        QNopt.write_optimization_json(opt_dict, filename)
+        assert QNopt.write_optimization_json(opt_dict, filename)
+
+        assert os.path.exists(filename + ".json")
 
         opt_json = QNopt.read_optimization_json(filename + ".json")
 
