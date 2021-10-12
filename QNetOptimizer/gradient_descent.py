@@ -43,6 +43,7 @@ def gradient_descent(
           intermediate step of gradient descent
         * **datetime** (*string*) - The date and time in UTC when the optimization occurred.
         * **step_times** (*list[float]*) - The time elapsed during each sampled optimization step.
+        * **step_size** (*float*) - The learning rate of the optimization.
 
     .. warning::
 
@@ -101,4 +102,5 @@ def gradient_descent(
         "samples": samples,
         "settings_history": settings_history,
         "step_times": step_times,
+        "step_size": step_size
     }
