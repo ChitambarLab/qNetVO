@@ -102,5 +102,5 @@ def gradient_descent(
         "samples": samples,
         "settings_history": settings_history,
         "step_times": step_times,
-        "step_size": step_size
+        "step_size": step_size,
     }
