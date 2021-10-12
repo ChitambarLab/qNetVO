@@ -16,5 +16,7 @@ class TestGradientDescent:
         assert len(opt_dict["scores"]) == 3
         assert len(opt_dict["settings_history"]) == 51
 
-        opt_datetime_match = re.match("\d+-\d+-\d+T\d\d:\d\d:\d\dZ", opt_dict["datetime"])
+        assert len(opt_dict["step_times"]) == 3
+
+        opt_datetime_match = re.match(r"\d+-\d+-\d+T\d\d:\d\d:\d\dZ", opt_dict["datetime"])
         assert bool(opt_datetime_match)

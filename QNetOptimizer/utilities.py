@@ -1,6 +1,8 @@
 import pennylane as qml
 import pennylane.numpy as np
 import itertools
+import copy
+import json
 
 
 def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
@@ -36,6 +38,16 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
 
 
 def write_optimization_json(opt_dict, filename):
+    """Writest the optimization dictionary to a JSON file.
+
+    :param opt_dict: The dictionary returned by a network optimization.
+    :type opt_dict: dict
+
+    :param filename: The name of the JSON file to be written. Note that ``.json`` extension is automatically added.
+    :type filename: string
+
+    :returns: ``True``
+    """
 
     opt_dict_json = copy.deepcopy(opt_dict)
 
@@ -47,8 +59,18 @@ def write_optimization_json(opt_dict, filename):
     with open(filename + ".json", "w") as file:
         file.write(json.dumps(opt_dict_json))
 
+    return True
+
 
 def read_optimization_json(filepath):
+    """Reads data from an optimization JSON created via ``write_optimization_json``.
+
+    :param filepath: The path to the JSON file. Note this string must contain the ``.json`` extension.
+    :type filepath: string
+
+    :returns: The optimization dictionary read from the file.
+    :rtype: dict
+    """
 
     with open(filepath) as file:
         opt_dict = json.load(file)
@@ -85,7 +107,7 @@ def settings_to_np(list_scenario_settings):
     :returns: The same nested array elements and structure using numpy arrays.
     """
 
-    np_prep_settings = [np.array(node_settings) for node_settings in list_settings[0]]
-    np_meas_settings = [np.array(node_settings) for node_settings in list_settings[1]]
+    np_prep_settings = [np.array(node_settings) for node_settings in list_scenario_settings[0]]
+    np_meas_settings = [np.array(node_settings) for node_settings in list_scenario_settings[1]]
 
     return [np_prep_settings, np_meas_settings]
