@@ -42,11 +42,8 @@ def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qn
     game_outputs, game_inputs = game.shape
 
     if game_inputs != net_num_in or game_outputs != net_num_out:
-        raise ValueError("`game` matrix must have dimension ("
-            + str(net_num_out)
-            + ", "
-            + str(net_num_in)
-            + ")."
+        raise ValueError(
+            "`game` matrix must have dimension (" + str(net_num_out) + ", " + str(net_num_in) + ")."
         )
 
     if game_outputs != raw_net_num_out:
@@ -77,8 +74,8 @@ def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qn
             )
 
             raw_probs = probs_qnode(prep_settings, meas_settings)
-            probs = raw_probs if net_num_out == raw_net_num_out else post_processing_map @ raw_probs 
-   
+            probs = raw_probs if net_num_out == raw_net_num_out else post_processing_map @ raw_probs
+
             score += math.sum(game[:, i] * probs)
 
         return -(score)

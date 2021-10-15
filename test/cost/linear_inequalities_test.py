@@ -39,14 +39,13 @@ class TestLinearInequalityCost:
         settings[0][1][3, :] = [np.pi, np.pi]
         assert np.isclose(cost(settings), -8)
 
-
     def test_linear_probs_inequality_cost_dichotomic_game(self):
         prep_nodes = [
             QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
             QNopt.PrepareNode(4, [1, 2], QNopt.local_RY, 2),
         ]
         meas_nodes = [
-            QNopt.MeasureNode(1, 2, [0,1,2], QNopt.local_RY, 3),
+            QNopt.MeasureNode(1, 2, [0, 1, 2], QNopt.local_RY, 3),
         ]
 
         network_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
@@ -57,7 +56,11 @@ class TestLinearInequalityCost:
         settings[0][1][1, :] = [0, np.pi]
 
         dichotomic_game = np.array([[1, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]])
-        dichotomic_cost = QNopt.linear_probs_cost(network_ansatz, dichotomic_game, post_processing_map=np.array([[1,0,0,1,0,1,1,0],[0,1,1,0,1,0,0,1]]))
+        dichotomic_cost = QNopt.linear_probs_cost(
+            network_ansatz,
+            dichotomic_game,
+            post_processing_map=np.array([[1, 0, 0, 1, 0, 1, 1, 0], [0, 1, 1, 0, 1, 0, 0, 1]]),
+        )
 
         assert np.isclose(dichotomic_cost(zero_settings), -1)
         assert np.isclose(dichotomic_cost(settings), -2)
