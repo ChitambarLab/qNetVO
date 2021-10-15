@@ -1,4 +1,5 @@
 import pennylane as qml
+from pennylane import math
 
 
 def parity_observable(wires):

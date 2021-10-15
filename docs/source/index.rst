@@ -15,6 +15,7 @@ QNetOptimizer
    network_ansatzes/index
    cost/index
    optimization
+   information
    utilities
 
 Indices and tables
