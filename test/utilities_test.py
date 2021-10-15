@@ -198,7 +198,6 @@ class TestOptimzationFileIO:
             [np.allclose(settings[1][i], np_settings[1][i]) for i in range(len(meas_settings))]
         )
 
-        
     def test_mixed_base_num(self):
 
         assert np.all(QNopt.mixed_base_num(0, [2, 2]) == [0, 0])
