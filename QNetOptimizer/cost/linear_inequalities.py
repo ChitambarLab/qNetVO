@@ -4,7 +4,7 @@ from .qnodes import joint_probs_qnode, global_parity_expval_qnode
 from ..utilities import mixed_base_num
 
 
-def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
+def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qnode_kwargs={}):
     """Constructs a generic linear cost function on the conditional probabilities
     for the network.
     The linear cost function is encoded into a ``game`` matrix whose
@@ -28,21 +28,42 @@ def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
     """
 
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
-    parity_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
+    # parity_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     num_in_prep_nodes = [node.num_in for node in network_ansatz.prepare_nodes]
     num_in_meas_nodes = [node.num_in for node in network_ansatz.measure_nodes]
+    num_out_meas_nodes = [node.num_out for node in network_ansatz.measure_nodes]
 
-    num_inputs = math.prod(num_in_prep_nodes) * math.prod(num_in_meas_nodes)
+    net_num_in = math.prod(num_in_prep_nodes) * math.prod(num_in_meas_nodes)
+    net_num_out = math.prod(num_out_meas_nodes)
 
-    game_inputs = game.shape[1]
+    raw_net_num_out = 2 ** len(network_ansatz.measure_wires)
 
-    if game_inputs != num_inputs:
-        raise ValueError("game matrix rows must have dimension " + str(num_inputs) + ".")
+    game_outputs, game_inputs = game.shape
+
+    if game_inputs != net_num_in or game_outputs != net_num_out:
+        raise ValueError("`game` matrix must have dimension ("
+            + str(net_num_out)
+            + ", "
+            + str(net_num_in)
+            + ")."
+        )
+
+    if game_outputs != raw_net_num_out:
+        if post_processing_map.shape[0] != net_num_out:
+            raise ValueError(
+                "The number of rows in the `post_processing_map` must be " + str(net_num_out) + "."
+            )
+        elif post_processing_map.shape[1] != raw_net_num_out:
+            raise ValueError(
+                "The number of columns in the `post_processing_map` must be "
+                + str(raw_net_num_out)
+                + "."
+            )
 
     # convert coefficient ids into a list of prep/meas node inputs
     base_digits = num_in_prep_nodes + num_in_meas_nodes
-    node_input_ids = [mixed_base_num(i, base_digits) for i in range(num_inputs)]
+    node_input_ids = [mixed_base_num(i, base_digits) for i in range(net_num_in)]
 
     def cost(scenario_settings):
         score = 0
@@ -55,26 +76,10 @@ def linear_probs_cost(network_ansatz, game, **qnode_kwargs):
                 scenario_settings[1], input_id_set[len(network_ansatz.prepare_nodes) :]
             )
 
-            if game.shape[0] == 2:
-                exp_val = parity_qnode(prep_settings, meas_settings)
-
-                prob0 = (exp_val + 1) / 2
-                probs = np.array([prob0, 1 - prob0])
-
-                score += math.sum(game[:, i] * probs)
-
-            else:
-                probs = probs_qnode(prep_settings, meas_settings)
-                if game.shape[0] != len(probs):
-                    raise ValueError(
-                        "``linear_probs_cost`` does not currently support coarse-graining from "
-                        + str(len(probs))
-                        + " -> "
-                        + str(game.shape[0])
-                        + " outputs."
-                    )
-
-                score += math.sum(game[:, i] * probs)
+            raw_probs = probs_qnode(prep_settings, meas_settings)
+            probs = raw_probs if net_num_out == raw_net_num_out else post_processing_map @ raw_probs 
+   
+            score += math.sum(game[:, i] * probs)
 
         return -(score)
 
