@@ -3,6 +3,6 @@ Information
 
 .. currentmodule:: QNetOptimizer
 
-.. autofunction:: network_behavior_fn
+.. autofunction:: behavior
 
 .. autofunction:: shannon_entropy
