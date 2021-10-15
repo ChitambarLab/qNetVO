@@ -20,6 +20,10 @@ def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qn
     :param game: A matrix with dimensions ``B x (X x Y)`` for
     :type game: np.arrray
 
+    :param post_processing_map: A matrix describing how the :math:`2^{\\text{num wires}}`
+                                outputs are mapped to the appropriate number of outputs.
+    :type post_processing_map: np.ndarray
+
     :returns: A cost function evaluated as ``cost(prepare_settings, measure_settings)``.
     :rtype: function
 
@@ -28,7 +32,6 @@ def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qn
     """
 
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
-    # parity_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     num_in_prep_nodes = [node.num_in for node in network_ansatz.prepare_nodes]
     num_in_meas_nodes = [node.num_in for node in network_ansatz.measure_nodes]

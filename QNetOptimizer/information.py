@@ -19,6 +19,10 @@ def behavior(network_ansatz, post_processing_map=np.array([]), qnode_kwargs={}):
     :param network_ansatz: A class describing the particular quantum network.
     :type network_ansatz: NetworkAnsatz
 
+    :param post_processing_map: A matrix describing how the :math:`2^{\\text{num wires}}`
+                                outputs are mapped to the appropriate number of outputs.
+    :type post_processing_map: np.ndarray
+
     :returns: A function ``P_Net(scenario_settings)`` that evaluates the
               behavior matrix for a given set of settings.
     :rtype: function
