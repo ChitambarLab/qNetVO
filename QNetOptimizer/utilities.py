@@ -39,7 +39,7 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
 
 
 def write_optimization_json(opt_dict, filename):
-    """Writest the optimization dictionary to a JSON file.
+    """Writes the optimization dictionary to a JSON file.
 
     :param opt_dict: The dictionary returned by a network optimization.
     :type opt_dict: dict
