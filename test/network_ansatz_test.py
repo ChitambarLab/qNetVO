@@ -96,7 +96,7 @@ class TestNetworkAnsatz:
         assert network_ansatz.network_wires.tolist() == [0, 1, 2]
 
         # verify device
-        assert network_ansatz.default_dev_name == "default.qubit"
+        assert network_ansatz.dev_kwargs["name"] == "default.qubit"
         assert network_ansatz.dev.wires.tolist() == [0, 1, 2]
         assert network_ansatz.dev.short_name == "default.qubit"
 
@@ -125,8 +125,8 @@ class TestNetworkAnsatz:
         assert noisy_network_ansatz.network_wires.tolist() == [0, 1, 2]
 
         # verify device
+        assert noisy_network_ansatz.dev_kwargs["name"] == "default.mixed"
         assert noisy_network_ansatz.dev.wires.tolist() == [0, 1, 2]
-        print(noisy_network_ansatz.dev_kwargs)
         assert noisy_network_ansatz.dev.short_name == "default.mixed"
 
         # verify qnode construction and execution

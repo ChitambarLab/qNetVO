@@ -107,9 +107,10 @@ class NetworkAnsatz:
     * **prepare_wires** - The list of wires used by the ``prepare_nodes``.
     * **measure_wires** - The list of wires used by the ``measure_nodes``.
     * **network_wires** - The list of wires used by the network ansatz.
-    * **default_dev_name** - ``"default.qubit"`` for noiseless networks and ``"default.mixed"``
-                             for noisy networks.
     * **dev_kwargs** - *mutable*, the keyword args to pass to the `pennylane.device`_ function.
+                       If no ``dev_kwargs`` are provided, a ``"default.qubit"`` is constructed for
+                       noiseless networks and ``"default.mixed"`` device is constructed
+                       for noisy networks.
     * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
 
@@ -131,8 +132,8 @@ class NetworkAnsatz:
             [self.prepare_wires, self.measure_wires, self.noise_wires]
         )
 
-        self.default_dev_name = "default.qubit" if len(self.noise_nodes) == 0 else "default.mixed"
-        self.dev_kwargs = dev_kwargs or {"name": self.default_dev_name}
+        default_dev_name = "default.qubit" if len(self.noise_nodes) == 0 else "default.mixed"
+        self.dev_kwargs = dev_kwargs or {"name": default_dev_name}
         self.dev_kwargs["wires"] = self.network_wires
         self.dev = self.device()
 
@@ -227,6 +228,20 @@ class NetworkAnsatz:
         )
 
     def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
+        """Constructs a list of settings to pass to the qnode executing the network ansatz.
+    
+        :param scenario_settings: The settings for the network ansatz scenario.
+        :type scenario_settings: list[list[np.ndarray]]
+
+        :param prep_inputs: The classical inputs passed to each preparation node.
+        :type prep_inputs: list[int]
+
+        :param meas_inputs: The classical inputs passed to each measurement node.
+        :type meas_inputs: list[int]
+
+        :returns: The settings to pass to the constructed qnode.
+        :rtype: list[float]
+        """
 
         prep_settings = self.layer_settings(scenario_settings[0], prep_inputs)
         meas_settings = self.layer_settings(scenario_settings[1], meas_inputs)
