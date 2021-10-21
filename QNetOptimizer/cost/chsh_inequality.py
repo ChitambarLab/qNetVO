@@ -33,10 +33,7 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
     if parallel:
-        chsh_qnodes = []
-        for xy in xy_vals:
-            chsh_qnode = global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs)
-            chsh_qnodes.append(chsh_qnode)
+        chsh_qnodes = [global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs)] * 4
     else:
         chsh_qnode = global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs)
 
