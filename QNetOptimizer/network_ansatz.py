@@ -110,7 +110,7 @@ class NetworkAnsatz:
     * **default_dev_name** - ``"default.qubit"`` for noiseless networks and ``"default.mixed"``
                              for noisy networks.
     * **dev_kwargs** - *mutable*, the keyword args to pass to the `pennylane.device`_ function.
-    * **dev** (*qml.device*) - *mutable*, the most recently device constructed for the ansatz.
+    * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
 
     :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
