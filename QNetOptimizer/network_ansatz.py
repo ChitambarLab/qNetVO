@@ -229,7 +229,7 @@ class NetworkAnsatz:
 
     def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
         """Constructs a list of settings to pass to the qnode executing the network ansatz.
-    
+
         :param scenario_settings: The settings for the network ansatz scenario.
         :type scenario_settings: list[list[np.ndarray]]
 
