@@ -112,6 +112,7 @@ def parallel_chsh_grad(chsh_ansatz, **qnode_kwargs):
 def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
     """Constructs a parallelized natural gradient function ``natural_grad`` for the CHSH
     cost function.
+
     The parallelization is achieved through multithreading and intended to improve the
     efficiency of remote qnode execution.
     The natural gradient
