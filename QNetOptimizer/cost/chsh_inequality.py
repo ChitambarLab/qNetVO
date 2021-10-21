@@ -62,6 +62,7 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
 def parallel_chsh_grad(chsh_ansatz, **qnode_kwargs):
     """Constructs a parallelizeable gradient function ``grad_fn`` for the CHSH
     cost.
+
     The parallelization is achieved through multithreading and intended to improve the
     efficiency of remote qnode execution.
 
