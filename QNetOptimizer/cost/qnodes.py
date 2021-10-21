@@ -41,14 +41,14 @@ def local_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     :type network_ansatz: NetworkAnsatz
 
     :returns: A qnode that performs a local parity measurement at measurement nodes.
-              The qnode is called as ``qnode(prepare_settings, measure_settings)``.
+              The qnode is called as ``qnode(settings)``.
     :rtype: ``qml.QNode``
     """
     observables = local_parity_observables(network_ansatz.measure_nodes)
 
-    @qml.qnode(network_ansatz.dev, **qnode_kwargs)
-    def circuit(prepare_settings, measure_settings):
-        network_ansatz.fn(prepare_settings, measure_settings)
+    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    def circuit(settings):
+        network_ansatz.fn(settings)
 
         return [qml.expval(obs) for obs in observables]
 
@@ -62,15 +62,14 @@ def global_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
 
-    :returns: A qnode the performs a global parity measurement and can be tuned over
-              ``prepare_settings`` and ``measure_settings``.
+    :returns: A qnode the performs a global parity measurement and is called as ``qnode(settings)``.
     :rtype: ``qml.QNode``
     """
     parity_obs = parity_observable(network_ansatz.measure_wires)
 
-    @qml.qnode(network_ansatz.dev, **qnode_kwargs)
-    def circuit(prepare_settings, measure_settings):
-        network_ansatz.fn(prepare_settings, measure_settings)
+    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    def circuit(settings):
+        network_ansatz.fn(settings)
 
         return qml.expval(parity_obs)
 
@@ -83,11 +82,15 @@ def joint_probs_qnode(network_ansatz, **qnode_kwargs):
 
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
+
+    :returns: A qnode called as ``qnode(settings)`` for evaluating the joint probabilities of the
+              network ansatz.
+    :rtype: ``pennylane.QNode``
     """
 
-    @qml.qnode(network_ansatz.dev, **qnode_kwargs)
-    def circuit(prepare_settings, measure_settings):
-        network_ansatz.fn(prepare_settings, measure_settings)
+    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    def circuit(settings):
+        network_ansatz.fn(settings)
 
         return qml.probs(wires=network_ansatz.measure_wires)
 

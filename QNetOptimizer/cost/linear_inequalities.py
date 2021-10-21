@@ -68,15 +68,13 @@ def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qn
     def cost(scenario_settings):
         score = 0
         for (i, input_id_set) in enumerate(node_input_ids):
-
-            prep_settings = network_ansatz.layer_settings(
-                scenario_settings[0], input_id_set[0 : len(network_ansatz.prepare_nodes)]
-            )
-            meas_settings = network_ansatz.layer_settings(
-                scenario_settings[1], input_id_set[len(network_ansatz.prepare_nodes) :]
+            settings = network_ansatz.qnode_settings(
+                scenario_settings,
+                input_id_set[0 : len(network_ansatz.prepare_nodes)],
+                input_id_set[len(network_ansatz.prepare_nodes) :],
             )
 
-            raw_probs = probs_qnode(prep_settings, meas_settings)
+            raw_probs = probs_qnode(settings)
             probs = raw_probs if net_num_out == raw_net_num_out else post_processing_map @ raw_probs
 
             score += math.sum(game[:, i] * probs)

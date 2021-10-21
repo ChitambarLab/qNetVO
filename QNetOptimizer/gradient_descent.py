@@ -1,4 +1,6 @@
 import pennylane as qml
+from datetime import datetime
+import time
 import tensorflow as tf
 
 
@@ -50,6 +52,9 @@ def gradient_descent(
         * **samples** (*array[int]*) - A list containing the iteration for each sample.
         * **settings_history** (*array[array-like]*) - A list of all settings found for each
           intermediate step of gradient descent
+        * **datetime** (*string*) - The date and time in UTC when the optimization occurred.
+        * **step_times** (*list[float]*) - The time elapsed during each sampled optimization step.
+        * **step_size** (*float*) - The learning rate of the optimization.
 
     .. warning::
 
@@ -72,7 +77,11 @@ def gradient_descent(
     settings = init_settings
     scores = []
     samples = []
-    settings_history = []
+    step_times = []
+    settings_history = [init_settings]
+
+    start_datetime = datetime.utcnow()
+    elapsed = 0
 
     # performing gradient descent
     for i in range(num_steps):
@@ -84,6 +93,7 @@ def gradient_descent(
             if verbose:
                 print("iteration : ", i, ", score : ", score)
 
+        start = time.time()
         if interface == "autograd":
             settings = opt.step(cost, settings, grad_fn=grad_fn)
         elif interface == "tf":
@@ -92,18 +102,29 @@ def gradient_descent(
             opt.minimize(tf_cost, settings)
         else:
             raise ValueError('Interface "' + interface + '" is not supported.')
+        elapsed = time.time() - start
+
+        if i % sample_width == 0:
+            step_times.append(elapsed)
+
+            if verbose:
+                print("elapsed time : ", elapsed)
 
         settings_history.append(settings)
 
     opt_score = -(cost(settings))
+    step_times.append(elapsed)
 
     scores.append(opt_score)
     samples.append(num_steps - 1)
 
     return {
+        "datetime": start_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "opt_score": opt_score,
         "opt_settings": settings,
         "scores": scores,
         "samples": samples,
         "settings_history": settings_history,
+        "step_times": step_times,
+        "step_size": step_size,
     }

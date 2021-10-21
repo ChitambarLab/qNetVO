@@ -95,6 +95,11 @@ class NetworkAnsatz:
     :param noise_nodes: A list of ``NoiseNode`` classes.
     :type noise_nodes: *optional* list[NoiseNode]
 
+    :param dev_kwargs: Keyword arguments for the `pennylane.device`_ function.
+    :type dev_kwargs: *optional* dict
+
+    .. _pennylane.device: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.device.html?highlight=device#qml-device
+
     :returns: An instantiated ``NetworkAnsatz`` class with the following fields:
 
     * **prepare_nodes** - The list of ``PrepareNode`` classes.
@@ -102,14 +107,17 @@ class NetworkAnsatz:
     * **prepare_wires** - The list of wires used by the ``prepare_nodes``.
     * **measure_wires** - The list of wires used by the ``measure_nodes``.
     * **network_wires** - The list of wires used by the network ansatz.
-    * **dev** (*qml.device*) - A PennyLane ``"default.qubit"`` device for the network ansatz.
-                               If noise nodes are provided, ``"default.mixed"`` is used instead.
+    * **dev_kwargs** - *mutable*, the keyword args to pass to the `pennylane.device`_ function.
+                       If no ``dev_kwargs`` are provided, a ``"default.qubit"`` is constructed for
+                       noiseless networks and ``"default.mixed"`` device is constructed
+                       for noisy networks.
+    * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
 
     :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
     """
 
-    def __init__(self, prepare_nodes, measure_nodes, noise_nodes=[]):
+    def __init__(self, prepare_nodes, measure_nodes, noise_nodes=[], dev_kwargs=None):
         self.prepare_nodes = prepare_nodes
         self.measure_nodes = measure_nodes
         self.noise_nodes = noise_nodes
@@ -124,10 +132,39 @@ class NetworkAnsatz:
             [self.prepare_wires, self.measure_wires, self.noise_wires]
         )
 
-        default_dev_name = "default.qubit" if self.noise_nodes == [] else "default.mixed"
-        self.dev = qml.device(default_dev_name, wires=self.network_wires)
+        default_dev_name = "default.qubit" if len(self.noise_nodes) == 0 else "default.mixed"
+        self.dev_kwargs = dev_kwargs or {"name": default_dev_name}
+        self.dev_kwargs["wires"] = self.network_wires
+        self.dev = self.device()
 
         self.fn = self.construct_ansatz_circuit()
+
+    def set_device(self, name, **kwargs):
+        """Configures a new PennyLane device for executing the network ansatz circuit.
+        For more details on parameters see `pennylane.device`_.
+        This method updates the values stored in ``self.dev_kwargs`` and ``self.dev``.
+
+        :returns: The instantiated device.
+        :rtype: ``pennylane.device``
+        """
+
+        dev_kwargs = kwargs.copy() if kwargs else {}
+        dev_kwargs["name"] = name
+        dev_kwargs["wires"] = self.network_wires
+
+        self.dev_kwargs = dev_kwargs
+        self.dev = qml.device(**self.dev_kwargs)
+        return self.dev
+
+    def device(self):
+        """Instantiates a new PennyLane device configured using the ``self.dev_kwargs`` parameters.
+        A distinct device is created each time this function runs.
+
+        :returns: The instantiated device.
+        :rtype: ``pennylane.device``
+        """
+        self.dev = qml.device(**self.dev_kwargs)
+        return self.dev
 
     def construct_ansatz_circuit(self):
         prepare_layer = self.circuit_layer(self.prepare_nodes)
@@ -136,10 +173,15 @@ class NetworkAnsatz:
 
         noise_settings = [np.array([]) for i in range(len(self.noise_nodes))]
 
-        def ansatz_circuit(prepare_settings_array, measure_settings_array):
-            prepare_layer(prepare_settings_array)
+        num_prep_settings = math.sum([node.num_settings for node in self.prepare_nodes])
+
+        def ansatz_circuit(settings):
+            prep_settings = settings[0:num_prep_settings]
+            meas_settings = settings[num_prep_settings:]
+
+            prepare_layer(prep_settings)
             noise_layer(noise_settings)
-            measure_layer(measure_settings_array)
+            measure_layer(meas_settings)
 
         return ansatz_circuit
 
@@ -184,6 +226,26 @@ class NetworkAnsatz:
         return math.concatenate(
             [scenario_settings[i][node_input] for i, node_input in enumerate(node_inputs)]
         )
+
+    def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
+        """Constructs a list of settings to pass to the qnode executing the network ansatz.
+
+        :param scenario_settings: The settings for the network ansatz scenario.
+        :type scenario_settings: list[list[np.ndarray]]
+
+        :param prep_inputs: The classical inputs passed to each preparation node.
+        :type prep_inputs: list[int]
+
+        :param meas_inputs: The classical inputs passed to each measurement node.
+        :type meas_inputs: list[int]
+
+        :returns: The settings to pass to the constructed qnode.
+        :rtype: list[float]
+        """
+
+        prep_settings = self.layer_settings(scenario_settings[0], prep_inputs)
+        meas_settings = self.layer_settings(scenario_settings[1], meas_inputs)
+        return math.append(prep_settings, meas_settings)
 
     @staticmethod
     def circuit_layer(network_nodes):
