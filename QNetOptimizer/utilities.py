@@ -47,7 +47,7 @@ def write_optimization_json(opt_dict, filename):
     :param filename: The name of the JSON file to be written. Note that ``.json`` extension is automatically added.
     :type filename: string
 
-    :returns: ``True``
+    :returns: ``None``
     """
 
     opt_dict_json = copy.deepcopy(opt_dict)
@@ -59,8 +59,6 @@ def write_optimization_json(opt_dict, filename):
 
     with open(filename + ".json", "w") as file:
         file.write(json.dumps(opt_dict_json))
-
-    return True
 
 
 def read_optimization_json(filepath):
