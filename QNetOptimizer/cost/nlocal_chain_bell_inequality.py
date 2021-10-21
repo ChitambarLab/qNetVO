@@ -58,8 +58,6 @@ def nlocal_chain_cost_22(network_ansatz, **qnode_kwargs):
         for x_a, x_b in [(0, 0), (0, 1), (1, 0), (1, 1)]:
 
             I22_inputs = [x_a] + [0 for i in range(num_interior_nodes)] + [x_b]
-            # I22_meas_settings = network_ansatz.layer_settings(meas_settings, I22_inputs)
-            # I22_score += nlocal_chain_qnode(static_prep_settings, I22_meas_settings)
             I22_settings = network_ansatz.qnode_settings(scenario_settings, [0], I22_inputs)
             I22_score += nlocal_chain_qnode(I22_settings)
 
