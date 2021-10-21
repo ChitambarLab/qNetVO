@@ -39,7 +39,6 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
 
     def chsh_cost(scenario_settings):
 
-        # prep_settings = chsh_ansatz.layer_settings(scenario_settings[0], [0])
         xy_settings = [chsh_ansatz.qnode_settings(scenario_settings, [0], xy) for xy in xy_vals]
 
         if parallel:
