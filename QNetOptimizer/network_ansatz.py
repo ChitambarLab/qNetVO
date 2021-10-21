@@ -132,7 +132,7 @@ class NetworkAnsatz:
         )
 
         self.default_dev_name = "default.qubit" if len(self.noise_nodes) == 0 else "default.mixed"
-        self.dev_kwargs = dev_kwargs if dev_kwargs != None else {"name": self.default_dev_name}
+        self.dev_kwargs = dev_kwargs or {"name": self.default_dev_name}
         self.dev_kwargs["wires"] = self.network_wires
         self.dev = self.device()
 
