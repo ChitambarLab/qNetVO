@@ -57,14 +57,13 @@ def behavior(network_ansatz, post_processing_map=np.array([]), qnode_kwargs={}):
     def P_Net(scenario_settings):
         raw_behavior_matrix = np.zeros((raw_net_num_out, net_num_in))
         for (i, input_id_set) in enumerate(node_input_ids):
-            prep_layer_settings = network_ansatz.layer_settings(
-                scenario_settings[0], input_id_set[0 : len(num_in_prep_nodes)]
-            )
-            meas_layer_settings = network_ansatz.layer_settings(
-                scenario_settings[1], input_id_set[len(num_in_prep_nodes) :]
+            settings = network_ansatz.qnode_settings(
+                scenario_settings,
+                input_id_set[0 : len(num_in_prep_nodes)],
+                input_id_set[len(num_in_prep_nodes) :],
             )
 
-            probs = probs_qnode(prep_layer_settings, meas_layer_settings)
+            probs = probs_qnode(settings)
             raw_behavior_matrix[:, i] += probs
 
             if raw_net_num_out != net_num_out:

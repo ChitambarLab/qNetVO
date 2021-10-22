@@ -50,6 +50,15 @@ class TestMeasureNode:
 
 
 class TestNetworkAnsatz:
+    def chsh_ansatz(self):
+        prepare_nodes = [QNopt.PrepareNode(1, [0, 1], QNopt.local_RY, 2)]
+        measure_nodes = [
+            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
+            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
+        ]
+
+        return QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
+
     def test_init(self):
         # setup test
         def ansatz_circuit(settings, wires):
@@ -87,18 +96,19 @@ class TestNetworkAnsatz:
         assert network_ansatz.network_wires.tolist() == [0, 1, 2]
 
         # verify device
+        assert network_ansatz.dev_kwargs["name"] == "default.qubit"
         assert network_ansatz.dev.wires.tolist() == [0, 1, 2]
         assert network_ansatz.dev.short_name == "default.qubit"
 
         # verify qnode construction and execution
         @qml.qnode(network_ansatz.dev)
-        def test_circuit(prepare_settings_array, measure_settings_array):
-            network_ansatz.fn(prepare_settings_array, measure_settings_array)
+        def test_circuit(settings):
+            network_ansatz.fn(settings)
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-        assert test_circuit([[0], [0], [0]], [[0], [0]]) == 1
-        assert test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]) == 1
+        assert test_circuit([0, 0, 0, 0, 0]) == 1
+        assert test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]) == 1
 
         # Noisy network Case
         noisy_network_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
@@ -115,20 +125,31 @@ class TestNetworkAnsatz:
         assert noisy_network_ansatz.network_wires.tolist() == [0, 1, 2]
 
         # verify device
+        assert noisy_network_ansatz.dev_kwargs["name"] == "default.mixed"
         assert noisy_network_ansatz.dev.wires.tolist() == [0, 1, 2]
         assert noisy_network_ansatz.dev.short_name == "default.mixed"
 
         # verify qnode construction and execution
         @qml.qnode(noisy_network_ansatz.dev)
-        def noisy_test_circuit(prepare_settings_array, measure_settings_array):
-            noisy_network_ansatz.fn(prepare_settings_array, measure_settings_array)
+        def noisy_test_circuit(settings):
+            noisy_network_ansatz.fn(settings)
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-        assert noisy_test_circuit([[0], [0], [0]], [[0], [0]]) == 0.5
+        assert noisy_test_circuit([0, 0, 0, 0, 0]) == 0.5
         assert np.isclose(
-            noisy_test_circuit([[np.pi / 4], [-np.pi / 3], [0]], [[-np.pi / 4], [np.pi / 3]]), 0.5
+            noisy_test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]), 0.5
         )
+
+    def test_qnode_settings(self):
+        chsh_ansatz = self.chsh_ansatz()
+
+        np.random.seed(123)
+        scenario_settings = chsh_ansatz.rand_scenario_settings()
+
+        settings = chsh_ansatz.qnode_settings(scenario_settings, [0], [0, 1])
+
+        assert np.allclose(settings, [1.2344523, -1.34372619, -1.71624293, -0.48313636])
 
     def test_layer_settings(self):
         nodes = [
@@ -162,6 +183,27 @@ class TestNetworkAnsatz:
         assert np.isclose(layer_settings[1], 1.37896421)
         assert np.isclose(layer_settings[2], -0.1198084)
         assert np.isclose(layer_settings[3], -0.98534158)
+
+    def test_network_ansatz_device(self):
+
+        chsh_ansatz = self.chsh_ansatz()
+        assert chsh_ansatz.dev.short_name == "default.qubit"
+        assert chsh_ansatz.dev_kwargs["name"] == "default.qubit"
+
+        updated_dev = chsh_ansatz.set_device("default.mixed", shots=5)
+        assert updated_dev == chsh_ansatz.dev
+        assert chsh_ansatz.dev.short_name == "default.mixed"
+        assert chsh_ansatz.dev_kwargs["name"] == "default.mixed"
+        assert chsh_ansatz.dev.shots == 5
+        assert chsh_ansatz.dev_kwargs["shots"] == 5
+
+        # device() instantiates a new device
+        dev1 = chsh_ansatz.device()
+        dev2 = chsh_ansatz.device()
+
+        assert dev1 != dev2
+        assert dev1.short_name == dev2.short_name
+        assert dev1.shots == dev2.shots
 
     def test_circuit_layer(self):
         def ansatz_circuit(settings, wires):
