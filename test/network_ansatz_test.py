@@ -31,6 +31,7 @@ class TestPrepareNode:
         assert prep_node.ansatz_fn == circuit
         assert prep_node.num_settings == 2
         assert prep_node.settings_dims == (3, 2)
+        assert prep_node.static_settings == []
 
 
 class TestMeasureNode:
@@ -47,6 +48,7 @@ class TestMeasureNode:
         assert measure_node.ansatz_fn == circuit
         assert measure_node.num_settings == 2
         assert measure_node.settings_dims == (3, 2)
+        assert measure_node.static_settings == []
 
 
 class TestNetworkAnsatz:
@@ -151,38 +153,45 @@ class TestNetworkAnsatz:
 
         assert np.allclose(settings, [1.2344523, -1.34372619, -1.71624293, -0.48313636])
 
-    def test_layer_settings(self):
-        nodes = [
-            QNopt.PrepareNode(3, [0], QNopt.local_RY, 1),
-            QNopt.PrepareNode(3, [1], QNopt.local_RY, 1),
-            QNopt.PrepareNode(3, [2], QNopt.local_RY, 1),
-            QNopt.PrepareNode(3, [3], QNopt.local_RY, 1),
-        ]
-
-        ansatz = QNopt.NetworkAnsatz(nodes, nodes)
-
-        # test
-        np.random.seed(123)
-        scenario_settings = ansatz.rand_scenario_settings()
-
-        layer_settings = ansatz.layer_settings(scenario_settings[0], [0, 1, 2, 1])
-
-        assert len(layer_settings) == 4
-        assert np.isclose(layer_settings[0], 1.2344523)
-        assert np.isclose(layer_settings[1], 1.37896421)
-        assert np.isclose(layer_settings[2], -0.1198084)
-        assert np.isclose(layer_settings[3], -0.98534158)
-
-        np.random.seed(123)
-        tf_scenario_settings = ansatz.tf_rand_scenario_settings()
-
-        layer_settings = ansatz.layer_settings(tf_scenario_settings[0], [0, 1, 2, 1])
-
-        assert len(layer_settings) == 4
-        assert np.isclose(layer_settings[0], 1.2344523)
-        assert np.isclose(layer_settings[1], 1.37896421)
-        assert np.isclose(layer_settings[2], -0.1198084)
-        assert np.isclose(layer_settings[3], -0.98534158)
+    @pytest.mark.parametrize(
+        "settings,node_inputs,nodes,match",
+        [
+            (
+                [np.array([[4], [5]]), np.array([[6], [7]])],
+                [1, 0],
+                [
+                    QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
+                    QNopt.PrepareNode(2, [1], QNopt.local_RY, 1),
+                ],
+                [5, 6],
+            ),
+            (
+                [np.array([[4], [5]]), np.array([[6], [7]])],
+                [0, 1],
+                [
+                    QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
+                    QNopt.PrepareNode(
+                        2, [1], QNopt.local_RY, 1, static_settings=np.array([[8], [9]])
+                    ),
+                ],
+                [4, 9],
+            ),
+            (
+                [tf.Variable([[4], [5]]), tf.Variable([[6], [7]])],
+                [1, 0],
+                [
+                    QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
+                    QNopt.PrepareNode(
+                        2, [1], QNopt.local_RY, 1, static_settings=np.array([[8], [9]])
+                    ),
+                ],
+                [5, 8],
+            ),
+        ],
+    )
+    def test_layer_settings(self, settings, node_inputs, nodes, match):
+        layer_settings = QNopt.NetworkAnsatz.layer_settings(settings, node_inputs, nodes)
+        assert np.allclose(layer_settings, match)
 
     def test_network_ansatz_device(self):
 
@@ -275,24 +284,27 @@ class TestNetworkAnsatz:
         meas_nodes = [
             QNopt.MeasureNode(2, 2, [0], ansatz_circuit, 1),
             QNopt.MeasureNode(1, 2, [1], ansatz_circuit, 3),
+            QNopt.MeasureNode(
+                2, 2, [2, 3], ansatz_circuit, 2, static_settings=np.array([[1, 2], [3, 4]])
+            ),
         ]
 
         network_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
 
         zero_settings = network_ansatz.zero_scenario_settings()
-
         match_settings = [
             [[[0, 0], [0, 0], [0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0]]],
-            [[[0], [0]], [[0, 0, 0]]],
+            [[[0], [0]], [[0, 0, 0]], [[]]],
         ]
 
         assert len(zero_settings[0]) == 2
         assert np.array_equal(zero_settings[0][0], match_settings[0][0])
         assert np.array_equal(zero_settings[0][1], match_settings[0][1])
 
-        assert len(zero_settings[1]) == 2
+        assert len(zero_settings[1]) == 3
         assert np.array_equal(zero_settings[1][0], match_settings[1][0])
         assert np.array_equal(zero_settings[1][1], match_settings[1][1])
+        assert np.array_equal(zero_settings[1][2], match_settings[1][2])
 
         np.random.seed(123)
         rand_settings = network_ansatz.rand_scenario_settings()
@@ -305,16 +317,17 @@ class TestNetworkAnsatz:
                     [-0.98534158, 1.43916176, -0.38596197, -2.76662537],
                 ],
             ],
-            [[[-0.64060684], [1.49536924]], [[-1.99496329, -2.03919676, 0.19824313]]],
+            [[[-0.64060684], [1.49536924]], [[-1.99496329, -2.03919676, 0.19824313]], [[]]],
         ]
 
         assert len(rand_settings[0]) == 2
         assert np.allclose(rand_settings[0][0], match_settings[0][0])
         assert np.allclose(rand_settings[0][1], match_settings[0][1])
 
-        assert len(rand_settings[1]) == 2
+        assert len(rand_settings[1]) == 3
         assert np.allclose(rand_settings[1][0], match_settings[1][0])
         assert np.allclose(rand_settings[1][1], match_settings[1][1])
+        assert np.array_equal(rand_settings[1][2], match_settings[1][2])
 
         # tensorflow types
         np.random.seed(123)
@@ -326,8 +339,7 @@ class TestNetworkAnsatz:
         assert np.allclose(tf_rand_settings[0][0], match_settings[0][0])
         assert np.allclose(tf_rand_settings[0][1], match_settings[0][1])
 
-        assert len(rand_settings[1]) == 2
+        assert len(rand_settings[1]) == 3
         assert np.allclose(tf_rand_settings[1][0], match_settings[1][0])
         assert np.allclose(tf_rand_settings[1][1], match_settings[1][1])
-
-        # assert False
+        assert np.array_equal(tf_rand_settings[1][2], match_settings[1][2])
