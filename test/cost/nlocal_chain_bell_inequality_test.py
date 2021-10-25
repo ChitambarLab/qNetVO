@@ -6,7 +6,8 @@ from context import QNetOptimizer as QNopt
 
 
 class TestNLocalChainBellInequality:
-    def test_nlocal_chain_cost_22(self):
+    @pytest.mark.parametrize("parallel_flag", [False, True])
+    def test_nlocal_chain_cost_22(self, parallel_flag):
         prep_nodes = [
             QNopt.PrepareNode(1, [0, 1], QNopt.ghz_state, 0),
             QNopt.PrepareNode(1, [2, 3], QNopt.ghz_state, 0),
@@ -19,7 +20,7 @@ class TestNLocalChainBellInequality:
 
         bilocal_chain_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        bilocal_chain_cost = QNopt.nlocal_chain_cost_22(bilocal_chain_ansatz)
+        bilocal_chain_cost = QNopt.nlocal_chain_cost_22(bilocal_chain_ansatz, parallel=parallel_flag)
 
         zero_settings = bilocal_chain_ansatz.zero_scenario_settings()
 

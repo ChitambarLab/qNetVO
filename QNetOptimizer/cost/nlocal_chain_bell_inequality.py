@@ -1,13 +1,17 @@
+import dask
 from pennylane import math
 from .qnodes import global_parity_expval_qnode
 
 
-def nlocal_chain_cost_22(network_ansatz, **qnode_kwargs):
+def nlocal_chain_cost_22(network_ansatz, parallel=False, **qnode_kwargs):
     """For the provided ``network_ansatz``, constructs the cost function for the
     :math:`n`-local chain Bell inequality for binary inputs and outputs.
 
     :param network_ansatz: The ansatz for the networks. 
     :type network_ansatz: QNopt.NetworkAnsatz
+
+    :param parallel: If ``True``, remote qnode executions are made in parallel web requests.
+    :type parallel: *optional* bool
 
     .. math::
 
@@ -41,29 +45,44 @@ def nlocal_chain_cost_22(network_ansatz, **qnode_kwargs):
     :rtype: Function
     """
 
-    nlocal_chain_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
+    xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
+
+    if parallel:
+        chain_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
+    else:
+        chain_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     num_interior_nodes = len(network_ansatz.measure_nodes) - 2
+    prep_inputs = [0] * len(network_ansatz.prepare_nodes)
 
     def cost(scenario_settings):
-        prep_settings, meas_settings = scenario_settings
-
-        static_prep_settings = network_ansatz.layer_settings(
-            prep_settings, [0] * len(network_ansatz.prepare_nodes)
-        )
 
         I22_score = 0
         J22_score = 0
 
-        for x_a, x_b in [(0, 0), (0, 1), (1, 0), (1, 1)]:
+        I22_xy_inputs = [[x_a] + [0 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
+        J22_xy_inputs = [[x_a] + [1 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
-            I22_inputs = [x_a] + [0 for i in range(num_interior_nodes)] + [x_b]
-            I22_settings = network_ansatz.qnode_settings(scenario_settings, [0], I22_inputs)
-            I22_score += nlocal_chain_qnode(I22_settings)
+        I22_xy_settings = [network_ansatz.qnode_settings(scenario_settings, prep_inputs, meas_inputs) for meas_inputs in I22_xy_inputs]
+        J22_xy_settings = [network_ansatz.qnode_settings(scenario_settings, prep_inputs, meas_inputs) for meas_inputs in J22_xy_inputs]
 
-            J22_inputs = [x_a] + [1 for i in range(num_interior_nodes)] + [x_b]
-            J22_settings = network_ansatz.qnode_settings(scenario_settings, [0], J22_inputs)
-            J22_score += ((-1) ** (x_a + x_b)) * nlocal_chain_qnode(J22_settings)
+        if parallel:
+            I22_delayed_results = [
+                dask.delayed(chain_qnodes[i])(settings) for i, settings in enumerate(I22_xy_settings)
+            ]
+            J22_delayed_results = [
+                dask.delayed(chain_qnodes[i])(settings) for i, settings in enumerate(J22_xy_settings)
+            ]
+
+            # IBM only allows 5 parallel requests (we do two batches of 4 and 4).
+            I22_results = math.array(dask.compute(*I22_delayed_results, scheduler="threads"))
+            J22_results = math.array(dask.compute(*J22_delayed_results, scheduler="threads"))
+        else:
+            I22_results = math.array([chain_qnode(settings) for settings in I22_xy_settings])
+            J22_results = math.array([chain_qnode(settings) for settings in J22_xy_settings])
+
+        I22_score = math.sum(I22_results)
+        J22_score = math.sum(math.array([1,-1,-1,1]) * J22_results)
 
         return -(math.sqrt(math.abs(I22_score) / 4) + math.sqrt(math.abs(J22_score) / 4))
 
