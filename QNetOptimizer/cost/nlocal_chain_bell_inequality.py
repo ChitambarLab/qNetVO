@@ -2,6 +2,7 @@ import dask
 import pennylane as qml
 from pennylane import math
 from .qnodes import global_parity_expval_qnode
+from scipy.linalg import pinvh
 
 
 def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
@@ -163,7 +164,7 @@ def nlocal_chain_cost_22(network_ansatz, parallel=False, **qnode_kwargs):
     return cost
 
 
-def parallel_nlocal_chain_grad_fn(network_ansatz, **qnode_kwargs):
+def parallel_nlocal_chain_grad_fn(network_ansatz, natural_gradient=False, **qnode_kwargs):
     """Constructs a parallelizeable gradient function ``grad_fn`` for the :math:`n`-local
     chain cost.
 
@@ -184,10 +185,8 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, **qnode_kwargs):
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
     n = len(network_ansatz.prepare_nodes)
 
-    qnode_grads = []
-    for xy in xy_vals:
-        chain_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
-        qnode_grads.append(qml.grad(chain_qnode))
+    chain_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
+    qnode_grads = [qml.grad(qnode) for qnode in chain_qnodes]
 
     I22 = I22_fn(network_ansatz, parallel=True, **qnode_kwargs)
     J22 = J22_fn(network_ansatz, parallel=True, **qnode_kwargs)
@@ -197,6 +196,12 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, **qnode_kwargs):
 
     prep_num_settings = [node.num_settings for node in network_ansatz.prepare_nodes]
     meas_num_settings = [node.num_settings for node in network_ansatz.measure_nodes]
+
+    def _ng(settings, qnode):
+        grad = qml.grad(qnode)(settings)
+        ginv = pinvh(qnode.metric_tensor(settings))
+
+        return ginv @ grad
 
     def nlocal_chain_grad(scenario_settings):
 
@@ -212,12 +217,22 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, **qnode_kwargs):
             for meas_inputs in J22_xy_meas_inputs
         ]
 
-        I22_delayed_results = [
-            dask.delayed(qnode_grads[i])(settings) for i, settings in enumerate(I22_xy_settings)
-        ]
-        J22_delayed_results = [
-            dask.delayed(qnode_grads[i])(settings) for i, settings in enumerate(J22_xy_settings)
-        ]
+        if natural_gradient:
+            I22_delayed_results = [
+                dask.delayed(_ng)(settings, chain_qnodes[i])
+                for i, settings in enumerate(I22_xy_settings)
+            ]
+            J22_delayed_results = [
+                dask.delayed(_ng)(settings, chain_qnodes[i])
+                for i, settings in enumerate(J22_xy_settings)
+            ]
+        else:
+            I22_delayed_results = [
+                dask.delayed(qnode_grads[i])(settings) for i, settings in enumerate(I22_xy_settings)
+            ]
+            J22_delayed_results = [
+                dask.delayed(qnode_grads[i])(settings) for i, settings in enumerate(J22_xy_settings)
+            ]
 
         I22_results = dask.compute(*I22_delayed_results, scheduler="threads")
         J22_results = dask.compute(*J22_delayed_results, scheduler="threads")
