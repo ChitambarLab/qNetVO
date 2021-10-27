@@ -174,7 +174,6 @@ def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
 
             scalar = -1 * (-1) ** (x * y)
 
-            # nat_grad = _ng(prep_settings, meas_settings, qnode, qgrad)
             nat_grad = nat_grads[grad_id]
 
             # remapping states and measurements
