@@ -41,14 +41,18 @@ class PrepareNode(NoiseNode):
     :param num_settings: The number of settings that the quantum function accepts.
     :type num_settings: int
 
+    :param static_settings: A set of fixed settings for the preparation node.
+    :type static_settings: optional, array-like
+
     :returns: An instantiated ``PrepareNode`` class.
     """
 
-    def __init__(self, num_in, wires, quantum_fn, num_settings):
+    def __init__(self, num_in, wires, quantum_fn, num_settings, static_settings=[]):
         super().__init__(wires, quantum_fn)
         self.num_in = num_in
         self.num_settings = num_settings
         self.settings_dims = (num_in, num_settings)
+        self.static_settings = static_settings
 
 
 class MeasureNode(PrepareNode):
@@ -71,11 +75,14 @@ class MeasureNode(PrepareNode):
     :param num_settings: The number of settings that the quantum function accepts.
     :type num_settings: int
 
+    :param static_settings: A set of fixed settings for the preparation node.
+    :type static_settings: optional, array-like
+
     :returns: An instantiated ``MeasureNode`` class.
     """
 
-    def __init__(self, num_in, num_out, wires, quantum_fn, num_settings):
-        super().__init__(num_in, wires, quantum_fn, num_settings)
+    def __init__(self, num_in, num_out, wires, quantum_fn, num_settings, static_settings=[]):
+        super().__init__(num_in, wires, quantum_fn, num_settings, static_settings=static_settings)
         self.num_out = num_out
 
 
@@ -208,7 +215,7 @@ class NetworkAnsatz:
         return all_wires
 
     @staticmethod
-    def layer_settings(scenario_settings, node_inputs):
+    def layer_settings(scenario_settings, node_inputs, nodes):
         """Constructs the list of settings for a circuit layer in the network ansatz.
 
         The type of tensor used for the returned layer settings matches the tensor
@@ -224,7 +231,12 @@ class NetworkAnsatz:
         :rtype: array[float]
         """
         return math.concatenate(
-            [scenario_settings[i][node_input] for i, node_input in enumerate(node_inputs)]
+            [
+                scenario_settings[i][node_input]
+                if len(nodes[i].static_settings) == 0
+                else nodes[i].static_settings[node_input]
+                for i, node_input in enumerate(node_inputs)
+            ]
         )
 
     def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
@@ -243,8 +255,8 @@ class NetworkAnsatz:
         :rtype: list[float]
         """
 
-        prep_settings = self.layer_settings(scenario_settings[0], prep_inputs)
-        meas_settings = self.layer_settings(scenario_settings[1], meas_inputs)
+        prep_settings = self.layer_settings(scenario_settings[0], prep_inputs, self.prepare_nodes)
+        meas_settings = self.layer_settings(scenario_settings[1], meas_inputs, self.measure_nodes)
         return math.append(prep_settings, meas_settings)
 
     @staticmethod
@@ -283,10 +295,16 @@ class NetworkAnsatz:
         :rtype: list[list[np.array]]
         """
         prepare_settings = [
-            2 * np.pi * np.random.random(node.settings_dims) - np.pi for node in self.prepare_nodes
+            2 * np.pi * np.random.random(node.settings_dims) - np.pi
+            if len(node.static_settings) == 0
+            else np.array([[]])
+            for node in self.prepare_nodes
         ]
         measure_settings = [
-            2 * np.pi * np.random.random(node.settings_dims) - np.pi for node in self.measure_nodes
+            2 * np.pi * np.random.random(node.settings_dims) - np.pi
+            if len(node.static_settings) == 0
+            else np.array([[]])
+            for node in self.measure_nodes
         ]
 
         return [prepare_settings, measure_settings]
@@ -315,7 +333,13 @@ class NetworkAnsatz:
                   where the dimension of each array is ``(num_inputs, num_settings)``.
         :rtype: list[list[np.array]]
         """
-        prepare_settings = [np.zeros(node.settings_dims) for node in self.prepare_nodes]
-        measure_settings = [np.zeros(node.settings_dims) for node in self.measure_nodes]
+        prepare_settings = [
+            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
+            for node in self.prepare_nodes
+        ]
+        measure_settings = [
+            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
+            for node in self.measure_nodes
+        ]
 
         return [prepare_settings, measure_settings]
