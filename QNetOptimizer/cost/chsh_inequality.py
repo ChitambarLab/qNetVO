@@ -33,7 +33,7 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
     if parallel:
-        chsh_qnodes = [global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs)] * 4
+        chsh_qnodes = [global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs) for i in range(4)]
     else:
         chsh_qnode = global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs)
 
@@ -174,7 +174,6 @@ def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
 
             scalar = -1 * (-1) ** (x * y)
 
-            # nat_grad = _ng(prep_settings, meas_settings, qnode, qgrad)
             nat_grad = nat_grads[grad_id]
 
             # remapping states and measurements

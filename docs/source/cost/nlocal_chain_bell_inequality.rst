@@ -20,6 +20,11 @@ integrated into cost functions.
 
 .. autofunction:: nlocal_chain_cost_22
 
+.. autofunction:: I22_fn
+
+.. autofunction:: J22_fn
+
+.. autofunction:: parallel_nlocal_chain_grad_fn
 
 References
 ----------
