@@ -2,5 +2,6 @@ pennylane==0.18
 qiskit
 pennylane-qiskit
 dask[delayed]
+dask[distributed]
 tensorflow>=2.0,<3.0
 tensornetwork>=0.3,<0.4

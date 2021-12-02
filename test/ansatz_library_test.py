@@ -6,6 +6,25 @@ from context import QNetOptimizer as QNopt
 
 
 class TestStatePreparationAnsatzes:
+    @pytest.mark.parametrize(
+        "settings,match",
+        [
+            ([0, 0, 0], [1 / np.sqrt(2), 0, 0, 1 / np.sqrt(2)]),
+            ([0, np.pi, 0], [0, -1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
+            ([np.pi, np.pi, 0], [0, -1j / np.sqrt(2), -1j / np.sqrt(2), 0]),
+            ([0, np.pi / 2, np.pi], [-0.5j, 0.5j, 0.5j, 0.5j]),
+            ([np.pi, 0, 0], [-1j / np.sqrt(2), 0, 0, 1j / np.sqrt(2)]),
+        ],
+    )
+    def test_max_entangled_state(self, settings, match):
+        @qml.qnode(qml.device("default.qubit", wires=[0, 1]))
+        def test_circ(settings):
+            QNopt.max_entangled_state(settings, wires=[0, 1])
+
+            return qml.state()
+
+        assert np.allclose(test_circ(settings), match)
+
     def test_bell_state_copies(self):
         U = QNopt.unitary_matrix(QNopt.bell_state_copies, 2, [], [0, 1])
         assert np.allclose(

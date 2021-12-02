@@ -58,7 +58,7 @@ def write_optimization_json(opt_dict, filename):
     ]
 
     with open(filename + ".json", "w") as file:
-        file.write(json.dumps(opt_dict_json))
+        file.write(json.dumps(opt_dict_json, indent=2))
 
 
 def read_optimization_json(filepath):
