@@ -34,16 +34,16 @@ release = "v0.1"
 # ones.
 # extensions = ["sphinx.ext.autodoc"]
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.inheritance_diagram',
-    'sphinx.ext.viewcode',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.todo",
+    "sphinx.ext.coverage",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.inheritance_diagram",
+    "sphinx.ext.viewcode",
     # 'sphinxcontrib.bibtex',
-    'sphinx.ext.graphviz',
+    "sphinx.ext.graphviz",
     "sphinx.ext.intersphinx",
     # "sphinx_automodapi.automodapi",
     # 'sphinx_copybutton',
@@ -74,46 +74,37 @@ show_authors = True
 html_static_path = ["_static"]
 
 html_sidebars = {
-    '**' : [
-        'logo-text.html',
-        'searchbox.html',
-        'globaltoc.html',
+    "**": [
+        "logo-text.html",
+        "searchbox.html",
+        "globaltoc.html",
         # 'sourcelink.html'
     ]
 }
 
 
 # # -- Xanadu theme ---------------------------------------------------------
-html_theme = 'xanadu_theme'
-html_theme_path = ['.']
+html_theme = "xanadu_theme"
+html_theme_path = ["."]
 
 html_theme_options = {
-
     # Set the path to a special layout to include for the homepage
     # "index_template": "special_index.html",
-
     # Set the name of the project to appear in the left sidebar.
     "project_nav_name": "NISQNet.py",
-
     # Set your Disqus short name to enable comments
     # "disqus_comments_shortname": "pennylane-1",
-
     # Set you GA account ID to enable tracking
     # "google_analytics_account": "UA-130507810-2",
-
     # Path to a touch icon
     # "touch_icon": "logo_new.png",
-
     # Specify a base_url used to generate sitemap.xml links. If not
     # specified, then no sitemap will be built.
     # "base_url": ""
-
     # Allow a separate homepage from the master_doc
     # "homepage": "index",
-
     # Allow the project link to be overriden to a custom URL.
     # "projectlink": "http://myproject.url",
-
     "large_toc": True,
     # colors
     "navigation_button": "#19b37b",
@@ -127,5 +118,3 @@ html_theme_options = {
     # "github_repo": "PennyLaneAI/pennylane",
     # "gallery_dirs": "tutorials",
 }
-
-
