@@ -3,10 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-QNetOptimizer
-=============
+NISQNet.py
+==========
 
-*Apply variational quantum optimization techniques to quantum networks.*
+*Simulate and optimize noisy quantum prepare and measure networks using
+noisy intermediate scale quantum (NISQ) computers.*
 
 .. toctree::
    :maxdepth: 2
