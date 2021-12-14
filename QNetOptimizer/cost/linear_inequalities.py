@@ -4,15 +4,27 @@ from .qnodes import joint_probs_qnode, global_parity_expval_qnode
 from ..utilities import mixed_base_num
 
 
-def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qnode_kwargs={}):
-    """Constructs a generic linear cost function on the conditional probabilities
-    for the network.
-    The linear cost function is encoded into a ``game`` matrix whose
+def linear_probs_cost_fn(network_ansatz, game, post_map=np.array([]), qnode_kwargs={}):
+    """Constructs an ansatz-specific cost that is a linear function of the network probablities.
+
+    The cost function is encoded into a ``game`` matrix whose
     coefficients scale conditional probabilities for the network.
+    The cost is derived from the score which is evaluated as,
 
     .. math::
 
-        \\sum_{\\vec{x},\\vec{y},\\vec{b}} G_{b|x,y} P(b|x,y)
+        \\langle\\mathbf{G},\\mathbf{P}\\rangle = \\sum_{\\vec{x},\\vec{y},\\vec{b}} G_{b|x,y} P(b|x,y),
+
+    where :math:`\\mathbf{P}` is a behavior (see :meth:`QNetOptimizer.behavior_fn`).
+
+    A post-processing map :math:`\\mathbf{L}` may optionally be applied as
+    :math:`\\mathbf{L}\\mathbf{P}_{Net}` where
+
+    .. math::
+
+        \\mathbf{L} = \\sum_{z',z}P(z'|z)|z'\\rangle\\langle z|.
+
+    In the above expression, :math:`z'` is a new output drawn from a new alphabet.
 
     :param network_ansatz: The network to which the cost function is applied.
     :type network_ansatz: ``NetworkAnsatz`` class
@@ -20,9 +32,10 @@ def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qn
     :param game: A matrix with dimensions ``B x (X x Y)`` for
     :type game: np.arrray
 
-    :param post_processing_map: A matrix describing how the :math:`2^{\\text{num wires}}`
-                                outputs are mapped to the appropriate number of outputs.
-    :type post_processing_map: np.ndarray
+    :param post_map: A post-processing map applied to the bitstrings output from the
+                     quantum circuit. The ``post_map`` matrix is column stochastic, that is,
+                     each column sums to one and contains only positive values.
+    :type post_map: *optional* np.ndarray
 
     :returns: A cost function evaluated as ``cost(prepare_settings, measure_settings)``.
     :rtype: function
@@ -44,22 +57,22 @@ def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qn
 
     game_outputs, game_inputs = game.shape
 
-    if game_inputs != net_num_in or game_outputs != net_num_out:
-        raise ValueError(
-            "`game` matrix must have dimension (" + str(net_num_out) + ", " + str(net_num_in) + ")."
-        )
+    if game_inputs != net_num_in:
+        raise ValueError("The `game` matrix must have " + str(net_num_in) + " columns.")
 
-    if game_outputs != raw_net_num_out:
-        if post_processing_map.shape[0] != net_num_out:
+    has_post_map = len(post_map) != 0
+    if not (has_post_map):
+        if game_outputs != raw_net_num_out:
             raise ValueError(
-                "The number of rows in the `post_processing_map` must be " + str(net_num_out) + "."
-            )
-        elif post_processing_map.shape[1] != raw_net_num_out:
-            raise ValueError(
-                "The number of columns in the `post_processing_map` must be "
+                "The `game` matrix must either have "
                 + str(raw_net_num_out)
-                + "."
+                + " rows, or a `post_map` is needed."
             )
+    else:
+        if post_map.shape[0] != game_outputs:
+            raise ValueError("The `post_map` must have " + str(game_outputs) + " rows.")
+        elif post_map.shape[1] != raw_net_num_out:
+            raise ValueError("The `post_map` must have " + str(raw_net_num_out) + " columns.")
 
     # convert coefficient ids into a list of prep/meas node inputs
     base_digits = num_in_prep_nodes + num_in_meas_nodes
@@ -75,7 +88,7 @@ def linear_probs_cost(network_ansatz, game, post_processing_map=np.array([]), qn
             )
 
             raw_probs = probs_qnode(settings)
-            probs = raw_probs if net_num_out == raw_net_num_out else post_processing_map @ raw_probs
+            probs = post_map @ raw_probs if has_post_map else raw_probs
 
             score += math.sum(game[:, i] * probs)
 
