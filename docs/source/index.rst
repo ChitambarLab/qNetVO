@@ -6,7 +6,7 @@
 NISQNet.py
 ==========
 
-*Simulate and optimize noisy quantum prepare and measure networks using
+*Simulate and optimize quantum prepare and measure networks using
 noisy intermediate scale quantum (NISQ) computers.*
 
 .. toctree::
