@@ -1,37 +1,33 @@
 {% extends "page.html" %}
 
-{%- block regular_scripts -%}
-{{ super() }}
-<script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
-<script src="{{ pathto('_static/language_data.js', 1) }}"></script>
-{%- endblock regular_scripts-%}
-
 {%- block htmltitle -%}
-<title>{{ _("Search") }} - {{ docstitle }}</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>{{ _("Search") }} - {{ docstitle }}</title>
 {%- endblock htmltitle -%}
 
-{% block content %}
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">{% trans %}Error{% endtrans %}</p>
-  <p>
-    {% trans %}Please activate JavaScript to enable the search functionality.{% endtrans %}
-  </p>
-</div>
-</noscript>
-
-<form class="sidebar-search-container" method="get" action="{{ pathto('search') }}" role="search">
-  <input class="sidebar-search" placeholder="{{ _('Search') }}" name="q" aria-label="{{ _('Search' )}}">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div>
-
-<div id="search-results"></div>
-{% endblock %}
-
-{% block scripts -%}
+{%- block regular_scripts -%}
 {{ super() }}
-<script src="{{ pathto('searchindex.js', 1) }}"></script>
-{%- endblock scripts %}
+  <script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
+  <script src="{{ pathto('_static/language_data.js', 1) }}"></script>
+  <script src="{{ pathto('searchindex.js', 1) }}"></script>
+{%- endblock regular_scripts-%}
+
+{% block content %}
+  <h1>Search Page</h1>
+  <noscript>
+  <div class="admonition error">
+    <p class="admonition-title">{% trans %}Error{% endtrans %}</p>
+    <p>
+      {% trans %}Please activate JavaScript to enable the search functionality.{% endtrans %}
+    </p>
+  </div>
+  </noscript>
+
+  <form class="sidebar-search-container" method="get" action="{{ pathto('search') }}" role="search">
+    <input class="sidebar-search" placeholder={{ _("Search") }} name="q" aria-label="{{ _("Search")}}">
+    <input type="hidden" name="check_keywords" value="yes">
+    <input type="hidden" name="area" value="default">
+  </form>
+  <div id="searchbox"></div>
+
+  <div id="search-results"></div>
+{% endblock %}

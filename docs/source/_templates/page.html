@@ -1,12 +1,8 @@
 {% extends "base.html" %}
 
-{%- block htmltitle %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-{%- endblock %}
-
-
 {% block body -%}
 {% include "partials/icons.html" %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 <input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
@@ -98,17 +94,7 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        {% block breadcrumbs %}
-            <div role="navigation" aria-label="breadcrumbs navigation">
-              <ol class="breadcrumb">
-                <li><a href="{{ pathto(master_doc) }}">Docs</a></li>
-                {% for doc in parents %}
-                  <li><a href="{{ doc.link|e }}">{{ doc.title }}</a></li>
-                {% endfor %}
-                <li>{{ title }}</li>
-              </ol>
-            </div>
-        {% endblock %}
+        {% include "breadcrumbs.html" %}
         <article role="main">
           {% block content %}{{ body }}{% endblock %}
         </article>
@@ -165,10 +151,9 @@
           {%- if show_copyright or last_updated %} | {%- endif %}
           {% trans %}Created using {% endtrans -%}
           {%- if show_sphinx -%}
-            {% trans %}<a href="https://www.sphinx-doc.org/">Sphinx</a> and {% endtrans -%}
+            {% trans %}<a href="https://www.sphinx-doc.org/">Sphinx</a> and the {% endtrans -%}
           {% endif -%}
           {%- trans -%}
-          <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
           {%- endtrans %}
           {%- if show_source and has_source and sourcename %}
