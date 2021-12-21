@@ -4,7 +4,7 @@ from .utilities import mixed_base_num
 from pennylane import numpy as np
 
 
-def behavior_fn(network_ansatz, post_map=np.array([]), qnode_kwargs={}):
+def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
     """Creates an ansatz-specific function for constructing the behavior matrix.
 
     A behavior function is created as ``P_Net = behavior(network_ansatz)``
@@ -33,10 +33,10 @@ def behavior_fn(network_ansatz, post_map=np.array([]), qnode_kwargs={}):
     :param network_ansatz: A class describing the particular quantum network.
     :type network_ansatz: NetworkAnsatz
 
-    :param post_map: A post-processing map applied to the bitstrings output from the
-                     quantum circuit. The ``post_map`` matrix is column stochastic, that is,
+    :param postmap: A post-processing map applied to the bitstrings output from the
+                     quantum circuit. The ``postmap`` matrix is column stochastic, that is,
                      each column sums to one and contains only positive values.
-    :type post_map: *optional* np.ndarray
+    :type postmap: *optional* np.ndarray
 
     :returns: A function ``P_Net(scenario_settings)`` that evaluates the
               behavior matrix for a given set of settings.
@@ -53,10 +53,10 @@ def behavior_fn(network_ansatz, post_map=np.array([]), qnode_kwargs={}):
 
     raw_net_num_out = 2 ** len(network_ansatz.measure_wires)
 
-    has_post_map = len(post_map) != 0
-    if has_post_map:
-        if post_map.shape[1] != raw_net_num_out:
-            raise ValueError("The `post_map` must have " + str(raw_net_num_out) + " columns.")
+    has_postmap = len(postmap) != 0
+    if has_postmap:
+        if postmap.shape[1] != raw_net_num_out:
+            raise ValueError("The `postmap` must have " + str(raw_net_num_out) + " columns.")
 
     node_input_ids = [mixed_base_num(i, base_digits) for i in range(net_num_in)]
 
@@ -73,7 +73,7 @@ def behavior_fn(network_ansatz, post_map=np.array([]), qnode_kwargs={}):
 
             raw_behavior[:, i] += probs_qnode(settings)
 
-        return post_map @ raw_behavior if has_post_map else raw_behavior
+        return postmap @ raw_behavior if has_postmap else raw_behavior
 
     return behavior
 

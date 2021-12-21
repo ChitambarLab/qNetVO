@@ -62,16 +62,16 @@ class TestLinearInequalityCost:
         dichotomic_cost = QNopt.linear_probs_cost_fn(
             network_ansatz,
             dichotomic_game,
-            post_map=np.array([[1, 0, 0, 1, 0, 1, 1, 0], [0, 1, 1, 0, 1, 0, 0, 1]]),
+            postmap=np.array([[1, 0, 0, 1, 0, 1, 1, 0], [0, 1, 1, 0, 1, 0, 0, 1]]),
         )
 
         assert np.isclose(dichotomic_cost(zero_settings), -1)
         assert np.isclose(dichotomic_cost(settings), -2)
 
     @pytest.mark.parametrize(
-        "game,post_map,match",
+        "game,postmap,match",
         [
-            ([], [], r"The `game` matrix must either have 8 rows, or a `post_map` is needed\."),
+            ([], [], r"The `game` matrix must either have 8 rows, or a `postmap` is needed\."),
             (
                 np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]),
                 [],
@@ -80,16 +80,16 @@ class TestLinearInequalityCost:
             (
                 [],
                 np.array([[1, 0, 0, 1, 0, 0, 1, 0], [0, 1, 1, 0, 1, 1, 0, 1]]),
-                r"The `post_map` must have 3 rows\.",
+                r"The `postmap` must have 3 rows\.",
             ),
             (
                 [],
                 np.array([[1, 0, 0, 1], [0, 1, 0, 0], [0, 0, 1, 0]]),
-                r"The `post_map` must have 8 columns\.",
+                r"The `postmap` must have 8 columns\.",
             ),
         ],
     )
-    def test_linear_probs_cost_fn_errors(self, game, post_map, match):
+    def test_linear_probs_cost_fn_errors(self, game, postmap, match):
         ansatz = self.example_ansatz()
 
         default_game = np.array(
@@ -98,4 +98,4 @@ class TestLinearInequalityCost:
 
         game = default_game if len(game) == 0 else game
         with pytest.raises(ValueError, match=match):
-            QNopt.linear_probs_cost_fn(ansatz, game, post_map=post_map)
+            QNopt.linear_probs_cost_fn(ansatz, game, postmap=postmap)

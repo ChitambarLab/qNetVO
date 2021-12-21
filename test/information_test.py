@@ -64,10 +64,10 @@ class TestBehaviorFn:
         ]
         ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        P_Net_no_post_map = QNopt.behavior_fn(ansatz)
+        P_Net_no_postmap = QNopt.behavior_fn(ansatz)
         zero_settings = ansatz.zero_scenario_settings()
         assert np.all(
-            P_Net_no_post_map(zero_settings)
+            P_Net_no_postmap(zero_settings)
             == [
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -76,8 +76,8 @@ class TestBehaviorFn:
             ]
         )
 
-        with pytest.raises(ValueError, match=r"The `post_map` must have 4 columns\."):
-            QNopt.behavior_fn(ansatz, post_map=np.array([[1, 0], [0, 1]]))
+        with pytest.raises(ValueError, match=r"The `postmap` must have 4 columns\."):
+            QNopt.behavior_fn(ansatz, postmap=np.array([[1, 0], [0, 1]]))
 
         P_Net = QNopt.behavior_fn(ansatz, np.array([[1, 0, 0, 1], [0, 1, 1, 0]]))
         assert np.all(
