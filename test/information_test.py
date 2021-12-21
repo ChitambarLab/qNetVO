@@ -123,6 +123,9 @@ class TestBehaviorFn:
 
 
 class TestShannonEntropy:
-    @pytest.mark.parametrize("probs, entropy_match", [([0, 0, 0, 1], 0), (np.ones(4) / 4, 2)])
+    @pytest.mark.parametrize(
+        "probs, entropy_match",
+        [([0, 0, 0, 1], 0), (np.ones(4) / 4, 2), ([0, -0.00000000001, 0, 1], 0)],
+    )
     def test_simple_shannon_entropy_cases(self, probs, entropy_match):
         assert QNopt.shannon_entropy(probs) == entropy_match

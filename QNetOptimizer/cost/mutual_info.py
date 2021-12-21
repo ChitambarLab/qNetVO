@@ -6,7 +6,9 @@ from ..information import shannon_entropy
 from ..utilities import mixed_base_num
 
 
-def mutual_info_cost_fn(ansatz, priors, postmap=np.array([]), **qnode_kwargs):
+def mutual_info_cost_fn(
+    ansatz, priors, postmap=np.array([]), static_layer="measure", **qnode_kwargs
+):
     """Constructs an ansatz-specific mutual information cost function.
 
     The mutual information quantifies the information shared by two distributions
@@ -35,6 +37,10 @@ def mutual_info_cost_fn(ansatz, priors, postmap=np.array([]), **qnode_kwargs):
                     quantum device into the measurement node outputs.
     :type postmap: np.array
 
+    :param static_layer: Either ``"prepare"`` or ``"measure"``, specifies which
+                         network layer is held constant over all inputs.
+    :type static_layer: String, default ``"measure"``.
+
     :param qnode_kwargs: Keyword arguments passed to the execute qnodes.
     :type qnode_kwargs: dictionary
 
@@ -45,8 +51,14 @@ def mutual_info_cost_fn(ansatz, priors, postmap=np.array([]), **qnode_kwargs):
 
     num_prep_inputs = [prep_node.num_in for prep_node in ansatz.prepare_nodes]
     num_prep_nodes = len(ansatz.prepare_nodes)
-    net_num_in = math.prod(num_prep_inputs)
-    node_input_ids = [mixed_base_num(i, num_prep_inputs) for i in range(net_num_in)]
+
+    num_meas_inputs = [meas_node.num_in for meas_node in ansatz.measure_nodes]
+    num_meas_nodes = len(ansatz.measure_nodes)
+
+    num_inputs = num_prep_inputs if static_layer == "measure" else num_meas_inputs
+
+    net_num_in = math.prod(num_inputs)
+    node_input_ids = [mixed_base_num(i, num_inputs) for i in range(net_num_in)]
 
     net_num_out = math.prod([meas_node.num_out for meas_node in ansatz.measure_nodes])
 
@@ -66,11 +78,14 @@ def mutual_info_cost_fn(ansatz, priors, postmap=np.array([]), **qnode_kwargs):
         py_vec = np.zeros(net_num_out)
         for (i, input_id_set) in enumerate(node_input_ids):
 
-            settings = ansatz.qnode_settings(
-                scenario_settings,
-                input_id_set[0:num_prep_nodes],
-                [0] * len(ansatz.measure_nodes),  # the measure settings are fixed.
-            )
+            if static_layer == "measure":
+                prep_input_vals = input_id_set[0:num_prep_nodes]
+                meas_input_vals = [0] * num_meas_nodes
+            else:
+                prep_input_vals = [0] * num_prep_nodes
+                meas_input_vals = input_id_set[0:num_meas_nodes]
+
+            settings = ansatz.qnode_settings(scenario_settings, prep_input_vals, meas_input_vals)
 
             p_mac = postmap @ probs_qnode(settings)
 

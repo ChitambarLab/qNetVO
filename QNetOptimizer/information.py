@@ -92,4 +92,6 @@ def shannon_entropy(probs):
     :returns: The Shannon entropy.
     :rtype: float
     """
-    return -(math.sum([px * math.log2(px) if px != 0 else 0 for px in probs]))
+    return -(
+        math.sum([px * math.log2(px) if px != 0 and not (np.isclose(px, 0)) else 0 for px in probs])
+    )
