@@ -257,7 +257,7 @@ class NetworkAnsatz:
 
         prep_settings = self.layer_settings(scenario_settings[0], prep_inputs, self.prepare_nodes)
         meas_settings = self.layer_settings(scenario_settings[1], meas_inputs, self.measure_nodes)
-        return math.append(prep_settings, meas_settings)
+        return math.concatenate([prep_settings, meas_settings])
 
     @staticmethod
     def circuit_layer(network_nodes):
