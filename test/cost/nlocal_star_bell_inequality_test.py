@@ -1,0 +1,110 @@
+import pytest
+from pennylane import numpy as np
+import pennylane as qml
+
+
+from context import QNetOptimizer as QNopt
+
+
+class TestNlocalStar22CostFn:
+    def bilocal_star_ry_ansatz(self):
+        prep_nodes = [
+            QNopt.PrepareNode(1, [0, 2], QNopt.ghz_state, 0),
+            QNopt.PrepareNode(1, [1, 3], QNopt.ghz_state, 0),
+        ]
+
+        meas_nodes = [
+            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
+            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
+            QNopt.MeasureNode(2, 2, [2, 3], QNopt.local_RY, 2),
+        ]
+
+        return QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+
+    def trilocal_star_ry_ansatz(self):
+        prep_nodes = [
+            QNopt.PrepareNode(1, [0, 3], QNopt.ghz_state, 0),
+            QNopt.PrepareNode(1, [1, 4], QNopt.ghz_state, 0),
+            QNopt.PrepareNode(1, [2, 5], QNopt.ghz_state, 0),
+        ]
+
+        meas_nodes = [
+            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
+            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
+            QNopt.MeasureNode(2, 2, [2], QNopt.local_RY, 1),
+            QNopt.MeasureNode(2, 2, [3, 4, 5], QNopt.local_RY, 3),
+        ]
+
+        return QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+
+    def test_bilocal_star_22_cost(self):
+        bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
+        bilocal_22_cost = QNopt.nlocal_star_22_cost_fn(bilocal_star_ansatz)
+
+        zero_settings = bilocal_star_ansatz.zero_scenario_settings()
+
+        assert np.isclose(bilocal_22_cost(zero_settings), -1)
+
+        ideal_settings = zero_settings
+        ideal_settings[1][0][1, 0] = np.pi / 2
+
+        ideal_settings[1][1][0, 0] = np.pi / 4
+        ideal_settings[1][1][1, 0] = -np.pi / 4
+
+        ideal_settings[1][2][0, 0] = np.pi / 4
+        ideal_settings[1][2][1, 0] = -np.pi / 4
+        ideal_settings[1][2][1, 1] = np.pi / 2
+
+        assert np.isclose(bilocal_22_cost(ideal_settings), -(np.sqrt(2)))
+
+    def test_trilocal_star_cost(self):
+        trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
+        trilocal_22_cost = QNopt.nlocal_star_22_cost_fn(trilocal_star_ansatz)
+
+        zero_settings = trilocal_star_ansatz.zero_scenario_settings()
+
+        assert np.isclose(trilocal_22_cost(zero_settings), -1)
+
+        ideal_settings = zero_settings
+        ideal_settings[1][0][0, 0] = np.pi / 4
+        ideal_settings[1][0][1, 0] = -np.pi / 4
+
+        ideal_settings[1][1][0, 0] = np.pi / 4
+        ideal_settings[1][1][1, 0] = -np.pi / 4
+
+        ideal_settings[1][2][0, 0] = np.pi / 4
+        ideal_settings[1][2][1, 0] = -np.pi / 4
+
+        ideal_settings[1][3][1, 0] = np.pi / 2
+        ideal_settings[1][3][1, 1] = np.pi / 2
+        ideal_settings[1][3][1, 2] = np.pi / 2
+
+        assert np.isclose(trilocal_22_cost(ideal_settings), -np.sqrt(2))
+
+    def test_bilocal_star_22_cost_gradient_descent(self):
+        bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
+
+        np.random.seed(45)
+        opt_dict = QNopt.gradient_descent(
+            QNopt.nlocal_star_22_cost_fn(bilocal_star_ansatz),
+            bilocal_star_ansatz.rand_scenario_settings(),
+            num_steps=10,
+            step_size=2,
+            sample_width=10,
+        )
+
+        assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
+
+    def test_trilocal_star_22_cost_gradient_descent(self):
+        trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
+
+        np.random.seed(45)
+        opt_dict = QNopt.gradient_descent(
+            QNopt.nlocal_star_22_cost_fn(trilocal_star_ansatz),
+            trilocal_star_ansatz.rand_scenario_settings(),
+            num_steps=8,
+            step_size=2,
+            sample_width=10,
+        )
+
+        assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
