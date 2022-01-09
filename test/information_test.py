@@ -65,8 +65,7 @@ class TestBehavior:
         net_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
 
         with pytest.raises(
-            ValueError,
-            match="The number of rows in the `post_processing_map` must be 2.",
+            ValueError, match="The number of rows in the `post_processing_map` must be 2.",
         ):
             QNopt.behavior(net_ansatz)
 

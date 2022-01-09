@@ -67,8 +67,7 @@ class TestLinearInequalityCost:
 
         # value erros
         with pytest.raises(
-            ValueError,
-            match=r"`game` matrix must have dimension \(2, 8\)\.",
+            ValueError, match=r"`game` matrix must have dimension \(2, 8\)\.",
         ):
             game = np.array(
                 [[1, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0]]
