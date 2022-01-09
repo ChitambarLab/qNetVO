@@ -9,4 +9,5 @@ from QNetOptimizer.cost.nlocal_chain_bell_inequality import *
 from QNetOptimizer.cost.magic_squares_game import *
 from QNetOptimizer.cost.chsh_inequality import *
 from QNetOptimizer.cost.linear_inequalities import *
+from QNetOptimizer.cost.mutual_info import *
 from QNetOptimizer.gradient_descent import *
