@@ -64,11 +64,11 @@ html_theme = "furo"
 html_static_path = ["_static"]
 
 html_css_files = [
-    "css/nisqnet.css",
+    "css/qnetvo.css",
 ]
 
-html_logo = "_static/nisqnet_logo.png"
-html_title = "NISQNet.py"
+html_logo = "_static/qnetvo_logo.png"
+html_title = "qNetVO"
 
 html_sidebars = {
     "**": [

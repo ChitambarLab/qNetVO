@@ -1,24 +1,25 @@
 .. QNetOptimizer documentation master file, created by
    sphinx-quickstart on Thu Jul 15 10:27:48 2021.
 
-NISQNet.py
-==========
+qNetVO
+======
 
-*Simulate and optimize quantum prepare and measure networks using
-noisy intermediate scale quantum (NISQ) computers.*
+*The Quantum Network Variational Optimizer (qNetVO) is python framework for
+simulating and optimizing quantum communication networks using
+quantum hardware.*
 
 Features
 ========
 
 Simulate Quantum Communication Networks on Quantum Computers:
 
-* Create quantum circuits that model quantum communication devices.
-* Combine devices to flexibly construct quantum communication network ansatzes. 
+* Create quantum circuits that model distributed quantum communication devices.
+* Combine devices to flexibly construct quantum communication network simulations. 
 * Execute ansatz circuits on quantum computing platforms and simulators.
 
-Optimimze Quantum Communication Networks:
+Optimize Quantum Communication Networks using Variational Techniques:
 
-* Apply differential programming to train quantum communication networks like neural networks.
+* Train quantum communication networks like neural networks using differential programming.
 * Use our library of communication oriented cost functions or create your own.
 
 Powered by `PennyLane <https://pennylane.ai>`_:
@@ -32,17 +33,17 @@ Quick Start
 
    Register Package.
 
-Install NISQNet:
+Install qNetVO:
 
 .. code-block:: bash
 
-   pip install nisqnet
+   pip install qnetvo
 
-Import NISQNet:
+Import qNetVO:
 
 .. code-block:: python
 
-   import nisqnet as qnet
+   import qnetvo as qn
 
 How to Cite
 ===========

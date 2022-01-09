@@ -1,4 +1,4 @@
-name: pennylane-nonlocality-dev
+name: qnetvo-dev
 channels:
   - defaults
 dependencies:
