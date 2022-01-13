@@ -109,8 +109,8 @@ class TestNetworkAnsatz:
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-        assert test_circuit([0, 0, 0, 0, 0]) == 1
-        assert test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]) == 1
+        assert np.isclose(test_circuit([0, 0, 0, 0, 0]), 1)
+        assert np.isclose(test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]), 1)
 
         # Noisy network Case
         noisy_network_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
