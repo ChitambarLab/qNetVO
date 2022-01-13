@@ -1,4 +1,4 @@
-name: pennylane-nonlocality-dev
+name: qnetvo-dev
 channels:
   - defaults
 dependencies:
@@ -11,3 +11,4 @@ dependencies:
   - pip
   - pip:
     - -r requirements.txt
+    - furo

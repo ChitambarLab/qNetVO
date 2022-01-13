@@ -1,8 +1,10 @@
-# QNetOptimizer
+# qNetVO
 
-*A Python library for tuning quantum networks with variational quantum optimization.*
+*The **Q**uantum **Net**work **V**ariational **O**ptimizer is python framework for
+simulating and optimizing quantum communication networks using
+quantum hardware.*
 
-[![Test Status](https://github.com/ChitambarLab/pennylane-nonlocality-optimization/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/pennylane-nonlocality-optimization/actions/workflows/run_tests.yml)
+[![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)
 
 ## Project Goals
 
@@ -21,16 +23,16 @@
 
 For convenience a dev environment can be setup from the `environment.yml`.
 
-1. Create the `pennylane-nonlocality-dev` enviroment:
+1. Create the `qnetvo-dev` enviroment:
 
 ```
 (base) $ conda env create -f environment.yml
 ```
 
-2. Activate the `pennylane-nonlocality-dev` environment:
+2. Activate the `qnetvo-dev` environment:
 
 ```
-(base) $ conda activate pennylane-nonlocality-dev
+(base) $ conda activate qnetvo-dev
 ```
 
 ### Documentation
@@ -43,13 +45,13 @@ services are not available for free accounts.
 1. Build documentation:
 
 ```
-(pennylane-nonlocality-dev) $ sphinx-build -b html docs/source/ docs/build/html
+(qnetvo-dev) $ sphinx-build -b html docs/source/ docs/build/html
 ```
 
 2. Locally serve documentation by navigating to the `./docs/build/html` directory and running:
 
 ```
-(pennylane-nonlocality-dev) $ python -m http.server --bind localhost
+(qnetvo-dev) $ python -m http.server --bind localhost
 ``` 
 
 ### Tests

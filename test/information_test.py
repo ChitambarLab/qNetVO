@@ -62,6 +62,7 @@ class TestBehaviorFn:
         meas_nodes = [
             QNopt.MeasureNode(4, 2, [0, 1], QNopt.local_RY, 2),
         ]
+
         ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
 
         P_Net_no_postmap = QNopt.behavior_fn(ansatz)
