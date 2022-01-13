@@ -4,7 +4,7 @@
 qNetVO
 ======
 
-*The Quantum Network Variational Optimizer (qNetVO) is python framework for
+*The Quantum Network Variational Optimizer (qNetVO) is Python framework for
 simulating and optimizing quantum communication networks using
 quantum hardware.*
 
