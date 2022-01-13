@@ -2,7 +2,7 @@ import pennylane as qml
 
 
 def max_entangled_state(settings, wires):
-    """Ansatz function for maximally entangled state preparation.
+    """Ansatz function for maximally entangled two-qubit state preparation.
 
     A general ``qml.Rot`` unitary is applied to one-side of a
     Bell state creating a general parameterization of all maximally
