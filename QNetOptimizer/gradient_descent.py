@@ -116,7 +116,7 @@ def gradient_descent(
     step_times.append(elapsed)
 
     scores.append(opt_score)
-    samples.append(num_steps - 1)
+    samples.append(num_steps)
 
     return {
         "datetime": start_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"),
