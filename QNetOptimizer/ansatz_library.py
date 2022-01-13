@@ -8,7 +8,7 @@ def max_entangled_state(settings, wires):
     Bell state creating a general parameterization of all maximally
     entangled states.
 
-    param settings: A list with three elements parameterizing a general qubit unitary
+    param settings: A list with three elements parameterizing a general single-qubit unitary
     :type settings: list[float]
 
     :param wires: The two wires on which the maximally entangled state is prepared.
