@@ -1,4 +1,5 @@
 import pennylane as qml
+import math
 
 
 def max_entangled_state(settings, wires):
@@ -81,3 +82,33 @@ def local_RXRY(settings, wires):
     for i, wire in enumerate(wires):
         qml.RX(settings[2 * i], wires=wire)
         qml.RY(settings[2 * i + 1], wires=wire)
+
+
+def pure_amplitude_damping(noise_params, wires):
+    """Implements a single qubit amplitude damping channel as a two-qubit gate.
+
+    This allows amplitude damping noise to be applied on quantum hardware or on a
+    state-vector simulator such as ``"default.qubit"``.
+
+    This method is equivalent to the
+    `pennylane.AmplitudeDamping <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.AmplitudeDamping.html?highlight=amplitudedamping#pennylane.AmplitudeDamping>`_
+    method. The corresponding Kraus operators are expressed as:
+
+    .. math::
+
+        K_0 = \\begin{pmatrix}1 & 0 \\\\ 0 & \\sqrt{1-\\gamma} \\end{pmatrix}, \\quad
+        K_1 = \\begin{pmatrix}0 & \\sqrt{\\gamma} \\\\ 0 & 0 \\end{pmatrix}.
+
+    :param noise_params: Parameters quantifying the amount of amplitude damping noise.
+    :type noise_params: List[Float]
+
+    :param wires: Two wires on which to implement the amplitude damping channel.
+                  The channel input and output is on ``wires[0]`` while ``wires[1]``
+                  serves as the ancilla register.
+    :type wires: qml.Wires
+    """
+
+    ry_setting = 2 * math.asin(math.sqrt(noise_params[0]))
+
+    qml.ctrl(qml.RY, control=wires[0])(ry_setting, wires=wires[1])
+    qml.CNOT(wires=[wires[1], wires[0]])

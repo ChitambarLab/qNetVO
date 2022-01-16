@@ -97,3 +97,66 @@ class TestStatePreparationAnsatzes:
         assert np.allclose(
             U, np.array([[1, 1, 1, 1], [-1, 1, -1, 1], [-1, -1, 1, 1], [1, -1, -1, 1]]).T / 2
         )
+
+    @pytest.mark.parametrize(
+        "state_prep_fn",
+        [
+            (lambda: None),
+            (lambda: qml.RX(np.pi / 4, wires=[0])),
+            (lambda: qml.RY(np.pi / 4, wires=[0])),
+            (lambda: qml.RZ(np.pi / 4, wires=[0])),
+            (lambda: qml.Hadamard(wires=[0])),
+        ],
+    )
+    def test_pure_amplitude_damping(self, state_prep_fn):
+        dev = qml.device("default.qubit", wires=[0, 1])
+        dev_mixed = qml.device("default.mixed", wires=[0])
+
+        # verifying state construction
+        @qml.qnode(dev)
+        def test_state(noise_param):
+            state_prep_fn()
+            QNopt.pure_amplitude_damping([noise_param], wires=[0, 1])
+
+            return qml.state()
+
+        @qml.qnode(dev_mixed)
+        def match_state(noise_param):
+            state_prep_fn()
+            qml.AmplitudeDamping(noise_param, wires=[0])
+
+            return qml.state()
+
+        for noise_param in np.arange(0, 1.001, 1 / 10):
+            test_vec = test_state(noise_param)
+            AB_state = np.outer(test_vec, test_vec.conj().T)
+
+            A_state = np.zeros((2, 2), dtype=np.complex128)
+
+            A_state[0, 0] = np.trace(AB_state[0:2, 0:2])
+            A_state[0, 1] = np.trace(AB_state[0:2, 2:4])
+            A_state[1, 0] = np.trace(AB_state[2:4, 0:2])
+            A_state[1, 1] = np.trace(AB_state[2:4, 2:4])
+
+            assert np.allclose(A_state, match_state(noise_param))
+
+        # verifying expectation values
+        for obs in [qml.PauliX, qml.PauliY, qml.PauliZ]:
+
+            @qml.qnode(dev)
+            def test_expval(noise_param):
+                state_prep_fn()
+                QNopt.pure_amplitude_damping([noise_param], wires=[0, 1])
+
+                return qml.expval(obs(wires=[0]))
+
+            @qml.qnode(dev_mixed)
+            def match_expval(noise_param):
+                state_prep_fn()
+                qml.AmplitudeDamping(noise_param, wires=[0])
+
+                return qml.expval(obs(wires=[0]))
+
+            for noise_param in np.arange(0, 1.001, 1 / 10):
+
+                assert np.isclose(test_expval(noise_param), match_expval(noise_param))
