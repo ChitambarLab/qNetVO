@@ -25,3 +25,5 @@ Noise Models
 ------------
 
 .. autofunction:: pure_amplitude_damping
+
+.. autofunction:: pure_phase_damping

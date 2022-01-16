@@ -99,7 +99,7 @@ def pure_amplitude_damping(noise_params, wires):
         K_0 = \\begin{pmatrix}1 & 0 \\\\ 0 & \\sqrt{1-\\gamma} \\end{pmatrix}, \\quad
         K_1 = \\begin{pmatrix}0 & \\sqrt{\\gamma} \\\\ 0 & 0 \\end{pmatrix}.
 
-    :param noise_params: Parameters quantifying the amount of amplitude damping noise.
+    :param noise_params: The parameter ``[gamma]`` quantifying the amount of amplitude damping noise.
     :type noise_params: List[Float]
 
     :param wires: Two wires on which to implement the amplitude damping channel.
@@ -112,3 +112,30 @@ def pure_amplitude_damping(noise_params, wires):
 
     qml.ctrl(qml.RY, control=wires[0])(ry_setting, wires=wires[1])
     qml.CNOT(wires=[wires[1], wires[0]])
+
+def pure_phase_damping(noise_params, wires):
+    """Implements a single qubit phase damping channel as a two-qubit gate.
+
+    This allows phase damping noise to be applied on quantum hardware or on a
+    state-vector simulator such as ``"default.qubit"``.
+
+    This method is equivalent to the
+    `pennylane.PhaseDamping <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.PhaseDamping.html?highlight=phasedamping#pennylane.PhaseDamping>`_
+    method. The corresponding Kraus operators are expressed as:
+
+    .. math::
+
+        K_0 = \\begin{pmatrix}1 & 0 \\\\ 0 & \\sqrt{1-\\gamma} \\end{pmatrix}, \\quad
+        K_1 = \\begin{pmatrix}0 & 0 \\\\ 0 & \\sqrt{\\gamma} \\end{pmatrix}.
+
+    :param noise_params: The parameter ``[gamma]`` quantifying the amount of phase damping noise.
+    :type noise_params: List[Float]
+
+    :param wires: Two wires on which to implement the phase damping channel.
+                  The channel input and output is on ``wires[0]`` while ``wires[1]``
+                  serves as the ancilla register.
+    :type wires: qml.Wires
+    """
+
+    ry_setting = 2 * math.asin(math.sqrt(noise_params[0]))
+    qml.ctrl(qml.RY, control=wires[0])(ry_setting, wires=wires[1])
