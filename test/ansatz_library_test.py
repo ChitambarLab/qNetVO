@@ -161,7 +161,6 @@ class TestStatePreparationAnsatzes:
 
                 assert np.isclose(test_expval(noise_param), match_expval(noise_param))
 
-
     @pytest.mark.parametrize(
         "state_prep_fn",
         [

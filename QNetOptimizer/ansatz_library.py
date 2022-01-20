@@ -113,6 +113,7 @@ def pure_amplitude_damping(noise_params, wires):
     qml.ctrl(qml.RY, control=wires[0])(ry_setting, wires=wires[1])
     qml.CNOT(wires=[wires[1], wires[0]])
 
+
 def pure_phase_damping(noise_params, wires):
     """Implements a single qubit phase damping channel as a two-qubit gate.
 
