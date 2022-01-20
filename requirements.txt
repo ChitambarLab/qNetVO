@@ -1,4 +1,4 @@
-pennylane==0.18
+pennylane==0.20
 qiskit
 pennylane-qiskit
 dask[delayed]
