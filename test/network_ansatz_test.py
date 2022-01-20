@@ -234,10 +234,10 @@ class TestNetworkAnsatz:
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-        assert test_circuit([[0], [0]]) == 1
-        assert test_circuit([[np.pi], [0]]) == -1
+        assert np.isclose(test_circuit([0, 0]), 1)
+        assert np.isclose(test_circuit([np.pi, 0]), -1)
 
-        val = test_circuit([[np.pi / 4], [-np.pi / 4]])
+        val = test_circuit([np.pi / 4, -np.pi / 4])
         assert np.isclose(val, 0.5)
 
         @qml.qnode(qml.device("default.mixed", wires=2))

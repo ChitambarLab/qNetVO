@@ -199,7 +199,7 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_gradient=False, **qnod
 
     def _ng(settings, qnode):
         grad = qml.grad(qnode)(settings)
-        ginv = pinvh(qnode.metric_tensor(settings))
+        ginv = pinvh(qml.metric_tensor(qnode, approx="block-diag")(settings))
 
         return ginv @ grad
 

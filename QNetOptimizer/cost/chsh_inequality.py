@@ -158,7 +158,7 @@ def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
 
         def _ng(settings, qnode):
             grad = qml.grad(qnode)(settings)
-            ginv = pinvh(qnode.metric_tensor(settings))
+            ginv = pinvh(qml.metric_tensor(qnode, approx="block-diag")(settings))
 
             return ginv @ grad
 
