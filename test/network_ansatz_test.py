@@ -143,6 +143,25 @@ class TestNetworkAnsatz:
             noisy_test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]), 0.5
         )
 
+    def test_init_noisy_device_override(self):
+        prep_nodes = [QNopt.PrepareNode(1, [0], QNopt.local_RY, 1)]
+        noise_nodes = [
+            QNopt.NoiseNode(
+                [0, 1], lambda settings, wires: QNopt.pure_amplitude_damping([0.5], wire=wires)
+            )
+        ]
+        meas_nodes = [QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1)]
+
+        mixed_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes, noise_nodes)
+
+        assert mixed_ansatz.dev.short_name == "default.mixed"
+
+        pure_ansatz = QNopt.NetworkAnsatz(
+            prep_nodes, meas_nodes, noise_nodes, dev_kwargs={"name": "default.qubit"}
+        )
+
+        assert pure_ansatz.dev.short_name == "default.qubit"
+
     def test_qnode_settings(self):
         chsh_ansatz = self.chsh_ansatz()
 
