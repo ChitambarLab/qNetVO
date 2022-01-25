@@ -121,7 +121,7 @@ def pure_phase_damping(noise_params, wires):
     state-vector simulator such as ``"default.qubit"``.
 
     This method is equivalent to the
-    `pennylane.PhaseDamping <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.PhaseDamping.html?highlight=phasedamping#pennylane.PhaseDamping>`_
+    `pennylane.PhaseDamping <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.PhaseDamping.html>`_
     method. The corresponding Kraus operators are expressed as:
 
     .. math::
