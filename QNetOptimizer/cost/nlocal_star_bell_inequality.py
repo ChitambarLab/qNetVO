@@ -21,7 +21,7 @@ def star_I22_fn(network_ansatz, **qnode_kwargs):
     :type network_ansatz: QNopt.NetworkAnsatz
 
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
-    :type: *optional* dictionary
+    :type qnode_kwargs: *optional* dictionary
 
     :returns: A function callable as ``I22(scenario_settings)`` that evaluates the :math:`I^n_{22}` quantity.
     :rtype: function
