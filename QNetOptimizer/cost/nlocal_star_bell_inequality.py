@@ -117,7 +117,7 @@ def nlocal_star_22_cost_fn(network_ansatz, **qnode_kwargs):
     :type network_ansatz: QNopt.NetworkAnsatz
 
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
-    :type: *optional* dictionary
+    :type qnode_kwargs: *optional* dictionary
 
     :returns: A function callable as ``nlocal_star_22_cost(scenario_settings)`` that evaluates
               the cost as :math:`-|I^n_{22}|^{1/n} - |J^n_{22}|^{1/n}`.
