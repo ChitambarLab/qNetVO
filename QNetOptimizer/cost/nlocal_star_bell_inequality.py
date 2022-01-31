@@ -10,11 +10,11 @@ def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     """Constructs a network-specific ``I22(scenario_settings)`` function that
     evaluates the :math:`I^n_{22}` quantity for the :math:`n`-local star network.
 
-    The :math:`I^n_{22}` quantity is formally expressed as
+    The :math:`I_{22,n}` quantity is formally expressed as
 
     .. math::
 
-        I^n_{22} = \\frac{1}{2^n}\\sum_{x_1,\\dots,x_n}\\langle A_{x_1}\\dots A_{x_n}B_0\\rangle,
+        I_{22,n} = \\frac{1}{2^n}\\sum_{x_1,\\dots,x_n}\\langle A_{x_1}\\dots A_{x_n}B_0\\rangle,
 
     where :math:`x_i\\in\\{0,1\\}` and :math:`A_{x_i}` and :math:`B_{x_{n+1}}`
     are dichotomic observables.
@@ -74,11 +74,11 @@ def star_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     """Constructs a network-specific ``J22(scenario_settings)`` function that
     evaluates the :math:`J^n_{22}` quantity for the :math:`n`-local star network.
 
-    The :math:`J^n_{22}` quantity is formally expressed as
+    The :math:`J_{22,n}` quantity is formally expressed as
 
     .. math::
 
-        J^n_{22} = \\frac{1}{2^n}\\sum_{x_1,\\dots,x_n}(-1)^{\\sum_i x_i}\\langle A_{x_1}\\dots A _{x_n}B_1\\rangle,
+        J_{22,n} = \\frac{1}{2^n}\\sum_{x_1,\\dots,x_n}(-1)^{\\sum_i x_i}\\langle A_{x_1}\\dots A _{x_n}B_1\\rangle,
 
     where :math:`x_i\\in\\{0,1\\}` and :math:`A_{x_i}` and :math:`B_{x_{n+1}}` are
     dichotomic observables.
@@ -149,9 +149,9 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
     .. math::
 
-        |I^n_{22}|^{1/n} + |J^n_{22}|^{1/n} \\leq 1
+        |I_{22,n}|^{1/n} + |J_{22,n}|^{1/n} \\leq 1
 
-    where the quantities :math:`I^n_{22}` and :math:`J^n_{22}` are evaluated using
+    where the quantities :math:`I_{22,n}` and :math:`J_{22,n}` are evaluated using
     functions constructed by the :meth:`QNetOptimizer.star_I22_fn` and
     :meth:`QNetOptimizer.star_J22_fn` methods respectively.
     The classical bound is found to be 1, but quantum systems can score as high as
@@ -169,7 +169,7 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
     :type qnode_kwargs: *optional* dictionary
 
     :returns: A function callable as ``nlocal_star_22_cost(scenario_settings)`` that evaluates
-              the cost as :math:`-|I^n_{22}|^{1/n} - |J^n_{22}|^{1/n}`.
+              the cost as :math:`-|I_{22,n}|^{1/n} - |J_{22,n}|^{1/n}`.
     :rtype: function
     """
 
@@ -191,6 +191,15 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
 def parallel_nlocal_star_grad_fn(network_ansatz, natural_gradient=False, **qnode_kwargs):
     """Constructs a parallelizeable gradient function ``grad_fn`` for the :math:`n`-local
     star cost function.
+
+    The gradient of the :meth:`nlocal_star_22_cost_fn` is expressed as,
+
+    .. math::
+
+        -\\nabla_{\\vec{\\theta}}|I_{22,n}|^{1/n}
+        - \\nabla_{\\vec{\\theta}}|J_{22,n}|^{1/n},
+
+    where the gradient differentiates with respect to the network settings :math:`\\vec{\\theta}`.
 
     The parallelization is achieved through multithreading and intended to improve the
     efficiency of remote qnode execution.
