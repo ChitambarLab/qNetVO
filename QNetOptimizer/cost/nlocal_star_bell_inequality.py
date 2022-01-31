@@ -36,7 +36,7 @@ def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     n = len(network_ansatz.prepare_nodes)
 
     prep_inputs = [0] * n
-    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2 ** n)]
+    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
 
     if parallel:
         star_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
@@ -65,7 +65,7 @@ def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
         else:
             I22_results = math.array([star_qnode(settings) for settings in I22_x_settings])
 
-        return math.sum(I22_results) / (2 ** n)
+        return math.sum(I22_results) / (2**n)
 
     return I22
 
@@ -102,7 +102,7 @@ def star_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     n = len(network_ansatz.prepare_nodes)
 
     prep_inputs = [0] * n
-    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2 ** n)]
+    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
     if parallel:
         star_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
@@ -135,7 +135,7 @@ def star_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
             [(-1) ** (math.sum(input_vals[0:n])) for input_vals in input_x_vals]
         )
 
-        return math.sum(J22_scalars * J22_expvals) / (2 ** n)
+        return math.sum(J22_scalars * J22_expvals) / (2**n)
 
     return J22
 
@@ -219,8 +219,8 @@ def parallel_nlocal_star_grad_fn(network_ansatz, natural_gradient=False, **qnode
 
     star_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
 
-    I22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2 ** n)]
-    J22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2 ** n)]
+    I22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
+    J22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
     I22 = star_I22_fn(network_ansatz, parallel=True, **qnode_kwargs)
     J22 = star_J22_fn(network_ansatz, parallel=True, **qnode_kwargs)
@@ -275,16 +275,16 @@ def parallel_nlocal_star_grad_fn(network_ansatz, natural_gradient=False, **qnode
             -(1 / n)
             * np.power(math.abs(I22_score), (1 - n) / n)
             * math.sign(I22_score)
-            * (1 / (2 ** n))
+            * (1 / (2**n))
         )
         J22_scalar = (
             -(1 / n)
             * np.power(math.abs(J22_score), (1 - n) / n)
             * math.sign(J22_score)
-            * (1 / (2 ** n))
+            * (1 / (2**n))
         )
 
-        for i in range(2 ** n):
+        for i in range(2**n):
             I22_inputs = I22_x_vals[i]
             J22_inputs = J22_x_vals[i]
 
