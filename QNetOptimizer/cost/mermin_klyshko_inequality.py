@@ -5,7 +5,7 @@ from .qnodes import global_parity_expval_qnode
 
 def mermin_klyshko_inputs_scalars(n):
     """Helper function for handling the algebra of combining correlator terms
-    in the Mermin-Klyshko MK inequality.
+    in the Mermin-Klyshko (MK) inequality.
 
     This function supports :meth:`mermin_klyshkp_cost_fn`.
 
