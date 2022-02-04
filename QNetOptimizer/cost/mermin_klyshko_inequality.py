@@ -63,7 +63,7 @@ def mermin_klyshko_cost_fn(ansatz, **qnode_kwargs):
     Mermin-Klyshko (MK) inequality.
 
     :param ansatz: The network ansatz for which to apply the MK inequality.
-    :type ansatz: QNopt.NetworkAnsatz
+    :type ansatz: NetworkAnsatz
 
     :param qnode_kwargs: Keyword arguments passed through to the qnode constructors.
 
