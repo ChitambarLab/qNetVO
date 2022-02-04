@@ -5,6 +5,7 @@ from QNetOptimizer.information import *
 from QNetOptimizer.cost.qnodes import *
 from QNetOptimizer.cost.postprocessing import *
 from QNetOptimizer.cost.I_3322_bell_inequality import *
+from QNetOptimizer.cost.mermin_klyshko_inequality import *
 from QNetOptimizer.cost.nlocal_chain_bell_inequality import *
 from QNetOptimizer.cost.nlocal_star_bell_inequality import *
 from QNetOptimizer.cost.magic_squares_game import *
