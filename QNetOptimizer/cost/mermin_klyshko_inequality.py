@@ -7,7 +7,7 @@ def mermin_klyshko_inputs_scalars(n):
     """Helper function for handling the algebra of combining correlator terms
     in the Mermin-Klyshko (MK) inequality.
 
-    This function supports :meth:`mermin_klyshkp_cost_fn`.
+    This function supports :meth:`mermin_klyshko_cost_fn`.
 
     :param n: The number of measurement nodes in the scenario.
     :type n: Int
