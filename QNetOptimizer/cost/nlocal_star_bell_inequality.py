@@ -72,7 +72,7 @@ def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
 def star_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     """Constructs a network-specific ``J22(scenario_settings)`` function that
-    evaluates the :math:`J^n_{22}` quantity for the :math:`n`-local star network.
+    evaluates the :math:`J_{22,n}` quantity for the :math:`n`-local star network.
 
     The :math:`J_{22,n}` quantity is formally expressed as
 
