@@ -8,7 +8,7 @@ from scipy.linalg import pinvh
 
 def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     """Constructs a network-specific ``I22(scenario_settings)`` function that
-    evaluates the :math:`I^n_{22}` quantity for the :math:`n`-local star network.
+    evaluates the :math:`I_{22,n}` quantity for the :math:`n`-local star network.
 
     The :math:`I_{22,n}` quantity is formally expressed as
 
