@@ -280,8 +280,6 @@ def parallel_nlocal_star_grad_fn(
         grad_I22_results = []
         grad_J22_results = []
 
-        # num_batches = 2 ** (n - 2)  # process qnodes in batches of 4
-
         num_batches = int((2**n) / nthreads)
         for i in range(num_batches + 1):
             start_id = i * nthreads
