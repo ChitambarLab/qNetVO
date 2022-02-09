@@ -17,6 +17,8 @@ These :math:`n`-local star Bell inequalities witness quantum violations to the c
 
 .. autofunction:: star_J22_fn
 
+.. autofunction:: parallel_nlocal_star_grad_fn
+
 References
 ----------
 

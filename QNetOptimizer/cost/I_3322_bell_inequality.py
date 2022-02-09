@@ -33,7 +33,7 @@ def post_process_I_3322_joint_probs(probs_vec):
     :returns: The dichotomic probability :math:`P(00|xy)`.
     """
     n_local_qubits = int(math.log2(len(probs_vec)) / 2)
-    probs = math.reshape(probs_vec, (2 ** n_local_qubits, 2 ** n_local_qubits))
+    probs = math.reshape(probs_vec, (2**n_local_qubits, 2**n_local_qubits))
     even_ids = even_parity_ids(n_local_qubits)
 
     return sum([sum([probs[a, b] for b in even_ids]) for a in even_ids])
