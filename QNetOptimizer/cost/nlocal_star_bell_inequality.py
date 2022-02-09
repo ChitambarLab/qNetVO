@@ -6,7 +6,7 @@ from .qnodes import global_parity_expval_qnode
 from scipy.linalg import pinvh
 
 
-def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
+def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     """Constructs a network-specific ``I22(scenario_settings)`` function that
     evaluates the :math:`I_{22,n}` quantity for the :math:`n`-local star network.
 
@@ -27,10 +27,13 @@ def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
                      Default value: ``False``.
     :type parallel: *optional* Bool
 
+    :param nthreads: Specifies the number of threads used when ``parallel=True``.
+    :type nthreads: Int
+
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
-    :returns: A function callable as ``I22(scenario_settings)`` that evaluates the :math:`I^n_{22}` quantity.
+    :returns: A function callable as ``I22(scenario_settings)`` that evaluates the :math:`I_{22,n}` quantity.
     :rtype: function
     """
     n = len(network_ansatz.prepare_nodes)
@@ -52,11 +55,14 @@ def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
         if parallel:
             I22_results = []
-            num_batches = 2 ** (n - 2)  # process qnodes in batches of 4
-            for i in range(num_batches):
+            num_batches = int((2**n) / nthreads)
+            for i in range(num_batches + 1):
+                start_id = i * nthreads
+                end_id = start_id + nthreads if i < num_batches else 2**n
+
                 I22_delayed_results = [
                     dask.delayed(star_qnodes[i])(settings)
-                    for i, settings in enumerate(I22_x_settings[i * 4 : i * 4 + 4])
+                    for i, settings in enumerate(I22_x_settings[start_id:end_id])
                 ]
 
                 I22_results = math.concatenate(
@@ -70,7 +76,7 @@ def star_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     return I22
 
 
-def star_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
+def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     """Constructs a network-specific ``J22(scenario_settings)`` function that
     evaluates the :math:`J_{22,n}` quantity for the :math:`n`-local star network.
 
@@ -91,10 +97,13 @@ def star_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
                      Default value: ``False``.
     :type parallel: *optional* Bool
 
+    :param nthreads: Specifies the number of threads used when ``parallel=True``.
+    :type nthreads: Int
+
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
-    :returns: A function callable as ``J22(scenario_settings)`` that evaluates the :math:`J^n_{22}`
+    :returns: A function callable as ``J22(scenario_settings)`` that evaluates the :math:`J_{22,n}`
               quantity for the given ``scenario_settings``.
     :rtype: function
     """
@@ -118,11 +127,14 @@ def star_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
         if parallel:
             J22_expvals = []
-            num_batches = 2 ** (n - 2)  # process qnodes in batches of 4
-            for i in range(num_batches):
+            num_batches = int((2**n) / nthreads)
+            for i in range(num_batches + 1):
+                start_id = i * nthreads
+                end_id = start_id + nthreads if i < num_batches else 2**n
+
                 J22_delayed_results = [
                     dask.delayed(star_qnodes[i])(settings)
-                    for i, settings in enumerate(J22_x_settings[i * 4 : i * 4 + 4])
+                    for i, settings in enumerate(J22_x_settings[start_id:end_id])
                 ]
 
                 J22_expvals = math.concatenate(
@@ -140,7 +152,7 @@ def star_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     return J22
 
 
-def nlocal_star_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
+def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     """A network-specific constructor for the :math:`n`-local star Bell
     inequality for scenarios when all measurement devices in the star network
     have 2 inputs and 2 outputs.
@@ -165,6 +177,9 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
                      Default value: ``False``.
     :type parallel: *optional* Bool
 
+    :param nthreads: Specifies the number of threads used when ``parallel=True``.
+    :type nthreads: Int
+
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
@@ -175,8 +190,8 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
     n = len(network_ansatz.prepare_nodes)
 
-    I22 = star_I22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
-    J22 = star_J22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
+    I22 = star_I22_fn(network_ansatz, parallel=parallel, nthreads=4, **qnode_kwargs)
+    J22 = star_J22_fn(network_ansatz, parallel=parallel, nthreads=4, **qnode_kwargs)
 
     def cost(scenario_settings):
 
@@ -188,7 +203,9 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
     return cost
 
 
-def parallel_nlocal_star_grad_fn(network_ansatz, natural_gradient=False, **qnode_kwargs):
+def parallel_nlocal_star_grad_fn(
+    network_ansatz, nthreads=4, natural_gradient=False, **qnode_kwargs
+):
     """Constructs a parallelizeable gradient function ``grad_fn`` for the :math:`n`-local
     star cost function.
 
@@ -208,6 +225,9 @@ def parallel_nlocal_star_grad_fn(network_ansatz, natural_gradient=False, **qnode
     :param network_ansatz: The ansatz describing the :math:`n`-local chain network.
     :type network_ansatz: NetworkAnsatz
 
+    :param nthreads: Specifies the number of threads used when ``parallel=True``.
+    :type nthreads: Int
+
     :param qnode_kwargs: A keyword argument passthrough to qnode construction.
     :type qnode_kwargs: *optional* dict
 
@@ -222,8 +242,8 @@ def parallel_nlocal_star_grad_fn(network_ansatz, natural_gradient=False, **qnode
     I22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
     J22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
-    I22 = star_I22_fn(network_ansatz, parallel=True, **qnode_kwargs)
-    J22 = star_J22_fn(network_ansatz, parallel=True, **qnode_kwargs)
+    I22 = star_I22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
+    J22 = star_J22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
 
     prep_num_settings = [node.num_settings for node in network_ansatz.prepare_nodes]
     meas_num_settings = [node.num_settings for node in network_ansatz.measure_nodes]
@@ -255,17 +275,22 @@ def parallel_nlocal_star_grad_fn(network_ansatz, natural_gradient=False, **qnode
         grad_I22_results = []
         grad_J22_results = []
 
-        num_batches = 2 ** (n - 2)  # process qnodes in batches of 4
-        for i in range(num_batches):
+        # num_batches = 2 ** (n - 2)  # process qnodes in batches of 4
+
+        num_batches = int((2**n) / nthreads)
+        for i in range(num_batches + 1):
+            start_id = i * nthreads
+            end_id = start_id + nthreads if i < num_batches else 2**n
+
             grad_I22_delayed_results = [
                 dask.delayed(_grad)(star_qnodes[i], settings)
-                for i, settings in enumerate(I22_x_settings[i * 4 : i * 4 + 4])
+                for i, settings in enumerate(I22_x_settings[start_id:end_id])
             ]
             grad_I22_results.extend(dask.compute(*grad_I22_delayed_results, scheduler="threads"))
 
             grad_J22_delayed_results = [
                 dask.delayed(_grad)(star_qnodes[i], settings)
-                for i, settings in enumerate(J22_x_settings[i * 4 : i * 4 + 4])
+                for i, settings in enumerate(J22_x_settings[start_id:end_id])
             ]
             grad_J22_results.extend(dask.compute(*grad_J22_delayed_results, scheduler="threads"))
 

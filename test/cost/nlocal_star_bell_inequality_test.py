@@ -37,10 +37,12 @@ class TestNlocalStar22CostFn:
 
         return QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
 
-    @pytest.mark.parametrize("parallel_flag", [False, True])
-    def test_bilocal_star_22_cost(self, parallel_flag):
+    @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 3)])
+    def test_bilocal_star_22_cost(self, parallel_flag, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
-        bilocal_22_cost = QNopt.nlocal_star_22_cost_fn(bilocal_star_ansatz, parallel=parallel_flag)
+        bilocal_22_cost = QNopt.nlocal_star_22_cost_fn(
+            bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
+        )
 
         zero_settings = bilocal_star_ansatz.zero_scenario_settings()
 
@@ -58,11 +60,13 @@ class TestNlocalStar22CostFn:
 
         assert np.isclose(bilocal_22_cost(ideal_settings), -(np.sqrt(2)))
 
-    @pytest.mark.parametrize("parallel_flag", [False, True])
-    def test_trilocal_star_cost(self, parallel_flag):
+    @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
+    def test_trilocal_star_cost(self, parallel_flag, nthreads):
         trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
         trilocal_22_cost = QNopt.nlocal_star_22_cost_fn(
-            trilocal_star_ansatz, parallel=parallel_flag
+            trilocal_star_ansatz,
+            parallel=parallel_flag,
+            nthreads=nthreads,
         )
 
         zero_settings = trilocal_star_ansatz.zero_scenario_settings()
@@ -85,13 +89,15 @@ class TestNlocalStar22CostFn:
 
         assert np.isclose(trilocal_22_cost(ideal_settings), -np.sqrt(2))
 
-    @pytest.mark.parametrize("parallel_flag", [False, True])
-    def test_bilocal_star_22_cost_gradient_descent(self, parallel_flag):
+    @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
+    def test_bilocal_star_22_cost_gradient_descent(self, parallel_flag, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
 
         np.random.seed(45)
         opt_dict = QNopt.gradient_descent(
-            QNopt.nlocal_star_22_cost_fn(bilocal_star_ansatz, parallel=parallel_flag),
+            QNopt.nlocal_star_22_cost_fn(
+                bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
+            ),
             bilocal_star_ansatz.rand_scenario_settings(),
             num_steps=10,
             step_size=2,
@@ -103,13 +109,13 @@ class TestNlocalStar22CostFn:
 
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
 
-    @pytest.mark.parametrize("parallel_flag", [False, True])
-    def test_trilocal_star_22_cost_gradient_descent(self, parallel_flag):
+    @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
+    def test_trilocal_star_22_cost_gradient_descent(self, parallel_flag, nthreads):
         trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
 
         np.random.seed(45)
         opt_dict = QNopt.gradient_descent(
-            QNopt.nlocal_star_22_cost_fn(trilocal_star_ansatz, parallel=parallel_flag),
+            QNopt.nlocal_star_22_cost_fn(trilocal_star_ansatz, parallel=True, nthreads=nthreads),
             trilocal_star_ansatz.rand_scenario_settings(),
             num_steps=8,
             step_size=2,
@@ -121,17 +127,20 @@ class TestNlocalStar22CostFn:
 
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
 
-    def test_bilocal_star_22_cost_natural_gradient_descent(self):
+    @pytest.mark.parametrize("nthreads", [3, 4])
+    def test_bilocal_star_22_cost_natural_gradient_descent(self, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
 
         np.random.seed(45)
         opt_dict = QNopt.gradient_descent(
-            QNopt.nlocal_star_22_cost_fn(bilocal_star_ansatz),
+            QNopt.nlocal_star_22_cost_fn(bilocal_star_ansatz, parallel=True, nthreads=nthreads),
             bilocal_star_ansatz.rand_scenario_settings(),
             num_steps=10,
             step_size=1,
             sample_width=1,
-            grad_fn=QNopt.parallel_nlocal_star_grad_fn(bilocal_star_ansatz, natural_gradient=True),
+            grad_fn=QNopt.parallel_nlocal_star_grad_fn(
+                bilocal_star_ansatz, nthreads=nthreads, natural_gradient=True
+            ),
         )
 
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
