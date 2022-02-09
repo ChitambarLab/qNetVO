@@ -42,7 +42,9 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
 
     if parallel:
-        star_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
+        star_qnodes = [
+            global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(nthreads)
+        ]
     else:
         star_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
@@ -114,7 +116,9 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
     if parallel:
-        star_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
+        star_qnodes = [
+            global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(nthreads)
+        ]
     else:
         star_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
@@ -190,8 +194,8 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_k
 
     n = len(network_ansatz.prepare_nodes)
 
-    I22 = star_I22_fn(network_ansatz, parallel=parallel, nthreads=4, **qnode_kwargs)
-    J22 = star_J22_fn(network_ansatz, parallel=parallel, nthreads=4, **qnode_kwargs)
+    I22 = star_I22_fn(network_ansatz, parallel=parallel, nthreads=nthreads, **qnode_kwargs)
+    J22 = star_J22_fn(network_ansatz, parallel=parallel, nthreads=nthreads, **qnode_kwargs)
 
     def cost(scenario_settings):
 
@@ -220,7 +224,6 @@ def parallel_nlocal_star_grad_fn(
 
     The parallelization is achieved through multithreading and intended to improve the
     efficiency of remote qnode execution.
-    The number of threads is restricted to four in order to be compatible with IBM's API.
 
     :param network_ansatz: The ansatz describing the :math:`n`-local chain network.
     :type network_ansatz: NetworkAnsatz
@@ -237,7 +240,9 @@ def parallel_nlocal_star_grad_fn(
 
     n = len(network_ansatz.prepare_nodes)
 
-    star_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
+    star_qnodes = [
+        global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(nthreads)
+    ]
 
     I22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
     J22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
