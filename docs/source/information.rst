@@ -1,7 +1,7 @@
 Information
 ===========
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 .. autofunction:: behavior_fn
 

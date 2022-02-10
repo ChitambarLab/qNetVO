@@ -1,7 +1,7 @@
 I-3322 Bell Inequality
 ======================
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 
 Consider the bipartite non-signaling scenario where Alice and Bob each have three classical

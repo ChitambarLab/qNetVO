@@ -1,7 +1,7 @@
 n-Local Chain Bell Inequality
 =============================
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 The :math:`n`-local chain network consists of :math:`n` entanglement sources (static preparation node) and :math:`n+1` measurement nodes linked as a chain by the entanglement sources.
 

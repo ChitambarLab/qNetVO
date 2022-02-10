@@ -2,7 +2,7 @@ Ansatz Library
 ==============
 
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 
 State Preparations

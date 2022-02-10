@@ -3,7 +3,7 @@ import pennylane as qml
 from pennylane import numpy as np
 import tensorflow as tf
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as QNopt
 
 
 class TestNoiseNode:

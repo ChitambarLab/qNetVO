@@ -3,7 +3,7 @@ Post-Processing
 
 General post-processing functions that assist the development of cost functions.
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 .. autofunction:: parity_vector
 

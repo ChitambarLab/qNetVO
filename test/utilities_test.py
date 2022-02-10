@@ -4,7 +4,7 @@ from pennylane import numpy as np
 import os
 import json
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as QNopt
 
 
 class TestUtilities:

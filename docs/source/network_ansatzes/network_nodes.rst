@@ -1,7 +1,7 @@
 Network Nodes
 =============
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 .. autoclass:: PrepareNode
 	:members:

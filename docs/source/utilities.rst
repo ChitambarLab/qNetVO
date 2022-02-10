@@ -1,7 +1,7 @@
 Utilities
 =========
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 .. autofunction:: unitary_matrix
 

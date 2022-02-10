@@ -3,7 +3,7 @@ from pennylane import numpy as np
 import pennylane as qml
 
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as QNopt
 
 
 class TestNLocalChainBellInequality:

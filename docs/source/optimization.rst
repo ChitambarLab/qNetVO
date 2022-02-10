@@ -1,6 +1,6 @@
 Optimization
 ============
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 .. autofunction:: gradient_descent

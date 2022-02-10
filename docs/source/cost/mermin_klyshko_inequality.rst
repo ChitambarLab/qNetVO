@@ -1,7 +1,7 @@
 Mermin-Klyshko Inequality
 =========================
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 Consider a non-signaling scenario with a single source and :math:`n` measurement
 devices.

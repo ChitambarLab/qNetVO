@@ -1,7 +1,7 @@
 QNodes
 ======
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 .. autofunction:: parity_observable
 

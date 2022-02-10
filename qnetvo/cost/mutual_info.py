@@ -20,7 +20,7 @@ def mutual_info_cost_fn(
             I(Y;X) = H(Y) + H(X) - H(XY)
 
     where :math:`H(X) = -\\sum_{i}P(X_i)\\log_2(P(X_i))` is the Shannon entropy
-    (see :meth:`QNetOptimizer.shannon_entropy`).
+    (see :meth:`qnetvo.shannon_entropy`).
 
     The mutual information can be used to quantify the amount of communication between
     a sender and receiver.

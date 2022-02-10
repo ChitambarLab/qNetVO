@@ -168,8 +168,8 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_k
         |I_{22,n}|^{1/n} + |J_{22,n}|^{1/n} \\leq 1
 
     where the quantities :math:`I_{22,n}` and :math:`J_{22,n}` are evaluated using
-    functions constructed by the :meth:`QNetOptimizer.star_I22_fn` and
-    :meth:`QNetOptimizer.star_J22_fn` methods respectively.
+    functions constructed by the :meth:`qnetvo.star_I22_fn` and
+    :meth:`qnetvo.star_J22_fn` methods respectively.
     The classical bound is found to be 1, but quantum systems can score as high as
     :math:`\\sqrt{2}`.
 

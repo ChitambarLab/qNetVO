@@ -1,7 +1,7 @@
 The Magic Squares Game
 ======================
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 
 Magic squares is a cooperative game where two players Alice and Bob each produce a
