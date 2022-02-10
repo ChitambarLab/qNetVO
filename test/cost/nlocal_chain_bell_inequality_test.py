@@ -21,9 +21,7 @@ class TestNLocalChainBellInequality:
 
         bilocal_chain_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        bilocal_chain_cost = qnet.nlocal_chain_cost_22(
-            bilocal_chain_ansatz, parallel=parallel_flag
-        )
+        bilocal_chain_cost = qnet.nlocal_chain_cost_22(bilocal_chain_ansatz, parallel=parallel_flag)
 
         zero_settings = bilocal_chain_ansatz.zero_scenario_settings()
 
