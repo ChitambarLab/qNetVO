@@ -44,7 +44,7 @@ Import qNetVO:
 
 .. code-block:: python
 
-   import qnetvo as qn
+   import qnetvo as qnet
 
 How to Cite
 ===========
