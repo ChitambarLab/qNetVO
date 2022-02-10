@@ -3,44 +3,44 @@ from pennylane import numpy as np
 import pennylane as qml
 
 
-from context import qnetvo as QNopt
+from context import qnetvo as qnet
 
 
 class TestNlocalStar22CostFn:
     def bilocal_star_ry_ansatz(self):
         prep_nodes = [
-            QNopt.PrepareNode(1, [0, 2], QNopt.ghz_state, 0),
-            QNopt.PrepareNode(1, [1, 3], QNopt.ghz_state, 0),
+            qnet.PrepareNode(1, [0, 2], qnet.ghz_state, 0),
+            qnet.PrepareNode(1, [1, 3], qnet.ghz_state, 0),
         ]
 
         meas_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [2, 3], QNopt.local_RY, 2),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [2, 3], qnet.local_RY, 2),
         ]
 
-        return QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+        return qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
     def trilocal_star_ry_ansatz(self):
         prep_nodes = [
-            QNopt.PrepareNode(1, [0, 3], QNopt.ghz_state, 0),
-            QNopt.PrepareNode(1, [1, 4], QNopt.ghz_state, 0),
-            QNopt.PrepareNode(1, [2, 5], QNopt.ghz_state, 0),
+            qnet.PrepareNode(1, [0, 3], qnet.ghz_state, 0),
+            qnet.PrepareNode(1, [1, 4], qnet.ghz_state, 0),
+            qnet.PrepareNode(1, [2, 5], qnet.ghz_state, 0),
         ]
 
         meas_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [2], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [3, 4, 5], QNopt.local_RY, 3),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [2], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [3, 4, 5], qnet.local_RY, 3),
         ]
 
-        return QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+        return qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 3)])
     def test_bilocal_star_22_cost(self, parallel_flag, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
-        bilocal_22_cost = QNopt.nlocal_star_22_cost_fn(
+        bilocal_22_cost = qnet.nlocal_star_22_cost_fn(
             bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
         )
 
@@ -63,7 +63,7 @@ class TestNlocalStar22CostFn:
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
     def test_trilocal_star_cost(self, parallel_flag, nthreads):
         trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
-        trilocal_22_cost = QNopt.nlocal_star_22_cost_fn(
+        trilocal_22_cost = qnet.nlocal_star_22_cost_fn(
             trilocal_star_ansatz,
             parallel=parallel_flag,
             nthreads=nthreads,
@@ -94,15 +94,15 @@ class TestNlocalStar22CostFn:
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
 
         np.random.seed(45)
-        opt_dict = QNopt.gradient_descent(
-            QNopt.nlocal_star_22_cost_fn(
+        opt_dict = qnet.gradient_descent(
+            qnet.nlocal_star_22_cost_fn(
                 bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
             ),
             bilocal_star_ansatz.rand_scenario_settings(),
             num_steps=10,
             step_size=2,
             sample_width=10,
-            grad_fn=QNopt.parallel_nlocal_star_grad_fn(bilocal_star_ansatz)
+            grad_fn=qnet.parallel_nlocal_star_grad_fn(bilocal_star_ansatz)
             if parallel_flag
             else None,
         )
@@ -114,13 +114,13 @@ class TestNlocalStar22CostFn:
         trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
 
         np.random.seed(45)
-        opt_dict = QNopt.gradient_descent(
-            QNopt.nlocal_star_22_cost_fn(trilocal_star_ansatz, parallel=True, nthreads=nthreads),
+        opt_dict = qnet.gradient_descent(
+            qnet.nlocal_star_22_cost_fn(trilocal_star_ansatz, parallel=True, nthreads=nthreads),
             trilocal_star_ansatz.rand_scenario_settings(),
             num_steps=8,
             step_size=2,
             sample_width=10,
-            grad_fn=QNopt.parallel_nlocal_star_grad_fn(trilocal_star_ansatz)
+            grad_fn=qnet.parallel_nlocal_star_grad_fn(trilocal_star_ansatz)
             if parallel_flag
             else None,
         )
@@ -132,13 +132,13 @@ class TestNlocalStar22CostFn:
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
 
         np.random.seed(45)
-        opt_dict = QNopt.gradient_descent(
-            QNopt.nlocal_star_22_cost_fn(bilocal_star_ansatz, parallel=True, nthreads=nthreads),
+        opt_dict = qnet.gradient_descent(
+            qnet.nlocal_star_22_cost_fn(bilocal_star_ansatz, parallel=True, nthreads=nthreads),
             bilocal_star_ansatz.rand_scenario_settings(),
             num_steps=10,
             step_size=1,
             sample_width=1,
-            grad_fn=QNopt.parallel_nlocal_star_grad_fn(
+            grad_fn=qnet.parallel_nlocal_star_grad_fn(
                 bilocal_star_ansatz, nthreads=nthreads, natural_gradient=True
             ),
         )

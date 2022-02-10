@@ -4,7 +4,7 @@ from pennylane import numpy as np
 import os
 import json
 
-from context import qnetvo as QNopt
+from context import qnetvo as qnet
 
 
 class TestUtilities:
@@ -12,14 +12,14 @@ class TestUtilities:
         def circ_pauli_y(wires):
             qml.PauliY(wires=wires)
 
-        U = QNopt.unitary_matrix(circ_pauli_y, 1, wires=[0])
+        U = qnet.unitary_matrix(circ_pauli_y, 1, wires=[0])
         assert np.allclose(U, qml.PauliY.matrix)
 
         def circ_rot_y(settings, wires):
             qml.RY(settings, wires=wires)
 
         theta = np.pi / 4
-        U = QNopt.unitary_matrix(circ_rot_y, 1, theta, wires=[0])
+        U = qnet.unitary_matrix(circ_rot_y, 1, theta, wires=[0])
         U_match = np.array(
             [[np.cos(theta / 2), -np.sin(theta / 2)], [np.sin(theta / 2), np.cos(theta / 2)]]
         )
@@ -29,7 +29,7 @@ class TestUtilities:
         def circ_cnot():
             qml.CNOT(wires=[0, 1])
 
-        U = QNopt.unitary_matrix(circ_cnot, 2)
+        U = qnet.unitary_matrix(circ_cnot, 2)
         assert np.allclose(U, [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]])
 
 
@@ -85,7 +85,7 @@ class TestOptimzationFileIO:
 
         filename = self.filename()
 
-        QNopt.write_optimization_json(opt_dict, filename)
+        qnet.write_optimization_json(opt_dict, filename)
 
         assert os.path.exists(filename + ".json")
 
@@ -112,11 +112,11 @@ class TestOptimzationFileIO:
 
         filename = self.filename()
 
-        QNopt.write_optimization_json(opt_dict, filename)
+        qnet.write_optimization_json(opt_dict, filename)
 
         assert os.path.exists(filename + ".json")
 
-        opt_json = QNopt.read_optimization_json(filename + ".json")
+        opt_json = qnet.read_optimization_json(filename + ".json")
 
         assert opt_json["datetime"] == "2021-05-22T11:11:11Z"
         assert opt_json["opt_score"] == 12
@@ -155,7 +155,7 @@ class TestOptimzationFileIO:
 
         settings = [prep_settings, meas_settings]
 
-        np_settings = QNopt.settings_to_np(settings)
+        np_settings = qnet.settings_to_np(settings)
 
         assert isinstance(np_settings, list)
         assert isinstance(np_settings[0], list)
@@ -182,7 +182,7 @@ class TestOptimzationFileIO:
             [np.array(meas_set) for meas_set in meas_settings],
         ]
 
-        settings = QNopt.settings_to_list(np_settings)
+        settings = qnet.settings_to_list(np_settings)
 
         assert isinstance(settings, list)
         assert isinstance(settings[0], list)
@@ -200,7 +200,7 @@ class TestOptimzationFileIO:
 
     def test_mixed_base_num(self):
 
-        assert np.all(QNopt.mixed_base_num(0, [2, 2]) == [0, 0])
-        assert np.all(QNopt.mixed_base_num(2, [2, 2]) == [1, 0])
-        assert np.all(QNopt.mixed_base_num(9, [2, 3, 4]) == [0, 2, 1])
-        assert np.all(QNopt.mixed_base_num(119, [5, 4, 3, 2, 1]) == [4, 3, 2, 1, 0])
+        assert np.all(qnet.mixed_base_num(0, [2, 2]) == [0, 0])
+        assert np.all(qnet.mixed_base_num(2, [2, 2]) == [1, 0])
+        assert np.all(qnet.mixed_base_num(9, [2, 3, 4]) == [0, 2, 1])
+        assert np.all(qnet.mixed_base_num(119, [5, 4, 3, 2, 1]) == [4, 3, 2, 1, 0])

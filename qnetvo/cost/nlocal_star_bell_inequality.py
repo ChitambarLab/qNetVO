@@ -20,7 +20,7 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     are dichotomic observables.
 
     :param network_ansatz: The :math:`n`-local star network ansatz.
-    :type network_ansatz: QNopt.NetworkAnsatz
+    :type network_ansatz: qnet.NetworkAnsatz
 
     :param parallel: If ``True`` qnodes will be evaluated in separate threads. This is
                      valuable for execution on remote simulator and hardware devices.
@@ -92,7 +92,7 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     dichotomic observables.
 
     :param network_ansatz: The :math:`n`-local star network ansatz.
-    :type network_ansatz: QNopt.NetworkAnsatz
+    :type network_ansatz: qnet.NetworkAnsatz
 
     :param parallel: If ``True`` qnodes will be evaluated in separate threads. This is
                      valuable for execution on remote simulator and hardware devices.
@@ -174,7 +174,7 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_k
     :math:`\\sqrt{2}`.
 
     :param network_ansatz: The :math:`n`-local star network ansatz.
-    :type network_ansatz: QNopt.NetworkAnsatz
+    :type network_ansatz: qnet.NetworkAnsatz
 
     :param parallel: If ``True`` qnodes will be evaluated in separate threads. This is
                      valuable for execution on remote simulator and hardware devices.

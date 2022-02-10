@@ -2,7 +2,7 @@ import pytest
 import pennylane as qml
 from pennylane import numpy as np
 
-from context import qnetvo as QNopt
+from context import qnetvo as qnet
 
 
 class TestCHSHGradientDescent:
@@ -15,19 +15,19 @@ class TestCHSHGradientDescent:
 
     def test_chsh_gradient_descent(self):
         prepare_nodes = [
-            QNopt.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
+            qnet.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
         ]
         measure_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
         ]
 
-        chsh_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
-        chsh_cost = QNopt.chsh_inequality_cost(chsh_ansatz)
+        chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
+        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
 
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
-        opt_dict = QNopt.gradient_descent(
+        opt_dict = qnet.gradient_descent(
             chsh_cost, init_settings, num_steps=15, step_size=0.2, verbose=False
         )
 
@@ -35,19 +35,19 @@ class TestCHSHGradientDescent:
 
     def test_chsh_gradient_descent_inhomogeneous_settings(self):
         prepare_nodes = [
-            QNopt.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
+            qnet.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
         ]
         measure_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1], qml.templates.subroutines.ArbitraryUnitary, 3),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qml.templates.subroutines.ArbitraryUnitary, 3),
         ]
 
-        chsh_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
-        chsh_cost = QNopt.chsh_inequality_cost(chsh_ansatz)
+        chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
+        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
 
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
-        opt_dict = QNopt.gradient_descent(
+        opt_dict = qnet.gradient_descent(
             chsh_cost, init_settings, num_steps=30, step_size=0.2, verbose=False
         )
 
@@ -55,20 +55,20 @@ class TestCHSHGradientDescent:
 
     def test_parallel_chsh_gradient_descent(self):
         prepare_nodes = [
-            QNopt.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
+            qnet.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
         ]
         measure_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
         ]
 
-        chsh_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
-        chsh_cost = QNopt.chsh_inequality_cost(chsh_ansatz)
-        chsh_grad_fn = QNopt.parallel_chsh_grad(chsh_ansatz)
+        chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
+        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
+        chsh_grad_fn = qnet.parallel_chsh_grad(chsh_ansatz)
 
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
-        opt_dict = QNopt.gradient_descent(
+        opt_dict = qnet.gradient_descent(
             chsh_cost,
             init_settings,
             num_steps=15,
@@ -81,20 +81,20 @@ class TestCHSHGradientDescent:
 
     def test_parallel_chsh_natural_gradient_descent(self):
         prepare_nodes = [
-            QNopt.PrepareNode(1, [0, 1], QNopt.ghz_state, 0),
+            qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0),
         ]
         measure_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
         ]
 
-        chsh_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
-        chsh_cost = QNopt.chsh_inequality_cost(chsh_ansatz)
-        chsh_grad_fn = QNopt.chsh_natural_grad(chsh_ansatz)
+        chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
+        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
+        chsh_grad_fn = qnet.chsh_natural_grad(chsh_ansatz)
 
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
-        opt_dict = QNopt.gradient_descent(
+        opt_dict = qnet.gradient_descent(
             chsh_cost,
             init_settings,
             num_steps=15,
