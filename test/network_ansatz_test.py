@@ -3,7 +3,7 @@ import pennylane as qml
 from pennylane import numpy as np
 import tensorflow as tf
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as qnet
 
 
 class TestNoiseNode:
@@ -12,7 +12,7 @@ class TestNoiseNode:
             qml.AmplitudeDamping(0.7, wires=[0])
             qml.AmplitudeDamping(0.3, wires=[1])
 
-        noise_node = QNopt.NoiseNode([0, 1], circuit)
+        noise_node = qnet.NoiseNode([0, 1], circuit)
 
         assert noise_node.wires == [0, 1]
         assert noise_node.ansatz_fn == circuit
@@ -24,7 +24,7 @@ class TestPrepareNode:
             qml.RY(settings[0], wires=wires[0])
             qml.RY(settings[1], wires=wires[1])
 
-        prep_node = QNopt.PrepareNode(3, [0, 1], circuit, 2)
+        prep_node = qnet.PrepareNode(3, [0, 1], circuit, 2)
 
         assert prep_node.num_in == 3
         assert prep_node.wires == [0, 1]
@@ -40,7 +40,7 @@ class TestMeasureNode:
             qml.RY(settings[0], wires=wires[0])
             qml.RY(settings[1], wires=wires[1])
 
-        measure_node = QNopt.MeasureNode(3, 4, [0, 1], circuit, 2)
+        measure_node = qnet.MeasureNode(3, 4, [0, 1], circuit, 2)
 
         assert measure_node.num_in == 3
         assert measure_node.num_out == 4
@@ -53,13 +53,13 @@ class TestMeasureNode:
 
 class TestNetworkAnsatz:
     def chsh_ansatz(self):
-        prepare_nodes = [QNopt.PrepareNode(1, [0, 1], QNopt.local_RY, 2)]
+        prepare_nodes = [qnet.PrepareNode(1, [0, 1], qnet.local_RY, 2)]
         measure_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 1),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
         ]
 
-        return QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
+        return qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
 
     def test_init(self):
         # setup test
@@ -70,21 +70,21 @@ class TestNetworkAnsatz:
             qml.DepolarizingChannel(0.5 * 3 / 4, wires=wires[0])
 
         prepare_nodes = [
-            QNopt.PrepareNode(1, [0], ansatz_circuit, 1),
-            QNopt.PrepareNode(1, [1], ansatz_circuit, 1),
-            QNopt.PrepareNode(1, [2], ansatz_circuit, 1),
+            qnet.PrepareNode(1, [0], ansatz_circuit, 1),
+            qnet.PrepareNode(1, [1], ansatz_circuit, 1),
+            qnet.PrepareNode(1, [2], ansatz_circuit, 1),
         ]
         measure_nodes = [
-            QNopt.MeasureNode(1, 2, [0], ansatz_circuit, 1),
-            QNopt.MeasureNode(1, 2, [1], ansatz_circuit, 1),
+            qnet.MeasureNode(1, 2, [0], ansatz_circuit, 1),
+            qnet.MeasureNode(1, 2, [1], ansatz_circuit, 1),
         ]
         noise_nodes = [
-            QNopt.NoiseNode([1], noisy_ansatz_circuit),
-            QNopt.NoiseNode([2], noisy_ansatz_circuit),
+            qnet.NoiseNode([1], noisy_ansatz_circuit),
+            qnet.NoiseNode([2], noisy_ansatz_circuit),
         ]
 
-        network_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes)
-        noisy_network_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
+        network_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
+        noisy_network_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
 
         # verify network nodes
         assert network_ansatz.prepare_nodes == prepare_nodes
@@ -113,7 +113,7 @@ class TestNetworkAnsatz:
         assert np.isclose(test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]), 1)
 
         # Noisy network Case
-        noisy_network_ansatz = QNopt.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
+        noisy_network_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
 
         # verify network nodes
         assert noisy_network_ansatz.prepare_nodes == prepare_nodes
@@ -144,19 +144,19 @@ class TestNetworkAnsatz:
         )
 
     def test_init_noisy_device_override(self):
-        prep_nodes = [QNopt.PrepareNode(1, [0], QNopt.local_RY, 1)]
+        prep_nodes = [qnet.PrepareNode(1, [0], qnet.local_RY, 1)]
         noise_nodes = [
-            QNopt.NoiseNode(
-                [0, 1], lambda settings, wires: QNopt.pure_amplitude_damping([0.5], wire=wires)
+            qnet.NoiseNode(
+                [0, 1], lambda settings, wires: qnet.pure_amplitude_damping([0.5], wire=wires)
             )
         ]
-        meas_nodes = [QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1)]
+        meas_nodes = [qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1)]
 
-        mixed_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes, noise_nodes)
+        mixed_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes, noise_nodes)
 
         assert mixed_ansatz.dev.short_name == "default.mixed"
 
-        pure_ansatz = QNopt.NetworkAnsatz(
+        pure_ansatz = qnet.NetworkAnsatz(
             prep_nodes, meas_nodes, noise_nodes, dev_kwargs={"name": "default.qubit"}
         )
 
@@ -179,8 +179,8 @@ class TestNetworkAnsatz:
                 [np.array([[4], [5]]), np.array([[6], [7]])],
                 [1, 0],
                 [
-                    QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
-                    QNopt.PrepareNode(2, [1], QNopt.local_RY, 1),
+                    qnet.PrepareNode(2, [0], qnet.local_RY, 1),
+                    qnet.PrepareNode(2, [1], qnet.local_RY, 1),
                 ],
                 [5, 6],
             ),
@@ -188,9 +188,9 @@ class TestNetworkAnsatz:
                 [np.array([[4], [5]]), np.array([[6], [7]])],
                 [0, 1],
                 [
-                    QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
-                    QNopt.PrepareNode(
-                        2, [1], QNopt.local_RY, 1, static_settings=np.array([[8], [9]])
+                    qnet.PrepareNode(2, [0], qnet.local_RY, 1),
+                    qnet.PrepareNode(
+                        2, [1], qnet.local_RY, 1, static_settings=np.array([[8], [9]])
                     ),
                 ],
                 [4, 9],
@@ -199,9 +199,9 @@ class TestNetworkAnsatz:
                 [tf.Variable([[4], [5]]), tf.Variable([[6], [7]])],
                 [1, 0],
                 [
-                    QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
-                    QNopt.PrepareNode(
-                        2, [1], QNopt.local_RY, 1, static_settings=np.array([[8], [9]])
+                    qnet.PrepareNode(2, [0], qnet.local_RY, 1),
+                    qnet.PrepareNode(
+                        2, [1], qnet.local_RY, 1, static_settings=np.array([[8], [9]])
                     ),
                 ],
                 [5, 8],
@@ -209,7 +209,7 @@ class TestNetworkAnsatz:
         ],
     )
     def test_layer_settings(self, settings, node_inputs, nodes, match):
-        layer_settings = QNopt.NetworkAnsatz.layer_settings(settings, node_inputs, nodes)
+        layer_settings = qnet.NetworkAnsatz.layer_settings(settings, node_inputs, nodes)
         assert np.allclose(layer_settings, match)
 
     def test_network_ansatz_device(self):
@@ -241,15 +241,15 @@ class TestNetworkAnsatz:
             qml.Hadamard(wires=wires[0])
             qml.DepolarizingChannel(0.5 * 3 / 4, wires=wires[0])
 
-        node1 = QNopt.PrepareNode(1, [0], ansatz_circuit, 1)
-        node2 = QNopt.PrepareNode(1, [1], ansatz_circuit, 1)
+        node1 = qnet.PrepareNode(1, [0], ansatz_circuit, 1)
+        node2 = qnet.PrepareNode(1, [1], ansatz_circuit, 1)
 
-        noisy_node1 = QNopt.NoiseNode([0], noisy_ansatz_circuit)
-        noisy_node2 = QNopt.NoiseNode([1], noisy_ansatz_circuit)
+        noisy_node1 = qnet.NoiseNode([0], noisy_ansatz_circuit)
+        noisy_node2 = qnet.NoiseNode([1], noisy_ansatz_circuit)
 
         @qml.qnode(qml.device("default.qubit", wires=2))
         def test_circuit(settings):
-            QNopt.NetworkAnsatz.circuit_layer([node1, node2])(settings)
+            qnet.NetworkAnsatz.circuit_layer([node1, node2])(settings)
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
@@ -261,7 +261,7 @@ class TestNetworkAnsatz:
 
         @qml.qnode(qml.device("default.mixed", wires=2))
         def noisy_test_circuit(settings):
-            QNopt.NetworkAnsatz.circuit_layer([noisy_node1, noisy_node2])(settings)
+            qnet.NetworkAnsatz.circuit_layer([noisy_node1, noisy_node2])(settings)
 
             return qml.state()
 
@@ -279,36 +279,36 @@ class TestNetworkAnsatz:
         def ansatz_circuit(settings, wires):
             qml.RY(settings[0], wires=wires[0])
 
-        node1 = QNopt.MeasureNode(1, 2, [1], ansatz_circuit, 1)
-        node2 = QNopt.MeasureNode(1, 2, [0], ansatz_circuit, 1)
+        node1 = qnet.MeasureNode(1, 2, [1], ansatz_circuit, 1)
+        node2 = qnet.MeasureNode(1, 2, [0], ansatz_circuit, 1)
 
-        ansatz_wires = QNopt.NetworkAnsatz.collect_wires([node1, node2])
+        ansatz_wires = qnet.NetworkAnsatz.collect_wires([node1, node2])
         assert ansatz_wires.tolist() == [1, 0]
 
-        node3 = QNopt.MeasureNode(1, 2, [0], ansatz_circuit, 1)
+        node3 = qnet.MeasureNode(1, 2, [0], ansatz_circuit, 1)
         with pytest.raises(
             ValueError,
             match="One or more wires are not unique. Each node must contain unique wires.",
         ):
-            QNopt.NetworkAnsatz.collect_wires([node2, node3])
+            qnet.NetworkAnsatz.collect_wires([node2, node3])
 
     def test_scenario_settings(self):
         def ansatz_circuit(settings, wires):
             return None
 
         prep_nodes = [
-            QNopt.PrepareNode(3, [0], ansatz_circuit, 2),
-            QNopt.PrepareNode(2, [1], ansatz_circuit, 4),
+            qnet.PrepareNode(3, [0], ansatz_circuit, 2),
+            qnet.PrepareNode(2, [1], ansatz_circuit, 4),
         ]
         meas_nodes = [
-            QNopt.MeasureNode(2, 2, [0], ansatz_circuit, 1),
-            QNopt.MeasureNode(1, 2, [1], ansatz_circuit, 3),
-            QNopt.MeasureNode(
+            qnet.MeasureNode(2, 2, [0], ansatz_circuit, 1),
+            qnet.MeasureNode(1, 2, [1], ansatz_circuit, 3),
+            qnet.MeasureNode(
                 2, 2, [2, 3], ansatz_circuit, 2, static_settings=np.array([[1, 2], [3, 4]])
             ),
         ]
 
-        network_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+        network_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         zero_settings = network_ansatz.zero_scenario_settings()
         match_settings = [

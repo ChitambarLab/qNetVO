@@ -313,7 +313,7 @@ class NetworkAnsatz:
         """Creates a randomized settings array for the network ansatz using TensorFlow
         tensor types.
 
-        :returns: See :meth:`QNetOptimizer.NetworkAnsatz.rand_scenario_settings` for details.
+        :returns: See :meth:`qnetvo.NetworkAnsatz.rand_scenario_settings` for details.
         :rtype: list[list[tf.Tensor]]
         """
         np_settings = self.rand_scenario_settings()

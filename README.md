@@ -60,6 +60,6 @@ Run tests from the root directory with with `$ python -m pytest`. All test are f
 
 ### Code Formatting
 
-To format code run `$ black -l 100 QNetOptimizer test docs`. This uses the [black](https://black.readthedocs.io/en/stable/) code formatter.
+To format code run `$ black -l 100 qnetvo test docs`. This uses the [black](https://black.readthedocs.io/en/stable/) code formatter.
 
 

@@ -2,37 +2,37 @@ import pytest
 import pennylane as qml
 from pennylane import numpy as np
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as qnet
 
 
 class TestLinearInequalityCost:
     def example_ansatz(self):
         prep_nodes = [
-            QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
-            QNopt.PrepareNode(4, [1, 2], QNopt.local_RY, 2),
+            qnet.PrepareNode(2, [0], qnet.local_RY, 1),
+            qnet.PrepareNode(4, [1, 2], qnet.local_RY, 2),
         ]
         meas_nodes = [
-            QNopt.MeasureNode(1, 2, [0, 1, 2], QNopt.local_RY, 3),
+            qnet.MeasureNode(1, 2, [0, 1, 2], qnet.local_RY, 3),
         ]
 
-        return QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+        return qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
     def test_linear_probs_inequality_cost_no_post_processing(self):
         prep_nodes = [
-            QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
-            QNopt.PrepareNode(4, [1, 2], QNopt.local_RY, 2),
+            qnet.PrepareNode(2, [0], qnet.local_RY, 1),
+            qnet.PrepareNode(4, [1, 2], qnet.local_RY, 2),
         ]
 
         meas_nodes = [
-            QNopt.MeasureNode(1, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(1, 4, [1, 2], QNopt.local_RY, 2),
+            qnet.MeasureNode(1, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(1, 4, [1, 2], qnet.local_RY, 2),
         ]
 
-        network_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+        network_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         game = np.eye(8)
 
-        cost = QNopt.linear_probs_cost_fn(network_ansatz, game)
+        cost = qnet.linear_probs_cost_fn(network_ansatz, game)
 
         zero_settings = network_ansatz.zero_scenario_settings()
         assert np.isclose(cost(zero_settings), -1)
@@ -59,7 +59,7 @@ class TestLinearInequalityCost:
         settings[0][1][1, :] = [0, np.pi]
 
         dichotomic_game = np.array([[1, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]])
-        dichotomic_cost = QNopt.linear_probs_cost_fn(
+        dichotomic_cost = qnet.linear_probs_cost_fn(
             network_ansatz,
             dichotomic_game,
             postmap=np.array([[1, 0, 0, 1, 0, 1, 1, 0], [0, 1, 1, 0, 1, 0, 0, 1]]),
@@ -98,4 +98,4 @@ class TestLinearInequalityCost:
 
         game = default_game if len(game) == 0 else game
         with pytest.raises(ValueError, match=match):
-            QNopt.linear_probs_cost_fn(ansatz, game, postmap=postmap)
+            qnet.linear_probs_cost_fn(ansatz, game, postmap=postmap)

@@ -15,7 +15,7 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
 
         \\langle\\mathbf{G},\\mathbf{P}\\rangle = \\sum_{\\vec{x},\\vec{y},\\vec{b}} G_{b|x,y} P(b|x,y),
 
-    where :math:`\\mathbf{P}` is a behavior (see :meth:`QNetOptimizer.behavior_fn`).
+    where :math:`\\mathbf{P}` is a behavior (see :meth:`qnetvo.behavior_fn`).
 
     A post-processing map :math:`\\mathbf{L}` may optionally be applied as
     :math:`\\mathbf{L}\\mathbf{P}_{Net}` where

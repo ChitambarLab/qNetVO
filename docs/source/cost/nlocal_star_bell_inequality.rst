@@ -1,7 +1,7 @@
 n-Local Star Bell Inequality
 =============================
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 The :math:`n`-local star network consists of :math:`n` entanglement sources (static preparation nodes) and :math:`n+1` measurement nodes where one central node holds one qubit from each source and the remaining :math:`n` nodes are connected to the central node through a single source.
 The network forms an :math:`n` point star. 

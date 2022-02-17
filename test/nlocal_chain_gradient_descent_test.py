@@ -2,7 +2,7 @@ import pytest
 import pennylane as qml
 from pennylane import numpy as np
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as qnet
 
 
 class TestNLocalChainGradientDescent:
@@ -14,21 +14,21 @@ class TestNLocalChainGradientDescent:
     @pytest.fixture
     def bilocal_chain_ansatz(self):
         prep_nodes = [
-            QNopt.PrepareNode(1, [0, 1], self.RY_CNOT, 2),
-            QNopt.PrepareNode(1, [2, 3], self.RY_CNOT, 2),
+            qnet.PrepareNode(1, [0, 1], self.RY_CNOT, 2),
+            qnet.PrepareNode(1, [2, 3], self.RY_CNOT, 2),
         ]
         meas_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1, 2], QNopt.local_RY, 2),
-            QNopt.MeasureNode(2, 2, [3], QNopt.local_RY, 1),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1, 2], qnet.local_RY, 2),
+            qnet.MeasureNode(2, 2, [3], qnet.local_RY, 1),
         ]
 
-        return QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+        return qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
     @pytest.fixture
     def optimization_args(self, bilocal_chain_ansatz):
 
-        bilocal_chain_cost = QNopt.nlocal_chain_cost_22(bilocal_chain_ansatz)
+        bilocal_chain_cost = qnet.nlocal_chain_cost_22(bilocal_chain_ansatz)
 
         np.random.seed(9)
         init_settings = bilocal_chain_ansatz.rand_scenario_settings()
@@ -37,7 +37,7 @@ class TestNLocalChainGradientDescent:
 
     def test_bilocal_chain_gradient_descent(self, optimization_args):
 
-        opt_dict = QNopt.gradient_descent(
+        opt_dict = qnet.gradient_descent(
             *optimization_args, num_steps=10, step_size=2, sample_width=10, verbose=False
         )
 
@@ -45,9 +45,9 @@ class TestNLocalChainGradientDescent:
 
     def test_bilocal_chain_parallel_gradient_descent(self, bilocal_chain_ansatz, optimization_args):
 
-        parallel_grad = QNopt.parallel_nlocal_chain_grad_fn(bilocal_chain_ansatz)
+        parallel_grad = qnet.parallel_nlocal_chain_grad_fn(bilocal_chain_ansatz)
 
-        opt_dict = QNopt.gradient_descent(
+        opt_dict = qnet.gradient_descent(
             *optimization_args,
             num_steps=10,
             step_size=2,
@@ -61,26 +61,26 @@ class TestNLocalChainGradientDescent:
     def test_bilocal_chain_natural_gradient_descent(self):
 
         prep_nodes = [
-            QNopt.PrepareNode(1, [0, 1], QNopt.ghz_state, 0),
-            QNopt.PrepareNode(1, [2, 3], QNopt.ghz_state, 0),
+            qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0),
+            qnet.PrepareNode(1, [2, 3], qnet.ghz_state, 0),
         ]
         meas_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1, 2], QNopt.local_RY, 2),
-            QNopt.MeasureNode(2, 2, [3], QNopt.local_RY, 1),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1, 2], qnet.local_RY, 2),
+            qnet.MeasureNode(2, 2, [3], qnet.local_RY, 1),
         ]
 
-        bilocal_chain_ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
-        bilocal_chain_cost = QNopt.nlocal_chain_cost_22(bilocal_chain_ansatz)
+        bilocal_chain_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
+        bilocal_chain_cost = qnet.nlocal_chain_cost_22(bilocal_chain_ansatz)
 
         np.random.seed(9)
         init_settings = bilocal_chain_ansatz.rand_scenario_settings()
 
-        nat_grad = QNopt.parallel_nlocal_chain_grad_fn(
+        nat_grad = qnet.parallel_nlocal_chain_grad_fn(
             bilocal_chain_ansatz, natural_gradient=True, diff_method="parameter-shift"
         )
 
-        opt_dict = QNopt.gradient_descent(
+        opt_dict = qnet.gradient_descent(
             bilocal_chain_cost,
             init_settings,
             num_steps=8,

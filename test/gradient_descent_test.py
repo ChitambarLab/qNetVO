@@ -3,13 +3,13 @@ import re
 from pennylane import numpy as np
 import tensorflow as tf
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as qnet
 
 
 class TestGradientDescent:
     def test_quadratic_cost(self):
         cost = lambda x: x**2
-        opt_dict = QNopt.gradient_descent(cost, 2.0, num_steps=50, step_size=0.1, verbose=False)
+        opt_dict = qnet.gradient_descent(cost, 2.0, num_steps=50, step_size=0.1, verbose=False)
 
         assert np.isclose(opt_dict["opt_score"], 0, atol=1e-6)
         assert np.isclose(opt_dict["opt_settings"], 0, atol=1e-4)
@@ -24,7 +24,7 @@ class TestGradientDescent:
         assert bool(opt_datetime_match)
 
         # tensor flow interface
-        tf_opt_dict = QNopt.gradient_descent(
+        tf_opt_dict = qnet.gradient_descent(
             cost, tf.Variable(2.0), num_steps=50, step_size=0.1, verbose=False, interface="tf"
         )
 
@@ -35,6 +35,6 @@ class TestGradientDescent:
         assert len(tf_opt_dict["settings_history"]) == 51
 
         with pytest.raises(ValueError, match='Interface "jax" is not supported.'):
-            QNopt.gradient_descent(
+            qnet.gradient_descent(
                 cost, tf.Variable(2.0), num_steps=50, step_size=0.1, verbose=False, interface="jax"
             )

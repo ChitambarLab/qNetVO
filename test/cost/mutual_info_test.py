@@ -2,7 +2,7 @@ import pytest
 import pennylane as qml
 from pennylane import numpy as np
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as qnet
 
 
 class TestMutualInfoCostFn:
@@ -31,23 +31,23 @@ class TestMutualInfoCostFn:
     )
     def test_mutual_info_cost_qubit_33(self, scenario_settings, priors, postmap, match):
 
-        ansatz = QNopt.NetworkAnsatz(
-            [QNopt.PrepareNode(3, [0], QNopt.local_RY, 1)],
-            [QNopt.MeasureNode(1, 3, [0], QNopt.local_RY, 1)],
+        ansatz = qnet.NetworkAnsatz(
+            [qnet.PrepareNode(3, [0], qnet.local_RY, 1)],
+            [qnet.MeasureNode(1, 3, [0], qnet.local_RY, 1)],
         )
 
-        mutual_info = QNopt.mutual_info_cost_fn(ansatz, priors, postmap=postmap)
+        mutual_info = qnet.mutual_info_cost_fn(ansatz, priors, postmap=postmap)
 
         assert np.isclose(mutual_info(scenario_settings), match)
 
     def test_mutual_info_2_senders(self):
 
-        ansatz = QNopt.NetworkAnsatz(
+        ansatz = qnet.NetworkAnsatz(
             [
-                QNopt.PrepareNode(2, [0], QNopt.local_RY, 1),
-                QNopt.PrepareNode(2, [1], QNopt.local_RY, 1),
+                qnet.PrepareNode(2, [0], qnet.local_RY, 1),
+                qnet.PrepareNode(2, [1], qnet.local_RY, 1),
             ],
-            [QNopt.MeasureNode(1, 4, [0, 1], QNopt.local_RY, 2)],
+            [qnet.MeasureNode(1, 4, [0, 1], qnet.local_RY, 2)],
         )
 
         scenario_settings = [
@@ -57,7 +57,7 @@ class TestMutualInfoCostFn:
 
         priors = [np.ones(2) / 2, np.ones(2) / 2]
 
-        mutual_info = QNopt.mutual_info_cost_fn(ansatz, priors)
+        mutual_info = qnet.mutual_info_cost_fn(ansatz, priors)
 
         assert np.isclose(mutual_info(scenario_settings), -2)
 
@@ -68,19 +68,19 @@ class TestMutualInfoOptimimzation:
     )
     def test_mutual_info_opt_qubit_33(self, priors, match):
 
-        ansatz = QNopt.NetworkAnsatz(
-            [QNopt.PrepareNode(3, [0], QNopt.local_RY, 1)],
-            [QNopt.MeasureNode(1, 3, [0], QNopt.local_RY, 1)],
+        ansatz = qnet.NetworkAnsatz(
+            [qnet.PrepareNode(3, [0], qnet.local_RY, 1)],
+            [qnet.MeasureNode(1, 3, [0], qnet.local_RY, 1)],
         )
 
         postmap = np.array([[1, 0], [0, 1], [0, 1]])
 
-        mutual_info = QNopt.mutual_info_cost_fn(ansatz, priors, postmap=postmap)
+        mutual_info = qnet.mutual_info_cost_fn(ansatz, priors, postmap=postmap)
 
         np.random.seed(12)
         scenario_settings = ansatz.rand_scenario_settings()
 
-        opt_dict = QNopt.gradient_descent(
+        opt_dict = qnet.gradient_descent(
             mutual_info, scenario_settings, step_size=0.1, num_steps=28, sample_width=24
         )
 

@@ -9,7 +9,7 @@ def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     """Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_cost_22`` function.
 
     :param network_ansatz: The ansatz for the :math:`n`-local chain network.
-    :type network_ansatz: QNopt.NetworkAnsatz
+    :type network_ansatz: qnet.NetworkAnsatz
 
     :param parallel: If ``True``, remote qnode executions are made in parallel web requests.
     :type parallel: *optional* bool, default ``False``
@@ -61,7 +61,7 @@ def J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     """Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_cost_22`` function.
 
     :param network_ansatz: The ansatz for the :math:`n`-local chain network.
-    :type network_ansatz: QNopt.NetworkAnsatz
+    :type network_ansatz: qnet.NetworkAnsatz
 
     :param parallel: If ``True``, remote qnode executions are made in parallel web requests.
     :type parallel: *optional* bool, default ``False``
@@ -114,7 +114,7 @@ def nlocal_chain_cost_22(network_ansatz, parallel=False, **qnode_kwargs):
     :math:`n`-local chain Bell inequality for binary inputs and outputs.
 
     :param network_ansatz: The ansatz for the networks. 
-    :type network_ansatz: QNopt.NetworkAnsatz
+    :type network_ansatz: qnet.NetworkAnsatz
 
     :param parallel: If ``True``, remote qnode executions are made in parallel web requests.
     :type parallel: *optional* bool

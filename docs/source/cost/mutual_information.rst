@@ -1,6 +1,6 @@
 Mutual Information
 ==================
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 .. autofunction:: mutual_info_cost_fn

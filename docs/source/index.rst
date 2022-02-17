@@ -1,4 +1,4 @@
-.. QNetOptimizer documentation master file, created by
+.. qnetvo documentation master file, created by
    sphinx-quickstart on Thu Jul 15 10:27:48 2021.
 
 qNetVO
@@ -44,7 +44,7 @@ Import qNetVO:
 
 .. code-block:: python
 
-   import qnetvo as qn
+   import qnetvo as qnet
 
 How to Cite
 ===========

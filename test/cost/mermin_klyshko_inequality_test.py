@@ -2,7 +2,7 @@ import pytest
 import pennylane as qml
 from pennylane import numpy as np
 
-from context import QNetOptimizer as QNopt
+from context import qnetvo as qnet
 
 
 class TestMerminKlyshkoInequality:
@@ -38,7 +38,7 @@ class TestMerminKlyshkoInequality:
     )
     def test_mermin_klyshko_inputs_scalars(self, n, match_inputs, match_scalars):
 
-        meas_inputs_list, scalars_list = QNopt.mermin_klyshko_inputs_scalars(n)
+        meas_inputs_list, scalars_list = qnet.mermin_klyshko_inputs_scalars(n)
 
         assert scalars_list == match_scalars
 
@@ -47,7 +47,7 @@ class TestMerminKlyshkoInequality:
 
     @pytest.mark.parametrize("n", [5, 6, 7, 8, 9, 10, 11])
     def test_num_terms_mermin_klyshk_inputs_scalars(self, n):
-        meas_inputs_list, scalars_list = QNopt.mermin_klyshko_inputs_scalars(n)
+        meas_inputs_list, scalars_list = qnet.mermin_klyshko_inputs_scalars(n)
 
         num_terms = 2 ** (2 * np.floor(n / 2))
 
@@ -56,16 +56,16 @@ class TestMerminKlyshkoInequality:
 
     def test_mermin_klyshko_inequality_fn_CHSH_scenario(self):
 
-        prep_nodes = [QNopt.PrepareNode(1, [0, 1], QNopt.ghz_state, 0)]
+        prep_nodes = [qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0)]
 
         meas_nodes = [
-            QNopt.MeasureNode(2, 2, [0], QNopt.local_RY, 1),
-            QNopt.MeasureNode(2, 2, [1], QNopt.local_RY, 2),
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 2),
         ]
 
-        ansatz = QNopt.NetworkAnsatz(prep_nodes, meas_nodes)
+        ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        mk_chsh_cost = QNopt.mermin_klyshko_cost_fn(ansatz)
+        mk_chsh_cost = qnet.mermin_klyshko_cost_fn(ansatz)
 
         chsh_cost = mk_chsh_cost(
             [
@@ -78,11 +78,11 @@ class TestMerminKlyshkoInequality:
 
     @pytest.mark.parametrize("n", [3, 4, 5, 6, 7, 8, 9, 10])
     def test_mermin_klyshko_classical_bounds(self, n):
-        cl_prep = [QNopt.PrepareNode(1, range(n), lambda settings, wires: None, 0)]
+        cl_prep = [qnet.PrepareNode(1, range(n), lambda settings, wires: None, 0)]
 
-        meas_nodes = [QNopt.MeasureNode(2, 2, [i], QNopt.local_RY, 1) for i in range(n)]
+        meas_nodes = [qnet.MeasureNode(2, 2, [i], qnet.local_RY, 1) for i in range(n)]
 
-        cl_ansatz = QNopt.NetworkAnsatz(cl_prep, meas_nodes)
+        cl_ansatz = qnet.NetworkAnsatz(cl_prep, meas_nodes)
 
         meas_settings = [np.array([[np.pi], [0]]) for i in range(n - 1)]
 
@@ -93,25 +93,25 @@ class TestMerminKlyshkoInequality:
 
         cl_opt_settings = [[np.array([[]])], meas_settings]
 
-        mermin_klyshko_cost = QNopt.mermin_klyshko_cost_fn(cl_ansatz)
+        mermin_klyshko_cost = qnet.mermin_klyshko_cost_fn(cl_ansatz)
 
         assert np.isclose(
-            -(mermin_klyshko_cost(cl_opt_settings)), QNopt.mermin_klyshko_classical_bound(n)
+            -(mermin_klyshko_cost(cl_opt_settings)), qnet.mermin_klyshko_classical_bound(n)
         )
 
     @pytest.mark.parametrize("n", [3, 4, 5, 6, 7, 8])
     def test_mermin_klyshko_quantum_bounds(self, n):
-        q_prep_ghz = [QNopt.PrepareNode(1, range(n), QNopt.ghz_state, 0)]
+        q_prep_ghz = [qnet.PrepareNode(1, range(n), qnet.ghz_state, 0)]
 
         def optimal_meas_ansatz(settings, wires):
             qml.RZ(settings[0], wires=wires)
             qml.RY(np.pi / 2, wires=wires)
 
-        meas_nodes = [QNopt.MeasureNode(2, 2, [i], optimal_meas_ansatz, 1) for i in range(n)]
+        meas_nodes = [qnet.MeasureNode(2, 2, [i], optimal_meas_ansatz, 1) for i in range(n)]
 
-        q_opt_ansatz = QNopt.NetworkAnsatz(q_prep_ghz, meas_nodes)
+        q_opt_ansatz = qnet.NetworkAnsatz(q_prep_ghz, meas_nodes)
 
-        mermin_klyshko_cost = QNopt.mermin_klyshko_cost_fn(q_opt_ansatz)
+        mermin_klyshko_cost = qnet.mermin_klyshko_cost_fn(q_opt_ansatz)
 
         opt_meas_settings = [np.array([[-np.pi / 4], [np.pi / 4]]) for i in range(n - 1)]
 
@@ -123,5 +123,5 @@ class TestMerminKlyshkoInequality:
         opt_settings = [[np.array([[]])], opt_meas_settings]
 
         assert np.isclose(
-            -(mermin_klyshko_cost(opt_settings)), QNopt.mermin_klyshko_quantum_bound(n)
+            -(mermin_klyshko_cost(opt_settings)), qnet.mermin_klyshko_quantum_bound(n)
         )

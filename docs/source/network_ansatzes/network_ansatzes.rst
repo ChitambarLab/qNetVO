@@ -1,7 +1,7 @@
 Network Ansatz
 ==============
 
-.. currentmodule:: QNetOptimizer
+.. currentmodule:: qnetvo
 
 .. autoclass:: NetworkAnsatz
 	:members:
