@@ -52,6 +52,8 @@ def write_optimization_json(opt_dict, filename):
 
     opt_dict_json = copy.deepcopy(opt_dict)
 
+    opt_dict_json["opt_score"] = float(opt_dict_json["opt_score"])
+    opt_dict_json["scores"] = [float(score) for score in opt_dict_json["scores"]]
     opt_dict_json["opt_settings"] = settings_to_list(opt_dict_json["opt_settings"])
     opt_dict_json["settings_history"] = [
         settings_to_list(settings) for settings in opt_dict_json["settings_history"]
