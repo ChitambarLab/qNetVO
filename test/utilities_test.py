@@ -60,6 +60,19 @@ class TestOptimzationFileIO:
 
         return opt_dict
 
+    def construct_opt_dict2(self):
+        opt_dict = {
+            "datetime": "2021-05-22T11:11:11Z",
+            "opt_score": np.array(12),
+            "opt_settings": [[np.array([[]])], [np.array([[]])]],
+            "scores": [np.array(0), np.array(6), np.array(12)],
+            "samples": [0, 2, 4],
+            "step_times": [0.1, 0.01, 0.2],
+            "settings_history": [[[np.array([[]])], [np.array([[]])]]],
+        }
+
+        return opt_dict
+
     @classmethod
     def filename(self):
         return "test/test_write_optimization_json"
@@ -105,6 +118,21 @@ class TestOptimzationFileIO:
             [[[[]]], [[[0, 0.1], [0.2, 0.3]], [[0.4], [0.5]]]],
             [[[[]]], [[[0, 1], [2, 3]], [[4], [5]]]],
         ]
+
+    def test_write_optimization_json_sanitization(self, file_io_cleanup):
+        opt_dict = self.construct_opt_dict2()
+
+        filename = self.filename()
+
+        qnet.write_optimization_json(opt_dict, filename)
+
+        assert os.path.exists(filename + ".json")
+
+        with open(filename + ".json") as file:
+            opt_json = json.load(file)
+
+        assert opt_json["opt_score"] == 12
+        assert opt_json["scores"] == [0, 6, 12]
 
     def test_read_optimization_json(self, file_io_cleanup):
 
