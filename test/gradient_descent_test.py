@@ -1,7 +1,7 @@
 import pytest
 import re
-from pennylane import numpy as np
 import tensorflow as tf
+from pennylane import numpy as np
 
 import qnetvo as qnet
 

@@ -35,6 +35,17 @@ For convenience a dev environment can be setup from the `environment.yml`.
 (base) $ conda activate qnetvo-dev
 ```
 
+### Tests
+
+Tests are located in the `test/` directory and run using `pytest`.
+First, from the root directory, install the local qnetvo package:
+
+```
+(qnetvo-dev) $ pip install -e . 
+```
+
+Then run `$ pytest` to run all tests in the `test/` directory.
+
 ### Documentation
 
 To view the project documentation it must be built and served locally. 
@@ -53,10 +64,6 @@ services are not available for free accounts.
 ```
 (qnetvo-dev) $ python -m http.server --bind localhost
 ``` 
-
-### Tests
-
-Run tests from the root directory with with `$ python -m pytest`. All test are found in the `./test` directory.
 
 ### Code Formatting
 
