@@ -1,4 +1,3 @@
-import dask
 import pennylane as qml
 from pennylane import math
 from .qnodes import global_parity_expval_qnode
@@ -33,6 +32,8 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
     if parallel:
+        from ..safe_dask_import import dask
+
         chsh_qnodes = [global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs) for i in range(4)]
     else:
         chsh_qnode = global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs)
@@ -71,6 +72,8 @@ def parallel_chsh_grad(chsh_ansatz, **qnode_kwargs):
     :returns: A parallelized (multithreaded) gradient function ``grad_fn(scenario_settings)``.
     :rtype: function
     """
+
+    from ..safe_dask_import import dask
 
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
     num_settings_A = chsh_ansatz.measure_nodes[0].num_settings
@@ -143,6 +146,8 @@ def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
     :returns: A parallelized (multithreaded) gradient function ``grad_fn(scenario_settings)``.
     :rtype: function
     """
+
+    from ..safe_dask_import import dask
 
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
     num_settings_A = chsh_ansatz.measure_nodes[0].num_settings
