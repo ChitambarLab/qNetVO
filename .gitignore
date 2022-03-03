@@ -2,4 +2,7 @@
 **/\.ipynb_checkpoints/*
 .DS_Store
 env/*
+*.egg-info/*
+dist/*
+build/*
 docs/build/*
