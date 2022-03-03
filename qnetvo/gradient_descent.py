@@ -1,7 +1,6 @@
 import pennylane as qml
 from datetime import datetime
 import time
-import tensorflow as tf
 
 
 def gradient_descent(
@@ -68,11 +67,15 @@ def gradient_descent(
 
     :raises ValueError: If the ``interface`` is not supported.
     """
-    opt = (
-        qml.GradientDescentOptimizer(stepsize=step_size)
-        if interface == "autograd"
-        else tf.keras.optimizers.SGD(learning_rate=step_size)
-    )
+
+    if interface == "autograd":
+        opt = qml.GradientDescentOptimizer(stepsize=step_size)
+    elif interface == "tf":
+        from .lazy_tensorflow_import import tensorflow as tf
+
+        opt = tf.keras.optimizers.SGD(learning_rate=step_size)
+    else:
+        raise ValueError('Interface "' + interface + '" is not supported.')
 
     settings = init_settings
     scores = []
@@ -100,8 +103,7 @@ def gradient_descent(
             # opt.minimize updates settings in place
             tf_cost = lambda: cost(settings)
             opt.minimize(tf_cost, settings)
-        else:
-            raise ValueError('Interface "' + interface + '" is not supported.')
+
         elapsed = time.time() - start
 
         if i % sample_width == 0:

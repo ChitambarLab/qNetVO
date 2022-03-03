@@ -23,7 +23,7 @@ def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
     if parallel:
-        from ..safe_dask_import import dask
+        from ..lazy_dask_import import dask
 
         chain_qnodes = [
             global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)
@@ -77,7 +77,7 @@ def J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
     if parallel:
-        from ..safe_dask_import import dask
+        from ..lazy_dask_import import dask
 
         chain_qnodes = [
             global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)
@@ -185,7 +185,7 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_gradient=False, **qnod
     :rtype: function
     """
 
-    from ..safe_dask_import import dask
+    from ..lazy_dask_import import dask
 
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
     n = len(network_ansatz.prepare_nodes)

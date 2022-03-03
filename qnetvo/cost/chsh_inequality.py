@@ -32,7 +32,7 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
     if parallel:
-        from ..safe_dask_import import dask
+        from ..lazy_dask_import import dask
 
         chsh_qnodes = [global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs) for i in range(4)]
     else:
@@ -73,7 +73,7 @@ def parallel_chsh_grad(chsh_ansatz, **qnode_kwargs):
     :rtype: function
     """
 
-    from ..safe_dask_import import dask
+    from ..lazy_dask_import import dask
 
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
     num_settings_A = chsh_ansatz.measure_nodes[0].num_settings
@@ -147,7 +147,7 @@ def chsh_natural_grad(chsh_ansatz, **qnode_kwargs):
     :rtype: function
     """
 
-    from ..safe_dask_import import dask
+    from ..lazy_dask_import import dask
 
     xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
     num_settings_A = chsh_ansatz.measure_nodes[0].num_settings

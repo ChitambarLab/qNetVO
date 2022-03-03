@@ -1,5 +1,6 @@
 """
-Checks that the user has dask[delayed] installed before 
+Lazily imports dask when needed.
+Throws an error if the user does not have dask[delayed] installed.
 """
 try:
     import dask

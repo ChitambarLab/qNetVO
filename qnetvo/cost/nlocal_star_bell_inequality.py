@@ -41,7 +41,7 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
 
     if parallel:
-        from ..safe_dask_import import dask
+        from ..lazy_dask_import import dask
 
         star_qnodes = [
             global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(nthreads)
@@ -117,7 +117,7 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
     if parallel:
-        from ..safe_dask_import import dask
+        from ..lazy_dask_import import dask
 
         star_qnodes = [
             global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(nthreads)
@@ -241,7 +241,7 @@ def parallel_nlocal_star_grad_fn(
     :rtype: function
     """
 
-    from ..safe_dask_import import dask
+    from ..lazy_dask_import import dask
 
     n = len(network_ansatz.prepare_nodes)
 
