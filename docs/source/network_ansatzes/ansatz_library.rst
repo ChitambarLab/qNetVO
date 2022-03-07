@@ -12,6 +12,8 @@ State Preparations
 
 .. autofunction:: ghz_state
 
+.. autofunction:: max_entangled_state
+
 
 Unitary Layers
 --------------

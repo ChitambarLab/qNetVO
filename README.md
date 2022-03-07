@@ -21,52 +21,73 @@ quantum hardware.*
 
 ### Environment
 
-For convenience a dev environment can be setup from the `environment.yml`.
+[Anaconda](https://docs.conda.io/projects/conda/en/latest/glossary.html#anaconda-glossary) distribution of Python is used to ensure a consistent development environment.
+Follow the [Anaconda installation instruction](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#installation) to setup the `conda` command line tool for your
+operating system.
+The `conda` tool is used to create the dev environment from the `environment.yml` file.
+For more details on how to use `conda` see the [managing environments](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) page in the `conda` documentation.
 
-1. Create the `qnetvo-dev` enviroment:
+To create the dev environment, navigate to the root `qNetVO/` project directory and follow these steps.
+
+1. Create the `qnetvo-dev` conda environment:
 
 ```
 (base) $ conda env create -f environment.yml
 ```
 
-2. Activate the `qnetvo-dev` environment:
+2. Activate the `qnetvo-dev` conda environment:
 
 ```
 (base) $ conda activate qnetvo-dev
 ```
 
+3. Install the local `qnetvo` package in editable mode:
+
+```
+(qnetvo-dev) $ pip install -e .
+```
+
+At this point all packages for building docs, running tests, and running notebooks will be installed.
+Local changes made to the `./src/qnetvo/` codebase will be reflected whenever the `import qnetvo` is called in Python code.
+
 ### Tests
 
-Tests are located in the `test/` directory and run using `pytest`.
-First, from the root directory, install the local `qnetvo` package:
+Tests are run using [`pytest`](https://docs.pytest.org/en/7.0.x/) and located in the `./test/` directory.
+To run tests, first setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment), then run:
 
 ```
-(qnetvo-dev) $ pip install -e . 
+(qnetvo-dev) $ pytest
 ```
-
-Then run `$ pytest` to run all tests in the `test/` directory.
 
 ### Documentation
 
-To view the project documentation it must be built and served locally. 
-It cannot currently be hosted by GitHub because the repository is private and hosting
-services are not available for free accounts.
+It is important to view the documentation before committing changes to the `qNetVO/` codebase.
+To locally build and serve the documentation, first setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment), then follow these steps.
 
 
-1. Build documentation:
+1. **Build Documentation:** From the root directory run:
 
 ```
 (qnetvo-dev) $ sphinx-build -b html docs/source/ docs/build/html
 ```
 
-2. Locally serve documentation by navigating to the `./docs/build/html` directory and running:
+2. **Serve Documentation:** Navigate to the `./docs/build/html` directory and run:
 
 ```
 (qnetvo-dev) $ python -m http.server --bind localhost
-``` 
+```
+
+3. **View Documentation:** Copy and paste the returned IP address to your browser URL to view the `qnetvo` documentation.
 
 ### Code Formatting
 
-To format code run `$ black -l 100 qnetvo test docs`. This uses the [black](https://black.readthedocs.io/en/stable/) code formatter.
+All code in this project is autoformatted using the [black](https://black.readthedocs.io/en/stable/) code formatter.
+Code must be formatted before a pull request is made.
+First, setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment)).
+Then, from the root directory run:
+
+```
+(qnetvo-dev) $ black -l 100 src test docs
+```
 
 
