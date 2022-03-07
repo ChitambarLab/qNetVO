@@ -38,7 +38,7 @@ For convenience a dev environment can be setup from the `environment.yml`.
 ### Tests
 
 Tests are located in the `test/` directory and run using `pytest`.
-First, from the root directory, install the local qnetvo package:
+First, from the root directory, install the local `qnetvo` package:
 
 ```
 (qnetvo-dev) $ pip install -e . 
