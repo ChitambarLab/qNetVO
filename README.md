@@ -1,8 +1,6 @@
-# qNetVO
+# qNetVO: The Quantum Network Variational Optimizer
 
-*The **Q**uantum **Net**work **V**ariational **O**ptimizer is python framework for
-simulating and optimizing quantum communication networks using
-quantum hardware.*
+*Simulate and optimize quantum communication networks using quantum computers.*
 
 [![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)
 
