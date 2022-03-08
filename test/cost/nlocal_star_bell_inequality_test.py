@@ -64,9 +64,7 @@ class TestNlocalStar22CostFn:
     def test_trilocal_star_cost(self, parallel_flag, nthreads):
         trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
         trilocal_22_cost = qnet.nlocal_star_22_cost_fn(
-            trilocal_star_ansatz,
-            parallel=parallel_flag,
-            nthreads=nthreads,
+            trilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads,
         )
 
         zero_settings = trilocal_star_ansatz.zero_scenario_settings()

@@ -33,7 +33,8 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
         circuit(*circ_args, **circ_kwargs)
         return qml.state()
 
-    bitstrings = list(itertools.product([0, 1], repeat=num_wires))
+    bitstrings = [np.array(bitstring) for bitstring in itertools.product([0, 1], repeat=num_wires)]
+
     u = [unitary_z(bitstring).numpy() for bitstring in bitstrings]
     return np.array(u).T
 

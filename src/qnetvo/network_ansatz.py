@@ -294,13 +294,13 @@ class NetworkAnsatz:
         :rtype: list[list[np.array]]
         """
         prepare_settings = [
-            2 * np.pi * np.random.random(node.settings_dims) - np.pi
+            2 * np.pi * np.random.random(node.settings_dims, requires_grad=True) - np.pi
             if len(node.static_settings) == 0
             else np.array([[]])
             for node in self.prepare_nodes
         ]
         measure_settings = [
-            2 * np.pi * np.random.random(node.settings_dims) - np.pi
+            2 * np.pi * np.random.random(node.settings_dims, requires_grad=True) - np.pi
             if len(node.static_settings) == 0
             else np.array([[]])
             for node in self.measure_nodes
@@ -335,11 +335,15 @@ class NetworkAnsatz:
         :rtype: list[list[np.array]]
         """
         prepare_settings = [
-            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
+            np.zeros(node.settings_dims, requires_grad=True)
+            if len(node.static_settings) == 0
+            else np.array([[]])
             for node in self.prepare_nodes
         ]
         measure_settings = [
-            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
+            np.zeros(node.settings_dims, requires_grad=True)
+            if len(node.static_settings) == 0
+            else np.array([[]])
             for node in self.measure_nodes
         ]
 

@@ -39,7 +39,7 @@ class TestCHSHGradientDescent:
         ]
         measure_nodes = [
             qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
-            qnet.MeasureNode(2, 2, [1], qml.templates.subroutines.ArbitraryUnitary, 3),
+            qnet.MeasureNode(2, 2, [1], lambda settings, wires: qml.Rot(*settings, wires=wires), 3),
         ]
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)

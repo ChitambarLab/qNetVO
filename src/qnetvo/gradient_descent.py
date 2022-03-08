@@ -1,4 +1,5 @@
 import pennylane as qml
+from pennylane import numpy as np
 from datetime import datetime
 import time
 
@@ -98,7 +99,16 @@ def gradient_descent(
 
         start = time.time()
         if interface == "autograd":
-            settings = opt.step(cost, settings, grad_fn=grad_fn)
+            # settings = opt.step(cost, settings, grad_fn=grad_fn)
+            settings_update = opt.step(cost, settings, grad_fn=grad_fn)
+            settings = [
+                [
+                    np.array(node_settings, requires_grad=True)
+                    for node_settings in settings_update[i]
+                ]
+                for i in [0, 1]
+            ]
+
         elif interface == "tf":
             # opt.minimize updates settings in place
             tf_cost = lambda: cost(settings)

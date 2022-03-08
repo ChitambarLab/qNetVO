@@ -8,8 +8,9 @@ import qnetvo as qnet
 
 class TestGradientDescent:
     def test_quadratic_cost(self):
-        cost = lambda x: x**2
-        opt_dict = qnet.gradient_descent(cost, 2.0, num_steps=50, step_size=0.1, verbose=False)
+        cost = lambda x: x ** 2
+        settings = np.array(2.0, requires_grad=True)
+        opt_dict = qnet.gradient_descent(cost, settings, num_steps=50, step_size=0.1, verbose=False)
 
         assert np.isclose(opt_dict["opt_score"], 0, atol=1e-6)
         assert np.isclose(opt_dict["opt_settings"], 0, atol=1e-4)
@@ -25,7 +26,7 @@ class TestGradientDescent:
 
         # tensor flow interface
         tf_opt_dict = qnet.gradient_descent(
-            cost, tf.Variable(2.0), num_steps=50, step_size=0.1, verbose=False, interface="tf"
+            cost, tf.Variable(settings), num_steps=50, step_size=0.1, verbose=False, interface="tf"
         )
 
         assert np.isclose(tf_opt_dict["opt_score"], 0, atol=1e-6)
@@ -36,5 +37,10 @@ class TestGradientDescent:
 
         with pytest.raises(ValueError, match='Interface "jax" is not supported.'):
             qnet.gradient_descent(
-                cost, tf.Variable(2.0), num_steps=50, step_size=0.1, verbose=False, interface="jax"
+                cost,
+                tf.Variable(settings),
+                num_steps=50,
+                step_size=0.1,
+                verbose=False,
+                interface="jax",
             )

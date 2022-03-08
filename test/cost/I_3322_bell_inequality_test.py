@@ -38,6 +38,8 @@ class TestCostI3322BellInequality:
         np.random.seed(13)
         init_settings = ansatz.rand_scenario_settings()
 
+        print(init_settings)
+
         opt_dict = qnet.gradient_descent(
             I_3322_cost, init_settings, step_size=0.5, num_steps=50, verbose=False
         )
