@@ -1,9 +1,9 @@
 import pytest
 import re
-from pennylane import numpy as np
 import tensorflow as tf
+from pennylane import numpy as np
 
-from context import qnetvo as qnet
+import qnetvo as qnet
 
 
 class TestGradientDescent:

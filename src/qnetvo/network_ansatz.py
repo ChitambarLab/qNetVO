@@ -1,7 +1,6 @@
 import pennylane as qml
 from pennylane import numpy as np
 from pennylane import math
-import tensorflow as tf
 
 
 class NoiseNode:
@@ -316,6 +315,8 @@ class NetworkAnsatz:
         :returns: See :meth:`qnetvo.NetworkAnsatz.rand_scenario_settings` for details.
         :rtype: list[list[tf.Tensor]]
         """
+        from .lazy_tensorflow_import import tensorflow as tf
+
         np_settings = self.rand_scenario_settings()
 
         return [

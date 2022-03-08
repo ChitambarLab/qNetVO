@@ -4,7 +4,7 @@ from pennylane import numpy as np
 import os
 import json
 
-from context import qnetvo as qnet
+import qnetvo as qnet
 
 
 class TestUtilities:

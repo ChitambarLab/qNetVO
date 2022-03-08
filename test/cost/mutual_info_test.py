@@ -2,7 +2,7 @@ import pytest
 import pennylane as qml
 from pennylane import numpy as np
 
-from context import qnetvo as qnet
+import qnetvo as qnet
 
 
 class TestMutualInfoCostFn:

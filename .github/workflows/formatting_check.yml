@@ -27,4 +27,4 @@ jobs:
         run: |
           black -l 100 docs/ --check
           black -l 100 test/ --check
-          black -l 100 qnetvo/ --check
+          black -l 100 src/ --check

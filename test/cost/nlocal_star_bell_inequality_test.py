@@ -3,7 +3,7 @@ from pennylane import numpy as np
 import pennylane as qml
 
 
-from context import qnetvo as qnet
+import qnetvo as qnet
 
 
 class TestNlocalStar22CostFn:
