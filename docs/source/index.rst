@@ -1,7 +1,7 @@
 .. qnetvo documentation master file, created by
    sphinx-quickstart on Thu Jul 15 10:27:48 2021.
 
-qNetVO: The Quantum Network Variational Optimizer
+qNetVO: the Quantum Network Variational Optimizer
 =================================================
 
 *Simulate and optimize quantum communication networks using quantum computers.*
@@ -9,14 +9,15 @@ qNetVO: The Quantum Network Variational Optimizer
 Features
 --------
 
+qNetVO simulates quantum communication networks on parameterized quantum ansatz cicuits.
+The cicuit parameters are optimized with respect to a cost function using gradient descent.
 qNetVO is powered by `PennyLane <https://pennylane.ai>`_ an open-source framework
 for cross-platform quantum machine learning.
 
 Simulating Quantum Communication Networks:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Create parameterizes quantum circuit ansatzes that simulate quantum communication network nodes.
-* Combine network nodes to flexibly construct quantum communication network ansatzes. 
+* Flexibly construct general quantum network ansatzes from generic quantum circuit compenents.
 * Simulate the network by running the ansatz circuit on a quantum computer or simulator.
 
 Optimizing Quantum Communication Networks:
@@ -49,7 +50,7 @@ Looking for something specific? See our :ref:`search` and :ref:`genindex`.
    :maxdepth: 2
    :caption: Contents
 
-   network_ansatzes/index
+   quantum_networks/index
    cost/index
    optimization
    information

@@ -6,7 +6,7 @@ n-Local Chain Bell Inequality
 The :math:`n`-local chain network consists of :math:`n` entanglement sources (static preparation node) and :math:`n+1` measurement nodes linked as a chain by the entanglement sources.
 
 
-.. figure:: ../_static/images/n-local_chain_general.png
+.. figure:: ../../_static/images/n-local_chain_general.png
 
    :math:`n` **-Local Chain Network.** 
 
