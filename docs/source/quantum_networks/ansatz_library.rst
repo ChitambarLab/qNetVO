@@ -1,9 +1,10 @@
 Ansatz Library
 ==============
 
-
 .. currentmodule:: qnetvo
 
+For convenience a library of state preparations, unitaries, and
+circuit-based noise model are provided.
 
 State Preparations
 ------------------
