@@ -1,16 +1,14 @@
 .. qnetvo documentation master file, created by
    sphinx-quickstart on Thu Jul 15 10:27:48 2021.
 
-qNetVO
-======
+qNetVO: the Quantum Network Variational Optimizer
+=================================================
 
-*The* **Q**\ *uantum* **Net**\ *work* **V**\ *ariational* **O**\ *ptimizer (*\
-**qNetVO**\ *) is Python framework for
-simulating and optimizing quantum communication networks using
-quantum hardware.*
+*A Python package for simulating and optimizing quantum communication
+networks on quantum hardware.*
 
 Features
-========
+--------
 
 Simulate Quantum Communication Networks on Quantum Computers:
 
@@ -28,7 +26,7 @@ Powered by `PennyLane <https://pennylane.ai>`_:
 * Free and open-source framework for cross-platform quantum machine learning.
 
 Quick Start
-===========
+-----------
 
 .. todo::
 
@@ -47,7 +45,7 @@ Import qNetVO:
    import qnetvo as qnet
 
 How to Cite
-===========
+-----------
 
 .. todo::
 
@@ -58,7 +56,7 @@ How to Cite
    Add Citation.bib file to project.
 
 Acknowledgments
-===============
+---------------
 
 We thank `Xanadu, Inc. <https://www.xanadu.ai/>`_, the
 `UIUC Physics Department <https://physics.illinois.edu/>`_, and the
@@ -68,7 +66,7 @@ for their support of this project.
 Work funded by NSF award DMR-1747426.
 
 License
-=======
+-------
 
 .. todo::
 
@@ -76,7 +74,7 @@ License
 
 
 Site Navigation
-===============
+---------------
 
 Looking for something specific? See our :ref:`search` and :ref:`genindex`.
 
