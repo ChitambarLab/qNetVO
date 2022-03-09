@@ -68,10 +68,9 @@ Work funded by NSF award DMR-1747426.
 License
 -------
 
-.. todo::
-
-   Add a project license.
-
+qNetVO is free and open-source.
+The software is released under the Apache License, Version 2.0.
+See `LICENSE <https://https://github.com/ChitambarLab/qNetVO/blob/main/LICENSE>`_ for details.
 
 Site Navigation
 ---------------
