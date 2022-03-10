@@ -36,6 +36,8 @@ As an example, optimal state preparation and measurements are provided in [Brass
 
 .. autofunction:: magic_squares_game_cost
 
+-----
+
 **References**
 
 .. [Mermin1990] Mermin, N. David. "Simple unified form for the major no-hidden-variables
