@@ -9,6 +9,8 @@ QNode.
 For convenience, we provide example cost functions for quantum networks.
 Custom cost functions can be implemented using PennyLane.
 
+----------
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:

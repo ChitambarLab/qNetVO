@@ -6,6 +6,7 @@ linked by quantum communication.
 Quantum networks have important advantages in distributed information processing,
 multipartite cryptography, and distributed sensing.
 
+------
 
 .. toctree::
    :maxdepth: 2
