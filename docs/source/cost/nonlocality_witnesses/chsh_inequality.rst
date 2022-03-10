@@ -1,5 +1,5 @@
-CHSH Bell Inequality
-======================
+CHSH Inequality
+===============
 
 .. currentmodule:: qnetvo
 

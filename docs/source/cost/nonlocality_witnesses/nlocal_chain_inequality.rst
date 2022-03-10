@@ -1,5 +1,5 @@
-n-Local Chain Bell Inequality
-=============================
+n-Local Chain Inequality
+========================
 
 .. currentmodule:: qnetvo
 

@@ -1,5 +1,5 @@
-n-Local Star Bell Inequality
-=============================
+n-Local Star Inequality
+=======================
 
 .. currentmodule:: qnetvo
 

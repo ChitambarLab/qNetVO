@@ -53,7 +53,6 @@ Looking for something specific? See our :ref:`search` and :ref:`genindex`.
    quantum_networks/index
    cost/index
    optimization
-   information
    utilities
 
 How to Cite
