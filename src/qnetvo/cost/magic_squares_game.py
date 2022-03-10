@@ -14,12 +14,13 @@ def magic_squares_game_cost(network_ansatz, **qnode_kwargs):
     :rtype: Function
     """
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
+    prep_inputs = [0] * len(network_ansatz.prepare_nodes)
 
     def cost(scenario_settings):
         winning_probability = 0
         for x in [0, 1, 2]:
             for y in [0, 1, 2]:
-                settings = network_ansatz.qnode_settings(scenario_settings, [0], [x, y])
+                settings = network_ansatz.qnode_settings(scenario_settings, prep_inputs, [x, y])
                 probs = probs_qnode(settings)
 
                 for i in range(16):
