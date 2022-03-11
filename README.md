@@ -8,7 +8,7 @@
 
 QNetVO simulates quantum communication networks on differentiable quantum cicuits.
 The cicuit parameters are optimized with respect to a cost function using gradient descent.
-qNetVO is powered by [PennyLane](https://pennylane.ai) an open-source framework
+qNetVO is powered by [PennyLane](https://pennylane.ai), an open-source framework
 for cross-platform quantum machine learning.
 
 ### Simulating Quantum Communication Networks:
@@ -18,7 +18,7 @@ for cross-platform quantum machine learning.
 
 ### Optimizing Quantum Communication Networks:
 
-* Use our library of network oriented cost functions or create your own.
+* Use our library of network-oriented cost functions or create your own.
 * Gradient descent methods for tuning quantum network ansatz settings to minimize the cost.
 
 ## Quick Start
@@ -47,7 +47,7 @@ import qnetvo as qnet
 ### Creating the `qnetvo-dev` Environment
 
 The [Anaconda](https://docs.conda.io/projects/conda/en/latest/glossary.html#anaconda-glossary) distribution of Python is used to ensure a consistent development environment.
-Follow the Anaconda [installation instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#installation) to setup the `conda` command line tool for your
+Follow the Anaconda [installation instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#installation) to set up the `conda` command line tool for your
 operating system.
 The `conda` tool creates the dev environment from the `environment.yml` file.
 For more details on how to use `conda` see the [managing environments](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) page in the `conda` documentation.
@@ -98,7 +98,7 @@ A Jupyter notebook server will launch in your browser allowing you to run the no
 ### Building Documentation
 
 It is important to view the documentation before committing changes.
-To locally build and view the documentation, first setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment).
+To locally build and view the documentation, first set up the [dev environment](https://github.com/ChitambarLab/qNetVO#environment).
 Then, follow these steps.
 
 
