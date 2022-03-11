@@ -1,0 +1,366 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Nonlocality Witnesses" href="nonlocality_witnesses/index.html" /><link rel="prev" title="Entropic Quantities" href="entropic_quantities.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
+        <title>The Magic Squares Game - qNetVO</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/qnetvo.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+    </div>
+    <div class="header-center">
+      <a href="../index.html">
+        <div class="brand">qNetVO</div>
+      </a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" style="padding-top: 1px;">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <div class="theme-toggle-container theme-toggle-header">
+      	<button class="theme-toggle">
+          <div class="visually-hidden">GitHub</div>
+      	  <a href="https://github.com/ChitambarLab/qNetVO">
+          <i class="fa fa-github" style="font-size:16px"></i></a>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/qnetvo_logo.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">qNetVO</span>
+  
+</a><div style="text-align: center;">
+  <a href="https://github.com/ChitambarLab/qNetVO" style="text-align: center; font-size: 18px">
+    <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
+  </a>
+</div><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../quantum_networks/index.html">Quantum Networks</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quantum_networks/network_nodes.html">Network Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantum_networks/network_ansatzes.html">Network Ansatzes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantum_networks/ansatz_library.html">Ansatz Library</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Cost Functions</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="qnodes.html">QNodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linear_inequalities.html">Linear Cost Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="entropic_quantities.html">Entropic Quantities</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">The Magic Squares Game</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="nonlocality_witnesses/index.html">Nonlocality Witnesses</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="nonlocality_witnesses/chsh_inequality.html">CHSH Inequality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nonlocality_witnesses/I_3322_inequality.html">I-3322 Inequality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nonlocality_witnesses/mermin_klyshko_inequality.html">Mermin-Klyshko Inequality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nonlocality_witnesses/nlocal_chain_inequality.html">n-Local Chain Inequality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nonlocality_witnesses/nlocal_star_inequality.html">n-Local Star Inequality</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities.html">Utilities</a></li>
+</ul>
+
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" style="padding-top: 2px;">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <div class="theme-toggle-container theme-toggle-content">
+	      	<button class="theme-toggle" style="padding-top: 1px;">
+	          <div class="visually-hidden">GitHub</div>
+	      	  <a href="https://github.com/ChitambarLab/qNetVO">
+	          <i class="fa fa-github" style="font-size:16px"></i></a>
+	        </button>
+	      </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <div role="navigation" aria-label="breadcrumbs navigation">
+  <ol class="breadcrumb">
+    <li><a href="../index.html">Docs</a></li>
+    
+      <li><a href="index.html">Cost Functions</a></li>
+    
+    <li>The Magic Squares Game</li>
+  </ol>
+</div>
+        <article role="main">
+          <div class="section" id="the-magic-squares-game">
+<h1>The Magic Squares Game<a class="headerlink" href="#the-magic-squares-game" title="Permalink to this headline">#</a></h1>
+<p>Magic squares is a cooperative game where two players Alice and Bob each produce a
+three-bit string <span class="math notranslate nohighlight">\((a_0,a_1,a_2)\)</span> and <span class="math notranslate nohighlight">\((b_0,b_1,b_2)\)</span>.
+Alice’s bitstring is required to have even parity while Bob’s must have odd parity.
+Alice’s bitstring is then used to fill in the <span class="math notranslate nohighlight">\(x^{th}\)</span> row of a 3x3 grid while
+Bob’s bitstring is used to fill in the <span class="math notranslate nohighlight">\(y^{th}\)</span> column of a 3x3 grid.
+The game is won if <span class="math notranslate nohighlight">\(a_y = b_x\)</span> that is, the intesection of Alice’s row and Bob’s
+column is filled in with same value by both Alice and Bob.</p>
+<p>The magic square game is interesting because classically the winning probability is bounded
+as <span class="math notranslate nohighlight">\(P_{Win}\leq 8/9\)</span>.
+On the other hand, there exists a quantum strategy that can win the game with certainty.
+The foundational physics behind the winning strategy was independently observed by D. Mermin
+<a class="reference internal" href="#mermin1990-magic-squares" id="id1"><span>[Mermin1990_magic_squares]</span></a>, and A. Peres <a class="reference internal" href="#peres1990" id="id2"><span>[Peres1990]</span></a>.
+Mermin and Peres’ thought experiment in quantum noncontextuality was later showed to achieve a
+perfect winning score in the magic square game by P. Aravind <a class="reference internal" href="#aravind2002" id="id3"><span>[Aravind2002]</span></a>, <a class="reference internal" href="#aravind2004" id="id4"><span>[Aravind2004]</span></a>.
+In our implementation of the magic squares game, we apply the approach outlined by G. Brassard <em>et al.</em> <a class="reference internal" href="#brassard2005" id="id5"><span>[Brassard2005]</span></a>.
+The optimal quantum strategy reduces to a bipartite non-signaling scenario where Alice and Bob perform local measurements on a shared static entangled state.
+The optimal quantum protocol is performed as follows:</p>
+<ol class="arabic simple">
+<li><p>Alice and Bob receive independent classical inputs <span class="math notranslate nohighlight">\(x,\;y\in \{0,1,2\}\)</span>.</p></li>
+<li><p>Alice and Bob apply local unitaries <span class="math notranslate nohighlight">\(U^A_x\)</span> and <span class="math notranslate nohighlight">\(U^B_y\)</span> respectively.</p></li>
+<li><p>Alice and Bob measure two-qubits in the computational basis to obtain two-bit outcomes
+<span class="math notranslate nohighlight">\((a_0,a_1)\)</span> and <span class="math notranslate nohighlight">\((b_0, b_1)\)</span> respectively where <span class="math notranslate nohighlight">\(a_i,\;b_j \in \{0,1\}\)</span>.</p></li>
+<li><p>Alice’s third bit <span class="math notranslate nohighlight">\(a_2\)</span> is selected such that the bitstring <span class="math notranslate nohighlight">\((a_0,a_1, a_2)\)</span> has
+even parity while Bob’s third bit is selected such that the bitstring <span class="math notranslate nohighlight">\((b_0,b_1,b_2)\)</span>
+has odd parity.</p></li>
+<li><p>The winning condition <span class="math notranslate nohighlight">\(a_y = b_x\)</span> is evaluated.</p></li>
+</ol>
+<p>As an example, optimal state preparation and measurements are provided in <a class="reference internal" href="#brassard2005" id="id6"><span>[Brassard2005]</span></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.magic_squares_game_cost">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">magic_squares_game_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/magic_squares_game.html#magic_squares_game_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.magic_squares_game_cost" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a cost function that maximizes the winning probability for the magic squares game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(scenario_settings)</span></code> where
+the <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code> are obtained from the provided
+<code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Function</p>
+</dd>
+</dl>
+</dd></dl>
+<hr class="docutils"/>
+<p><strong>References</strong></p>
+<dl class="citation">
+<dt class="label" id="mermin1990-magic-squares"><span class="brackets"><a class="fn-backref" href="#id1">Mermin1990_magic_squares</a></span></dt>
+<dd><p>Mermin, N. David. “Simple unified form for the major no-hidden-variables
+theorems.” Physical review letters 65.27 (1990): 3373.</p>
+</dd>
+<dt class="label" id="peres1990"><span class="brackets"><a class="fn-backref" href="#id2">Peres1990</a></span></dt>
+<dd><p>Peres, Asher. “Incompatible results of quantum measurements.” Physics Letters
+A 151.3-4 (1990): 107-108.</p>
+</dd>
+<dt class="label" id="aravind2002"><span class="brackets"><a class="fn-backref" href="#id3">Aravind2002</a></span></dt>
+<dd><p>Aravind, Padmanabhan K. “Bell’s theorem without inequalities and only two
+distant observers.” Journal of Genetic Counseling 15.4 (2002): 397-405.</p>
+</dd>
+<dt class="label" id="aravind2004"><span class="brackets"><a class="fn-backref" href="#id4">Aravind2004</a></span></dt>
+<dd><p>Aravind, Padmanabhan K. “Quantum mysteries revisited again.” American Journal
+of Physics 72.10 (2004): 1303-1307.</p>
+</dd>
+<dt class="label" id="brassard2005"><span class="brackets">Brassard2005</span><span class="fn-backref">(<a href="#id5">1</a>,<a href="#id6">2</a>)</span></dt>
+<dd><p>Brassard, Gilles, Anne Broadbent, and Alain Tapp. “Quantum pseudo-telepathy.”
+Foundations of Physics 35.11 (2005): 1877-1907.</p>
+</dd>
+</dl>
+</div>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="nonlocality_witnesses/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Nonlocality Witnesses</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="entropic_quantities.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Entropic Quantities</div>
+                
+              </div>
+            </a>
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2021, Brian Doolittle and Tom Bromley |
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and the <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            | <a class="muted-link" href="../_sources/cost/magic_squares_game.rst.txt"
+               rel="nofollow">
+              Show Source
+            </a>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

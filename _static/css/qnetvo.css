@@ -1,0 +1,23 @@
+.breadcrumb {
+  font-size: 15px;
+  background: none;
+  display: block;
+  padding: 8px 15px;
+  list-style: none;
+  border-radius: 0px;
+  border-bottom: 1px solid lightgray;
+}
+
+.breadcrumb>li {
+  display: inline-block
+}
+
+.breadcrumb>li+li:before {
+  content: "/\00a0";
+  padding: 0 5px;
+  color: #ccc
+}
+
+.breadcrumb>.active {
+  color: #999
+}

@@ -1,0 +1,617 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
+        <title>qnetvo.network_ansatz - qNetVO</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+    </div>
+    <div class="header-center">
+      <a href="../../index.html">
+        <div class="brand">qNetVO</div>
+      </a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" style="padding-top: 1px;">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <div class="theme-toggle-container theme-toggle-header">
+      	<button class="theme-toggle">
+          <div class="visually-hidden">GitHub</div>
+      	  <a href="https://github.com/ChitambarLab/qNetVO">
+          <i class="fa fa-github" style="font-size:16px"></i></a>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/qnetvo_logo.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">qNetVO</span>
+  
+</a><div style="text-align: center;">
+  <a href="https://github.com/ChitambarLab/qNetVO" style="text-align: center; font-size: 18px">
+    <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
+  </a>
+</div><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../quantum_networks/index.html">Quantum Networks</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../quantum_networks/network_nodes.html">Network Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quantum_networks/network_ansatzes.html">Network Ansatzes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quantum_networks/ansatz_library.html">Ansatz Library</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cost/index.html">Cost Functions</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cost/qnodes.html">QNodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cost/linear_inequalities.html">Linear Cost Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cost/entropic_quantities.html">Entropic Quantities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cost/magic_squares_game.html">The Magic Squares Game</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cost/nonlocality_witnesses/index.html">Nonlocality Witnesses</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cost/nonlocality_witnesses/chsh_inequality.html">CHSH Inequality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cost/nonlocality_witnesses/I_3322_inequality.html">I-3322 Inequality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cost/nonlocality_witnesses/mermin_klyshko_inequality.html">Mermin-Klyshko Inequality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cost/nonlocality_witnesses/nlocal_chain_inequality.html">n-Local Chain Inequality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cost/nonlocality_witnesses/nlocal_star_inequality.html">n-Local Star Inequality</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">Utilities</a></li>
+</ul>
+
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" style="padding-top: 2px;">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <div class="theme-toggle-container theme-toggle-content">
+	      	<button class="theme-toggle" style="padding-top: 1px;">
+	          <div class="visually-hidden">GitHub</div>
+	      	  <a href="https://github.com/ChitambarLab/qNetVO">
+	          <i class="fa fa-github" style="font-size:16px"></i></a>
+	        </button>
+	      </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <div role="navigation" aria-label="breadcrumbs navigation">
+  <ol class="breadcrumb">
+    <li><a href="../../index.html">Docs</a></li>
+    
+      <li><a href="../index.html">Module code</a></li>
+    
+    <li>qnetvo.network_ansatz</li>
+  </ol>
+</div>
+        <article role="main">
+          <h1>Source code for qnetvo.network_ansatz</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pennylane</span> <span class="k">as</span> <span class="nn">qml</span>
+<span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">math</span>
+
+
+<div class="viewcode-block" id="NoiseNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.NoiseNode">[docs]</a><span class="k">class</span> <span class="nc">NoiseNode</span><span class="p">:</span>
+    <span class="sd">"""A class that configures each noise node in the quantum network.</span>
+
+<span class="sd">    :param wires: A list of wires on which the node is defined.</span>
+<span class="sd">    :type wires: array[int]</span>
+
+<span class="sd">    :param quantum_fn: A PennyLane quantum function which accepts as input the</span>
+<span class="sd">        positional arguments ``(settings, wires)`` where settings is an *array[float]*</span>
+<span class="sd">        of length ``num_settings``.</span>
+<span class="sd">    :type quantum_fn: function</span>
+
+<span class="sd">    :returns: An instantiated ``NoiseNode`` class.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wires</span> <span class="o">=</span> <span class="n">wires</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ansatz_fn</span> <span class="o">=</span> <span class="n">quantum_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_settings</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="PrepareNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.PrepareNode">[docs]</a><span class="k">class</span> <span class="nc">PrepareNode</span><span class="p">(</span><span class="n">NoiseNode</span><span class="p">):</span>
+    <span class="sd">"""A class that configures each preparation node in the quantum network.</span>
+
+<span class="sd">    :param num_in: The number of classical inputs for the node.</span>
+<span class="sd">    :type num_in: int</span>
+
+<span class="sd">    :param wires: A list of wires on which the node is defined.</span>
+<span class="sd">    :type wires: array[int]</span>
+
+<span class="sd">    :param quantum_fn: A PennyLane quantum function which accepts as input the</span>
+<span class="sd">        positional arguments ``(settings, wires)`` where settings is an *array[float]*</span>
+<span class="sd">        of length ``num_settings``.</span>
+<span class="sd">    :type quantum_fn: function</span>
+
+<span class="sd">    :param num_settings: The number of settings that the quantum function accepts.</span>
+<span class="sd">    :type num_settings: int</span>
+
+<span class="sd">    :param static_settings: A set of fixed settings for the preparation node.</span>
+<span class="sd">    :type static_settings: optional, array-like</span>
+
+<span class="sd">    :returns: An instantiated ``PrepareNode`` class.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_in</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">,</span> <span class="n">static_settings</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_in</span> <span class="o">=</span> <span class="n">num_in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_settings</span> <span class="o">=</span> <span class="n">num_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_dims</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_in</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">static_settings</span> <span class="o">=</span> <span class="n">static_settings</span></div>
+
+
+<div class="viewcode-block" id="MeasureNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.MeasureNode">[docs]</a><span class="k">class</span> <span class="nc">MeasureNode</span><span class="p">(</span><span class="n">PrepareNode</span><span class="p">):</span>
+    <span class="sd">"""A class that configures each measurement node in the quantum network.</span>
+
+<span class="sd">    :param num_in: The number of classical inputs for the node.</span>
+<span class="sd">    :type num_in: int</span>
+
+<span class="sd">    :param num_out: The number of classical outputs for the node.</span>
+<span class="sd">    :type num_out: int</span>
+
+<span class="sd">    :param wires: A list of wires on which the node is defined.</span>
+<span class="sd">    :type wires: array[int]</span>
+
+<span class="sd">    :param quantum_fn: A PennyLane quantum function which accepts as input the</span>
+<span class="sd">        positional arguments ``(settings, wires)`` where settings is an *array[float]*</span>
+<span class="sd">        of length ``num_settings``.</span>
+<span class="sd">    :type quantum_fn: function</span>
+
+<span class="sd">    :param num_settings: The number of settings that the quantum function accepts.</span>
+<span class="sd">    :type num_settings: int</span>
+
+<span class="sd">    :param static_settings: A set of fixed settings for the preparation node.</span>
+<span class="sd">    :type static_settings: optional, array-like</span>
+
+<span class="sd">    :returns: An instantiated ``MeasureNode`` class.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_in</span><span class="p">,</span> <span class="n">num_out</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">,</span> <span class="n">static_settings</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_in</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">,</span> <span class="n">static_settings</span><span class="o">=</span><span class="n">static_settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_out</span> <span class="o">=</span> <span class="n">num_out</span></div>
+
+
+<div class="viewcode-block" id="NetworkAnsatz"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz">[docs]</a><span class="k">class</span> <span class="nc">NetworkAnsatz</span><span class="p">:</span>
+    <span class="sd">"""The ``NetworkAnsatz`` class describes a parameterized quantum prepare and measure network.</span>
+<span class="sd">    The ansatz is constructed from a prepare layer and a measure layer.</span>
+<span class="sd">    The prepare layer is a collection of unitaries which prepare quantum states while the</span>
+<span class="sd">    measure layer is a collection of unitaries which encode the measurement basis.</span>
+<span class="sd">    These layers are constructed from the ``prepare_nodes`` and ``measure_nodes`` inputs respectively.</span>
+
+<span class="sd">    :param prepare_nodes: A list of ``PrepareNode`` classes.</span>
+<span class="sd">    :type prepare_nodes: list[PrepareNode]</span>
+
+<span class="sd">    :param measure_nodes: A list of ``MeasureNode`` classes.</span>
+<span class="sd">    :type measure_nodes: list[MeasureNode]</span>
+
+<span class="sd">    :param noise_nodes: A list of ``NoiseNode`` classes.</span>
+<span class="sd">    :type noise_nodes: *optional* list[NoiseNode]</span>
+
+<span class="sd">    :param dev_kwargs: Keyword arguments for the `pennylane.device`_ function.</span>
+<span class="sd">    :type dev_kwargs: *optional* dict</span>
+
+<span class="sd">    .. _pennylane.device: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.device.html?highlight=device#qml-device</span>
+
+<span class="sd">    :returns: An instantiated ``NetworkAnsatz`` class with the following fields:</span>
+
+<span class="sd">    * **prepare_nodes** - The list of ``PrepareNode`` classes.</span>
+<span class="sd">    * **measure_nodes** - The list of ``MeasureNode`` classes.</span>
+<span class="sd">    * **prepare_wires** - The list of wires used by the ``prepare_nodes``.</span>
+<span class="sd">    * **measure_wires** - The list of wires used by the ``measure_nodes``.</span>
+<span class="sd">    * **network_wires** - The list of wires used by the network ansatz.</span>
+<span class="sd">    * **dev_kwargs** - *mutable*, the keyword args to pass to the `pennylane.device`_ function.</span>
+<span class="sd">                       If no ``dev_kwargs`` are provided, a ``"default.qubit"`` is constructed for</span>
+<span class="sd">                       noiseless networks and ``"default.mixed"`` device is constructed</span>
+<span class="sd">                       for noisy networks.</span>
+<span class="sd">    * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.</span>
+<span class="sd">    * **fn** (*function*) - A quantum function implementing the quantum network ansatz.</span>
+
+<span class="sd">    :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prepare_nodes</span><span class="p">,</span> <span class="n">measure_nodes</span><span class="p">,</span> <span class="n">noise_nodes</span><span class="o">=</span><span class="p">[],</span> <span class="n">dev_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span> <span class="o">=</span> <span class="n">prepare_nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span> <span class="o">=</span> <span class="n">measure_nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span> <span class="o">=</span> <span class="n">noise_nodes</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_wires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_wires</span><span class="p">(</span><span class="n">prepare_nodes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measure_wires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_wires</span><span class="p">(</span><span class="n">measure_nodes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise_wires</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="p">([])</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span> <span class="o">==</span> <span class="p">[]</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_wires</span><span class="p">(</span><span class="n">noise_nodes</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="o">.</span><span class="n">all_wires</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prepare_wires</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_wires</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_wires</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">default_dev_name</span> <span class="o">=</span> <span class="s2">"default.qubit"</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"default.mixed"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span> <span class="o">=</span> <span class="n">dev_kwargs</span> <span class="ow">or</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">default_dev_name</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">"wires"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_ansatz_circuit</span><span class="p">()</span>
+
+<div class="viewcode-block" id="NetworkAnsatz.set_device"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.set_device">[docs]</a>    <span class="k">def</span> <span class="nf">set_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">"""Configures a new PennyLane device for executing the network ansatz circuit.</span>
+<span class="sd">        For more details on parameters see `pennylane.device`_.</span>
+<span class="sd">        This method updates the values stored in ``self.dev_kwargs`` and ``self.dev``.</span>
+
+<span class="sd">        :returns: The instantiated device.</span>
+<span class="sd">        :rtype: ``pennylane.device``</span>
+<span class="sd">        """</span>
+
+        <span class="n">dev_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">"wires"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span> <span class="o">=</span> <span class="n">dev_kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev</span></div>
+
+<div class="viewcode-block" id="NetworkAnsatz.device"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.device">[docs]</a>    <span class="k">def</span> <span class="nf">device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Instantiates a new PennyLane device configured using the ``self.dev_kwargs`` parameters.</span>
+<span class="sd">        A distinct device is created each time this function runs.</span>
+
+<span class="sd">        :returns: The instantiated device.</span>
+<span class="sd">        :rtype: ``pennylane.device``</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev</span></div>
+
+    <span class="k">def</span> <span class="nf">construct_ansatz_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">prepare_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">)</span>
+        <span class="n">noise_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span><span class="p">)</span>
+        <span class="n">measure_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span>
+
+        <span class="n">noise_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span><span class="p">))]</span>
+
+        <span class="n">num_prep_settings</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">num_settings</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">])</span>
+
+        <span class="k">def</span> <span class="nf">ansatz_circuit</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
+            <span class="n">prep_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">num_prep_settings</span><span class="p">]</span>
+            <span class="n">meas_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="n">num_prep_settings</span><span class="p">:]</span>
+
+            <span class="n">prepare_layer</span><span class="p">(</span><span class="n">prep_settings</span><span class="p">)</span>
+            <span class="n">noise_layer</span><span class="p">(</span><span class="n">noise_settings</span><span class="p">)</span>
+            <span class="n">measure_layer</span><span class="p">(</span><span class="n">meas_settings</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ansatz_circuit</span>
+
+<div class="viewcode-block" id="NetworkAnsatz.collect_wires"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.collect_wires">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">collect_wires</span><span class="p">(</span><span class="n">network_nodes</span><span class="p">):</span>
+        <span class="sd">"""A helper method for the ``NetworkAnsatz`` class which collects and aggregates the</span>
+<span class="sd">        wires from a set of collection of network nodes (``prepare_nodes`` or ``measure_nodes``).</span>
+
+<span class="sd">        :param network_nodes: A list consisting of either ``PrepareNode``'s or ``MeasureNode``'s.</span>
+<span class="sd">        :type network_nodes: list[PrepareNode or MeasureNode]</span>
+
+<span class="sd">        :raises ValueError: If the same wire is used in two different nodes in ``network_nodes``.</span>
+<span class="sd">        """</span>
+        <span class="n">ansatz_wires</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">wires</span><span class="p">),</span> <span class="n">network_nodes</span><span class="p">))</span>
+        <span class="n">all_wires</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="o">.</span><span class="n">all_wires</span><span class="p">(</span><span class="n">ansatz_wires</span><span class="p">)</span>
+        <span class="n">unique_wires</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="o">.</span><span class="n">unique_wires</span><span class="p">(</span><span class="n">ansatz_wires</span><span class="p">)</span>
+
+        <span class="c1"># two nodes cannot prepare a state on the same wire</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">all_wires</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">==</span> <span class="n">unique_wires</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"One or more wires are not unique. Each node must contain unique wires."</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_wires</span></div>
+
+<div class="viewcode-block" id="NetworkAnsatz.layer_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.layer_settings">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">layer_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="n">node_inputs</span><span class="p">,</span> <span class="n">nodes</span><span class="p">):</span>
+        <span class="sd">"""Constructs the list of settings for a circuit layer in the network ansatz.</span>
+
+<span class="sd">        The type of tensor used for the returned layer settings matches the tensor</span>
+<span class="sd">        type of the elements of ``scenario_settings``.</span>
+
+<span class="sd">        :param scenario_settings: A list containing the settings for all classical inputs.</span>
+<span class="sd">        :type network_nodes: list[array[float]]</span>
+
+<span class="sd">        :param node_inputs: A list of the classical inputs supplied to each network node.</span>
+<span class="sd">        :type node_inputs: list[int]</span>
+
+<span class="sd">        :returns: A 1D array of all settings for the circuit layer.</span>
+<span class="sd">        :rtype: array[float]</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">scenario_settings</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">node_input</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">static_settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="k">else</span> <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">static_settings</span><span class="p">[</span><span class="n">node_input</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node_input</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_inputs</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetworkAnsatz.qnode_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.qnode_settings">[docs]</a>    <span class="k">def</span> <span class="nf">qnode_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario_settings</span><span class="p">,</span> <span class="n">prep_inputs</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">):</span>
+        <span class="sd">"""Constructs a list of settings to pass to the qnode executing the network ansatz.</span>
+
+<span class="sd">        :param scenario_settings: The settings for the network ansatz scenario.</span>
+<span class="sd">        :type scenario_settings: list[list[np.ndarray]]</span>
+
+<span class="sd">        :param prep_inputs: The classical inputs passed to each preparation node.</span>
+<span class="sd">        :type prep_inputs: list[int]</span>
+
+<span class="sd">        :param meas_inputs: The classical inputs passed to each measurement node.</span>
+<span class="sd">        :type meas_inputs: list[int]</span>
+
+<span class="sd">        :returns: The settings to pass to the constructed qnode.</span>
+<span class="sd">        :rtype: list[float]</span>
+<span class="sd">        """</span>
+
+        <span class="n">prep_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prep_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">)</span>
+        <span class="n">meas_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">meas_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">prep_settings</span><span class="p">,</span> <span class="n">meas_settings</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="NetworkAnsatz.circuit_layer"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.circuit_layer">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">circuit_layer</span><span class="p">(</span><span class="n">network_nodes</span><span class="p">):</span>
+        <span class="sd">"""Constructs a quantum function for an ansatz layer of provided network nodes.</span>
+
+<span class="sd">        :param network_nodes: A list of network nodes which can be either</span>
+<span class="sd">                              ``NoiseNode``, ``PrepareNode``, or ``MeasureNode``</span>
+<span class="sd">        :type network_nodes: list[NetworkNode]</span>
+
+<span class="sd">        :returns: A quantum function evaluated as ``circuit(settings)`` where ``settings``</span>
+<span class="sd">                  is an array constructed via the ``layer_settings`` function.</span>
+<span class="sd">        :rtype: function</span>
+<span class="sd">        """</span>
+
+        <span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
+            <span class="n">current_id</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">network_nodes</span><span class="p">)):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">network_nodes</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span>
+                <span class="n">node_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="n">current_id</span> <span class="p">:</span> <span class="n">current_id</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">num_settings</span><span class="p">]</span>
+
+                <span class="n">current_id</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="n">num_settings</span>
+
+                <span class="n">node</span><span class="o">.</span><span class="n">ansatz_fn</span><span class="p">(</span><span class="n">node_settings</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">wires</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">circuit</span></div>
+
+<div class="viewcode-block" id="NetworkAnsatz.rand_scenario_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.rand_scenario_settings">[docs]</a>    <span class="k">def</span> <span class="nf">rand_scenario_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Creates a randomized settings array for the network ansatz.</span>
+
+<span class="sd">        :returns: A nested list containing settings for each network node.</span>
+<span class="sd">                  ``PreparNode`` settings are listed under index ``0`` while</span>
+<span class="sd">                  ``MeasureNode`` settings are listed under index ``1``.</span>
+<span class="sd">                  The measure and prepare layers settings are a list of numpy arrays</span>
+<span class="sd">                  where the dimension of each array is ``(num_inputs, num_settings)``.</span>
+<span class="sd">        :rtype: list[list[np.array]]</span>
+<span class="sd">        """</span>
+        <span class="n">prepare_settings</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">settings_dims</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">static_settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span>
+        <span class="p">]</span>
+        <span class="n">measure_settings</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">settings_dims</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">static_settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">prepare_settings</span><span class="p">,</span> <span class="n">measure_settings</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="NetworkAnsatz.tf_rand_scenario_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.tf_rand_scenario_settings">[docs]</a>    <span class="k">def</span> <span class="nf">tf_rand_scenario_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Creates a randomized settings array for the network ansatz using TensorFlow</span>
+<span class="sd">        tensor types.</span>
+
+<span class="sd">        :returns: See :meth:`qnetvo.NetworkAnsatz.rand_scenario_settings` for details.</span>
+<span class="sd">        :rtype: list[list[tf.Tensor]]</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span> <span class="nn">.lazy_tensorflow_import</span> <span class="kn">import</span> <span class="n">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+        <span class="n">np_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rand_scenario_settings</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">np_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">np_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="NetworkAnsatz.zero_scenario_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.zero_scenario_settings">[docs]</a>    <span class="k">def</span> <span class="nf">zero_scenario_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Creates a settings array for the network ansatz that consists of zeros.</span>
+
+<span class="sd">        :returns: A nested list containing settings for each network node.</span>
+<span class="sd">                  ``PrepareNode`` settings are listed under index ``0`` while</span>
+<span class="sd">                  ``MeasureNode`` settings are listed under index ``1``.</span>
+<span class="sd">                  The measure and prepare layers settings are a list of numpy arrays</span>
+<span class="sd">                  where the dimension of each array is ``(num_inputs, num_settings)``.</span>
+<span class="sd">        :rtype: list[list[np.array]]</span>
+<span class="sd">        """</span>
+        <span class="n">prepare_settings</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">settings_dims</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">static_settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span>
+        <span class="p">]</span>
+        <span class="n">measure_settings</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">settings_dims</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">static_settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">prepare_settings</span><span class="p">,</span> <span class="n">measure_settings</span><span class="p">]</span></div></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2021, Brian Doolittle and Tom Bromley |
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and the <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>
