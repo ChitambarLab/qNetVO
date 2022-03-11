@@ -11,7 +11,7 @@ Features
 
 QNetVO simulates quantum communication networks on differentiable quantum cicuits.
 The cicuit parameters are optimized with respect to a cost function using gradient descent.
-qNetVO is powered by `PennyLane <https://pennylane.ai>`_ an open-source framework
+qNetVO is powered by `PennyLane <https://pennylane.ai>`_, an open-source framework
 for cross-platform quantum machine learning.
 
 Simulating Quantum Communication Networks:
@@ -23,7 +23,7 @@ Simulating Quantum Communication Networks:
 Optimizing Quantum Communication Networks:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Use our library of network oriented cost functions or create your own.
+* Use our library of network-oriented cost functions or create your own.
 * Gradient descent methods for tuning quantum network ansatz settings to minimize the cost.
 
 Quick Start
@@ -85,7 +85,7 @@ See `LICENSE <https://https://github.com/ChitambarLab/qNetVO/blob/main/LICENSE>`
 Acknowledgments
 ---------------
 
-We thank `Xanadu, Inc. <https://www.xanadu.ai/>`_, the
+We thank `Xanadu <https://www.xanadu.ai/>`_, the
 `UIUC Physics Department <https://physics.illinois.edu/>`_, and the
 `Quantum Information Science and Engineering Network (QISE-Net)
 <https://qisenet.uchicago.edu/>`_
