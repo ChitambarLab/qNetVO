@@ -12,3 +12,4 @@ dependencies:
   - pip:
     - -r requirements.txt
     - furo
+    - m2r2==0.3

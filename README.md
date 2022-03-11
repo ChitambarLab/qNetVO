@@ -42,6 +42,10 @@ import pennylane as qml
 import qnetvo as qnet
 ```
 
+!!! note
+    For optimal use, qNetVO should be used with PennyLane.
+    QNetVO is currently compatible with PennyLane v0.20.
+
 ## Development
 
 ### Creating the `qnetvo-dev` Environment

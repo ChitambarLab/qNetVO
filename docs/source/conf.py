@@ -31,14 +31,15 @@ master_doc = "index"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-# extensions = ["sphinx.ext.autodoc"]
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.todo",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
+    "m2r2",
 ]
+source_suffix = ['.rst', '.md']
 
 todo_include_todos = True
 

@@ -4,6 +4,8 @@
 qNetVO: the Quantum Network Variational Optimizer
 =================================================
 
+.. mdinclude:: ../../README.md
+
 *Simulate and optimize quantum communication networks using quantum computers.*
 
 Features
