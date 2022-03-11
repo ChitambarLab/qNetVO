@@ -70,13 +70,10 @@ Looking for something specific? See our :ref:`search` and :ref:`genindex`.
 How to Cite
 -----------
 
-.. todo::
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.6345835.svg
+   :target: https://doi.org/10.5281/zenodo.6345835
 
-   Register DOI for project.
-
-.. todo::
-
-   Add Citation.bib file to project.
+See `CITATION.bib <https://github.com/ChitambarLab/qNetVO/blob/main/CITATION.bib>`_ for a BibTex reference of qNetVO.
 
 License
 -------
