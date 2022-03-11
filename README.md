@@ -2,7 +2,7 @@
 
 *Simulate and optimize quantum communication networks using quantum computers.*
 
-[![Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://chitambarlab.github.io/qNetVO/index.html)[![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)
+[![Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://chitambarlab.github.io/qNetVO/index.html)[![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)[![PyPI version](https://badge.fury.io/py/qNetVO.svg)](https://badge.fury.io/py/qNetVO)
 
 ## Features
 
