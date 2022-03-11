@@ -1,12 +1,12 @@
-CHSH Bell Inequality
-======================
+CHSH Inequality
+===============
 
 .. currentmodule:: qnetvo
 
 The CHSH scenario consists of two nonsignaling devices which share randomness in the
 classical case and entanglement in the quantum case.
 
-.. figure:: ../_static/images/bipartite_non-signaling.png
+.. figure:: ../../_static/images/bipartite_non-signaling.png
    :scale: 60%
     
    **Bipartite Non-Signaling Scenario.** 

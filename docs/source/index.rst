@@ -1,53 +1,74 @@
 .. qnetvo documentation master file, created by
    sphinx-quickstart on Thu Jul 15 10:27:48 2021.
 
-qNetVO
-======
+qNetVO: the Quantum Network Variational Optimizer
+=================================================
 
-*The* **Q**\ *uantum* **Net**\ *work* **V**\ *ariational* **O**\ *ptimizer (*\
-**qNetVO**\ *) is Python framework for
-simulating and optimizing quantum communication networks using
-quantum hardware.*
+*Simulate and optimize quantum communication networks using quantum computers.*
 
 Features
-========
+--------
 
-Simulate Quantum Communication Networks on Quantum Computers:
+QNetVO simulates quantum communication networks on differentiable quantum cicuits.
+The cicuit parameters are optimized with respect to a cost function using gradient descent.
+qNetVO is powered by `PennyLane <https://pennylane.ai>`_ an open-source framework
+for cross-platform quantum machine learning.
 
-* Create quantum circuits that model distributed quantum communication devices.
-* Combine devices to flexibly construct quantum communication network simulations. 
-* Execute ansatz circuits on quantum computing platforms and simulators.
+Simulating Quantum Communication Networks:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Optimize Quantum Communication Networks using Variational Techniques:
+* Construct complex quantum network ansatzes from generic quantum circuit compenents.
+* Simulate the quantum network on a quantum computer or classical simulator.
 
-* Train quantum communication networks like neural networks using differential programming.
-* Use our library of communication oriented cost functions or create your own.
+Optimizing Quantum Communication Networks:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Powered by `PennyLane <https://pennylane.ai>`_:
-
-* Free and open-source framework for cross-platform quantum machine learning.
+* Use our library of network oriented cost functions or create your own.
+* Gradient descent methods for tuning quantum network ansatz settings to minimize the cost.
 
 Quick Start
-===========
-
-.. todo::
-
-   Register Package.
+-----------
 
 Install qNetVO:
 
-.. code-block:: bash
+.. code-block::
 
-   pip install qnetvo
+   $ pip install qnetvo
 
-Import qNetVO:
+Install PennyLane:
+
+.. code-block::
+
+   $ pip install pennylane==0.20
+
+Import packages:
 
 .. code-block:: python
 
+   import pennylane as qml
    import qnetvo as qnet
 
+.. note::
+
+   For optimal use, qNetVO should be used with PennyLane.
+   QNetVO is currently compatible with PennyLane v0.20.
+
+Site Navigation
+---------------
+
+Looking for something specific? See our :ref:`search` and :ref:`genindex`.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
+
+   quantum_networks/index
+   cost/index
+   optimization
+   utilities
+
 How to Cite
-===========
+-----------
 
 .. todo::
 
@@ -57,8 +78,15 @@ How to Cite
 
    Add Citation.bib file to project.
 
+License
+-------
+
+qNetVO is free and open-source.
+The software is released under the Apache License, Version 2.0.
+See `LICENSE <https://https://github.com/ChitambarLab/qNetVO/blob/main/LICENSE>`_ for details.
+
 Acknowledgments
-===============
+---------------
 
 We thank `Xanadu, Inc. <https://www.xanadu.ai/>`_, the
 `UIUC Physics Department <https://physics.illinois.edu/>`_, and the
@@ -66,26 +94,3 @@ We thank `Xanadu, Inc. <https://www.xanadu.ai/>`_, the
 <https://qisenet.uchicago.edu/>`_
 for their support of this project.
 Work funded by NSF award DMR-1747426.
-
-License
-=======
-
-.. todo::
-
-   Add a project license.
-
-
-Site Navigation
-===============
-
-Looking for something specific? See our :ref:`search` and :ref:`genindex`.
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents
-
-   network_ansatzes/index
-   cost/index
-   optimization
-   information
-   utilities

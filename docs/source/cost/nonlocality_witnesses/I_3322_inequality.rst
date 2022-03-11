@@ -1,5 +1,7 @@
-I-3322 Bell Inequality
-======================
+
+
+I-3322 Inequality
+=================
 
 .. currentmodule:: qnetvo
 

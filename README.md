@@ -4,12 +4,43 @@
 
 [![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)
 
-## Project Goals
+## Features
 
-1. Develop a variational optimziation framework for quantum networks:
-    1. Construct ansatz circuits that simulate quantum networks.
-    2. Provide cost functions that quantify network properties.
-    3. Optimize network network ansatz to minimize cost.
+QNetVO simulates quantum communication networks on differentiable quantum cicuits.
+The cicuit parameters are optimized with respect to a cost function using gradient descent.
+qNetVO is powered by `PennyLane <https://pennylane.ai>`_ an open-source framework
+for cross-platform quantum machine learning.
+
+### Simulating Quantum Communication Networks:
+
+* Construct complex quantum network ansatzes from generic quantum circuit compenents.
+* Simulate the quantum network on a quantum computer or classical simulator.
+
+### Optimizing Quantum Communication Networks:
+
+* Use our library of network oriented cost functions or create your own.
+* Gradient descent methods for tuning quantum network ansatz settings to minimize the cost.
+
+## Quick Start
+
+Install qNetVO:
+
+```
+$ pip install qnetvo
+```
+
+Install PennyLane:
+
+```
+$ pip install pennylane==0.20
+```
+
+Import packages:
+
+```
+import pennylane as qml
+import qnetvo as qnet
+```
 
 ## Development
 
@@ -53,6 +84,16 @@ Then, from the root directory, run:
 ```
 (qnetvo-dev) $ pytest
 ```
+
+### Running Demos
+
+Demos are found in the `./demos` directory and implemented in Jupyter notebooks.
+To run the demos locally, first setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment), then run:
+
+```
+(qnetvo-dev) $  jupyter-notebook
+```
+A Jupyter notebook server will launch in your browser allowing you to run the notebooks.
 
 ### Building Documentation
 
