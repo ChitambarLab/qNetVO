@@ -1,4 +1,4 @@
 sphinx>=3.0
-pygments==2.7
+Pygments>=2.7.4
 furo
 pennylane
