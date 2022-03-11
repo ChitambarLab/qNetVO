@@ -16,7 +16,7 @@ The magic square game is interesting because classically the winning probability
 as :math:`P_{Win}\leq 8/9`.
 On the other hand, there exists a quantum strategy that can win the game with certainty.
 The foundational physics behind the winning strategy was independently observed by D. Mermin
-[Mermin1990]_, and A. Peres [Peres1990]_.
+[Mermin1990_magic_squares]_, and A. Peres [Peres1990]_.
 Mermin and Peres' thought experiment in quantum noncontextuality was later showed to achieve a
 perfect winning score in the magic square game by P. Aravind [Aravind2002]_, [Aravind2004]_.
 In our implementation of the magic squares game, we apply the approach outlined by G. Brassard *et al.* [Brassard2005]_.
@@ -40,7 +40,7 @@ As an example, optimal state preparation and measurements are provided in [Brass
 
 **References**
 
-.. [Mermin1990] Mermin, N. David. "Simple unified form for the major no-hidden-variables
+.. [Mermin1990_magic_squares] Mermin, N. David. "Simple unified form for the major no-hidden-variables
    theorems." Physical review letters 65.27 (1990): 3373.
 
 .. [Peres1990] Peres, Asher. "Incompatible results of quantum measurements." Physics Letters
