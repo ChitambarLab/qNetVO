@@ -1,6 +1,7 @@
-name: "Pull Request Docs Check"
+name: Build Documentation
 on: 
-- pull_request
+  push:
+    branches: [ main ]
 
 jobs:
   docs:
