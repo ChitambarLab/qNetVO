@@ -8,7 +8,7 @@ import qnetvo as qnet
 
 class TestGradientDescent:
     def test_quadratic_cost(self):
-        cost = lambda x: x ** 2
+        cost = lambda x: x**2
         opt_dict = qnet.gradient_descent(cost, 2.0, num_steps=50, step_size=0.1, verbose=False)
 
         assert np.isclose(opt_dict["opt_score"], 0, atol=1e-6)
