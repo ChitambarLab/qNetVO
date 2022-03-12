@@ -1,5 +1,6 @@
 sphinx>=3.0
 Pygments>=2.7.4
 m2r2==0.3
+sphinxcontrib-email==0.1
 furo
 pennylane

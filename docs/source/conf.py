@@ -38,6 +38,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "m2r2",
+    "sphinxcontrib.email",
 ]
 source_suffix = ['.rst', '.md']
 
