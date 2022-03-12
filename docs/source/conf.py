@@ -40,7 +40,7 @@ extensions = [
     "m2r2",
     "sphinxcontrib.email",
 ]
-source_suffix = ['.rst', '.md']
+source_suffix = [".rst", ".md"]
 
 todo_include_todos = True
 

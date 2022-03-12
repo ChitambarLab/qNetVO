@@ -56,7 +56,7 @@ QNetVO is currently compatible with PennyLane v0.20.
 
 We welcome outside contributions to qNetVO.
 Please see the [Contributing](https://chitambarlab.github.io/qNetVO/contributing.html)
-for details and a development guide. 
+page for details and a development guide. 
 
 ## How to Cite
 
