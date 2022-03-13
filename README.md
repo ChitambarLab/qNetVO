@@ -7,8 +7,8 @@
 ## Features
 
 QNetVO simulates quantum communication networks on differentiable quantum cicuits.
-The cicuit parameters are optimized with respect to a cost function using gradient descent.
-qNetVO is powered by [PennyLane](https://pennylane.ai), an open-source framework
+The cicuit parameters are optimized with respect to a cost function using automatic differentiation and gradient descent.
+QNetVO is powered by [PennyLane](https://pennylane.ai), an open-source framework
 for cross-platform quantum machine learning.
 
 ### Simulating Quantum Communication Networks:
@@ -42,88 +42,38 @@ import pennylane as qml
 import qnetvo as qnet
 ```
 
-## Development
+<div class="admonition note">
+<p class="admonition-title">
+Note
+</p>
+<p>
+For optimal use, qNetVO should be used with PennyLane.
+QNetVO is currently compatible with PennyLane v0.20.
+</p>
+</div>
 
-### Creating the `qnetvo-dev` Environment
+## Contributing
 
-The [Anaconda](https://docs.conda.io/projects/conda/en/latest/glossary.html#anaconda-glossary) distribution of Python is used to ensure a consistent development environment.
-Follow the Anaconda [installation instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#installation) to set up the `conda` command line tool for your
-operating system.
-The `conda` tool creates the dev environment from the `environment.yml` file.
-For more details on how to use `conda` see the [managing environments](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) page in the `conda` documentation.
+We welcome outside contributions to qNetVO.
+Please see the [Contributing](https://chitambarlab.github.io/qNetVO/contributing.html)
+page for details and a development guide. 
 
-To create the dev environment, navigate to the root directory of the `qNetVO/` repository and follow these steps.
+## How to Cite
 
-1. Create the `qnetvo-dev` conda environment:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6345835.svg)](https://doi.org/10.5281/zenodo.6345835)
 
-```
-(base) $ conda env create -f environment.yml
-```
+See [CITATION.bib](https://github.com/ChitambarLab/qNetVO/blob/main/CITATION.bib) for a BibTex reference to qNetVO.
 
-2. Activate the `qnetvo-dev` conda environment:
+## License
 
-```
-(base) $ conda activate qnetvo-dev
-```
+QNetVO is free and open-source.
+The software is released under the Apache License, Version 2.0.
+See [LICENSE](https://https://github.com/ChitambarLab/qNetVO/blob/main/LICENSE) for details.
 
-3. Install the local `qnetvo` package in editable mode:
+## Acknowledgments
 
-```
-(qnetvo-dev) $ pip install -e .
-```
-
-All packages for building docs, running tests, and running notebooks are installed.
-Changes to the local `./src/qnetvo` codebase are reflected whenever `import qnetvo` is called.
-
-### Running Tests
-
-Tests are found in the `./test` directory and run using [`pytest`](https://docs.pytest.org/en/7.0.x/).
-First, setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment).
-Then, from the root directory, run:
-
-```
-(qnetvo-dev) $ pytest
-```
-
-### Running Demos
-
-Demos are found in the `./demos` directory and implemented in Jupyter notebooks.
-To run the demos locally, first setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment), then run:
-
-```
-(qnetvo-dev) $  jupyter-notebook
-```
-A Jupyter notebook server will launch in your browser allowing you to run the notebooks.
-
-### Building Documentation
-
-It is important to view the documentation before committing changes.
-To locally build and view the documentation, first set up the [dev environment](https://github.com/ChitambarLab/qNetVO#environment).
-Then, follow these steps.
-
-
-1. **Build Documentation:** From the root directory run:
-
-```
-(qnetvo-dev) $ sphinx-build -b html docs/source/ docs/build/html
-```
-
-2. **Serve Documentation:** Navigate to the `./docs/build/html` directory and run:
-
-```
-(qnetvo-dev) $ python -m http.server --bind localhost
-```
-
-3. **View Documentation:** Copy and paste the returned IP address to your browser.
-
-### Formatting Code
-
-All code in this project is autoformatted using [black](https://black.readthedocs.io/en/stable/).
-First, setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment).
-Then, from the root directory, run:
-
-```
-(qnetvo-dev) $ black -l 100 src test docs
-```
-
-
+We thank [Xanadu](https://www.xanadu.ai/), the
+[UIUC Physics Department](https://physics.illinois.edu/), and the
+[Quantum Information Science and Engineering Network (QISE-Net)](https://qisenet.uchicago.edu/)
+for their support of qNetVO.
+Work funded by NSF award DMR-1747426.
