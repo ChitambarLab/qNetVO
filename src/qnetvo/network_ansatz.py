@@ -3,6 +3,38 @@ from pennylane import numpy as np
 from pennylane import math
 
 
+class Node:
+    """A base class for configuring nodes in the quantum network ansatz.
+
+    :param num_in: The number of classical inputs for the node.
+    :type num_in: int
+
+    :param num_out: The number of classical outputs for the node.
+    :type num_out: int
+
+    :param wires: A list of wires on which the node is defined.
+    :type wires: array[int]
+
+    :param quantum_fn: A PennyLane quantum function that accepts the
+        positional arguments ``(settings, wires)`` where settings is an *array[float]*
+        of length ``num_settings``.
+    :type quantum_fn: function
+
+    :param num_settings: The number of settings that the quantum function accepts.
+    :type num_settings: int
+
+    :returns: An instantiated ``Node`` class.
+    :rtype: ``qnetvo.Node``
+    """
+
+    def __init__(self, num_in, num_out, wires, quantum_fn, num_settings):
+        self.num_in = num_in
+        self.num_out = num_out
+        self.wires = wires
+        self.ansatz_fn = quantum_fn
+        self.num_settings = num_settings
+
+
 class NoiseNode:
     """A class that configures each noise node in the quantum network.
 
