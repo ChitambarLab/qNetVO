@@ -1,4 +1,6 @@
 import pennylane as qml
+from pennylane.operation import Channel
+from pennylane import numpy as np
 import math
 
 
@@ -140,3 +142,31 @@ def pure_phase_damping(noise_params, wires):
 
     ry_setting = 2 * math.asin(math.sqrt(noise_params[0]))
     qml.ctrl(qml.RY, control=wires[0])(ry_setting, wires=wires[1])
+
+
+class ColoredNoise(Channel):
+    num_params = 1
+    num_wires = 2
+    grad_method = "F"
+
+    @classmethod
+    def _kraus_matrices(cls, *params):
+        gamma = params[0]
+
+        phi_plus = np.array([1,0,0,1]) / np.sqrt(2)
+        phi_min = np.array([1,0,0,-1]) / np.sqrt(2)
+        psi_plus = np.array([0,1,1,0]) / np.sqrt(2)
+        psi_min = np.array([0,1,-1,0]) / np.sqrt(2)
+
+        scalar = np.sqrt(gamma/2)
+
+        K0 = np.sqrt(1-gamma) * np.eye(4)
+        K1 = scalar * np.outer(psi_plus, phi_plus)
+        K2 = scalar * np.outer(psi_plus, phi_min)
+        K3 = scalar * np.outer(psi_plus, psi_plus)
+        K4 = scalar * np.outer(psi_plus, psi_min)
+        K5 = scalar * np.outer(psi_min, phi_plus)
+        K6 = scalar * np.outer(psi_min, phi_min)
+        K7 = scalar * np.outer(psi_min, psi_plus)
+        K8 = scalar * np.outer(psi_min, psi_min)
+        return [K0, K1, K2, K3, K4, K5, K6, K7, K8]

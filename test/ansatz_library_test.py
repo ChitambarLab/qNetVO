@@ -98,6 +98,7 @@ class TestStatePreparationAnsatzes:
             U, np.array([[1, 1, 1, 1], [-1, 1, -1, 1], [-1, -1, 1, 1], [1, -1, -1, 1]]).T / 2
         )
 
+class TestNoiseAnsazes:
     @pytest.mark.parametrize(
         "state_prep_fn",
         [
@@ -223,3 +224,28 @@ class TestStatePreparationAnsatzes:
             for noise_param in np.arange(0, 1.001, 1 / 10):
 
                 assert np.isclose(test_expval(noise_param), match_expval(noise_param))
+
+    @pytest.mark.parametrize("gamma", np.arange(0,1.01,0.1))
+    def test_ColoredNoise(self, gamma):
+
+        from qnetvo import ColoredNoise
+
+        dev = qml.device("default.mixed", wires=[0,1])
+        dev.operations.update(["ColoredNoise"])
+
+        @qml.qnode(dev)
+        def test_noise(gamma):
+            qml.Hadamard(wires=[0])
+            qml.CNOT(wires=[0,1])
+
+            qnet.ColoredNoise(gamma, wires=[0,1])
+
+            return qml.state()
+
+        test_state = test_noise(gamma)
+
+        bell_state = np.array([[1,0,0,1],[0,0,0,0],[0,0,0,0],[1,0,0,1]]) / 2
+        colored_noise = np.array([[0,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,0]]) / 2
+        match_state = (1-gamma) * bell_state + gamma * colored_noise
+
+        assert np.allclose(test_state, match_state)
