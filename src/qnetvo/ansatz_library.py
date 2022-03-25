@@ -177,6 +177,8 @@ class two_qubit_depolarizing(Channel):
 
         if not 0.0 - eps <= gamma <= 1.0 + eps:
             raise ValueError("gamma must be in the interval [0,1].")
+        elif np.isclose(gamma, 0):
+            gamma = 0
 
         paulis = [
             np.array([[1, 0], [0, 1]]),
@@ -225,6 +227,8 @@ class colored_noise(Channel):
 
         if not 0.0 - eps <= gamma <= 1.0 + eps:
             raise ValueError("gamma must be in the interval [0,1].")
+        elif np.isclose(gamma, 0):
+            gamma = 0
 
         phi_plus = np.array([1, 0, 0, 1]) / np.sqrt(2)
         phi_min = np.array([1, 0, 0, -1]) / np.sqrt(2)
