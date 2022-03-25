@@ -3,6 +3,8 @@ from pennylane.operation import Channel
 from pennylane import numpy as np
 import math
 
+eps = 1e-7  # constant
+
 
 def max_entangled_state(settings, wires):
     """Ansatz function for maximally entangled two-qubit state preparation.
@@ -173,7 +175,7 @@ class two_qubit_depolarizing(Channel):
     def _kraus_matrices(cls, *params):
         gamma = params[0]
 
-        if not 0.0 <= gamma <= 1.0:
+        if not 0.0 - eps <= gamma <= 1.0 + eps:
             raise ValueError("gamma must be in the interval [0,1].")
 
         paulis = [
@@ -221,7 +223,7 @@ class colored_noise(Channel):
     def _kraus_matrices(cls, *params):
         gamma = params[0]
 
-        if not 0.0 <= gamma <= 1.0:
+        if not 0.0 - eps <= gamma <= 1.0 + eps:
             raise ValueError("gamma must be in the interval [0,1].")
 
         phi_plus = np.array([1, 0, 0, 1]) / np.sqrt(2)
