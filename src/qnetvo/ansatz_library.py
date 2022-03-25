@@ -162,6 +162,7 @@ class two_qubit_depolarizing(Channel):
 
         \\mathcal{N}(\\rho) = (1-\\frac{16}{15}\\gamma)\\rho + (\\frac{16}{15})(\\frac{\\gamma}{4})) \\mathbb{I}
     """
+
     num_params = 1
     num_wires = 2
     grad_method = "F"
@@ -171,16 +172,16 @@ class two_qubit_depolarizing(Channel):
         gamma = params[0]
 
         paulis = [
-            np.array([[1, 0],[0, 1]]),
-            np.array([[0, 1],[1, 0]]),
-            np.array([[0, -1j],[1j, 0]]),
-            np.array([[1, 0],[0, -1]]),
+            np.array([[1, 0], [0, 1]]),
+            np.array([[0, 1], [1, 0]]),
+            np.array([[0, -1j], [1j, 0]]),
+            np.array([[1, 0], [0, -1]]),
         ]
 
         kraus_ops = []
         for i in range(4):
             for j in range(4):
-                scalar = np.sqrt(1-gamma) if i + j == 0 else np.sqrt(gamma/15)
+                scalar = np.sqrt(1 - gamma) if i + j == 0 else np.sqrt(gamma / 15)
                 kraus_ops.append(scalar * np.kron(paulis[i], paulis[j]))
 
         return kraus_ops
@@ -188,7 +189,7 @@ class two_qubit_depolarizing(Channel):
 
 class colored_noise(Channel):
     """Applies a two-qubit colored noise channel using Kraus operators.
-    
+
     The channel is called as a quantum function ``colored_noise(gamma, wires)``.
 
     :param gamma: The amount of colored noise in the channel.
@@ -196,7 +197,7 @@ class colored_noise(Channel):
 
     :param wires: Two wires on which to apply the colored noise.
     :type wires: qml.Wires
-    
+
     For the noise parameter :math:`\\gamma`, the colored noise model is
     represented by the following function:
 
@@ -204,6 +205,7 @@ class colored_noise(Channel):
 
         \\mathcal{N}(\\rho) = (1-\\gamma)\\rho + \\frac{\\gamma}{2}(|01\\rangle\\langle 01| + |10\\rangle\\langle 10|)
     """
+
     num_params = 1
     num_wires = 2
     grad_method = "F"
@@ -212,14 +214,14 @@ class colored_noise(Channel):
     def _kraus_matrices(cls, *params):
         gamma = params[0]
 
-        phi_plus = np.array([1,0,0,1]) / np.sqrt(2)
-        phi_min = np.array([1,0,0,-1]) / np.sqrt(2)
-        psi_plus = np.array([0,1,1,0]) / np.sqrt(2)
-        psi_min = np.array([0,1,-1,0]) / np.sqrt(2)
+        phi_plus = np.array([1, 0, 0, 1]) / np.sqrt(2)
+        phi_min = np.array([1, 0, 0, -1]) / np.sqrt(2)
+        psi_plus = np.array([0, 1, 1, 0]) / np.sqrt(2)
+        psi_min = np.array([0, 1, -1, 0]) / np.sqrt(2)
 
-        scalar = np.sqrt(gamma/2)
+        scalar = np.sqrt(gamma / 2)
 
-        K0 = np.sqrt(1-gamma) * np.eye(4)
+        K0 = np.sqrt(1 - gamma) * np.eye(4)
         K1 = scalar * np.outer(psi_plus, phi_plus)
         K2 = scalar * np.outer(psi_plus, phi_min)
         K3 = scalar * np.outer(psi_plus, psi_plus)
@@ -229,4 +231,3 @@ class colored_noise(Channel):
         K7 = scalar * np.outer(psi_min, psi_plus)
         K8 = scalar * np.outer(psi_min, psi_min)
         return [K0, K1, K2, K3, K4, K5, K6, K7, K8]
-

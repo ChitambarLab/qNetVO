@@ -105,7 +105,6 @@ class TestCHSHGradientDescent:
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
 
-
     def test_colored_noise_chsh_gradient_descent(self):
         # standard bell state is not optimal here.
         def prep_circ(settings, wires):
@@ -119,14 +118,10 @@ class TestCHSHGradientDescent:
         ]
 
         noise_nodes = [
-            qnet.NoiseNode(
-                [0, 1], lambda settings, wires: qnet.colored_noise(0.25, wires=wires)
-            ),
+            qnet.NoiseNode([0, 1], lambda settings, wires: qnet.colored_noise(0.25, wires=wires)),
         ]
 
-        chsh_ansatz = qnet.NetworkAnsatz(
-            prep_nodes, meas_nodes, noise_nodes
-        )
+        chsh_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes, noise_nodes)
 
         chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
 
@@ -141,4 +136,3 @@ class TestCHSHGradientDescent:
         )
 
         assert np.isclose(opt_dict["opt_score"], 2.5, atol=1e-4)
-
