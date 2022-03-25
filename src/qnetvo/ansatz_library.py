@@ -161,6 +161,8 @@ class two_qubit_depolarizing(Channel):
     .. math::
 
         \\mathcal{N}(\\rho) = (1-\\frac{16}{15}\\gamma)\\rho + (\\frac{16}{15})(\\frac{\\gamma}{4})) \\mathbb{I}
+
+    :raises ValueError: if ``0 <= gamma <= 1`` is not satisfied.
     """
 
     num_params = 1
@@ -170,6 +172,9 @@ class two_qubit_depolarizing(Channel):
     @classmethod
     def _kraus_matrices(cls, *params):
         gamma = params[0]
+
+        if not 0.0 <= gamma <= 1.0:
+            raise ValueError("gamma must be in the interval [0,1].")
 
         paulis = [
             np.array([[1, 0], [0, 1]]),
@@ -204,6 +209,8 @@ class colored_noise(Channel):
     .. math::
 
         \\mathcal{N}(\\rho) = (1-\\gamma)\\rho + \\frac{\\gamma}{2}(|01\\rangle\\langle 01| + |10\\rangle\\langle 10|)
+
+    :raises ValueError: if ``0 <= gamma <= 1`` is not satisfied.
     """
 
     num_params = 1
@@ -213,6 +220,9 @@ class colored_noise(Channel):
     @classmethod
     def _kraus_matrices(cls, *params):
         gamma = params[0]
+
+        if not 0.0 <= gamma <= 1.0:
+            raise ValueError("gamma must be in the interval [0,1].")
 
         phi_plus = np.array([1, 0, 0, 1]) / np.sqrt(2)
         phi_min = np.array([1, 0, 0, -1]) / np.sqrt(2)

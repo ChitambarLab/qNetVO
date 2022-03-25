@@ -226,7 +226,7 @@ class TestNoiseAnsazes:
 
                 assert np.isclose(test_expval(noise_param), match_expval(noise_param))
 
-    @pytest.mark.parametrize("gamma", np.arange(0, 1.01, 0.1))
+    @pytest.mark.parametrize("gamma", np.arange(-0.1, 1.11, 0.1))
     def test_two_qubit_depolarizing(self, gamma):
 
         dev = qml.device("default.mixed", wires=[0, 1])
@@ -240,15 +240,22 @@ class TestNoiseAnsazes:
 
             return qml.state()
 
-        test_state = test_noise(gamma)
+        if not 0 <= gamma <= 1:
+            with pytest.raises(
+                ValueError,
+                match="gamma must be in the interval \\[0,1\\].",
+            ):
+                test_noise(gamma)
+        else:
+            test_state = test_noise(gamma)
 
-        bell_state = np.array([[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0], [1, 0, 0, 1]]) / 2
-        white_noise_state = np.eye(4) / 4
-        match_state = (1 - 16 * gamma / 15) * bell_state + (16 / 15) * gamma * white_noise_state
-        print(gamma)
-        assert np.allclose(test_state, match_state)
+            bell_state = np.array([[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0], [1, 0, 0, 1]]) / 2
+            white_noise_state = np.eye(4) / 4
+            match_state = (1 - 16 * gamma / 15) * bell_state + (16 / 15) * gamma * white_noise_state
+            print(gamma)
+            assert np.allclose(test_state, match_state)
 
-    @pytest.mark.parametrize("gamma", np.arange(0, 1.01, 0.1))
+    @pytest.mark.parametrize("gamma", np.arange(-0.1, 1.11, 0.1))
     def test_colored_noise(self, gamma):
 
         dev = qml.device("default.mixed", wires=[0, 1])
@@ -262,10 +269,19 @@ class TestNoiseAnsazes:
 
             return qml.state()
 
-        test_state = test_noise(gamma)
+        if not 0 <= gamma <= 1:
+            with pytest.raises(
+                ValueError,
+                match="gamma must be in the interval \\[0,1\\].",
+            ):
+                test_noise(gamma)
+        else:
+            test_state = test_noise(gamma)
 
-        bell_state = np.array([[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0], [1, 0, 0, 1]]) / 2
-        colored_noise_state = np.array([[0, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0]]) / 2
-        match_state = (1 - gamma) * bell_state + gamma * colored_noise_state
+            bell_state = np.array([[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0], [1, 0, 0, 1]]) / 2
+            colored_noise_state = (
+                np.array([[0, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0]]) / 2
+            )
+            match_state = (1 - gamma) * bell_state + gamma * colored_noise_state
 
-        assert np.allclose(test_state, match_state)
+            assert np.allclose(test_state, match_state)
