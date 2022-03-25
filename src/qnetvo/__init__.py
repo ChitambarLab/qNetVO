@@ -13,3 +13,7 @@ from qnetvo.cost.chsh_inequality import *
 from qnetvo.cost.linear_inequalities import *
 from qnetvo.cost.mutual_info import *
 from qnetvo.gradient_descent import *
+
+# adding the quantum channels to "default.mixed" device
+mixed_dev = qml.device("default.mixed", wires=[0,1])
+mixed_dev.operations.update(["two_qubit_depolarizing", "colored_noise"])

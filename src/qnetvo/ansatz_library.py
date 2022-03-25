@@ -144,7 +144,66 @@ def pure_phase_damping(noise_params, wires):
     qml.ctrl(qml.RY, control=wires[0])(ry_setting, wires=wires[1])
 
 
-class ColoredNoise(Channel):
+class two_qubit_depolarizing(Channel):
+    """Applies a two-qubit depolarizing channel using Kraus operators.
+
+    The channel is called as a quantum function ``two_qubit_depolarizing(gamma, wires)``
+
+    :param gamma: The amount of colored noise in the channel.
+    :type gamma: Float
+
+    :param wires: Two wires on which to apply the colored noise.
+    :type wires: qml.Wires
+
+    For a noise parameter :math:`\\gamma`, the two-qubit depolarizing
+    noise model is represented by the following function:
+
+    .. math::
+
+        \\mathcal{N}(\\rho) = (1-\\frac{16}{15}\\gamma)\\rho + (\\frac{16}{15})(\\frac{\\gamma}{4})) \\mathbb{I}
+    """
+    num_params = 1
+    num_wires = 2
+    grad_method = "F"
+
+    @classmethod
+    def _kraus_matrices(cls, *params):
+        gamma = params[0]
+
+        paulis = [
+            np.array([[1, 0],[0, 1]]),
+            np.array([[0, 1],[1, 0]]),
+            np.array([[0, -1j],[1j, 0]]),
+            np.array([[1, 0],[0, -1]]),
+        ]
+
+        kraus_ops = []
+        for i in range(4):
+            for j in range(4):
+                scalar = np.sqrt(1-gamma) if i + j == 0 else np.sqrt(gamma/15)
+                kraus_ops.append(scalar * np.kron(paulis[i], paulis[j]))
+
+        return kraus_ops
+
+
+class colored_noise(Channel):
+    """Applies a two-qubit colored noise channel using Kraus operators.
+    
+    The channel is called as a quantum function ``colored_noise(gamma, wires)``.
+
+    :param gamma: The amount of colored noise in the channel.
+    :type gamma: Float
+
+    :param wires: Two wires on which to apply the colored noise.
+    :type wires: qml.Wires
+    
+    For the noise parameter :math:`\\gamma`, the colored noise model is
+    represented by the following function:
+
+    .. math::
+
+        \\mathcal{N}(\\rho) = (1-\\gamma)\\rho + \\frac{\\gamma}{2}(|01\\rangle\\langle 01| + |10\\rangle\\langle 10|)
+    """
     num_params = 1
     num_wires = 2
     grad_method = "F"
@@ -170,3 +229,4 @@ class ColoredNoise(Channel):
         K7 = scalar * np.outer(psi_min, psi_plus)
         K8 = scalar * np.outer(psi_min, psi_min)
         return [K0, K1, K2, K3, K4, K5, K6, K7, K8]
+
