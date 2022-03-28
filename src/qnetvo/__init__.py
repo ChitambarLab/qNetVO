@@ -15,5 +15,6 @@ from qnetvo.cost.mutual_info import *
 from qnetvo.gradient_descent import *
 
 # adding the quantum channels to "default.mixed" device
-mixed_dev = qml.device("default.mixed", wires=[0, 1])
-mixed_dev.operations.update(["two_qubit_depolarizing", "colored_noise"])
+from pennylane.devices import DefaultMixed
+
+DefaultMixed.operations.update(["two_qubit_depolarizing", "colored_noise"])
