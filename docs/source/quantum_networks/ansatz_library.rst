@@ -30,3 +30,7 @@ Noise Models
 .. autofunction:: pure_amplitude_damping
 
 .. autofunction:: pure_phase_damping
+
+.. autofunction:: two_qubit_depolarizing
+
+.. autofunction:: colored_noise
