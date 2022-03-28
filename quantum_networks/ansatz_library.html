@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Cost Functions" href="../cost/index.html" /><link rel="prev" title="Network Ansatzes" href="network_ansatzes.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.03.04"/>
         <title>Ansatz Library - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
@@ -367,6 +367,52 @@ K_1 = \begin{pmatrix}0 &amp; 0 \\ 0 &amp; \sqrt{\gamma} \end{pmatrix}.\end{split
 The channel input and output is on <code class="docutils literal notranslate"><span class="pre">wires[0]</span></code> while <code class="docutils literal notranslate"><span class="pre">wires[1]</span></code>
 serves as the ancilla register.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.two_qubit_depolarizing">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">two_qubit_depolarizing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_queue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#two_qubit_depolarizing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.two_qubit_depolarizing" title="Permalink to this definition">#</a></dt>
+<dd><p>Applies a two-qubit depolarizing channel using Kraus operators.</p>
+<p>The channel is called as a quantum function <code class="docutils literal notranslate"><span class="pre">two_qubit_depolarizing(gamma,</span> <span class="pre">wires)</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>Float</em>) – The amount of depolarizing noise in the channel.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – Two wires on which to apply the depolarizing noise.</p></li>
+</ul>
+</dd>
+</dl>
+<p>For a noise parameter <span class="math notranslate nohighlight">\(\gamma\)</span>, the two-qubit depolarizing
+noise model is represented by the following function:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mathcal{N}(\rho) = (1-\frac{16}{15}\gamma)\rho + (\frac{16}{15})(\frac{\gamma}{4})) \mathbb{I}\]</div></div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">gamma</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code> is not satisfied.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.colored_noise">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">colored_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_queue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#colored_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.colored_noise" title="Permalink to this definition">#</a></dt>
+<dd><p>Applies a two-qubit colored noise channel using Kraus operators.</p>
+<p>The channel is called as a quantum function <code class="docutils literal notranslate"><span class="pre">colored_noise(gamma,</span> <span class="pre">wires)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>Float</em>) – The amount of colored noise in the channel.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – Two wires on which to apply the colored noise.</p></li>
+</ul>
+</dd>
+</dl>
+<p>For the noise parameter <span class="math notranslate nohighlight">\(\gamma\)</span>, the colored noise model is
+represented by the following function:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mathcal{N}(\rho) = (1-\gamma)\rho + \frac{\gamma}{2}(|01\rangle\langle 01| + |10\rangle\langle 10|)\]</div></div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">gamma</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code> is not satisfied.</p>
 </dd>
 </dl>
 </dd></dl>
