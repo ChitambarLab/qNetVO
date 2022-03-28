@@ -151,10 +151,10 @@ class two_qubit_depolarizing(Channel):
 
     The channel is called as a quantum function ``two_qubit_depolarizing(gamma, wires)``
 
-    :param gamma: The amount of colored noise in the channel.
+    :param gamma: The amount of depolarizing noise in the channel.
     :type gamma: Float
 
-    :param wires: Two wires on which to apply the colored noise.
+    :param wires: Two wires on which to apply the depolarizing noise.
     :type wires: qml.Wires
 
     For a noise parameter :math:`\\gamma`, the two-qubit depolarizing
