@@ -1,5 +1,4 @@
 import pennylane as qml
-from pennylane import numpy as np
 from datetime import datetime
 import time
 
