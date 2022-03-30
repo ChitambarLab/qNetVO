@@ -77,7 +77,7 @@ class TestNLocalChainBellInequality:
         rand_settings = bilocal_chain_ansatz.rand_scenario_settings()
 
         bilocal_chain_cost = qnet.nlocal_chain_cost_22(bilocal_chain_ansatz)
-        grad_match = qml.grad(bilocal_chain_cost)(rand_settings)
+        grad_match = qml.grad(bilocal_chain_cost, argnum=0)(rand_settings)
 
         bilocal_chain_grad = qnet.parallel_nlocal_chain_grad_fn(bilocal_chain_ansatz)
         grad = bilocal_chain_grad(rand_settings)

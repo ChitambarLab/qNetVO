@@ -48,7 +48,7 @@ class TestCHSHGradientDescent:
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
         opt_dict = qnet.gradient_descent(
-            chsh_cost, init_settings, num_steps=30, step_size=0.2, verbose=False
+            chsh_cost, init_settings, num_steps=40, step_size=0.2, verbose=False
         )
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)

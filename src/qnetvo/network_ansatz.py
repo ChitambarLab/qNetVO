@@ -256,7 +256,7 @@ class NetworkAnsatz:
 
         prep_settings = self.layer_settings(scenario_settings[0], prep_inputs, self.prepare_nodes)
         meas_settings = self.layer_settings(scenario_settings[1], meas_inputs, self.measure_nodes)
-        return math.concatenate([prep_settings, meas_settings])
+        return np.concatenate([prep_settings, meas_settings])
 
     @staticmethod
     def circuit_layer(network_nodes):
@@ -294,13 +294,13 @@ class NetworkAnsatz:
         :rtype: list[list[np.array]]
         """
         prepare_settings = [
-            2 * np.pi * np.random.random(node.settings_dims, requires_grad=True) - np.pi
+            2 * np.pi * np.random.random(node.settings_dims) - np.pi
             if len(node.static_settings) == 0
             else np.array([[]])
             for node in self.prepare_nodes
         ]
         measure_settings = [
-            2 * np.pi * np.random.random(node.settings_dims, requires_grad=True) - np.pi
+            2 * np.pi * np.random.random(node.settings_dims) - np.pi
             if len(node.static_settings) == 0
             else np.array([[]])
             for node in self.measure_nodes
@@ -335,15 +335,11 @@ class NetworkAnsatz:
         :rtype: list[list[np.array]]
         """
         prepare_settings = [
-            np.zeros(node.settings_dims, requires_grad=True)
-            if len(node.static_settings) == 0
-            else np.array([[]])
+            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
             for node in self.prepare_nodes
         ]
         measure_settings = [
-            np.zeros(node.settings_dims, requires_grad=True)
-            if len(node.static_settings) == 0
-            else np.array([[]])
+            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
             for node in self.measure_nodes
         ]
 

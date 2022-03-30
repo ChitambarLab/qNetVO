@@ -75,11 +75,11 @@ class TestQNodes:
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
         qnode = qnet.global_parity_expval_qnode(ansatz)
 
-        assert qnode([0, 0, 0, 0]) == 1
-        assert qnode([0, 1, 0, 0]) == -1
-        assert qnode([0, 0, 1, 1]) == 1
-        assert qnode([1, 0, 1, 1]) == -1
-        assert qnode([1, 1, 1, 1]) == 1
+        assert qnode(np.array([0, 0, 0, 0])) == 1
+        assert qnode(np.array([0, 1, 0, 0])) == -1
+        assert qnode(np.array([0, 0, 1, 1])) == 1
+        assert qnode(np.array([1, 0, 1, 1])) == -1
+        assert qnode(np.array([1, 1, 1, 1])) == 1
 
     def test_joint_probs_qnode(self):
         prep_nodes = [
