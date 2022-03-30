@@ -2,7 +2,7 @@
 
 *Simulate and optimize quantum communication networks using quantum computers.*
 
-[![Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://chitambarlab.github.io/qNetVO/index.html)[![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)[![PyPI version](https://badge.fury.io/py/qNetVO.svg)](https://badge.fury.io/py/qNetVO)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6345835.svg)](https://doi.org/10.5281/zenodo.6345835)
+[![Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://chitambarlab.github.io/qNetVO/index.html)[![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)[![PyPI version](https://badge.fury.io/py/qNetVO.svg)](https://badge.fury.io/py/qNetVO)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6345834.svg)](https://doi.org/10.5281/zenodo.6345834)
 
 ## Features
 
@@ -32,7 +32,7 @@ $ pip install qnetvo
 Install PennyLane:
 
 ```
-$ pip install pennylane==0.20
+$ pip install pennylane==0.21
 ```
 
 Import packages:
