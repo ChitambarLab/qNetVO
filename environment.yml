@@ -12,3 +12,5 @@ dependencies:
   - pip:
     - -r requirements.txt
     - furo
+    - m2r2==0.3.2
+    - sphinxcontrib-email==0.3.5

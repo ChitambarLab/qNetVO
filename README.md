@@ -2,87 +2,78 @@
 
 *Simulate and optimize quantum communication networks using quantum computers.*
 
-[![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)
+[![Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://chitambarlab.github.io/qNetVO/index.html)[![Test Status](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/ChitambarLab/qNetVO/actions/workflows/run_tests.yml)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)[![PyPI version](https://badge.fury.io/py/qNetVO.svg)](https://badge.fury.io/py/qNetVO)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6345835.svg)](https://doi.org/10.5281/zenodo.6345835)
 
-## Project Goals
+## Features
 
-1. Develop a variational optimziation framework for quantum networks:
-    1. Construct ansatz circuits that simulate quantum networks.
-    2. Provide cost functions that quantify network properties.
-    3. Optimize network network ansatz to minimize cost.
+QNetVO simulates quantum communication networks on differentiable quantum cicuits.
+The cicuit parameters are optimized with respect to a cost function using automatic differentiation and gradient descent.
+QNetVO is powered by [PennyLane](https://pennylane.ai), an open-source framework
+for cross-platform quantum machine learning.
 
-## Development
+### Simulating Quantum Communication Networks:
 
-### Creating the `qnetvo-dev` Environment
+* Construct complex quantum network ansatzes from generic quantum circuit compenents.
+* Simulate the quantum network on a quantum computer or classical simulator.
 
-The [Anaconda](https://docs.conda.io/projects/conda/en/latest/glossary.html#anaconda-glossary) distribution of Python is used to ensure a consistent development environment.
-Follow the Anaconda [installation instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#installation) to setup the `conda` command line tool for your
-operating system.
-The `conda` tool creates the dev environment from the `environment.yml` file.
-For more details on how to use `conda` see the [managing environments](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) page in the `conda` documentation.
+### Optimizing Quantum Communication Networks:
 
-To create the dev environment, navigate to the root directory of the `qNetVO/` repository and follow these steps.
+* Use our library of network-oriented cost functions or create your own.
+* Gradient descent methods for tuning quantum network ansatz settings to minimize the cost.
 
-1. Create the `qnetvo-dev` conda environment:
+## Quick Start
 
-```
-(base) $ conda env create -f environment.yml
-```
-
-2. Activate the `qnetvo-dev` conda environment:
+Install qNetVO:
 
 ```
-(base) $ conda activate qnetvo-dev
+$ pip install qnetvo
 ```
 
-3. Install the local `qnetvo` package in editable mode:
+Install PennyLane:
 
 ```
-(qnetvo-dev) $ pip install -e .
+$ pip install pennylane==0.20
 ```
 
-All packages for building docs, running tests, and running notebooks are installed.
-Changes to the local `./src/qnetvo` codebase are reflected whenever `import qnetvo` is called.
-
-### Running Tests
-
-Tests are found in the `./test` directory and run using [`pytest`](https://docs.pytest.org/en/7.0.x/).
-First, setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment).
-Then, from the root directory, run:
+Import packages:
 
 ```
-(qnetvo-dev) $ pytest
+import pennylane as qml
+import qnetvo as qnet
 ```
 
-### Building Documentation
+<div class="admonition note">
+<p class="admonition-title">
+Note
+</p>
+<p>
+For optimal use, qNetVO should be used with PennyLane.
+QNetVO is currently compatible with PennyLane v0.20.
+</p>
+</div>
 
-It is important to view the documentation before committing changes.
-To locally build and view the documentation, first setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment).
-Then, follow these steps.
+## Contributing
 
+We welcome outside contributions to qNetVO.
+Please see the [Contributing](https://chitambarlab.github.io/qNetVO/contributing.html)
+page for details and a development guide. 
 
-1. **Build Documentation:** From the root directory run:
+## How to Cite
 
-```
-(qnetvo-dev) $ sphinx-build -b html docs/source/ docs/build/html
-```
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6345835.svg)](https://doi.org/10.5281/zenodo.6345835)
 
-2. **Serve Documentation:** Navigate to the `./docs/build/html` directory and run:
+See [CITATION.bib](https://github.com/ChitambarLab/qNetVO/blob/main/CITATION.bib) for a BibTex reference to qNetVO.
 
-```
-(qnetvo-dev) $ python -m http.server --bind localhost
-```
+## License
 
-3. **View Documentation:** Copy and paste the returned IP address to your browser.
+QNetVO is free and open-source.
+The software is released under the Apache License, Version 2.0.
+See [LICENSE](https://github.com/ChitambarLab/qNetVO/blob/main/LICENSE) for details.
 
-### Formatting Code
+## Acknowledgments
 
-All code in this project is autoformatted using [black](https://black.readthedocs.io/en/stable/).
-First, setup the [dev environment](https://github.com/ChitambarLab/qNetVO#environment).
-Then, from the root directory, run:
-
-```
-(qnetvo-dev) $ black -l 100 src test docs
-```
-
-
+We thank [Xanadu](https://www.xanadu.ai/), the
+[UIUC Physics Department](https://physics.illinois.edu/), and the
+[Quantum Information Science and Engineering Network (QISE-Net)](https://qisenet.uchicago.edu/)
+for their support of qNetVO.
+Work funded by NSF award DMR-1747426.

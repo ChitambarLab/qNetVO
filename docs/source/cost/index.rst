@@ -1,17 +1,22 @@
 Cost Functions
 ==============
 
+A cost function quantifies the performance of the quantum network at a particular task.
+A cost function is evaluated for a given network ansatz and settings.
+In general, a quantum network cost function requires one or more executions of a PennyLane
+QNode.
+
+For convenience, we provide example cost functions for quantum networks.
+Custom cost functions can be implemented using PennyLane.
+
+----------
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    qnodes
-   postprocessing
-   chsh_inequality
    linear_inequalities
-   I_3322_bell_inequality
-   mermin_klyshko_inequality
+   entropic_quantities
    magic_squares_game
-   nlocal_chain_bell_inequality
-   nlocal_star_bell_inequality
-   mutual_information
+   nonlocality_witnesses/index
