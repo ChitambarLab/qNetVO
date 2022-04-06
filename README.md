@@ -32,7 +32,7 @@ $ pip install qnetvo
 Install PennyLane:
 
 ```
-$ pip install pennylane==0.21
+$ pip install pennylane==0.22
 ```
 
 Import packages:
