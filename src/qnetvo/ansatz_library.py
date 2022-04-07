@@ -171,9 +171,16 @@ class two_qubit_depolarizing(Channel):
     num_wires = 2
     grad_method = "F"
 
-    @classmethod
-    def _kraus_matrices(cls, *params):
-        gamma = params[0]
+    @staticmethod
+    def compute_kraus_matrices(gamma):
+        """Kraus matrices representing the ``two_qubit_depolarizing`` channel.
+
+        :param gamma: The amount of depolarizing noise in the channel.
+        :type gamma: Float
+
+        :returns: The Kraus matrices.
+        :rtype: List[Array]
+        """
 
         if not 0.0 - eps <= gamma <= 1.0 + eps:
             raise ValueError("gamma must be in the interval [0,1].")
@@ -221,10 +228,16 @@ class colored_noise(Channel):
     num_wires = 2
     grad_method = "F"
 
-    @classmethod
-    def _kraus_matrices(cls, *params):
-        gamma = params[0]
+    @staticmethod
+    def compute_kraus_matrices(gamma):
+        """Kraus matrices representing the ``colored_noise`` channel.
 
+        :param gamma: The amount of colored noise in the channel.
+        :type gamma: Float
+
+        :returns: The Kraus matrices.
+        :rtype: List[Array]
+        """
         if not 0.0 - eps <= gamma <= 1.0 + eps:
             raise ValueError("gamma must be in the interval [0,1].")
         elif np.isclose(gamma, 0):

@@ -13,7 +13,7 @@ class TestUtilities:
             qml.PauliY(wires=wires)
 
         U = qnet.unitary_matrix(circ_pauli_y, 1, wires=[0])
-        assert np.allclose(U, qml.PauliY.matrix)
+        assert np.allclose(U, qml.PauliY.compute_matrix())
 
         def circ_rot_y(settings, wires):
             qml.RY(settings, wires=wires)
@@ -30,7 +30,7 @@ class TestUtilities:
             qml.CNOT(wires=[0, 1])
 
         U = qnet.unitary_matrix(circ_cnot, 2)
-        assert np.allclose(U, [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]])
+        assert np.allclose(U, np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]))
 
 
 class TestOptimzationFileIO:
