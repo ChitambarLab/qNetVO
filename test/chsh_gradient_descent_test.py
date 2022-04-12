@@ -39,7 +39,7 @@ class TestCHSHGradientDescent:
         ]
         measure_nodes = [
             qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
-            qnet.MeasureNode(2, 2, [1], qml.templates.subroutines.ArbitraryUnitary, 3),
+            qnet.MeasureNode(2, 2, [1], lambda settings, wires: qml.Rot(*settings, wires=wires), 3),
         ]
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
@@ -48,7 +48,7 @@ class TestCHSHGradientDescent:
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
         opt_dict = qnet.gradient_descent(
-            chsh_cost, init_settings, num_steps=30, step_size=0.2, verbose=False
+            chsh_cost, init_settings, num_steps=40, step_size=0.2, verbose=False
         )
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)

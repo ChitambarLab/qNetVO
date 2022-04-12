@@ -86,6 +86,9 @@ def gradient_descent(
     start_datetime = datetime.utcnow()
     elapsed = 0
 
+    if grad_fn is None:
+        grad_fn = qml.grad(cost, argnum=0)
+
     # performing gradient descent
     for i in range(num_steps):
         if i % sample_width == 0:

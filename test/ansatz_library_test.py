@@ -26,12 +26,12 @@ class TestStatePreparationAnsatzes:
         assert np.allclose(test_circ(settings), match)
 
     def test_bell_state_copies(self):
-        U = qnet.unitary_matrix(qnet.bell_state_copies, 2, [], [0, 1])
+        U = qnet.unitary_matrix(qnet.bell_state_copies, 2, np.array([]), [0, 1])
         assert np.allclose(
             U, np.array([[1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 0, -1], [0, 1, -1, 0]]).T / np.sqrt(2)
         )
 
-        U = qnet.unitary_matrix(qnet.bell_state_copies, 4, [], [0, 1, 2, 3])
+        U = qnet.unitary_matrix(qnet.bell_state_copies, 4, np.array([]), [0, 1, 2, 3])
         assert np.allclose(U[:, 0], np.array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]) / 2)
 
     def test_ghz_state(self):
@@ -59,24 +59,24 @@ class TestStatePreparationAnsatzes:
         )
 
     def test_local_RY(self):
-        U = qnet.unitary_matrix(qnet.local_RY, 2, [np.pi / 2, 0], [0, 1])
+        U = qnet.unitary_matrix(qnet.local_RY, 2, np.array([np.pi / 2, 0]), [0, 1])
         assert np.allclose(
             U, np.array([[1, 0, 1, 0], [0, 1, 0, 1], [-1, 0, 1, 0], [0, -1, 0, 1]]).T / np.sqrt(2)
         )
 
-        U = qnet.unitary_matrix(qnet.local_RY, 2, [0, np.pi / 2], [0, 1])
+        U = qnet.unitary_matrix(qnet.local_RY, 2, np.array([0, np.pi / 2]), [0, 1])
         assert np.allclose(
             U, np.array([[1, 1, 0, 0], [-1, 1, 0, 0], [0, 0, 1, 1], [0, 0, -1, 1]]).T / np.sqrt(2)
         )
 
-        U = qnet.unitary_matrix(qnet.local_RY, 2, [np.pi / 2, np.pi / 2], [0, 1])
+        U = qnet.unitary_matrix(qnet.local_RY, 2, np.array([np.pi / 2, np.pi / 2]), [0, 1])
         assert np.allclose(
             U, np.array([[1, 1, 1, 1], [-1, 1, -1, 1], [-1, -1, 1, 1], [1, -1, -1, 1]]).T / 2
         )
 
     def test_local_RXRY(self):
         # single qubit cases
-        U = qnet.unitary_matrix(qnet.local_RXRY, 1, [np.pi / 2, 0], [0])
+        U = qnet.unitary_matrix(qnet.local_RXRY, 1, np.array([np.pi / 2, 0]), [0])
         assert np.allclose(U, np.array([[1, -1j], [-1j, 1]]) / np.sqrt(2))
 
         U = qnet.unitary_matrix(qnet.local_RXRY, 1, [0, np.pi / 2], [0])
