@@ -54,6 +54,12 @@ class PrepareNode(NoiseNode):
         self.static_settings = static_settings
 
 
+class ProcessingNode(PrepareNode):
+    
+    def __init__(self, num_in, wires, quantum_fn, num_settings, static_settings=[]):
+        super().__init__(num_in, wires, quantum_fn, num_settings, static_settings=static_settings)
+
+
 class MeasureNode(PrepareNode):
     """A class that configures each measurement node in the quantum network.
 
@@ -123,19 +129,23 @@ class NetworkAnsatz:
     :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
     """
 
-    def __init__(self, prepare_nodes, measure_nodes, noise_nodes=[], dev_kwargs=None):
+    def __init__(self, prepare_nodes, measure_nodes, noise_nodes=[], processing_nodes=[], dev_kwargs=None):
         self.prepare_nodes = prepare_nodes
         self.measure_nodes = measure_nodes
         self.noise_nodes = noise_nodes
+        self.processing_nodes = processing_nodes
 
         self.prepare_wires = self.collect_wires(prepare_nodes)
         self.measure_wires = self.collect_wires(measure_nodes)
         self.noise_wires = (
             qml.wires.Wires([]) if self.noise_nodes == [] else self.collect_wires(noise_nodes)
         )
+        self.processing_wires = (
+            qml.wires.Wires([]) if self.processing_nodes == [] else self.collect_wires(processing_nodes)
+        )
 
         self.network_wires = qml.wires.Wires.all_wires(
-            [self.prepare_wires, self.measure_wires, self.noise_wires]
+            [self.prepare_wires, self.measure_wires, self.noise_wires, self.processing_wires]
         )
 
         default_dev_name = "default.qubit" if len(self.noise_nodes) == 0 else "default.mixed"
@@ -175,18 +185,25 @@ class NetworkAnsatz:
     def construct_ansatz_circuit(self):
         prepare_layer = self.circuit_layer(self.prepare_nodes)
         noise_layer = self.circuit_layer(self.noise_nodes)
+        processing_layer = self.circuit_layer(self.processing_nodes)
         measure_layer = self.circuit_layer(self.measure_nodes)
 
         noise_settings = [np.array([]) for i in range(len(self.noise_nodes))]
 
         num_prep_settings = math.sum([node.num_settings for node in self.prepare_nodes])
-
+        num_processing_settings = 0 if len(self.processing_nodes) == 0 else math.sum([node.num_settings for node in self.processing_nodes])
+        
+        proc_settings_end_id = num_prep_settings + num_processing_settings
         def ansatz_circuit(settings):
             prep_settings = settings[0:num_prep_settings]
-            meas_settings = settings[num_prep_settings:]
+            proc_settings = settings[num_prep_settings:proc_settings_end_id]
+            # meas_settings = settings[num_prep_settings:]
+            meas_settings = settings[proc_settings_end_id:]
+
 
             prepare_layer(prep_settings)
             noise_layer(noise_settings)
+            processing_layer(proc_settings)
             measure_layer(meas_settings)
 
         return ansatz_circuit
@@ -238,7 +255,7 @@ class NetworkAnsatz:
             ]
         )
 
-    def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
+    def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs, proc_inputs=[]):
         """Constructs a list of settings to pass to the qnode executing the network ansatz.
 
         :param scenario_settings: The settings for the network ansatz scenario.
@@ -256,7 +273,12 @@ class NetworkAnsatz:
 
         prep_settings = self.layer_settings(scenario_settings[0], prep_inputs, self.prepare_nodes)
         meas_settings = self.layer_settings(scenario_settings[1], meas_inputs, self.measure_nodes)
-        return math.concatenate([prep_settings, meas_settings])
+
+        if len(proc_inputs) == 0: 
+            return math.concatenate([prep_settings, meas_settings])
+        else:
+            proc_settings = self.layer_settings(scenario_settings[2], proc_inputs, self.processing_nodes)
+            return math.concatenate([prep_settings, proc_settings, meas_settings])
 
     @staticmethod
     def circuit_layer(network_nodes):
@@ -293,6 +315,7 @@ class NetworkAnsatz:
                   where the dimension of each array is ``(num_inputs, num_settings)``.
         :rtype: list[list[np.array]]
         """
+
         prepare_settings = [
             2 * np.pi * np.random.random(node.settings_dims) - np.pi
             if len(node.static_settings) == 0
@@ -305,8 +328,18 @@ class NetworkAnsatz:
             else np.array([[]])
             for node in self.measure_nodes
         ]
+        processing_settings = [] if len(self.processing_nodes) == 0 else [
+            2 * np.pi * np.random.random(node.settings_dims) - np.pi
+            if len(node.static_settings) == 0
+            else np.array([[]])
+            for node in self.processing_nodes
+        ]
 
-        return [prepare_settings, measure_settings]
+        if len(self.processing_nodes) == 0:
+            return [prepare_settings, measure_settings]
+        else:
+            return [prepare_settings, measure_settings, processing_settings]
+
 
     def tf_rand_scenario_settings(self):
         """Creates a randomized settings array for the network ansatz using TensorFlow
