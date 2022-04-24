@@ -1,5 +1,5 @@
 from pennylane import math
-from .cost.qnodes import joint_probs_qnode
+from .qnodes import joint_probs_qnode
 from .utilities import mixed_base_num
 from pennylane import numpy as np
 

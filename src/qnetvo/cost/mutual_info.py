@@ -1,7 +1,7 @@
 import pennylane as qml
 from pennylane import math
 from pennylane import numpy as np
-from .qnodes import joint_probs_qnode
+from ..qnodes import joint_probs_qnode
 from ..information import shannon_entropy
 from ..utilities import mixed_base_num
 

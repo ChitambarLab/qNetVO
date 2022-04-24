@@ -1,6 +1,6 @@
 import pennylane as qml
 from pennylane import math
-from .qnodes import global_parity_expval_qnode
+from ..qnodes import global_parity_expval_qnode
 from scipy.linalg import pinvh
 
 

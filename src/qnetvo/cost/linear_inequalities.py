@@ -1,6 +1,6 @@
 from pennylane import math
 from pennylane import numpy as np
-from .qnodes import joint_probs_qnode, global_parity_expval_qnode
+from ..qnodes import joint_probs_qnode, global_parity_expval_qnode
 from ..utilities import mixed_base_num
 
 
