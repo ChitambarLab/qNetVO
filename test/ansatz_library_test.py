@@ -242,8 +242,7 @@ class TestNoiseAnsazes:
 
         if not 0 <= gamma <= 1:
             with pytest.raises(
-                ValueError,
-                match="gamma must be in the interval \\[0,1\\].",
+                ValueError, match="gamma must be in the interval \\[0,1\\].",
             ):
                 test_noise(gamma)
         else:
@@ -271,8 +270,7 @@ class TestNoiseAnsazes:
 
         if not 0 <= gamma <= 1:
             with pytest.raises(
-                ValueError,
-                match="gamma must be in the interval \\[0,1\\].",
+                ValueError, match="gamma must be in the interval \\[0,1\\].",
             ):
                 test_noise(gamma)
         else:

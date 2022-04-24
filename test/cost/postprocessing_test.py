@@ -11,8 +11,7 @@ class TestPostProcessing:
         assert np.all(qnet.parity_vector(3) == [1, -1, -1, 1, -1, 1, 1, -1])
 
         with pytest.raises(
-            ValueError,
-            match="Input `n_qubits` must satisfy `n_qubits >= 1`.",
+            ValueError, match="Input `n_qubits` must satisfy `n_qubits >= 1`.",
         ):
             qnet.parity_vector(0)
 
@@ -23,7 +22,6 @@ class TestPostProcessing:
         assert np.all(qnet.even_parity_ids(3) == [0, 3, 5, 6])
 
         with pytest.raises(
-            ValueError,
-            match="Input `n_qubits` must satisfy `n_qubits >= 1`.",
+            ValueError, match="Input `n_qubits` must satisfy `n_qubits >= 1`.",
         ):
             qnet.parity_vector(0)
