@@ -38,7 +38,7 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     n = len(network_ansatz.prepare_nodes)
 
     prep_inputs = [0] * n
-    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2 ** n)]
+    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
 
     if parallel:
         from ..lazy_dask_import import dask
@@ -58,10 +58,10 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
 
         if parallel:
             I22_results = []
-            num_batches = int((2 ** n) / nthreads)
+            num_batches = int((2**n) / nthreads)
             for i in range(num_batches + 1):
                 start_id = i * nthreads
-                end_id = start_id + nthreads if i < num_batches else 2 ** n
+                end_id = start_id + nthreads if i < num_batches else 2**n
 
                 I22_delayed_results = [
                     dask.delayed(star_qnodes[i])(settings)
@@ -74,7 +74,7 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
         else:
             I22_results = math.array([star_qnode(settings) for settings in I22_x_settings])
 
-        return math.sum(I22_results) / (2 ** n)
+        return math.sum(I22_results) / (2**n)
 
     return I22
 
@@ -114,7 +114,7 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     n = len(network_ansatz.prepare_nodes)
 
     prep_inputs = [0] * n
-    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2 ** n)]
+    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
     if parallel:
         from ..lazy_dask_import import dask
@@ -134,10 +134,10 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
 
         if parallel:
             J22_expvals = []
-            num_batches = int((2 ** n) / nthreads)
+            num_batches = int((2**n) / nthreads)
             for i in range(num_batches + 1):
                 start_id = i * nthreads
-                end_id = start_id + nthreads if i < num_batches else 2 ** n
+                end_id = start_id + nthreads if i < num_batches else 2**n
 
                 J22_delayed_results = [
                     dask.delayed(star_qnodes[i])(settings)
@@ -154,7 +154,7 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
             [(-1) ** (math.sum(input_vals[0:n])) for input_vals in input_x_vals]
         )
 
-        return math.sum(J22_scalars * J22_expvals) / (2 ** n)
+        return math.sum(J22_scalars * J22_expvals) / (2**n)
 
     return J22
 
@@ -249,8 +249,8 @@ def parallel_nlocal_star_grad_fn(
         global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(nthreads)
     ]
 
-    I22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2 ** n)]
-    J22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2 ** n)]
+    I22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
+    J22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
     I22 = star_I22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
     J22 = star_J22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
@@ -285,10 +285,10 @@ def parallel_nlocal_star_grad_fn(
         grad_I22_results = []
         grad_J22_results = []
 
-        num_batches = int((2 ** n) / nthreads)
+        num_batches = int((2**n) / nthreads)
         for i in range(num_batches + 1):
             start_id = i * nthreads
-            end_id = start_id + nthreads if i < num_batches else 2 ** n
+            end_id = start_id + nthreads if i < num_batches else 2**n
 
             grad_I22_delayed_results = [
                 dask.delayed(_grad)(star_qnodes[i], settings)
@@ -308,16 +308,16 @@ def parallel_nlocal_star_grad_fn(
             -(1 / n)
             * np.power(math.abs(I22_score), (1 - n) / n)
             * math.sign(I22_score)
-            * (1 / (2 ** n))
+            * (1 / (2**n))
         )
         J22_scalar = (
             -(1 / n)
             * np.power(math.abs(J22_score), (1 - n) / n)
             * math.sign(J22_score)
-            * (1 / (2 ** n))
+            * (1 / (2**n))
         )
 
-        for i in range(2 ** n):
+        for i in range(2**n):
             I22_inputs = I22_x_vals[i]
             J22_inputs = J22_x_vals[i]
 
