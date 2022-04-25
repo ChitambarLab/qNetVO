@@ -246,7 +246,7 @@ The considered cost function dictates which type of QNode measurement is applied
 <h2>Probability QNodes<a class="headerlink" href="#probability-qnodes" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.joint_probs_qnode">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">joint_probs_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/qnodes.html#joint_probs_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.joint_probs_qnode" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">joint_probs_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#joint_probs_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.joint_probs_qnode" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a qnode that computes the joint probabilities in the computational basis
 across all measurement wires.</p>
 <dl class="field-list simple">
@@ -267,7 +267,7 @@ network ansatz.</p>
 <h2>Parity Observable QNodes<a class="headerlink" href="#parity-observable-qnodes" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.local_parity_expval_qnode">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">local_parity_expval_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/qnodes.html#local_parity_expval_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.local_parity_expval_qnode" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">local_parity_expval_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#local_parity_expval_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.local_parity_expval_qnode" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a qnode that computes expectation values for the local parity observable
 at each measurement node.</p>
 <dl class="field-list simple">
@@ -285,7 +285,7 @@ The qnode is called as <code class="docutils literal notranslate"><span class="p
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.global_parity_expval_qnode">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">global_parity_expval_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/qnodes.html#global_parity_expval_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.global_parity_expval_qnode" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">global_parity_expval_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#global_parity_expval_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.global_parity_expval_qnode" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a qnode that computes expectation values for the local parity observable
 at each measurement node.</p>
 <dl class="field-list simple">
@@ -304,7 +304,7 @@ at each measurement node.</p>
 <h3>Helper Functions for Parity Observables<a class="headerlink" href="#helper-functions-for-parity-observables" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.parity_observable">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parity_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/qnodes.html#parity_observable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parity_observable" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parity_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#parity_observable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parity_observable" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs the parity observable for the provided <code class="docutils literal notranslate"><span class="pre">wires</span></code> in the computational basis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -317,7 +317,7 @@ at each measurement node.</p>
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.local_parity_observables">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">local_parity_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measure_nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/qnodes.html#local_parity_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.local_parity_observables" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">local_parity_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measure_nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#local_parity_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.local_parity_observables" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a list of dichotomic observables for each measurement node.
 The observables are constructed as products of <code class="docutils literal notranslate"><span class="pre">qml.PauliZ</span></code> qubit operators and
 therefore, a <span class="math notranslate nohighlight">\(+1\)</span> outcome corresponds to an <em>Even</em> parity bit string whereas a
@@ -330,7 +330,7 @@ therefore, a <span class="math notranslate nohighlight">\(+1\)</span> outcome co
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.parity_vector">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parity_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/postprocessing.html#parity_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parity_vector" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parity_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/postprocessing.html#parity_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parity_vector" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a vector with elements <span class="math notranslate nohighlight">\(\pm 1\)</span> describing the parity of
 an <span class="math notranslate nohighlight">\(n\)</span>-bit string measured from <span class="math notranslate nohighlight">\(n\)</span>-qubits.
 The (+) and (-) elements indicate even and odd parity respectively and are placed in
@@ -346,7 +346,7 @@ the index corresponding to the bit string’s value.</p>
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.even_parity_ids">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">even_parity_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/postprocessing.html#even_parity_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.even_parity_ids" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">even_parity_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/postprocessing.html#even_parity_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.even_parity_ids" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs the list ids corresponding to even parity bit strings with respect
 to the vector returned by <code class="docutils literal notranslate"><span class="pre">parity_vector</span></code>.</p>
 <dl class="field-list simple">
