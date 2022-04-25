@@ -1,6 +1,6 @@
 from pennylane import math
-from .postprocessing import even_parity_ids
-from .qnodes import joint_probs_qnode, local_parity_expval_qnode
+from ..postprocessing import even_parity_ids
+from ..qnodes import joint_probs_qnode, local_parity_expval_qnode
 
 
 def post_process_I_3322_joint_probs(probs_vec):

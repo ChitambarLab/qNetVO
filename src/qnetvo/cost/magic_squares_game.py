@@ -1,5 +1,5 @@
 from pennylane import math
-from .qnodes import joint_probs_qnode
+from ..qnodes import joint_probs_qnode
 
 
 def magic_squares_game_cost(network_ansatz, **qnode_kwargs):
