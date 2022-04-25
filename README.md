@@ -48,7 +48,7 @@ Note
 </p>
 <p>
 For optimal use, qNetVO should be used with PennyLane.
-QNetVO is currently compatible with PennyLane v0.20.
+QNetVO is currently compatible with PennyLane v0.22.
 </p>
 </div>
 
