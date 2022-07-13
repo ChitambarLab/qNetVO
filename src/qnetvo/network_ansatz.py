@@ -229,7 +229,8 @@ class NetworkAnsatz:
         :returns: A 1D array of all settings for the circuit layer.
         :rtype: array[float]
         """
-        return math.concatenate(
+        # return math.concatenate(
+        return np.concatenate(
             [
                 scenario_settings[i][node_input]
                 if len(nodes[i].static_settings) == 0
@@ -256,7 +257,10 @@ class NetworkAnsatz:
 
         prep_settings = self.layer_settings(scenario_settings[0], prep_inputs, self.prepare_nodes)
         meas_settings = self.layer_settings(scenario_settings[1], meas_inputs, self.measure_nodes)
-        return np.concatenate([prep_settings, meas_settings])
+        # return np.concatenate([prep_settings, meas_settings])
+        blah = np.concatenate([prep_settings, meas_settings])
+        print({"blah" :  blah})
+        return blah
 
     @staticmethod
     def circuit_layer(network_nodes):
