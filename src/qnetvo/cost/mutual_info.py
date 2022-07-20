@@ -101,43 +101,40 @@ def mutual_info_cost_fn(
     return cost_fn
 
 
-def von_neumann_entropy(ansatz, **qnode_kwargs):
-    """Constructs an function that finds the von Neumann entropy through optimization
+def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
+    """Constructs an ansatz-specific Shannon entropy cost function
 
-        The von Neumann entropy quantifies how mixed a quantum state :math:'rho' is.
-        It is defined by the expression:
-        .. math::
+    The Shannon entropy characterizes the amount of randomness, or similarly, the amount of
+    information is present in a random variable. Formally, let :math:'X' be a discrete random
+    variable, then the Shannon entropy is defined by the expression:
+    .. math::
 
-                S(\\rho) = Tr(\\rho \\log(\\rho))
+            H(X) = \\sum_{x} P(x) log_{2} P(x)
 
-        where the :math:'\\log' operator here refers to the matrix logarithm. For any given state,
-        if we measure in its eigenbasis, the Shannon entropy is minimized and coincides with the
-        von Neumann entropy. As the measurement basis deviates from the eigenbases, the measurement
-        outcomes becomes noisier and Shannon entropy diverge from the von Neumann entropy. Thus,
-        the von Neumann entropy will be found by numerically finding the eigenbasis via minimizing
-        the Shannon entropy.
+    In the case of a quantum network, the Shannon entropy is defined on the measurement outcome
+    of the network ansatz.
 
-        :param ansatz: The ansatz circuit on which the von Neumann entropy is evalutated.
-        :type ansatz: NetworkAnsatz
+    :param ansatz: The ansatz circuit on which the Shannon entropy is evalutated.
+    :type ansatz: NetworkAnsatz
 
-        :param qnode_kwargs: Keyword arguments passed to the execute qnodes.
-        :type qnode_kwargs: dictionary
+    :param qnode_kwargs: Keyword arguments passed to the execute qnodes.
+    :type qnode_kwargs: dictionary
 
-        :returns: A cost function ``von_neumann_entropy(scenario_settings)`` parameterized by
-                  the ansatz-specific scenario settings.
-        :rtype: Function
-        """
+    :returns: A cost function ``shannon_entropy(scenario_settings)`` parameterized by
+              the ansatz-specific scenario settings.
+    :rtype: Function
+    """
     num_prep_nodes = len(ansatz.prepare_nodes)
     num_meas_nodes = len(ansatz.measure_nodes)
 
     probs_qnode = joint_probs_qnode(ansatz, **qnode_kwargs)
 
     def cost_fn(scenario_settings):
-        settings = ansatz.qnode_settings(scenario_settings, [0] * num_prep_nodes, [0] * num_meas_nodes)
-        py_vec = probs_qnode(settings)
+        settings = ansatz.qnode_settings(
+            scenario_settings, [0] * num_prep_nodes, [0] * num_meas_nodes
+        )
+        probs_vec = probs_qnode(settings)
 
-        Hy = shannon_entropy(py_vec)
-
-        return Hy
+        return shannon_entropy(probs_vec)
 
     return cost_fn
