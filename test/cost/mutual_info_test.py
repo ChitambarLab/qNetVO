@@ -111,8 +111,12 @@ class TestShannonEntropy:
         meas_node = [qnet.MeasureNode(1, 4, [0, 1], qml.ArbitraryUnitary, 4 ** 2 - 1)]
         gamma = 0.04
         noise_node = [
-            qnet.NoiseNode([0], lambda settings, wires: qml.DepolarizingChannel(gamma, wires)),
-            qnet.NoiseNode([1], lambda settings, wires: qml.DepolarizingChannel(gamma, wires)),
+            qnet.NoiseNode(
+                [0], lambda settings, wires: qml.DepolarizingChannel(gamma, wires)
+            ),
+            qnet.NoiseNode(
+                [1], lambda settings, wires: qml.DepolarizingChannel(gamma, wires)
+            ),
         ]
 
         ansatz = qnet.NetworkAnsatz(prep_node, meas_node, noise_node)
