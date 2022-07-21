@@ -85,9 +85,7 @@ def mutual_info_cost_fn(
                 prep_input_vals = [0] * num_prep_nodes
                 meas_input_vals = input_id_set[0:num_meas_nodes]
 
-            settings = ansatz.qnode_settings(
-                scenario_settings, prep_input_vals, meas_input_vals
-            )
+            settings = ansatz.qnode_settings(scenario_settings, prep_input_vals, meas_input_vals)
 
             p_mac = postmap @ probs_qnode(settings)
 
