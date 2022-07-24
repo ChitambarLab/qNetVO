@@ -107,6 +107,7 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
     The Shannon entropy characterizes the amount of randomness, or similarly, the amount of
     information is present in a random variable. Formally, let :math:'X' be a discrete random
     variable, then the Shannon entropy is defined by the expression:
+
     .. math::
 
             H(X) = \\sum_{x} P(x) log_{2} P(x)
