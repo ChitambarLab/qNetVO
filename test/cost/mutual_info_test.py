@@ -85,3 +85,42 @@ class TestMutualInfoOptimimzation:
         )
 
         assert np.isclose(opt_dict["scores"][-1], match, atol=0.0005)
+
+
+class TestShannonEntropy:
+    def test_shannon_entropy_pure_state(self):
+        np.random.seed(123)
+
+        prep_node = [qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0)]
+        meas_node = [qnet.MeasureNode(1, 4, [0, 1], qml.ArbitraryUnitary, 4**2 - 1)]
+
+        ansatz = qnet.NetworkAnsatz(prep_node, meas_node)
+        shannon_entropy = qnet.shannon_entropy_cost_fn(ansatz)
+
+        settings = ansatz.rand_scenario_settings()
+        opt_dict = qnet.gradient_descent(
+            shannon_entropy, settings, step_size=0.08, sample_width=5, num_steps=30
+        )
+
+        assert np.isclose(opt_dict["scores"][-1], 0, atol=0.0005)
+
+    def test_von_neumann_entropy_mixed_state(self):
+        np.random.seed(123)
+
+        prep_node = [qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0)]
+        meas_node = [qnet.MeasureNode(1, 4, [0, 1], qml.ArbitraryUnitary, 4**2 - 1)]
+        gamma = 0.04
+        noise_node = [
+            qnet.NoiseNode([0], lambda settings, wires: qml.DepolarizingChannel(gamma, wires)),
+            qnet.NoiseNode([1], lambda settings, wires: qml.DepolarizingChannel(gamma, wires)),
+        ]
+
+        ansatz = qnet.NetworkAnsatz(prep_node, meas_node, noise_node)
+        shannon_entropy = qnet.shannon_entropy_cost_fn(ansatz)
+
+        settings = ansatz.rand_scenario_settings()
+        opt_dict = qnet.gradient_descent(
+            shannon_entropy, settings, step_size=0.1, sample_width=5, num_steps=30
+        )
+
+        assert np.isclose(opt_dict["scores"][-1], -0.518, atol=0.0005)

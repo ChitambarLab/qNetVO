@@ -1,3 +1,4 @@
+from .version import __version__
 from qnetvo.utilities import *
 from qnetvo.network_ansatz import *
 from qnetvo.ansatz_library import *
