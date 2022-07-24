@@ -110,7 +110,7 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
 
     .. math::
 
-            H(X) = \\sum_{x} P(x) log_{2} P(x)
+            H(X) = \\sum_{x} P(x) \\log_{2} P(x)
 
     In the case of a quantum network, the Shannon entropy is defined on the measurement outcome
     of the network ansatz.
