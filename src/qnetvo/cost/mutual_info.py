@@ -99,3 +99,43 @@ def mutual_info_cost_fn(
         return -(mutual_info)
 
     return cost_fn
+
+
+def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
+    """Constructs an ansatz-specific Shannon entropy cost function
+
+    The Shannon entropy characterizes the amount of randomness, or similarly, the amount of
+    information is present in a random variable. Formally, let :math:'X' be a discrete random
+    variable, then the Shannon entropy is defined by the expression:
+
+    .. math::
+
+            H(X) = \\sum_{x} P(x) \\log_{2} P(x)
+
+    In the case of a quantum network, the Shannon entropy is defined on the measurement outcome
+    of the network ansatz.
+
+    :param ansatz: The ansatz circuit on which the Shannon entropy is evalutated.
+    :type ansatz: NetworkAnsatz
+
+    :param qnode_kwargs: Keyword arguments passed to the execute qnodes.
+    :type qnode_kwargs: dictionary
+
+    :returns: A cost function ``shannon_entropy(scenario_settings)`` parameterized by
+              the ansatz-specific scenario settings.
+    :rtype: Function
+    """
+    num_prep_nodes = len(ansatz.prepare_nodes)
+    num_meas_nodes = len(ansatz.measure_nodes)
+
+    probs_qnode = joint_probs_qnode(ansatz, **qnode_kwargs)
+
+    def cost_fn(scenario_settings):
+        settings = ansatz.qnode_settings(
+            scenario_settings, [0] * num_prep_nodes, [0] * num_meas_nodes
+        )
+        probs_vec = probs_qnode(settings)
+
+        return shannon_entropy(probs_vec)
+
+    return cost_fn
