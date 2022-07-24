@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Linear Cost Functions" href="linear_inequalities.html" /><link rel="prev" title="Cost Functions" href="index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
         <title>QNodes - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/qnetvo.css" />
     
@@ -237,124 +237,18 @@
 </div>
         <article role="main">
           <div class="section" id="qnodes">
-<h1>QNodes<a class="headerlink" href="#qnodes" title="Permalink to this headline">#</a></h1>
-<p>A <a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><code class="xref py py-meth docutils literal notranslate"><span class="pre">qnetvo.NetworkAnsatz()</span></code></a> is executed on a <a class="reference external" href="https://pennylane.readthedocs.io/en/stable/code/api/pennylane.QNode.html?highlight=qnode#qml-qnode">PennyLane QNode</a> object.
+<h1>QNodes<a class="headerlink" href="#qnodes" title="Permalink to this heading">#</a></h1>
+<p>A <code class="xref py py-meth docutils literal notranslate"><span class="pre">qnetvo.NetworkAnsatz()</span></code> is executed on a <a class="reference external" href="https://pennylane.readthedocs.io/en/stable/code/api/pennylane.QNode.html?highlight=qnode#qml-qnode">PennyLane QNode</a> object.
 The output of the QNode execution can either be the probility of obtaining
 each output or the expectation of an observable.
 The considered cost function dictates which type of QNode measurement is applied.</p>
 <div class="section" id="probability-qnodes">
-<h2>Probability QNodes<a class="headerlink" href="#probability-qnodes" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.joint_probs_qnode">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">joint_probs_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#joint_probs_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.joint_probs_qnode" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a qnode that computes the joint probabilities in the computational basis
-across all measurement wires.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A qnode called as <code class="docutils literal notranslate"><span class="pre">qnode(settings)</span></code> for evaluating the joint probabilities of the
-network ansatz.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pennylane.QNode</span></code></p>
-</dd>
-</dl>
-</dd></dl>
+<h2>Probability QNodes<a class="headerlink" href="#probability-qnodes" title="Permalink to this heading">#</a></h2>
 </div>
 <div class="section" id="parity-observable-qnodes">
-<h2>Parity Observable QNodes<a class="headerlink" href="#parity-observable-qnodes" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.local_parity_expval_qnode">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">local_parity_expval_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#local_parity_expval_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.local_parity_expval_qnode" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a qnode that computes expectation values for the local parity observable
-at each measurement node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A qnode that performs a local parity measurement at measurement nodes.
-The qnode is called as <code class="docutils literal notranslate"><span class="pre">qnode(settings)</span></code>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">qml.QNode</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.global_parity_expval_qnode">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">global_parity_expval_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#global_parity_expval_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.global_parity_expval_qnode" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a qnode that computes expectation values for the local parity observable
-at each measurement node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A qnode the performs a global parity measurement and is called as <code class="docutils literal notranslate"><span class="pre">qnode(settings)</span></code>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">qml.QNode</span></code></p>
-</dd>
-</dl>
-</dd></dl>
+<h2>Parity Observable QNodes<a class="headerlink" href="#parity-observable-qnodes" title="Permalink to this heading">#</a></h2>
 <div class="section" id="helper-functions-for-parity-observables">
-<h3>Helper Functions for Parity Observables<a class="headerlink" href="#helper-functions-for-parity-observables" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.parity_observable">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parity_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#parity_observable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parity_observable" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs the parity observable for the provided <code class="docutils literal notranslate"><span class="pre">wires</span></code> in the computational basis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>wires</strong> (<em>qml.wires.Wires</em>) – A list of <code class="docutils literal notranslate"><span class="pre">MeasureNode</span></code> classes for which to construct the observables.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A parity <code class="docutils literal notranslate"><span class="pre">qml.Observable</span></code> across all wires.</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.local_parity_observables">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">local_parity_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measure_nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#local_parity_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.local_parity_observables" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a list of dichotomic observables for each measurement node.
-The observables are constructed as products of <code class="docutils literal notranslate"><span class="pre">qml.PauliZ</span></code> qubit operators and
-therefore, a <span class="math notranslate nohighlight">\(+1\)</span> outcome corresponds to an <em>Even</em> parity bit string whereas a
-<span class="math notranslate nohighlight">\(-1\)</span> outcome corresponds to an <em>Odd</em> parity bit string.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>measure_nodes</strong> (<em>list</em><em>[ </em><a class="reference internal" href="../quantum_networks/network_nodes.html#qnetvo.MeasureNode" title="qnetvo.MeasureNode"><em>MeasureNode</em></a><em> ]</em>) – A list of <code class="docutils literal notranslate"><span class="pre">MeasureNode</span></code> classes for which to construct the observables.</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.parity_vector">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parity_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/postprocessing.html#parity_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parity_vector" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a vector with elements <span class="math notranslate nohighlight">\(\pm 1\)</span> describing the parity of
-an <span class="math notranslate nohighlight">\(n\)</span>-bit string measured from <span class="math notranslate nohighlight">\(n\)</span>-qubits.
-The (+) and (-) elements indicate even and odd parity respectively and are placed in
-the index corresponding to the bit string’s value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_qubits</strong> (<em>int</em>) – The number of qubits for which to consider the parity vector.</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">n_qubits</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.even_parity_ids">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">even_parity_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/postprocessing.html#even_parity_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.even_parity_ids" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs the list ids corresponding to even parity bit strings with respect
-to the vector returned by <code class="docutils literal notranslate"><span class="pre">parity_vector</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_qubits</strong> (<em>int</em>) – The number of qubits for which to consider the parity vector.</p>
-</dd>
-</dl>
-</dd></dl>
+<h3>Helper Functions for Parity Observables<a class="headerlink" href="#helper-functions-for-parity-observables" title="Permalink to this heading">#</a></h3>
 </div>
 </div>
 </div>
@@ -429,8 +323,8 @@ to the vector returned by <code class="docutils literal notranslate"><span class
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/scripts/furo.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

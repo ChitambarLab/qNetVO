@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Nonlocality Witnesses" href="nonlocality_witnesses/index.html" /><link rel="prev" title="Entropic Quantities" href="entropic_quantities.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
         <title>The Magic Squares Game - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/qnetvo.css" />
     
@@ -237,7 +237,7 @@
 </div>
         <article role="main">
           <div class="section" id="the-magic-squares-game">
-<h1>The Magic Squares Game<a class="headerlink" href="#the-magic-squares-game" title="Permalink to this headline">#</a></h1>
+<h1>The Magic Squares Game<a class="headerlink" href="#the-magic-squares-game" title="Permalink to this heading">#</a></h1>
 <p>Magic squares is a cooperative game where two players Alice and Bob each produce a
 three-bit string <span class="math notranslate nohighlight">\((a_0,a_1,a_2)\)</span> and <span class="math notranslate nohighlight">\((b_0,b_1,b_2)\)</span>.
 Alice’s bitstring is required to have even parity while Bob’s must have odd parity.
@@ -266,25 +266,7 @@ has odd parity.</p></li>
 <li><p>The winning condition <span class="math notranslate nohighlight">\(a_y = b_x\)</span> is evaluated.</p></li>
 </ol>
 <p>As an example, optimal state preparation and measurements are provided in <a class="reference internal" href="#brassard2005" id="id6"><span>[Brassard2005]</span></a>.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.magic_squares_game_cost">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">magic_squares_game_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/magic_squares_game.html#magic_squares_game_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.magic_squares_game_cost" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a cost function that maximizes the winning probability for the magic squares game.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(scenario_settings)</span></code> where
-the <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code> are obtained from the provided
-<code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Function</p>
-</dd>
-</dl>
-</dd></dl>
-<hr class="docutils"/>
+<hr class="docutils" />
 <p><strong>References</strong></p>
 <dl class="citation">
 <dt class="label" id="mermin1990-magic-squares"><span class="brackets"><a class="fn-backref" href="#id1">Mermin1990_magic_squares</a></span></dt>
@@ -357,6 +339,7 @@ Foundations of Physics 35.11 (2005): 1877-1907.</p>
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
