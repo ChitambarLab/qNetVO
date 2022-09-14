@@ -255,6 +255,95 @@ classical case and entanglement in the quantum case.</p>
 correlator for dichotomic observables <span class="math notranslate nohighlight">\(A_x\)</span> and <span class="math notranslate nohighlight">\(B_y\)</span> with eigenvalues <span class="math notranslate nohighlight">\(\pm  1\)</span>.
 Quantum entanglement yields a maximal CHSH score of of <span class="math notranslate nohighlight">\(I_{CHSH}=\leq \beta^Q_{CHSH} = 2\sqrt{2}\)</span>
 <a class="reference internal" href="#cirelson1980" id="id2"><span>[Cirelson1980]</span></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.chsh_inequality_cost">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">chsh_inequality_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chsh_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/chsh_inequality.html#chsh_inequality_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.chsh_inequality_cost" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a cost function for maximizing the score against the CHSH Bell inequality.
+This inequality is defined as</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[I_{CHSH} = \sum_{x,y\in\{0,1\}}(-1)^{x\cdot y}\langle A_x B_y \rangle\]</div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\langle A_x B_y \rangle = \sum_{a,b\in\{-1,1\}} a\cdot b P(a,b|x,y)\)</span> is
+the two-body correlator between dichotomic observables <span class="math notranslate nohighlight">\(A_x\)</span> and <span class="math notranslate nohighlight">\(B_y\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p></li>
+<li><p><strong>parallel</strong> (<em>optional</em> bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, remote qnode executions are made in parallel web requests.</p></li>
+<li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – Keyword arguments used only for <code class="docutils literal notranslate"><span class="pre">pennylane.qnode</span></code> construction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(scenario_settings)</span></code> where
+the <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code> are obtained from the provided
+<code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.parallel_chsh_grad">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parallel_chsh_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chsh_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/chsh_inequality.html#parallel_chsh_grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parallel_chsh_grad" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a parallelizeable gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn</span></code> for the CHSH
+cost.</p>
+<p>The parallelization is achieved through multithreading and intended to improve the
+efficiency of remote qnode execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chsh_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the network for which the CHSH inequality considered.</p></li>
+<li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn(scenario_settings)</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.chsh_natural_grad">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">chsh_natural_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chsh_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/chsh_inequality.html#chsh_natural_grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.chsh_natural_grad" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a parallelized natural gradient function <code class="docutils literal notranslate"><span class="pre">natural_grad</span></code> for the CHSH
+cost function.</p>
+<p>The parallelization is achieved through multithreading and intended to improve the
+efficiency of remote qnode execution.
+The natural gradient</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\nabla_{ng}I_{CHSH}(\vec{\theta}):= g^{-1}(\vec{\theta})\nabla I_{CHSH}(\vec{\theta})\]</div>
+</div>
+<p>scales the euclidean gradient <span class="math notranslate nohighlight">\(\nabla\)</span> by the pseudo-inverse of the Fubini-Study metric tensor
+<span class="math notranslate nohighlight">\(g^{-1}(\vec{\theta})\)</span>.
+The natural gradient of the <span class="math notranslate nohighlight">\(-I_{CHSH}(\vec{\theta})\)</span> cost function is evaluated directly as</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}-\nabla_{ng}I_{CHSH}(\vec{\theta})  &amp;= -\nabla_{ng}\sum_{x,y=0}^1 (-1)^{x \wedge y}\langle A_x B_y\rangle(\vec{\theta}_{x,y}) \\
+&amp;= -\sum_{x,y=0}^1 (-1)^{x \wedge y}\nabla_{ng}\langle A_x B_y \rangle(\vec{\theta_{x,y}}) \\
+&amp;= -\sum_{x,y=0}^1(-1)^{x \wedge y}g^{-1}(\vec{\theta}_{x,y})\nabla\langle A_x B_y \rangle(\vec{\theta}_{x,y})\end{split}\]</div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\langle A_x B_y \rangle(\vec{\theta}_{x,y})\)</span> is the expectation value of observables
+<span class="math notranslate nohighlight">\(A_x\)</span> and <span class="math notranslate nohighlight">\(B_y\)</span> parameterized by the settings <span class="math notranslate nohighlight">\(\vec{\theta}_{x,y}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chsh_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the network for which the CHSH inequality considered.</p></li>
+<li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn(scenario_settings)</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <dl class="citation">

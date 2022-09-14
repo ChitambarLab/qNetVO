@@ -266,6 +266,25 @@ has odd parity.</p></li>
 <li><p>The winning condition <span class="math notranslate nohighlight">\(a_y = b_x\)</span> is evaluated.</p></li>
 </ol>
 <p>As an example, optimal state preparation and measurements are provided in <a class="reference internal" href="#brassard2005" id="id6"><span>[Brassard2005]</span></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.magic_squares_game_cost">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">magic_squares_game_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/magic_squares_game.html#magic_squares_game_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.magic_squares_game_cost" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a cost function that maximizes the winning probability for the magic squares game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(scenario_settings)</span></code> where
+the <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code> are obtained from the provided
+<code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Function</p>
+</dd>
+</dl>
+</dd></dl>
+
 <hr class="docutils" />
 <p><strong>References</strong></p>
 <dl class="citation">

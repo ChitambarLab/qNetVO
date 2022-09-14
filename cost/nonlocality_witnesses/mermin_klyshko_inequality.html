@@ -262,6 +262,84 @@ to execute.</p>
 while the quantum bound is <span class="math notranslate nohighlight">\(2^{3(n-1)/2}\)</span> <a class="reference internal" href="#cabello2002" id="id6"><span>[Cabello2002]</span></a>.
 A remarkable feature of the Mermin-Klyshko inequality is that the
 separation between the quantum and classical bounds grows exponentialy with <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.mermin_klyshko_cost_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">mermin_klyshko_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/mermin_klyshko_inequality.html#mermin_klyshko_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.mermin_klyshko_cost_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs an ansatz-specific cost function based upon the
+Mermin-Klyshko (MK) inequality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The network ansatz for which to apply the MK inequality.</p></li>
+<li><p><strong>qnode_kwargs</strong> – Keyword arguments passed through to the qnode constructors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A cost function, <code class="docutils literal notranslate"><span class="pre">cost(network_settings)</span></code>, that evaluates <span class="math notranslate nohighlight">\(-I_{\text{MK}}\)</span>
+for the supplied network settings.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.mermin_klyshko_inputs_scalars">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">mermin_klyshko_inputs_scalars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/mermin_klyshko_inequality.html#mermin_klyshko_inputs_scalars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.mermin_klyshko_inputs_scalars" title="Permalink to this definition">#</a></dt>
+<dd><p>Helper function for handling the algebra of combining correlator terms
+in the Mermin-Klyshko (MK) inequality.</p>
+<p>This function supports <a class="reference internal" href="#qnetvo.mermin_klyshko_cost_fn" title="qnetvo.mermin_klyshko_cost_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mermin_klyshko_cost_fn()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>Int</em>) – The number of measurement nodes in the scenario.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The first element of the returned tuple is a list of
+measurement inputs <span class="math notranslate nohighlight">\(y_j\in\{0,1\}\)</span> for the MK
+correlator terms. The second element of the returned tuple
+is a list of scalar multipliers for each correlator term.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple(List[Int], List[Int])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.mermin_klyshko_classical_bound">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">mermin_klyshko_classical_bound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/mermin_klyshko_inequality.html#mermin_klyshko_classical_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.mermin_klyshko_classical_bound" title="Permalink to this definition">#</a></dt>
+<dd><p>The classical bound for the Mermin-Klyshko inequality is <span class="math notranslate nohighlight">\(2^{n-1}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>Int</em>) – The number of measurement nodes.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The classical bound.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.mermin_klyshko_quantum_bound">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">mermin_klyshko_quantum_bound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/mermin_klyshko_inequality.html#mermin_klyshko_quantum_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.mermin_klyshko_quantum_bound" title="Permalink to this definition">#</a></dt>
+<dd><p>The quantum bound for the Mermin-Klyshko inequality is <span class="math notranslate nohighlight">\(2^{3(n-1)/2}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>Int</em>) – The number of measurement nodes.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The quantum bound.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Float</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <dl class="citation">

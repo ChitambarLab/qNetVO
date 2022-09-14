@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.cost.magic_squares_game - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/qnetvo.css" />
     
@@ -242,7 +242,7 @@
 
 
 <div class="viewcode-block" id="magic_squares_game_cost"><a class="viewcode-back" href="../../../cost/magic_squares_game.html#qnetvo.magic_squares_game_cost">[docs]</a><span class="k">def</span> <span class="nf">magic_squares_game_cost</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">"""Constructs a cost function that maximizes the winning probability for the magic squares game.</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a cost function that maximizes the winning probability for the magic squares game.</span>
 
 <span class="sd">    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.</span>
 <span class="sd">    :type network_ansatz: NetworkAnsatz</span>
@@ -251,7 +251,7 @@
 <span class="sd">              the ``scenario_settings`` are obtained from the provided</span>
 <span class="sd">              ``network_ansatz`` class.</span>
 <span class="sd">    :rtype: Function</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">probs_qnode</span> <span class="o">=</span> <span class="n">joint_probs_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
     <span class="n">prep_inputs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">)</span>
 
@@ -303,6 +303,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

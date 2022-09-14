@@ -260,6 +260,56 @@ The classical upper bound is known to be <span class="math notranslate nohighlig
 upper bound for local qubit Hilbert spaces is <span class="math notranslate nohighlight">\(I_{3322} \leq \beta_Q = 0.25\)</span> and has been
 found to be bounded by <span class="math notranslate nohighlight">\(\beta_Q \leq 0.250\: 875\: 38\)</span> for local Hilbert spaces
 infinite dimension <a class="reference internal" href="#pal2010" id="id3"><span>[Pal2010]</span></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.post_process_I_3322_joint_probs">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">post_process_I_3322_joint_probs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/I_3322_bell_inequality.html#post_process_I_3322_joint_probs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.post_process_I_3322_joint_probs" title="Permalink to this definition">#</a></dt>
+<dd><p>Applies post-processing to multi-qubit probabilities in order to coarse-grain
+them into the dichotomic parity observables required by the <span class="math notranslate nohighlight">\(I_{3322}\)</span> inequality.</p>
+<p>An <span class="math notranslate nohighlight">\(N\)</span>-qubit circuit has <span class="math notranslate nohighlight">\(2^N\)</span> measurement outcomes.
+To construct the joint probabilitye <span class="math notranslate nohighlight">\(P(00|xy)\)</span> for binary outputs, the joint
+probabilities can be partitioned into two sets, <span class="math notranslate nohighlight">\(\{Even\}\)</span> and :math`{Odd}` which
+denote the set of <em>Even</em> and <em>Odd</em> parity bit strings.
+The <span class="math notranslate nohighlight">\(2^N\)</span> joint probabilities are expressed as <span class="math notranslate nohighlight">\(P(\vec{a},\vec{b}|x,y)\)</span> where
+<span class="math notranslate nohighlight">\(\vec{a}\)</span> and <span class="math notranslate nohighlight">\(\vec{b}\)</span> are each <span class="math notranslate nohighlight">\(N\)</span>-bit strings.
+Since the <span class="math notranslate nohighlight">\(I_{3322}\)</span> inequality only requires dichotomic probabilities <span class="math notranslate nohighlight">\(P(00|xy)\)</span>,
+our post-processing only needs to calculate this value.
+To reduce the joint probabilities <span class="math notranslate nohighlight">\(P(\vec{a},\vec{b}|x,y)\)</span> to dichotomic probabilities
+<span class="math notranslate nohighlight">\(P(00|x,y)\)</span> we aggregate the probabilities of even parity bit strings with</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[P(00|xy) = \{Even\}_A\{Even\}_B
+= \sum_{\vec{a}\in \{Even\}} \sum_{\vec{b}\in\{Even\}} P(\vec{a},\vec{b}|x,y).\]</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_qubits</strong> (<em>int</em>) – The number of wires measured to obtained the joint probabilites.</p></li>
+<li><p><strong>probs_vec</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – A probability vector obtained by measuring all wires in the
+computational basis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The dichotomic probability <span class="math notranslate nohighlight">\(P(00|xy)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.I_3322_bell_inequality_cost">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">I_3322_bell_inequality_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/I_3322_bell_inequality.html#I_3322_bell_inequality_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.I_3322_bell_inequality_cost" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a cost function that maximizes the score of the <span class="math notranslate nohighlight">\(I_{3322}\)</span> Bell inequality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(scenario_settings)</span></code> where
+the <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code> are obtained from the provided
+<code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <dl class="citation">

@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.qnodes - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -242,13 +242,13 @@
 
 
 <div class="viewcode-block" id="parity_observable"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.parity_observable">[docs]</a><span class="k">def</span> <span class="nf">parity_observable</span><span class="p">(</span><span class="n">wires</span><span class="p">):</span>
-    <span class="sd">"""Constructs the parity observable for the provided ``wires`` in the computational basis.</span>
+    <span class="sd">&quot;&quot;&quot;Constructs the parity observable for the provided ``wires`` in the computational basis.</span>
 
 <span class="sd">    :param wires: A list of ``MeasureNode`` classes for which to construct the observables.</span>
 <span class="sd">    :type wires: qml.wires.Wires</span>
 
 <span class="sd">    :returns: A parity ``qml.Observable`` across all wires.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">obs</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">PauliZ</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">wire</span> <span class="ow">in</span> <span class="n">wires</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="n">obs</span> <span class="o">@</span> <span class="n">qml</span><span class="o">.</span><span class="n">PauliZ</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="n">wire</span><span class="p">)</span>
@@ -257,14 +257,14 @@
 
 
 <div class="viewcode-block" id="local_parity_observables"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.local_parity_observables">[docs]</a><span class="k">def</span> <span class="nf">local_parity_observables</span><span class="p">(</span><span class="n">measure_nodes</span><span class="p">):</span>
-    <span class="sd">"""Constructs a list of dichotomic observables for each measurement node.</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a list of dichotomic observables for each measurement node.</span>
 <span class="sd">    The observables are constructed as products of ``qml.PauliZ`` qubit operators and</span>
 <span class="sd">    therefore, a :math:`+1` outcome corresponds to an *Even* parity bit string whereas a</span>
 <span class="sd">    :math:`-1` outcome corresponds to an *Odd* parity bit string.</span>
 
 <span class="sd">    :param measure_nodes: A list of ``MeasureNode`` classes for which to construct the observables.</span>
 <span class="sd">    :type measure_nodes: list[ MeasureNode ]</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">obs_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">measure_nodes</span><span class="p">:</span>
         <span class="n">obs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parity_observable</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">wires</span><span class="p">))</span>
@@ -273,7 +273,7 @@
 
 
 <div class="viewcode-block" id="local_parity_expval_qnode"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.local_parity_expval_qnode">[docs]</a><span class="k">def</span> <span class="nf">local_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">"""Constructs a qnode that computes expectation values for the local parity observable</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a qnode that computes expectation values for the local parity observable</span>
 <span class="sd">    at each measurement node.</span>
 
 <span class="sd">    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.</span>
@@ -282,7 +282,7 @@
 <span class="sd">    :returns: A qnode that performs a local parity measurement at measurement nodes.</span>
 <span class="sd">              The qnode is called as ``qnode(settings)``.</span>
 <span class="sd">    :rtype: ``qml.QNode``</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">observables</span> <span class="o">=</span> <span class="n">local_parity_observables</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span>
 
     <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">device</span><span class="p">(),</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
@@ -295,7 +295,7 @@
 
 
 <div class="viewcode-block" id="global_parity_expval_qnode"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.global_parity_expval_qnode">[docs]</a><span class="k">def</span> <span class="nf">global_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">"""Constructs a qnode that computes expectation values for the local parity observable</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a qnode that computes expectation values for the local parity observable</span>
 <span class="sd">    at each measurement node.</span>
 
 <span class="sd">    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.</span>
@@ -303,7 +303,7 @@
 
 <span class="sd">    :returns: A qnode the performs a global parity measurement and is called as ``qnode(settings)``.</span>
 <span class="sd">    :rtype: ``qml.QNode``</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parity_obs</span> <span class="o">=</span> <span class="n">parity_observable</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">measure_wires</span><span class="p">)</span>
 
     <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">device</span><span class="p">(),</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
@@ -316,7 +316,7 @@
 
 
 <div class="viewcode-block" id="joint_probs_qnode"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.joint_probs_qnode">[docs]</a><span class="k">def</span> <span class="nf">joint_probs_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">"""Constructs a qnode that computes the joint probabilities in the computational basis</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a qnode that computes the joint probabilities in the computational basis</span>
 <span class="sd">    across all measurement wires.</span>
 
 <span class="sd">    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.</span>
@@ -325,7 +325,7 @@
 <span class="sd">    :returns: A qnode called as ``qnode(settings)`` for evaluating the joint probabilities of the</span>
 <span class="sd">              network ansatz.</span>
 <span class="sd">    :rtype: ``pennylane.QNode``</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">device</span><span class="p">(),</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
@@ -360,6 +360,7 @@
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>

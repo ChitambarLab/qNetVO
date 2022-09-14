@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.postprocessing - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -241,18 +241,18 @@
 
 
 <div class="viewcode-block" id="parity_vector"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.parity_vector">[docs]</a><span class="k">def</span> <span class="nf">parity_vector</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
-    <span class="sd">"""Constructs a vector with elements :math:`\\pm 1` describing the parity of</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a vector with elements :math:`\\pm 1` describing the parity of</span>
 <span class="sd">    an :math:`n`-bit string measured from :math:`n`-qubits.</span>
 <span class="sd">    The (+) and (-) elements indicate even and odd parity respectively and are placed in</span>
-<span class="sd">    the index corresponding to the bit string's value.</span>
+<span class="sd">    the index corresponding to the bit string&#39;s value.</span>
 
 <span class="sd">    :param n_qubits: The number of qubits for which to consider the parity vector.</span>
 <span class="sd">    :type n_qubits: int</span>
 
 <span class="sd">    :raises ValueError: If ``n_qubits &lt; 1``.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">n_qubits</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input `n_qubits` must satisfy `n_qubits &gt;= 1`."</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input `n_qubits` must satisfy `n_qubits &gt;= 1`.&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
@@ -262,12 +262,12 @@
 
 
 <div class="viewcode-block" id="even_parity_ids"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.even_parity_ids">[docs]</a><span class="k">def</span> <span class="nf">even_parity_ids</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
-    <span class="sd">"""Constructs the list ids corresponding to even parity bit strings with respect</span>
+    <span class="sd">&quot;&quot;&quot;Constructs the list ids corresponding to even parity bit strings with respect</span>
 <span class="sd">    to the vector returned by ``parity_vector``.</span>
 
 <span class="sd">    :param n_qubits: The number of qubits for which to consider the parity vector.</span>
 <span class="sd">    :type n_qubits: int</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">p_vec</span> <span class="o">=</span> <span class="n">parity_vector</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">p_vec</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 </pre></div>
@@ -296,6 +296,7 @@
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>

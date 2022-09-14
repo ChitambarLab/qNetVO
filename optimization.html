@@ -236,6 +236,62 @@
         <article role="main">
           <div class="section" id="optimization">
 <h1>Optimization<a class="headerlink" href="#optimization" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.gradient_descent">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">gradient_descent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'autograd'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qnetvo/gradient_descent.html#gradient_descent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.gradient_descent" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs a numerical gradient descent optimization on the provided <code class="docutils literal notranslate"><span class="pre">cost</span></code> function.
+The optimization is seeded with (random) <code class="docutils literal notranslate"><span class="pre">init_settings</span></code> which are then varied to
+minimze the cost.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cost</strong> (<em>function</em>) – The cost function to be minimized with gradient descent.</p></li>
+<li><p><strong>init_settings</strong> (<em>array-like</em><em>[</em><em>float</em><em>]</em>) – A valid input for the cost function.</p></li>
+<li><p><strong>num_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of gradient descent iterations, defaults to <code class="docutils literal notranslate"><span class="pre">150</span></code>.</p></li>
+<li><p><strong>step_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The learning rate for the gradient descent, defaults to <code class="docutils literal notranslate"><span class="pre">0.1</span></code>.</p></li>
+<li><p><strong>sample_width</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of steps between “sampled” costs which are printed/returned
+to user, defaults to <code class="docutils literal notranslate"><span class="pre">25</span></code>.</p></li>
+<li><p><strong>grad_fn</strong> (<em>function</em><em>, </em><em>optional</em>) – A custom gradient function, default to <code class="docutils literal notranslate"><span class="pre">None</span></code> which applies the standard numerical gradient.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, progress is printed during the optimization, defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>interface</strong> (string, default <code class="docutils literal notranslate"><span class="pre">&quot;autograd</span></code>”) – Specifies the optimizer software either <code class="docutils literal notranslate"><span class="pre">&quot;autograd&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;tf&quot;</span></code> (TensorFlow).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Data regarding the gradient descent optimization.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><p>dictionary, contains the following keys:</p>
+<ul class="simple">
+<li><p><strong>opt_score</strong> (<em>float</em>) - The maximized reward <code class="docutils literal notranslate"><span class="pre">-(min_cost)</span></code>.</p></li>
+<li><p><strong>opt_settings</strong> (<em>array-like[float]</em>) - The setting for which the optimum is achieved.</p></li>
+<li><p><strong>scores</strong> (<em>array[float]</em>) - The list of rewards sampled during the gradient descent.</p></li>
+<li><p><strong>samples</strong> (<em>array[int]</em>) - A list containing the iteration for each sample.</p></li>
+<li><p><strong>settings_history</strong> (<em>array[array-like]</em>) - A list of all settings found for each
+intermediate step of gradient descent</p></li>
+<li><p><strong>datetime</strong> (<em>string</em>) - The date and time in UTC when the optimization occurred.</p></li>
+<li><p><strong>step_times</strong> (<em>list[float]</em>) - The time elapsed during each sampled optimization step.</p></li>
+<li><p><strong>step_size</strong> (<em>float</em>) - The learning rate of the optimization.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">gradient_descent</span></code> function minimizes the cost function, however, the general
+use case within this project is to maximize the violation of a Bell inequality.
+The maximization is assumed within <code class="docutils literal notranslate"><span class="pre">gradient_descent</span></code> and is applied by multiplying
+the cost by (-1). This is an abuse of function naming and will be resolved in a future
+commit by having <code class="docutils literal notranslate"><span class="pre">gradient_descent</span></code> return the minimized cost rather than the maximized
+reward. The resolution is to wrap <code class="docutils literal notranslate"><span class="pre">gradient_descent</span></code> with a <code class="docutils literal notranslate"><span class="pre">gradient_ascent</span></code> function
+which maximizes a reward function equivalent to <code class="docutils literal notranslate"><span class="pre">-(cost)</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the <code class="docutils literal notranslate"><span class="pre">interface</span></code> is not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
         </article>

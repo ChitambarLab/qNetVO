@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.cost.mutual_info - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/qnetvo.css" />
     
@@ -246,9 +246,9 @@
 
 
 <div class="viewcode-block" id="mutual_info_cost_fn"><a class="viewcode-back" href="../../../cost/entropic_quantities.html#qnetvo.mutual_info_cost_fn">[docs]</a><span class="k">def</span> <span class="nf">mutual_info_cost_fn</span><span class="p">(</span>
-    <span class="n">ansatz</span><span class="p">,</span> <span class="n">priors</span><span class="p">,</span> <span class="n">postmap</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">static_layer</span><span class="o">=</span><span class="s2">"measure"</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span>
+    <span class="n">ansatz</span><span class="p">,</span> <span class="n">priors</span><span class="p">,</span> <span class="n">postmap</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">static_layer</span><span class="o">=</span><span class="s2">&quot;measure&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span>
 <span class="p">):</span>
-    <span class="sd">"""Constructs an ansatz-specific mutual information cost function.</span>
+    <span class="sd">&quot;&quot;&quot;Constructs an ansatz-specific mutual information cost function.</span>
 
 <span class="sd">    The mutual information quantifies the information shared by two distributions</span>
 <span class="sd">    :math:`X` and :math:`Y`.</span>
@@ -276,9 +276,9 @@
 <span class="sd">                    quantum device into the measurement node outputs.</span>
 <span class="sd">    :type postmap: np.array</span>
 
-<span class="sd">    :param static_layer: Either ``"prepare"`` or ``"measure"``, specifies which</span>
+<span class="sd">    :param static_layer: Either ``&quot;prepare&quot;`` or ``&quot;measure&quot;``, specifies which</span>
 <span class="sd">                         network layer is held constant over all inputs.</span>
-<span class="sd">    :type static_layer: String, default ``"measure"``.</span>
+<span class="sd">    :type static_layer: String, default ``&quot;measure&quot;``.</span>
 
 <span class="sd">    :param qnode_kwargs: Keyword arguments passed to the execute qnodes.</span>
 <span class="sd">    :type qnode_kwargs: dictionary</span>
@@ -286,7 +286,7 @@
 <span class="sd">    :returns: A cost function ``mutual_info_cost(scenario_settings)`` parameterized by</span>
 <span class="sd">              the ansatz-specific scenario settings.</span>
 <span class="sd">    :rtype: Function</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">num_prep_inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">prep_node</span><span class="o">.</span><span class="n">num_in</span> <span class="k">for</span> <span class="n">prep_node</span> <span class="ow">in</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">]</span>
     <span class="n">num_prep_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">)</span>
@@ -294,7 +294,7 @@
     <span class="n">num_meas_inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">meas_node</span><span class="o">.</span><span class="n">num_in</span> <span class="k">for</span> <span class="n">meas_node</span> <span class="ow">in</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">]</span>
     <span class="n">num_meas_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span>
 
-    <span class="n">num_inputs</span> <span class="o">=</span> <span class="n">num_prep_inputs</span> <span class="k">if</span> <span class="n">static_layer</span> <span class="o">==</span> <span class="s2">"measure"</span> <span class="k">else</span> <span class="n">num_meas_inputs</span>
+    <span class="n">num_inputs</span> <span class="o">=</span> <span class="n">num_prep_inputs</span> <span class="k">if</span> <span class="n">static_layer</span> <span class="o">==</span> <span class="s2">&quot;measure&quot;</span> <span class="k">else</span> <span class="n">num_meas_inputs</span>
 
     <span class="n">net_num_in</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">num_inputs</span><span class="p">)</span>
     <span class="n">node_input_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">mixed_base_num</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">num_inputs</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">net_num_in</span><span class="p">)]</span>
@@ -317,7 +317,7 @@
         <span class="n">py_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">net_num_out</span><span class="p">)</span>
         <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">input_id_set</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_input_ids</span><span class="p">):</span>
 
-            <span class="k">if</span> <span class="n">static_layer</span> <span class="o">==</span> <span class="s2">"measure"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">static_layer</span> <span class="o">==</span> <span class="s2">&quot;measure&quot;</span><span class="p">:</span>
                 <span class="n">prep_input_vals</span> <span class="o">=</span> <span class="n">input_id_set</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">num_prep_nodes</span><span class="p">]</span>
                 <span class="n">meas_input_vals</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_meas_nodes</span>
             <span class="k">else</span><span class="p">:</span>
@@ -336,6 +336,46 @@
         <span class="n">mutual_info</span> <span class="o">=</span> <span class="n">Hx</span> <span class="o">+</span> <span class="n">Hy</span> <span class="o">-</span> <span class="n">Hxy</span>
 
         <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">mutual_info</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cost_fn</span></div>
+
+
+<div class="viewcode-block" id="shannon_entropy_cost_fn"><a class="viewcode-back" href="../../../cost/entropic_quantities.html#qnetvo.shannon_entropy_cost_fn">[docs]</a><span class="k">def</span> <span class="nf">shannon_entropy_cost_fn</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Constructs an ansatz-specific Shannon entropy cost function</span>
+
+<span class="sd">    The Shannon entropy characterizes the amount of randomness, or similarly, the amount of</span>
+<span class="sd">    information is present in a random variable. Formally, let :math:&#39;X&#39; be a discrete random</span>
+<span class="sd">    variable, then the Shannon entropy is defined by the expression:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">            H(X) = \\sum_{x} P(x) \\log_{2} P(x)</span>
+
+<span class="sd">    In the case of a quantum network, the Shannon entropy is defined on the measurement outcome</span>
+<span class="sd">    of the network ansatz.</span>
+
+<span class="sd">    :param ansatz: The ansatz circuit on which the Shannon entropy is evalutated.</span>
+<span class="sd">    :type ansatz: NetworkAnsatz</span>
+
+<span class="sd">    :param qnode_kwargs: Keyword arguments passed to the execute qnodes.</span>
+<span class="sd">    :type qnode_kwargs: dictionary</span>
+
+<span class="sd">    :returns: A cost function ``shannon_entropy(scenario_settings)`` parameterized by</span>
+<span class="sd">              the ansatz-specific scenario settings.</span>
+<span class="sd">    :rtype: Function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_prep_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">)</span>
+    <span class="n">num_meas_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span>
+
+    <span class="n">probs_qnode</span> <span class="o">=</span> <span class="n">joint_probs_qnode</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">cost_fn</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">):</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span>
+            <span class="n">scenario_settings</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_prep_nodes</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_meas_nodes</span>
+        <span class="p">)</span>
+        <span class="n">probs_vec</span> <span class="o">=</span> <span class="n">probs_qnode</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">shannon_entropy</span><span class="p">(</span><span class="n">probs_vec</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">cost_fn</span></div>
 </pre></div>
@@ -364,6 +404,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

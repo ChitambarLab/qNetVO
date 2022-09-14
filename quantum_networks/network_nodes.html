@@ -251,12 +251,76 @@ operation and/or a classical output obtained after the applying the quantum oper
 </ul>
 <div class="section" id="prepare-nodes">
 <h2>Prepare Nodes<a class="headerlink" href="#prepare-nodes" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="qnetvo.PrepareNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">PrepareNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantum_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#PrepareNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.PrepareNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A class that configures each preparation node in the quantum network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_in</strong> (<em>int</em>) – The number of classical inputs for the node.</p></li>
+<li><p><strong>wires</strong> (<em>array</em><em>[</em><em>int</em><em>]</em>) – A list of wires on which the node is defined.</p></li>
+<li><p><strong>quantum_fn</strong> (<em>function</em>) – A PennyLane quantum function which accepts as input the
+positional arguments <code class="docutils literal notranslate"><span class="pre">(settings,</span> <span class="pre">wires)</span></code> where settings is an <em>array[float]</em>
+of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p></li>
+<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings that the quantum function accepts.</p></li>
+<li><p><strong>static_settings</strong> (<em>optional</em><em>, </em><em>array-like</em>) – A set of fixed settings for the preparation node.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">PrepareNode</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="noise-nodes">
 <h2>Noise Nodes<a class="headerlink" href="#noise-nodes" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="qnetvo.NoiseNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">NoiseNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wires</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantum_fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NoiseNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NoiseNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A class that configures each noise node in the quantum network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wires</strong> (<em>array</em><em>[</em><em>int</em><em>]</em>) – A list of wires on which the node is defined.</p></li>
+<li><p><strong>quantum_fn</strong> (<em>function</em>) – A PennyLane quantum function which accepts as input the
+positional arguments <code class="docutils literal notranslate"><span class="pre">(settings,</span> <span class="pre">wires)</span></code> where settings is an <em>array[float]</em>
+of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">NoiseNode</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="measure-nodes">
 <h2>Measure Nodes<a class="headerlink" href="#measure-nodes" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="qnetvo.MeasureNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">MeasureNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantum_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#MeasureNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.MeasureNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A class that configures each measurement node in the quantum network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_in</strong> (<em>int</em>) – The number of classical inputs for the node.</p></li>
+<li><p><strong>num_out</strong> (<em>int</em>) – The number of classical outputs for the node.</p></li>
+<li><p><strong>wires</strong> (<em>array</em><em>[</em><em>int</em><em>]</em>) – A list of wires on which the node is defined.</p></li>
+<li><p><strong>quantum_fn</strong> (<em>function</em>) – A PennyLane quantum function which accepts as input the
+positional arguments <code class="docutils literal notranslate"><span class="pre">(settings,</span> <span class="pre">wires)</span></code> where settings is an <em>array[float]</em>
+of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p></li>
+<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings that the quantum function accepts.</p></li>
+<li><p><strong>static_settings</strong> (<em>optional</em><em>, </em><em>array-like</em>) – A set of fixed settings for the preparation node.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">MeasureNode</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 

@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.network_ansatz - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -243,7 +243,7 @@
 
 
 <div class="viewcode-block" id="NoiseNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.NoiseNode">[docs]</a><span class="k">class</span> <span class="nc">NoiseNode</span><span class="p">:</span>
-    <span class="sd">"""A class that configures each noise node in the quantum network.</span>
+    <span class="sd">&quot;&quot;&quot;A class that configures each noise node in the quantum network.</span>
 
 <span class="sd">    :param wires: A list of wires on which the node is defined.</span>
 <span class="sd">    :type wires: array[int]</span>
@@ -254,7 +254,7 @@
 <span class="sd">    :type quantum_fn: function</span>
 
 <span class="sd">    :returns: An instantiated ``NoiseNode`` class.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wires</span> <span class="o">=</span> <span class="n">wires</span>
@@ -263,7 +263,7 @@
 
 
 <div class="viewcode-block" id="PrepareNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.PrepareNode">[docs]</a><span class="k">class</span> <span class="nc">PrepareNode</span><span class="p">(</span><span class="n">NoiseNode</span><span class="p">):</span>
-    <span class="sd">"""A class that configures each preparation node in the quantum network.</span>
+    <span class="sd">&quot;&quot;&quot;A class that configures each preparation node in the quantum network.</span>
 
 <span class="sd">    :param num_in: The number of classical inputs for the node.</span>
 <span class="sd">    :type num_in: int</span>
@@ -283,7 +283,7 @@
 <span class="sd">    :type static_settings: optional, array-like</span>
 
 <span class="sd">    :returns: An instantiated ``PrepareNode`` class.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_in</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">,</span> <span class="n">static_settings</span><span class="o">=</span><span class="p">[]):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">)</span>
@@ -294,7 +294,7 @@
 
 
 <div class="viewcode-block" id="MeasureNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.MeasureNode">[docs]</a><span class="k">class</span> <span class="nc">MeasureNode</span><span class="p">(</span><span class="n">PrepareNode</span><span class="p">):</span>
-    <span class="sd">"""A class that configures each measurement node in the quantum network.</span>
+    <span class="sd">&quot;&quot;&quot;A class that configures each measurement node in the quantum network.</span>
 
 <span class="sd">    :param num_in: The number of classical inputs for the node.</span>
 <span class="sd">    :type num_in: int</span>
@@ -317,7 +317,7 @@
 <span class="sd">    :type static_settings: optional, array-like</span>
 
 <span class="sd">    :returns: An instantiated ``MeasureNode`` class.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_in</span><span class="p">,</span> <span class="n">num_out</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">,</span> <span class="n">static_settings</span><span class="o">=</span><span class="p">[]):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_in</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">,</span> <span class="n">static_settings</span><span class="o">=</span><span class="n">static_settings</span><span class="p">)</span>
@@ -325,7 +325,7 @@
 
 
 <div class="viewcode-block" id="NetworkAnsatz"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz">[docs]</a><span class="k">class</span> <span class="nc">NetworkAnsatz</span><span class="p">:</span>
-    <span class="sd">"""The ``NetworkAnsatz`` class describes a parameterized quantum prepare and measure network.</span>
+    <span class="sd">&quot;&quot;&quot;The ``NetworkAnsatz`` class describes a parameterized quantum prepare and measure network.</span>
 <span class="sd">    The ansatz is constructed from a prepare layer and a measure layer.</span>
 <span class="sd">    The prepare layer is a collection of unitaries which prepare quantum states while the</span>
 <span class="sd">    measure layer is a collection of unitaries which encode the measurement basis.</span>
@@ -353,14 +353,14 @@
 <span class="sd">    * **measure_wires** - The list of wires used by the ``measure_nodes``.</span>
 <span class="sd">    * **network_wires** - The list of wires used by the network ansatz.</span>
 <span class="sd">    * **dev_kwargs** - *mutable*, the keyword args to pass to the `pennylane.device`_ function.</span>
-<span class="sd">                       If no ``dev_kwargs`` are provided, a ``"default.qubit"`` is constructed for</span>
-<span class="sd">                       noiseless networks and ``"default.mixed"`` device is constructed</span>
+<span class="sd">                       If no ``dev_kwargs`` are provided, a ``&quot;default.qubit&quot;`` is constructed for</span>
+<span class="sd">                       noiseless networks and ``&quot;default.mixed&quot;`` device is constructed</span>
 <span class="sd">                       for noisy networks.</span>
 <span class="sd">    * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.</span>
 <span class="sd">    * **fn** (*function*) - A quantum function implementing the quantum network ansatz.</span>
 
 <span class="sd">    :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prepare_nodes</span><span class="p">,</span> <span class="n">measure_nodes</span><span class="p">,</span> <span class="n">noise_nodes</span><span class="o">=</span><span class="p">[],</span> <span class="n">dev_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span> <span class="o">=</span> <span class="n">prepare_nodes</span>
@@ -377,37 +377,37 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prepare_wires</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_wires</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_wires</span><span class="p">]</span>
         <span class="p">)</span>
 
-        <span class="n">default_dev_name</span> <span class="o">=</span> <span class="s2">"default.qubit"</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"default.mixed"</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span> <span class="o">=</span> <span class="n">dev_kwargs</span> <span class="ow">or</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">default_dev_name</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">"wires"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span>
+        <span class="n">default_dev_name</span> <span class="o">=</span> <span class="s2">&quot;default.qubit&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;default.mixed&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span> <span class="o">=</span> <span class="n">dev_kwargs</span> <span class="ow">or</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">default_dev_name</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">&quot;wires&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_ansatz_circuit</span><span class="p">()</span>
 
 <div class="viewcode-block" id="NetworkAnsatz.set_device"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.set_device">[docs]</a>    <span class="k">def</span> <span class="nf">set_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">"""Configures a new PennyLane device for executing the network ansatz circuit.</span>
+        <span class="sd">&quot;&quot;&quot;Configures a new PennyLane device for executing the network ansatz circuit.</span>
 <span class="sd">        For more details on parameters see `pennylane.device`_.</span>
 <span class="sd">        This method updates the values stored in ``self.dev_kwargs`` and ``self.dev``.</span>
 
 <span class="sd">        :returns: The instantiated device.</span>
 <span class="sd">        :rtype: ``pennylane.device``</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">dev_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="p">{}</span>
-        <span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">"wires"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span>
+        <span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">&quot;wires&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span> <span class="o">=</span> <span class="n">dev_kwargs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev</span></div>
 
 <div class="viewcode-block" id="NetworkAnsatz.device"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.device">[docs]</a>    <span class="k">def</span> <span class="nf">device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Instantiates a new PennyLane device configured using the ``self.dev_kwargs`` parameters.</span>
+        <span class="sd">&quot;&quot;&quot;Instantiates a new PennyLane device configured using the ``self.dev_kwargs`` parameters.</span>
 <span class="sd">        A distinct device is created each time this function runs.</span>
 
 <span class="sd">        :returns: The instantiated device.</span>
 <span class="sd">        :rtype: ``pennylane.device``</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev</span></div>
 
@@ -432,14 +432,14 @@
 
 <div class="viewcode-block" id="NetworkAnsatz.collect_wires"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.collect_wires">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">collect_wires</span><span class="p">(</span><span class="n">network_nodes</span><span class="p">):</span>
-        <span class="sd">"""A helper method for the ``NetworkAnsatz`` class which collects and aggregates the</span>
+        <span class="sd">&quot;&quot;&quot;A helper method for the ``NetworkAnsatz`` class which collects and aggregates the</span>
 <span class="sd">        wires from a set of collection of network nodes (``prepare_nodes`` or ``measure_nodes``).</span>
 
-<span class="sd">        :param network_nodes: A list consisting of either ``PrepareNode``'s or ``MeasureNode``'s.</span>
+<span class="sd">        :param network_nodes: A list consisting of either ``PrepareNode``&#39;s or ``MeasureNode``&#39;s.</span>
 <span class="sd">        :type network_nodes: list[PrepareNode or MeasureNode]</span>
 
 <span class="sd">        :raises ValueError: If the same wire is used in two different nodes in ``network_nodes``.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ansatz_wires</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">wires</span><span class="p">),</span> <span class="n">network_nodes</span><span class="p">))</span>
         <span class="n">all_wires</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="o">.</span><span class="n">all_wires</span><span class="p">(</span><span class="n">ansatz_wires</span><span class="p">)</span>
         <span class="n">unique_wires</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="o">.</span><span class="n">unique_wires</span><span class="p">(</span><span class="n">ansatz_wires</span><span class="p">)</span>
@@ -447,14 +447,14 @@
         <span class="c1"># two nodes cannot prepare a state on the same wire</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">all_wires</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">==</span> <span class="n">unique_wires</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">"One or more wires are not unique. Each node must contain unique wires."</span>
+                <span class="s2">&quot;One or more wires are not unique. Each node must contain unique wires.&quot;</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">all_wires</span></div>
 
 <div class="viewcode-block" id="NetworkAnsatz.layer_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.layer_settings">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">layer_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="n">node_inputs</span><span class="p">,</span> <span class="n">nodes</span><span class="p">):</span>
-        <span class="sd">"""Constructs the list of settings for a circuit layer in the network ansatz.</span>
+        <span class="sd">&quot;&quot;&quot;Constructs the list of settings for a circuit layer in the network ansatz.</span>
 
 <span class="sd">        The type of tensor used for the returned layer settings matches the tensor</span>
 <span class="sd">        type of the elements of ``scenario_settings``.</span>
@@ -467,7 +467,7 @@
 
 <span class="sd">        :returns: A 1D array of all settings for the circuit layer.</span>
 <span class="sd">        :rtype: array[float]</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">scenario_settings</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">node_input</span><span class="p">]</span>
@@ -478,7 +478,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAnsatz.qnode_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.qnode_settings">[docs]</a>    <span class="k">def</span> <span class="nf">qnode_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario_settings</span><span class="p">,</span> <span class="n">prep_inputs</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">):</span>
-        <span class="sd">"""Constructs a list of settings to pass to the qnode executing the network ansatz.</span>
+        <span class="sd">&quot;&quot;&quot;Constructs a list of settings to pass to the qnode executing the network ansatz.</span>
 
 <span class="sd">        :param scenario_settings: The settings for the network ansatz scenario.</span>
 <span class="sd">        :type scenario_settings: list[list[np.ndarray]]</span>
@@ -491,7 +491,7 @@
 
 <span class="sd">        :returns: The settings to pass to the constructed qnode.</span>
 <span class="sd">        :rtype: list[float]</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">prep_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prep_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">)</span>
         <span class="n">meas_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">meas_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span>
@@ -499,7 +499,7 @@
 
 <div class="viewcode-block" id="NetworkAnsatz.circuit_layer"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.circuit_layer">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">circuit_layer</span><span class="p">(</span><span class="n">network_nodes</span><span class="p">):</span>
-        <span class="sd">"""Constructs a quantum function for an ansatz layer of provided network nodes.</span>
+        <span class="sd">&quot;&quot;&quot;Constructs a quantum function for an ansatz layer of provided network nodes.</span>
 
 <span class="sd">        :param network_nodes: A list of network nodes which can be either</span>
 <span class="sd">                              ``NoiseNode``, ``PrepareNode``, or ``MeasureNode``</span>
@@ -508,7 +508,7 @@
 <span class="sd">        :returns: A quantum function evaluated as ``circuit(settings)`` where ``settings``</span>
 <span class="sd">                  is an array constructed via the ``layer_settings`` function.</span>
 <span class="sd">        :rtype: function</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
             <span class="n">current_id</span> <span class="o">=</span> <span class="mi">0</span>
@@ -523,7 +523,7 @@
         <span class="k">return</span> <span class="n">circuit</span></div>
 
 <div class="viewcode-block" id="NetworkAnsatz.rand_scenario_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.rand_scenario_settings">[docs]</a>    <span class="k">def</span> <span class="nf">rand_scenario_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Creates a randomized settings array for the network ansatz.</span>
+        <span class="sd">&quot;&quot;&quot;Creates a randomized settings array for the network ansatz.</span>
 
 <span class="sd">        :returns: A nested list containing settings for each network node.</span>
 <span class="sd">                  ``PreparNode`` settings are listed under index ``0`` while</span>
@@ -531,7 +531,7 @@
 <span class="sd">                  The measure and prepare layers settings are a list of numpy arrays</span>
 <span class="sd">                  where the dimension of each array is ``(num_inputs, num_settings)``.</span>
 <span class="sd">        :rtype: list[list[np.array]]</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prepare_settings</span> <span class="o">=</span> <span class="p">[</span>
             <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">settings_dims</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">static_settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
@@ -548,12 +548,12 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">prepare_settings</span><span class="p">,</span> <span class="n">measure_settings</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="NetworkAnsatz.tf_rand_scenario_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.tf_rand_scenario_settings">[docs]</a>    <span class="k">def</span> <span class="nf">tf_rand_scenario_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Creates a randomized settings array for the network ansatz using TensorFlow</span>
+        <span class="sd">&quot;&quot;&quot;Creates a randomized settings array for the network ansatz using TensorFlow</span>
 <span class="sd">        tensor types.</span>
 
 <span class="sd">        :returns: See :meth:`qnetvo.NetworkAnsatz.rand_scenario_settings` for details.</span>
 <span class="sd">        :rtype: list[list[tf.Tensor]]</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">.lazy_tensorflow_import</span> <span class="kn">import</span> <span class="n">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
 
         <span class="n">np_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rand_scenario_settings</span><span class="p">()</span>
@@ -564,7 +564,7 @@
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="NetworkAnsatz.zero_scenario_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.zero_scenario_settings">[docs]</a>    <span class="k">def</span> <span class="nf">zero_scenario_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Creates a settings array for the network ansatz that consists of zeros.</span>
+        <span class="sd">&quot;&quot;&quot;Creates a settings array for the network ansatz that consists of zeros.</span>
 
 <span class="sd">        :returns: A nested list containing settings for each network node.</span>
 <span class="sd">                  ``PrepareNode`` settings are listed under index ``0`` while</span>
@@ -572,7 +572,7 @@
 <span class="sd">                  The measure and prepare layers settings are a list of numpy arrays</span>
 <span class="sd">                  where the dimension of each array is ``(num_inputs, num_settings)``.</span>
 <span class="sd">        :rtype: list[list[np.array]]</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prepare_settings</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">settings_dims</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">static_settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
             <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span>
@@ -609,6 +609,7 @@
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>

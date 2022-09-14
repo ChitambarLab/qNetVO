@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.utilities - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -246,7 +246,7 @@
 
 
 <div class="viewcode-block" id="unitary_matrix"><a class="viewcode-back" href="../../utilities.html#qnetvo.unitary_matrix">[docs]</a><span class="k">def</span> <span class="nf">unitary_matrix</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">num_wires</span><span class="p">,</span> <span class="o">*</span><span class="n">circ_args</span><span class="p">,</span> <span class="o">**</span><span class="n">circ_kwargs</span><span class="p">):</span>
-    <span class="sd">"""Constructs the unitary matrix representation of a quantum</span>
+    <span class="sd">&quot;&quot;&quot;Constructs the unitary matrix representation of a quantum</span>
 <span class="sd">    circuit in the computational basis.</span>
 
 <span class="sd">    :param circuit: A quantum function.</span>
@@ -263,8 +263,8 @@
 
 <span class="sd">    :returns: A unitary matrix representing the provided ``circuit``.</span>
 <span class="sd">    :rtype: Numpy Array</span>
-<span class="sd">    """</span>
-    <span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"default.qubit"</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">num_wires</span><span class="p">))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;default.qubit&quot;</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">num_wires</span><span class="p">))</span>
 
     <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">unitary_z</span><span class="p">(</span><span class="n">basis_state</span><span class="p">):</span>
@@ -279,7 +279,7 @@
 
 
 <div class="viewcode-block" id="write_optimization_json"><a class="viewcode-back" href="../../utilities.html#qnetvo.write_optimization_json">[docs]</a><span class="k">def</span> <span class="nf">write_optimization_json</span><span class="p">(</span><span class="n">opt_dict</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-    <span class="sd">"""Writes the optimization dictionary to a JSON file.</span>
+    <span class="sd">&quot;&quot;&quot;Writes the optimization dictionary to a JSON file.</span>
 
 <span class="sd">    :param opt_dict: The dictionary returned by a network optimization.</span>
 <span class="sd">    :type opt_dict: dict</span>
@@ -288,50 +288,50 @@
 <span class="sd">    :type filename: string</span>
 
 <span class="sd">    :returns: ``None``</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">opt_dict_json</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">opt_dict</span><span class="p">)</span>
 
-    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">"opt_score"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">"opt_score"</span><span class="p">])</span>
-    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">"scores"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">"scores"</span><span class="p">]]</span>
-    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">"opt_settings"</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings_to_list</span><span class="p">(</span><span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">"opt_settings"</span><span class="p">])</span>
-    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">"settings_history"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">settings_to_list</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">"settings_history"</span><span class="p">]</span>
+    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_score&quot;</span><span class="p">])</span>
+    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]]</span>
+    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings_to_list</span><span class="p">(</span><span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">])</span>
+    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">settings_to_list</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span>
     <span class="p">]</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">".json"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">opt_dict_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="read_optimization_json"><a class="viewcode-back" href="../../utilities.html#qnetvo.read_optimization_json">[docs]</a><span class="k">def</span> <span class="nf">read_optimization_json</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-    <span class="sd">"""Reads data from an optimization JSON created via ``write_optimization_json``.</span>
+    <span class="sd">&quot;&quot;&quot;Reads data from an optimization JSON created via ``write_optimization_json``.</span>
 
 <span class="sd">    :param filepath: The path to the JSON file. Note this string must contain the ``.json`` extension.</span>
 <span class="sd">    :type filepath: string</span>
 
 <span class="sd">    :returns: The optimization dictionary read from the file.</span>
 <span class="sd">    :rtype: dict</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">opt_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
-    <span class="n">opt_dict</span><span class="p">[</span><span class="s2">"opt_settings"</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings_to_np</span><span class="p">(</span><span class="n">opt_dict</span><span class="p">[</span><span class="s2">"opt_settings"</span><span class="p">])</span>
-    <span class="n">opt_dict</span><span class="p">[</span><span class="s2">"settings_history"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">settings_to_np</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">opt_dict</span><span class="p">[</span><span class="s2">"settings_history"</span><span class="p">]</span>
+    <span class="n">opt_dict</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings_to_np</span><span class="p">(</span><span class="n">opt_dict</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">])</span>
+    <span class="n">opt_dict</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">settings_to_np</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">opt_dict</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span>
     <span class="p">]</span>
 
     <span class="k">return</span> <span class="n">opt_dict</span></div>
 
 
 <div class="viewcode-block" id="settings_to_list"><a class="viewcode-back" href="../../utilities.html#qnetvo.settings_to_list">[docs]</a><span class="k">def</span> <span class="nf">settings_to_list</span><span class="p">(</span><span class="n">np_scenario_settings</span><span class="p">):</span>
-    <span class="sd">"""Converts the numpy array in scenario settings to lists.</span>
+    <span class="sd">&quot;&quot;&quot;Converts the numpy array in scenario settings to lists.</span>
 <span class="sd">    This function is intended for printing purposes.</span>
 
 <span class="sd">    :param np_scenario_settings: The scenario settings structure for a `NetworkAnsatz`.</span>
 
 <span class="sd">    :returns: The same nested array elements and structure using lists.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">list_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_settings</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">np_scenario_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
     <span class="n">list_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_settings</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">np_scenario_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
@@ -340,13 +340,13 @@
 
 
 <div class="viewcode-block" id="settings_to_np"><a class="viewcode-back" href="../../utilities.html#qnetvo.settings_to_np">[docs]</a><span class="k">def</span> <span class="nf">settings_to_np</span><span class="p">(</span><span class="n">list_scenario_settings</span><span class="p">):</span>
-    <span class="sd">"""Converts the nested list elements in the scenario settings to numpy arrays.</span>
+    <span class="sd">&quot;&quot;&quot;Converts the nested list elements in the scenario settings to numpy arrays.</span>
 <span class="sd">    This function is intended for printing purposes.</span>
 
 <span class="sd">    :param list_scenario_settings: The scenario settings structure for a `NetworkAnsatz`.</span>
 
 <span class="sd">    :returns: The same nested array elements and structure using numpy arrays.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">np_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_scenario_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
     <span class="n">np_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_scenario_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
@@ -355,7 +355,7 @@
 
 
 <div class="viewcode-block" id="mixed_base_num"><a class="viewcode-back" href="../../utilities.html#qnetvo.mixed_base_num">[docs]</a><span class="k">def</span> <span class="nf">mixed_base_num</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">base_digits</span><span class="p">):</span>
-    <span class="sd">"""Converts a base-10 number ``n`` into a mixed base number with digit</span>
+    <span class="sd">&quot;&quot;&quot;Converts a base-10 number ``n`` into a mixed base number with digit</span>
 <span class="sd">    values described by the ``base_digits`` array.</span>
 
 <span class="sd">    :param n: A base-10 number</span>
@@ -368,7 +368,7 @@
 <span class="sd">    :returns: A list of integers representing the mixed base number.</span>
 <span class="sd">    :rtype: list[int]</span>
 
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mixed_base_digits</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">n_tmp</span> <span class="o">=</span> <span class="n">n</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">base_digits</span><span class="p">)):</span>
@@ -404,6 +404,7 @@
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>

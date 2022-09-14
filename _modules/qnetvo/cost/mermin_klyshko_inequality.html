@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.cost.mermin_klyshko_inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/qnetvo.css" />
     
@@ -243,7 +243,7 @@
 
 
 <div class="viewcode-block" id="mermin_klyshko_inputs_scalars"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/mermin_klyshko_inequality.html#qnetvo.mermin_klyshko_inputs_scalars">[docs]</a><span class="k">def</span> <span class="nf">mermin_klyshko_inputs_scalars</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="sd">"""Helper function for handling the algebra of combining correlator terms</span>
+    <span class="sd">&quot;&quot;&quot;Helper function for handling the algebra of combining correlator terms</span>
 <span class="sd">    in the Mermin-Klyshko (MK) inequality.</span>
 
 <span class="sd">    This function supports :meth:`mermin_klyshko_cost_fn`.</span>
@@ -256,7 +256,7 @@
 <span class="sd">              correlator terms. The second element of the returned tuple</span>
 <span class="sd">              is a list of scalar multipliers for each correlator term.</span>
 <span class="sd">    :rtype: Tuple(List[Int], List[Int])</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">inputs_list</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]]</span>
     <span class="n">scalars_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -298,7 +298,7 @@
 
 
 <div class="viewcode-block" id="mermin_klyshko_cost_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/mermin_klyshko_inequality.html#qnetvo.mermin_klyshko_cost_fn">[docs]</a><span class="k">def</span> <span class="nf">mermin_klyshko_cost_fn</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">"""Constructs an ansatz-specific cost function based upon the</span>
+    <span class="sd">&quot;&quot;&quot;Constructs an ansatz-specific cost function based upon the</span>
 <span class="sd">    Mermin-Klyshko (MK) inequality.</span>
 
 <span class="sd">    :param ansatz: The network ansatz for which to apply the MK inequality.</span>
@@ -309,7 +309,7 @@
 <span class="sd">    :returns: A cost function, ``cost(network_settings)``, that evaluates :math:`-I_{\\text{MK}}`</span>
 <span class="sd">              for the supplied network settings.</span>
 <span class="sd">    :rtype: Function</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mk_qnode</span> <span class="o">=</span> <span class="n">global_parity_expval_qnode</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
     <span class="n">num_meas_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span>
@@ -339,26 +339,26 @@
 
 
 <div class="viewcode-block" id="mermin_klyshko_classical_bound"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/mermin_klyshko_inequality.html#qnetvo.mermin_klyshko_classical_bound">[docs]</a><span class="k">def</span> <span class="nf">mermin_klyshko_classical_bound</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="sd">"""The classical bound for the Mermin-Klyshko inequality is :math:`2^{n-1}`.</span>
+    <span class="sd">&quot;&quot;&quot;The classical bound for the Mermin-Klyshko inequality is :math:`2^{n-1}`.</span>
 
 <span class="sd">    :param n: The number of measurement nodes.</span>
 <span class="sd">    :type n: Int</span>
 
 <span class="sd">    :returns: The classical bound.</span>
 <span class="sd">    :rtype: Float</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="mermin_klyshko_quantum_bound"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/mermin_klyshko_inequality.html#qnetvo.mermin_klyshko_quantum_bound">[docs]</a><span class="k">def</span> <span class="nf">mermin_klyshko_quantum_bound</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="sd">"""The quantum bound for the Mermin-Klyshko inequality is :math:`2^{3(n-1)/2}`.</span>
+    <span class="sd">&quot;&quot;&quot;The quantum bound for the Mermin-Klyshko inequality is :math:`2^{3(n-1)/2}`.</span>
 
 <span class="sd">    :param n: The number of measurement nodes.</span>
 <span class="sd">    :type n: Int</span>
 
 <span class="sd">    :returns: The quantum bound.</span>
 <span class="sd">    :rtype: Float</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span></div>
 </pre></div>
         </article>
@@ -386,6 +386,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

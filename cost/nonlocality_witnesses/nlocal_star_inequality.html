@@ -246,6 +246,139 @@ Polynomial Bell inequalities can be derivied that tightly bound the set of class
 <a class="reference internal" href="#tavakoli2014" id="id1"><span>[Tavakoli2014]</span></a>.
 These <span class="math notranslate nohighlight">\(n\)</span>-local star Bell inequalities witness quantum violations to the classical
 <span class="math notranslate nohighlight">\(n\)</span>-local set and can be used to optimize non-<span class="math notranslate nohighlight">\(n\)</span>-locality in star configurations.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.nlocal_star_22_cost_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">nlocal_star_22_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_star_bell_inequality.html#nlocal_star_22_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.nlocal_star_22_cost_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>A network-specific constructor for the <span class="math notranslate nohighlight">\(n\)</span>-local star Bell
+inequality for scenarios when all measurement devices in the star network
+have 2 inputs and 2 outputs.</p>
+<p>The <span class="math notranslate nohighlight">\(n\)</span>-local star network Bell inequality is expressed as</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[|I_{22,n}|^{1/n} + |J_{22,n}|^{1/n} \leq 1\]</div>
+</div>
+<p>where the quantities <span class="math notranslate nohighlight">\(I_{22,n}\)</span> and <span class="math notranslate nohighlight">\(J_{22,n}\)</span> are evaluated using
+functions constructed by the <a class="reference internal" href="#qnetvo.star_I22_fn" title="qnetvo.star_I22_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">qnetvo.star_I22_fn()</span></code></a> and
+<a class="reference internal" href="#qnetvo.star_J22_fn" title="qnetvo.star_J22_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">qnetvo.star_J22_fn()</span></code></a> methods respectively.
+The classical bound is found to be 1, but quantum systems can score as high as
+<span class="math notranslate nohighlight">\(\sqrt{2}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The <span class="math notranslate nohighlight">\(n\)</span>-local star network ansatz.</p></li>
+<li><p><strong>parallel</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> qnodes will be evaluated in separate threads. This is
+valuable for execution on remote simulator and hardware devices.
+Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>nthreads</strong> (<em>Int</em>) – Specifies the number of threads used when <code class="docutils literal notranslate"><span class="pre">parallel=True</span></code>.</p></li>
+<li><p><strong>qnode_kwargs</strong> (<em>optional</em> dictionary) – keyword args passed through to the QNode constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">nlocal_star_22_cost(scenario_settings)</span></code> that evaluates
+the cost as <span class="math notranslate nohighlight">\(-|I_{22,n}|^{1/n} - |J_{22,n}|^{1/n}\)</span>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.star_I22_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">star_I22_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_star_bell_inequality.html#star_I22_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.star_I22_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a network-specific <code class="docutils literal notranslate"><span class="pre">I22(scenario_settings)</span></code> function that
+evaluates the <span class="math notranslate nohighlight">\(I_{22,n}\)</span> quantity for the <span class="math notranslate nohighlight">\(n\)</span>-local star network.</p>
+<p>The <span class="math notranslate nohighlight">\(I_{22,n}\)</span> quantity is formally expressed as</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[I_{22,n} = \frac{1}{2^n}\sum_{x_1,\dots,x_n}\langle A_{x_1}\dots A_{x_n}B_0\rangle,\]</div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(x_i\in\{0,1\}\)</span> and <span class="math notranslate nohighlight">\(A_{x_i}\)</span> and <span class="math notranslate nohighlight">\(B_{x_{n+1}}\)</span>
+are dichotomic observables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The <span class="math notranslate nohighlight">\(n\)</span>-local star network ansatz.</p></li>
+<li><p><strong>parallel</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> qnodes will be evaluated in separate threads. This is
+valuable for execution on remote simulator and hardware devices.
+Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>nthreads</strong> (<em>Int</em>) – Specifies the number of threads used when <code class="docutils literal notranslate"><span class="pre">parallel=True</span></code>.</p></li>
+<li><p><strong>qnode_kwargs</strong> (<em>optional</em> dictionary) – keyword args passed through to the QNode constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">I22(scenario_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(I_{22,n}\)</span> quantity.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.star_J22_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">star_J22_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_star_bell_inequality.html#star_J22_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.star_J22_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a network-specific <code class="docutils literal notranslate"><span class="pre">J22(scenario_settings)</span></code> function that
+evaluates the <span class="math notranslate nohighlight">\(J_{22,n}\)</span> quantity for the <span class="math notranslate nohighlight">\(n\)</span>-local star network.</p>
+<p>The <span class="math notranslate nohighlight">\(J_{22,n}\)</span> quantity is formally expressed as</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[J_{22,n} = \frac{1}{2^n}\sum_{x_1,\dots,x_n}(-1)^{\sum_i x_i}\langle A_{x_1}\dots A _{x_n}B_1\rangle,\]</div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(x_i\in\{0,1\}\)</span> and <span class="math notranslate nohighlight">\(A_{x_i}\)</span> and <span class="math notranslate nohighlight">\(B_{x_{n+1}}\)</span> are
+dichotomic observables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The <span class="math notranslate nohighlight">\(n\)</span>-local star network ansatz.</p></li>
+<li><p><strong>parallel</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> qnodes will be evaluated in separate threads. This is
+valuable for execution on remote simulator and hardware devices.
+Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>nthreads</strong> (<em>Int</em>) – Specifies the number of threads used when <code class="docutils literal notranslate"><span class="pre">parallel=True</span></code>.</p></li>
+<li><p><strong>qnode_kwargs</strong> (<em>optional</em> dictionary) – keyword args passed through to the QNode constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">J22(scenario_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(J_{22,n}\)</span>
+quantity for the given <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.parallel_nlocal_star_grad_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parallel_nlocal_star_grad_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_star_bell_inequality.html#parallel_nlocal_star_grad_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parallel_nlocal_star_grad_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a parallelizeable gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn</span></code> for the <span class="math notranslate nohighlight">\(n\)</span>-local
+star cost function.</p>
+<p>The gradient of the <a class="reference internal" href="#qnetvo.nlocal_star_22_cost_fn" title="qnetvo.nlocal_star_22_cost_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">nlocal_star_22_cost_fn()</span></code></a> is expressed as,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[-\nabla_{\vec{\theta}}|I_{22,n}|^{1/n}
+- \nabla_{\vec{\theta}}|J_{22,n}|^{1/n},\]</div>
+</div>
+<p>where the gradient differentiates with respect to the network settings <span class="math notranslate nohighlight">\(\vec{\theta}\)</span>.</p>
+<p>The parallelization is achieved through multithreading and intended to improve the
+efficiency of remote qnode execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the <span class="math notranslate nohighlight">\(n\)</span>-local chain network.</p></li>
+<li><p><strong>nthreads</strong> (<em>Int</em>) – Specifies the number of threads used when <code class="docutils literal notranslate"><span class="pre">parallel=True</span></code>.</p></li>
+<li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">nlocal_star_grad(scenario_settings)</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <dl class="citation">

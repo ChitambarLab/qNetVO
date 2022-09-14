@@ -241,6 +241,48 @@
 <p>Cost functions such as nonlocality witnesses can often be expressed
 as a linear function on the network probabilities
 or correlators.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.linear_probs_cost_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">linear_probs_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">game</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">tensor([],</span> <span class="pre">dtype=float64,</span> <span class="pre">requires_grad=True)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qnode_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/linear_inequalities.html#linear_probs_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.linear_probs_cost_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs an ansatz-specific cost that is a linear function of the network probablities.</p>
+<p>The cost function is encoded into a <code class="docutils literal notranslate"><span class="pre">game</span></code> matrix whose
+coefficients scale conditional probabilities for the network.
+The cost is derived from the score which is evaluated as,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\langle\mathbf{G},\mathbf{P}\rangle = \sum_{\vec{x},\vec{y},\vec{b}} G_{b|x,y} P(b|x,y),\]</div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{P}\)</span> is a behavior (see <a class="reference internal" href="entropic_quantities.html#qnetvo.behavior_fn" title="qnetvo.behavior_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">qnetvo.behavior_fn()</span></code></a>).</p>
+<p>A post-processing map <span class="math notranslate nohighlight">\(\mathbf{L}\)</span> may optionally be applied as
+<span class="math notranslate nohighlight">\(\mathbf{L}\mathbf{P}_{Net}\)</span> where</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\mathbf{L} = \sum_{z',z}P(z'|z)|z'\rangle\langle z|.\]</div>
+</div>
+<p>In the above expression, <span class="math notranslate nohighlight">\(z'\)</span> is a new output drawn from a new alphabet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_ansatz</strong> (<code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class) – The network to which the cost function is applied.</p></li>
+<li><p><strong>game</strong> (<em>np.arrray</em>) – A matrix with dimensions <code class="docutils literal notranslate"><span class="pre">B</span> <span class="pre">x</span> <span class="pre">(X</span> <span class="pre">x</span> <span class="pre">Y)</span></code> for</p></li>
+<li><p><strong>postmap</strong> (<em>optional</em> np.ndarray) – A post-processing map applied to the bitstrings output from the
+quantum circuit. The <code class="docutils literal notranslate"><span class="pre">postmap</span></code> matrix is column stochastic, that is,
+each column sums to one and contains only positive values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(prepare_settings,</span> <span class="pre">measure_settings)</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the number of outputs from the qnode do not match the
+the number of rows in the specified <code class="docutils literal notranslate"><span class="pre">game</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
         </article>
@@ -293,5 +335,6 @@ or correlators.</p>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/scripts/furo.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.information - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -244,7 +244,7 @@
 
 
 <div class="viewcode-block" id="behavior_fn"><a class="viewcode-back" href="../../cost/entropic_quantities.html#qnetvo.behavior_fn">[docs]</a><span class="k">def</span> <span class="nf">behavior_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">postmap</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">qnode_kwargs</span><span class="o">=</span><span class="p">{}):</span>
-    <span class="sd">"""Creates an ansatz-specific function for constructing the behavior matrix.</span>
+    <span class="sd">&quot;&quot;&quot;Creates an ansatz-specific function for constructing the behavior matrix.</span>
 
 <span class="sd">    A behavior function is created as ``P_Net = behavior(network_ansatz)``</span>
 <span class="sd">    and called as ``P_Net(ansatz_settings)``.</span>
@@ -264,10 +264,10 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        \\mathbf{L} = \\sum_{z',z}P(z'|z)|z'\\rangle\\langle z|.</span>
+<span class="sd">        \\mathbf{L} = \\sum_{z&#39;,z}P(z&#39;|z)|z&#39;\\rangle\\langle z|.</span>
 
 
-<span class="sd">    In the above expression, :math:`z'` is a new output drawn from a new alphabet.</span>
+<span class="sd">    In the above expression, :math:`z&#39;` is a new output drawn from a new alphabet.</span>
 
 <span class="sd">    :param network_ansatz: A class describing the particular quantum network.</span>
 <span class="sd">    :type network_ansatz: NetworkAnsatz</span>
@@ -280,7 +280,7 @@
 <span class="sd">    :returns: A function ``P_Net(scenario_settings)`` that evaluates the</span>
 <span class="sd">              behavior matrix for a given set of settings.</span>
 <span class="sd">    :rtype: function</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">num_in_prep_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">num_in</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">]</span>
     <span class="n">num_in_meas_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">num_in</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">]</span>
 
@@ -295,7 +295,7 @@
     <span class="n">has_postmap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">postmap</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">has_postmap</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">postmap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">raw_net_num_out</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The `postmap` must have "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_net_num_out</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" columns."</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The `postmap` must have &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_net_num_out</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; columns.&quot;</span><span class="p">)</span>
 
     <span class="n">node_input_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">mixed_base_num</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">base_digits</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">net_num_in</span><span class="p">)]</span>
 
@@ -318,7 +318,7 @@
 
 
 <div class="viewcode-block" id="shannon_entropy"><a class="viewcode-back" href="../../cost/entropic_quantities.html#qnetvo.shannon_entropy">[docs]</a><span class="k">def</span> <span class="nf">shannon_entropy</span><span class="p">(</span><span class="n">probs</span><span class="p">):</span>
-    <span class="sd">"""Evaluates the Shannon entropy for the given marginal probability</span>
+    <span class="sd">&quot;&quot;&quot;Evaluates the Shannon entropy for the given marginal probability</span>
 <span class="sd">    distribution ``probs``.</span>
 
 <span class="sd">    .. math::</span>
@@ -330,7 +330,7 @@
 
 <span class="sd">    :returns: The Shannon entropy.</span>
 <span class="sd">    :rtype: float</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="o">-</span><span class="p">(</span>
         <span class="n">math</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">px</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">px</span><span class="p">)</span> <span class="k">if</span> <span class="n">px</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">px</span> <span class="ow">in</span> <span class="n">probs</span><span class="p">])</span>
     <span class="p">)</span></div>
@@ -360,6 +360,7 @@
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>

@@ -242,12 +242,194 @@
 circuit-based noise model are provided.</p>
 <div class="section" id="state-preparations">
 <h2>State Preparations<a class="headerlink" href="#state-preparations" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.bell_state_copies">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">bell_state_copies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#bell_state_copies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.bell_state_copies" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes <span class="math notranslate nohighlight">\(n\)</span> Bell states on <span class="math notranslate nohighlight">\(2n\)</span> wires.
+The first <span class="math notranslate nohighlight">\(n\)</span> wires represent Alice’s half of the entangled
+state while Bob’s half consists of the remaining <span class="math notranslate nohighlight">\(n\)</span> wires.
+Entanglement is shared between Alice and Bob, however, the independent
+Bell states are not initially entangled with each other.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>settings</strong> (<em>list</em><em>[</em><em>empty</em><em>]</em>) – A placeholder parameter that is not used.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – The wires on which the bell states are prepared.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.ghz_state">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">ghz_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#ghz_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.ghz_state" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes a GHZ state on the provided wires.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>settings</strong> (<em>list</em><em>[</em><em>empty</em><em>]</em>) – A placeholder parameter that is not used.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – The wires on which the GHZ state is prepared.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.max_entangled_state">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">max_entangled_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#max_entangled_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.max_entangled_state" title="Permalink to this definition">#</a></dt>
+<dd><p>Ansatz function for maximally entangled two-qubit state preparation.</p>
+<p>A general <code class="docutils literal notranslate"><span class="pre">qml.Rot</span></code> unitary is applied to one-side of a
+Bell state creating a general parameterization of all maximally
+entangled states.</p>
+<p>param settings: A list with three elements parameterizing a general single-qubit unitary
+:type settings: list[float]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>wires</strong> (<em>qml.Wires</em>) – The two wires on which the maximally entangled state is prepared.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="unitary-layers">
 <h2>Unitary Layers<a class="headerlink" href="#unitary-layers" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.local_RY">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">local_RY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#local_RY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.local_RY" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs a rotation about <span class="math notranslate nohighlight">\(y\)</span>-axis on each qubit
+specified by <code class="docutils literal notranslate"><span class="pre">wires</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>settings</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – A list of <code class="docutils literal notranslate"><span class="pre">len(wires)</span></code> real values.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – The wires on which the rotations are applied.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.local_RXRY">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">local_RXRY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#local_RXRY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.local_RXRY" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs a rotation about the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> axes on
+each qubit specified by <code class="docutils literal notranslate"><span class="pre">wires</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>settings</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – A list of <code class="docutils literal notranslate"><span class="pre">2*len(wires)</span></code> real values.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – The wires on which the rotations are applied.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="noise-models">
 <h2>Noise Models<a class="headerlink" href="#noise-models" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.pure_amplitude_damping">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">pure_amplitude_damping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noise_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#pure_amplitude_damping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.pure_amplitude_damping" title="Permalink to this definition">#</a></dt>
+<dd><p>Implements a single qubit amplitude damping channel as a two-qubit gate.</p>
+<p>This allows amplitude damping noise to be applied on quantum hardware or on a
+state-vector simulator such as <code class="docutils literal notranslate"><span class="pre">&quot;default.qubit&quot;</span></code>.</p>
+<p>This method is equivalent to the
+<a class="reference external" href="https://pennylane.readthedocs.io/en/stable/code/api/pennylane.AmplitudeDamping.html">pennylane.AmplitudeDamping</a>
+method. The corresponding Kraus operators are expressed as:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}K_0 = \begin{pmatrix}1 &amp; 0 \\ 0 &amp; \sqrt{1-\gamma} \end{pmatrix}, \quad
+K_1 = \begin{pmatrix}0 &amp; \sqrt{\gamma} \\ 0 &amp; 0 \end{pmatrix}.\end{split}\]</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>noise_params</strong> (<em>List</em><em>[</em><em>Float</em><em>]</em>) – The parameter <code class="docutils literal notranslate"><span class="pre">[gamma]</span></code> quantifying the amount of amplitude damping noise.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – Two wires on which to implement the amplitude damping channel.
+The channel input and output is on <code class="docutils literal notranslate"><span class="pre">wires[0]</span></code> while <code class="docutils literal notranslate"><span class="pre">wires[1]</span></code>
+serves as the ancilla register.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.pure_phase_damping">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">pure_phase_damping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noise_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#pure_phase_damping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.pure_phase_damping" title="Permalink to this definition">#</a></dt>
+<dd><p>Implements a single qubit phase damping channel as a two-qubit gate.</p>
+<p>This allows phase damping noise to be applied on quantum hardware or on a
+state-vector simulator such as <code class="docutils literal notranslate"><span class="pre">&quot;default.qubit&quot;</span></code>.</p>
+<p>This method is equivalent to the
+<a class="reference external" href="https://pennylane.readthedocs.io/en/stable/code/api/pennylane.PhaseDamping.html">pennylane.PhaseDamping</a>
+method. The corresponding Kraus operators are expressed as:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}K_0 = \begin{pmatrix}1 &amp; 0 \\ 0 &amp; \sqrt{1-\gamma} \end{pmatrix}, \quad
+K_1 = \begin{pmatrix}0 &amp; 0 \\ 0 &amp; \sqrt{\gamma} \end{pmatrix}.\end{split}\]</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>noise_params</strong> (<em>List</em><em>[</em><em>Float</em><em>]</em>) – The parameter <code class="docutils literal notranslate"><span class="pre">[gamma]</span></code> quantifying the amount of phase damping noise.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – Two wires on which to implement the phase damping channel.
+The channel input and output is on <code class="docutils literal notranslate"><span class="pre">wires[0]</span></code> while <code class="docutils literal notranslate"><span class="pre">wires[1]</span></code>
+serves as the ancilla register.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.two_qubit_depolarizing">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">two_qubit_depolarizing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_queue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#two_qubit_depolarizing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.two_qubit_depolarizing" title="Permalink to this definition">#</a></dt>
+<dd><p>Applies a two-qubit depolarizing channel using Kraus operators.</p>
+<p>The channel is called as a quantum function <code class="docutils literal notranslate"><span class="pre">two_qubit_depolarizing(gamma,</span> <span class="pre">wires)</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>Float</em>) – The amount of depolarizing noise in the channel.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – Two wires on which to apply the depolarizing noise.</p></li>
+</ul>
+</dd>
+</dl>
+<p>For a noise parameter <span class="math notranslate nohighlight">\(\gamma\)</span>, the two-qubit depolarizing
+noise model is represented by the following function:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\mathcal{N}(\rho) = (1-\frac{16}{15}\gamma)\rho + (\frac{16}{15})(\frac{\gamma}{4})) \mathbb{I}\]</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">gamma</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code> is not satisfied.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.colored_noise">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">colored_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_queue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/ansatz_library.html#colored_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.colored_noise" title="Permalink to this definition">#</a></dt>
+<dd><p>Applies a two-qubit colored noise channel using Kraus operators.</p>
+<p>The channel is called as a quantum function <code class="docutils literal notranslate"><span class="pre">colored_noise(gamma,</span> <span class="pre">wires)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>Float</em>) – The amount of colored noise in the channel.</p></li>
+<li><p><strong>wires</strong> (<em>qml.Wires</em>) – Two wires on which to apply the colored noise.</p></li>
+</ul>
+</dd>
+</dl>
+<p>For the noise parameter <span class="math notranslate nohighlight">\(\gamma\)</span>, the colored noise model is
+represented by the following function:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\mathcal{N}(\rho) = (1-\gamma)\rho + \frac{\gamma}{2}(|01\rangle\langle 01| + |10\rangle\langle 10|)\]</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">gamma</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code> is not satisfied.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
@@ -322,5 +504,6 @@ circuit-based noise model are provided.</p>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/scripts/furo.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

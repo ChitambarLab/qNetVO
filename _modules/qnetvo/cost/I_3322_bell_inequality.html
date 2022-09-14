@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>qnetvo.cost.I_3322_bell_inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/qnetvo.css" />
     
@@ -243,7 +243,7 @@
 
 
 <div class="viewcode-block" id="post_process_I_3322_joint_probs"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/I_3322_inequality.html#qnetvo.post_process_I_3322_joint_probs">[docs]</a><span class="k">def</span> <span class="nf">post_process_I_3322_joint_probs</span><span class="p">(</span><span class="n">probs_vec</span><span class="p">):</span>
-    <span class="sd">"""Applies post-processing to multi-qubit probabilities in order to coarse-grain</span>
+    <span class="sd">&quot;&quot;&quot;Applies post-processing to multi-qubit probabilities in order to coarse-grain</span>
 <span class="sd">    them into the dichotomic parity observables required by the :math:`I_{3322}` inequality.</span>
 
 <span class="sd">    An :math:`N`-qubit circuit has :math:`2^N` measurement outcomes.</span>
@@ -270,7 +270,7 @@
 <span class="sd">    :type probs_vec: list[float]</span>
 
 <span class="sd">    :returns: The dichotomic probability :math:`P(00|xy)`.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_local_qubits</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">probs_vec</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">probs</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">probs_vec</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">n_local_qubits</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="n">n_local_qubits</span><span class="p">))</span>
     <span class="n">even_ids</span> <span class="o">=</span> <span class="n">even_parity_ids</span><span class="p">(</span><span class="n">n_local_qubits</span><span class="p">)</span>
@@ -279,7 +279,7 @@
 
 
 <div class="viewcode-block" id="I_3322_bell_inequality_cost"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/I_3322_inequality.html#qnetvo.I_3322_bell_inequality_cost">[docs]</a><span class="k">def</span> <span class="nf">I_3322_bell_inequality_cost</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">"""Constructs a cost function that maximizes the score of the :math:`I_{3322}` Bell inequality.</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a cost function that maximizes the score of the :math:`I_{3322}` Bell inequality.</span>
 
 <span class="sd">    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.</span>
 <span class="sd">    :type network_ansatz: NetworkAnsatz</span>
@@ -287,7 +287,7 @@
 <span class="sd">    :returns: A cost function evaluated as ``cost(scenario_settings)`` where</span>
 <span class="sd">              the ``scenario_settings`` are obtained from the provided</span>
 <span class="sd">              ``network_ansatz`` class.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">I_3322_joint_probs_qnode</span> <span class="o">=</span> <span class="n">joint_probs_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
     <span class="n">I_3322_local_expval_qnode</span> <span class="o">=</span> <span class="n">local_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
@@ -354,6 +354,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>
