@@ -22,7 +22,8 @@ copyright = "2021, Brian Doolittle and Tom Bromley"
 author = "Brian Doolittle and Tom Bromley"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.1"
+import qnetvo
+release = "v" + qnetvo.__version__
 
 master_doc = "index"
 
