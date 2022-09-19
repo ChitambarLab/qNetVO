@@ -23,6 +23,7 @@ author = "Brian Doolittle and Tom Bromley"
 
 # The full version, including alpha/beta/rc tags
 import qnetvo
+
 release = "v" + qnetvo.__version__
 
 master_doc = "index"
