@@ -119,6 +119,12 @@ class NetworkAnsatz:
                        for noisy networks.
     * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
+    * **parameter_partitions** (*List[List[List[Tuple]]]*) - A ragged array containing tuples that specify
+                               how to partition a 1D array of network settings into the subset of settings
+                               passed to the qnode simulating the network. Each tuple ``(start_id, stop_id)``
+                               is indexed by ``layer_id``, ``node_id``, and classical ``input_id`` as
+                               ``parameter_partitions[layer_id][node_id][input_id] => (start_id, stop_id)``.
+                               The ``start_id`` and ``stop_id`` describe the slice ``network_settings[start_id:stop_id]``.
 
     :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
     """
@@ -144,6 +150,7 @@ class NetworkAnsatz:
         self.dev = self.device()
 
         self.fn = self.construct_ansatz_circuit()
+        self.parameter_partitions = self.get_network_parameter_partitions()
 
     def set_device(self, name, **kwargs):
         """Configures a new PennyLane device for executing the network ansatz circuit.
@@ -190,6 +197,22 @@ class NetworkAnsatz:
             measure_layer(meas_settings)
 
         return ansatz_circuit
+
+    def get_network_parameter_partitions(self):
+        layers = [self.prepare_nodes, self.measure_nodes]
+        parameter_partitions = []
+
+        start_id = 0
+        for i, layer in enumerate(layers):
+            parameter_partitions += [[]]
+            for j, node in enumerate(layer):
+                parameter_partitions[i] += [[]]
+                for input in range(node.num_in):
+                    stop_id = start_id + node.num_settings
+                    parameter_partitions[i][j] += [(start_id, stop_id)]
+                    start_id = stop_id
+
+        return parameter_partitions
 
     @staticmethod
     def collect_wires(network_nodes):
@@ -344,3 +367,35 @@ class NetworkAnsatz:
         ]
 
         return [prepare_settings, measure_settings]
+
+
+# class NetworkSettings:
+#     def __init__(self, network_ansatz, network_settings):
+#         self.settings = network_settings
+#         self.ansatz = network_ansatz
+
+#     def qnode_settings(layer_inputs):
+#         settings_list = []
+
+#         prep_nodes = self.ansatz.prepare_nodes
+#         meas_nodes = self.ansatz.measure_nodes
+
+#         layers = [prep_nodes, meas_nodes]
+
+#         start_id = 0
+#         for i, layer_nodes in enumerate(layers):
+#             num_layer_settings = math.prod([node.num_settings for node in layer_nodes])
+#             for j, node in enumerate(layer_nodes):
+#                 sub_start_id = 0
+
+#                 input = layer_inputs[i][j]
+#                 settings_list += [
+#                     # TODO index each setting from a list
+#                     for k in range(node.num_settings)
+#                 ]
+
+#                 sub_start_id += node.num_settings
+
+
+#             sub_start_id = 0
+#             start_id += num_layer_settings

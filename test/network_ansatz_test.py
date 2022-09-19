@@ -91,6 +91,12 @@ class TestNetworkAnsatz:
         assert network_ansatz.measure_nodes == measure_nodes
         assert network_ansatz.noise_nodes == []
 
+        # verify network settings partitions
+        assert network_ansatz.parameter_partitions == [
+            [[(0, 1)], [(1, 2)], [(2, 3)]],
+            [[(3, 4)], [(4, 5)]],
+        ]
+
         # verify wires
         assert network_ansatz.prepare_wires.tolist() == [0, 1, 2]
         assert network_ansatz.measure_wires.tolist() == [0, 1]
@@ -119,6 +125,12 @@ class TestNetworkAnsatz:
         assert noisy_network_ansatz.prepare_nodes == prepare_nodes
         assert noisy_network_ansatz.measure_nodes == measure_nodes
         assert noisy_network_ansatz.noise_nodes == noise_nodes
+
+        # verify network settings partitions
+        assert network_ansatz.parameter_partitions == [
+            [[(0, 1)], [(1, 2)], [(2, 3)]],
+            [[(3, 4)], [(4, 5)]],
+        ]
 
         # verify wires
         assert noisy_network_ansatz.prepare_wires.tolist() == [0, 1, 2]
@@ -161,6 +173,23 @@ class TestNetworkAnsatz:
         )
 
         assert pure_ansatz.dev.short_name == "default.qubit"
+
+    def test_partition_settings_slices(self):
+        prep_nodes = [
+            qnet.PrepareNode(3, [0, 1], qml.ArbitraryStatePreparation, 6),
+            qnet.PrepareNode(2, [2], qnet.local_RY, 1),
+        ]
+        meas_nodes = [
+            qnet.MeasureNode(2, 2, [1], qml.ArbitraryUnitary, 3),
+            qnet.MeasureNode(2, 4, [0, 2], qml.ArbitraryUnitary, 15),
+        ]
+
+        network_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
+
+        assert network_ansatz.get_network_parameter_partitions() == [
+            [[(0, 6), (6, 12), (12, 18)], [(18, 19), (19, 20)]],
+            [[(20, 23), (23, 26)], [(26, 41), (41, 56)]],
+        ]
 
     def test_qnode_settings(self):
         chsh_ansatz = self.chsh_ansatz()
