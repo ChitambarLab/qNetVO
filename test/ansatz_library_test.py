@@ -252,7 +252,6 @@ class TestNoiseAnsazes:
             bell_state = np.array([[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0], [1, 0, 0, 1]]) / 2
             white_noise_state = np.eye(4) / 4
             match_state = (1 - 16 * gamma / 15) * bell_state + (16 / 15) * gamma * white_noise_state
-            print(gamma)
             assert np.allclose(test_state, match_state)
 
     @pytest.mark.parametrize("gamma", np.arange(-0.1, 1.11, 0.1))
