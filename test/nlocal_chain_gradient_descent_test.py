@@ -77,7 +77,7 @@ class TestNLocalChainGradientDescent:
         init_settings = bilocal_chain_ansatz.rand_scenario_settings()
 
         nat_grad = qnet.parallel_nlocal_chain_grad_fn(
-            bilocal_chain_ansatz, natural_gradient=True, diff_method="parameter-shift"
+            bilocal_chain_ansatz, natural_grad=True, diff_method="parameter-shift"
         )
 
         opt_dict = qnet.gradient_descent(

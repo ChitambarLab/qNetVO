@@ -10,19 +10,19 @@ class TestMutualInfoCostFn:
         "scenario_settings,priors,postmap,match",
         [
             (
-                [[np.zeros((3, 1))], [np.zeros((3, 1))]],
+                [0, 0, 0, 0, 0, 0],
                 [np.ones(3) / 3],
                 np.array([[1, 0], [0, 1], [0, 1]]),
                 0.0,
             ),
             (
-                [[np.array([[0], [np.pi], [0]])], [np.array([[0], [-np.pi], [0]])]],
+                [0, np.pi, 0, 0, -np.pi, 0],
                 [np.ones(3) / 3],
                 np.array([[1, 0], [0, 1], [0, 1]]),
                 -0.9182958,
             ),
             (
-                [[np.array([[0], [np.pi], [0]])], [np.array([[0], [-np.pi], [0]])]],
+                [0, np.pi, 0, 0, -np.pi, 0],
                 [np.array([0.5, 0.5, 0])],
                 np.array([[1, 0], [0, 1], [0, 1]]),
                 -1,
@@ -50,16 +50,11 @@ class TestMutualInfoCostFn:
             [qnet.MeasureNode(1, 4, [0, 1], qnet.local_RY, 2)],
         )
 
-        scenario_settings = [
-            [np.array([[0], [np.pi]]), np.array([[0], [np.pi]])],
-            [np.array([[0, 0]])],
-        ]
-
+        network_settings = [0, np.pi, 0, np.pi, 0, 0]
         priors = [np.ones(2) / 2, np.ones(2) / 2]
-
         mutual_info = qnet.mutual_info_cost_fn(ansatz, priors)
 
-        assert np.isclose(mutual_info(scenario_settings), -2)
+        assert np.isclose(mutual_info(network_settings), -2)
 
 
 class TestMutualInfoOptimimzation:

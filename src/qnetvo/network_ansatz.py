@@ -211,11 +211,13 @@ class NetworkAnsatz:
         for i, layer in enumerate(layers):
             parameter_partitions += [[]]
             for j, node in enumerate(layer):
+
                 parameter_partitions[i] += [[]]
-                for input in range(node.num_in):
-                    stop_id = start_id + node.num_settings
-                    parameter_partitions[i][j] += [(start_id, stop_id)]
-                    start_id = stop_id
+                if len(node.static_settings) == 0:
+                    for input in range(node.num_in):
+                        stop_id = start_id + node.num_settings
+                        parameter_partitions[i][j] += [(start_id, stop_id)]
+                        start_id = stop_id
 
         return parameter_partitions
 
@@ -241,50 +243,63 @@ class NetworkAnsatz:
 
         return all_wires
 
-    @staticmethod
-    def layer_settings(scenario_settings, node_inputs, nodes):
+    def layer_settings(self, network_settings, layer_id, layer_inputs):
         """Constructs the list of settings for a circuit layer in the network ansatz.
 
-        The type of tensor used for the returned layer settings matches the tensor
-        type of the elements of ``scenario_settings``.
+        :param network_settings: A list containing the circuit settings for each node
+                                 in the network.
+        :type network_settings: List[Float]
 
-        :param scenario_settings: A list containing the settings for all classical inputs.
-        :type network_nodes: list[array[float]]
+        :param layer_id: The id for the targeted layer.
+        :type layer_id: Int
 
-        :param node_inputs: A list of the classical inputs supplied to each network node.
-        :type node_inputs: list[int]
+        :param layer_inputs: A list of the classical inputs supplied to each network node.
+        :type layer_inputs: List[Int]
 
-        :returns: A 1D array of all settings for the circuit layer.
-        :rtype: array[float]
+        :returns: A 1D array of settings for the circuit layer.
+        :rtype: List[float]
         """
-        return math.concatenate(
-            [
-                scenario_settings[i][node_input]
-                if len(nodes[i].static_settings) == 0
-                else nodes[i].static_settings[node_input]
-                for i, node_input in enumerate(node_inputs)
-            ]
-        )
+        settings = []
+        for j, node_input in enumerate(layer_inputs):
+            start_id, stop_id = self.parameter_partitions[layer_id][j][node_input]
+            settings += [network_settings[k] for k in range(start_id, stop_id)]
 
-    def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
+        return settings
+
+    def qnode_settings(self, network_settings, network_inputs):
         """Constructs a list of settings to pass to the qnode executing the network ansatz.
 
-        :param scenario_settings: The settings for the network ansatz scenario.
-        :type scenario_settings: list[list[np.ndarray]]
+        :param network_settings: The settings for the network ansatz scenario.
+        :type network_settings: list[list[np.ndarray]]
 
-        :param prep_inputs: The classical inputs passed to each preparation node.
-        :type prep_inputs: list[int]
+        :param network_inputs: The classical inputs passed to each network node.
+        :type network_inputs: List[List[int]]
 
-        :param meas_inputs: The classical inputs passed to each measurement node.
-        :type meas_inputs: list[int]
-
-        :returns: The settings to pass to the constructed qnode.
-        :rtype: list[float]
+        :returns: A list of settings to pass to the constructed qnode.
+        :rtype: np.array
         """
+        settings = []
+        for i, layer_inputs in enumerate(network_inputs):
+            settings += self.layer_settings(network_settings, i, layer_inputs)
 
-        prep_settings = self.layer_settings(scenario_settings[0], prep_inputs, self.prepare_nodes)
-        meas_settings = self.layer_settings(scenario_settings[1], meas_inputs, self.measure_nodes)
-        return np.concatenate([prep_settings, meas_settings])
+        return np.array(settings)
+
+    def expand_qnode_settings(self, qn_settings, network_inputs):
+        layers = [self.prepare_nodes, self.measure_nodes]
+        expanded_settings = self.zero_scenario_settings()
+
+        qn_start_id = 0
+        for i, layer_inputs in enumerate(network_inputs):
+            for j, node_input in enumerate(layer_inputs):
+                node = layers[i][j]
+                qn_stop_id = qn_start_id + node.num_settings
+                start_id, stop_id = self.parameter_partitions[i][j][node_input]
+
+                expanded_settings[start_id:stop_id] = qn_settings[qn_start_id:qn_stop_id]
+
+                qn_start_id = qn_stop_id
+
+        return np.array(expanded_settings)
 
     @staticmethod
     def circuit_layer(network_nodes):
@@ -321,20 +336,22 @@ class NetworkAnsatz:
                   where the dimension of each array is ``(num_inputs, num_settings)``.
         :rtype: list[list[np.array]]
         """
-        prepare_settings = [
-            2 * np.pi * np.random.random(node.settings_dims) - np.pi
-            if len(node.static_settings) == 0
-            else np.array([[]])
-            for node in self.prepare_nodes
-        ]
-        measure_settings = [
-            2 * np.pi * np.random.random(node.settings_dims) - np.pi
-            if len(node.static_settings) == 0
-            else np.array([[]])
-            for node in self.measure_nodes
-        ]
+        # prepare_settings = [
+        #     2 * np.pi * np.random.random(node.settings_dims) - np.pi
+        #     if len(node.static_settings) == 0
+        #     else np.array([[]])
+        #     for node in self.prepare_nodes
+        # ]
+        # measure_settings = [
+        #     2 * np.pi * np.random.random(node.settings_dims) - np.pi
+        #     if len(node.static_settings) == 0
+        #     else np.array([[]])
+        #     for node in self.measure_nodes
+        # ]
 
-        return [prepare_settings, measure_settings]
+        # return [prepare_settings, measure_settings]
+        num_settings = self.parameter_partitions[-1][-1][-1][-1]
+        return 2 * np.pi * np.random.rand(num_settings) - np.pi
 
     def tf_rand_scenario_settings(self):
         """Creates a randomized settings array for the network ansatz using TensorFlow
@@ -347,10 +364,11 @@ class NetworkAnsatz:
 
         np_settings = self.rand_scenario_settings()
 
-        return [
-            [tf.Variable(settings) for settings in np_settings[0]],
-            [tf.Variable(settings) for settings in np_settings[1]],
-        ]
+        # return [
+        #     [tf.Variable(settings) for settings in np_settings[0]],
+        #     [tf.Variable(settings) for settings in np_settings[1]],
+        # ]
+        return tf.Variable(np_settings)
 
     def zero_scenario_settings(self):
         """Creates a settings array for the network ansatz that consists of zeros.
@@ -362,13 +380,16 @@ class NetworkAnsatz:
                   where the dimension of each array is ``(num_inputs, num_settings)``.
         :rtype: list[list[np.array]]
         """
-        prepare_settings = [
-            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
-            for node in self.prepare_nodes
-        ]
-        measure_settings = [
-            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
-            for node in self.measure_nodes
-        ]
+        # prepare_settings = [
+        #     np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
+        #     for node in self.prepare_nodes
+        # ]
+        # measure_settings = [
+        #     np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
+        #     for node in self.measure_nodes
+        # ]
 
-        return [prepare_settings, measure_settings]
+        # return [prepare_settings, measure_settings]
+        print(self.parameter_partitions)
+        num_settings = self.parameter_partitions[-1][-1][-1][-1]
+        return np.zeros(num_settings)

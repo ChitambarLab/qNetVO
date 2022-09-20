@@ -30,7 +30,7 @@ class TestBehaviorFn:
         )
 
         settings = zero_settings
-        settings[0][0][1] = [np.pi]
+        settings[1] = np.pi
 
         assert np.allclose(
             P_Net(settings),
@@ -42,7 +42,7 @@ class TestBehaviorFn:
             ],
         )
 
-        settings[1][1][1] = [np.pi / 2]
+        settings[7] = np.pi / 2
 
         assert np.allclose(
             P_Net(settings),
@@ -90,7 +90,7 @@ class TestBehaviorFn:
         )
 
         settings = zero_settings
-        settings[0][0][1] = [np.pi]
+        settings[1] = np.pi
 
         assert np.allclose(
             P_Net(settings),

@@ -45,12 +45,13 @@ class TestCostI3322BellInequality:
         assert np.isclose(opt_dict["opt_score"], 0.25, atol=10e-6)
 
         # example close to optimal strategy
-        settings = ansatz.zero_scenario_settings()
-        settings[1][0][0] = [3 * np.pi / 4]
-        settings[1][0][1] = [-14 * np.pi / 15]
-        settings[1][0][2] = [2 * np.pi / 5]
-        settings[1][1][0] = [3 * np.pi / 4]
-        settings[1][1][1] = [16 * np.pi / 15]
-        settings[1][1][2] = [2 * np.pi / 5]
+        settings = [
+            3 * np.pi / 4,
+            -14 * np.pi / 15,
+            2 * np.pi / 5,
+            3 * np.pi / 4,
+            16 * np.pi / 15,
+            2 * np.pi / 5,
+        ]
 
         assert np.isclose(I_3322_cost(settings), -0.25, atol=1e-3)

@@ -21,9 +21,5 @@ class TestCHSHInequalityCost:
         zero_settings = chsh_ansatz.zero_scenario_settings()
         assert np.isclose(chsh_cost(zero_settings), -2)
 
-        settings = zero_settings
-        settings[1][0][1] = np.pi / 2
-        settings[1][1][0] = np.pi / 4
-        settings[1][1][1] = -np.pi / 4
-
+        settings = [0, np.pi / 2, np.pi / 4, -np.pi / 4]
         assert np.isclose(chsh_cost(settings), -2 * np.sqrt(2))

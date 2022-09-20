@@ -339,55 +339,60 @@ class TestNetworkAnsatz:
 
         network_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        zero_settings = network_ansatz.zero_scenario_settings()
-        match_settings = [
-            [[[0, 0], [0, 0], [0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0]]],
-            [[[0], [0]], [[0, 0, 0]], [[]]],
-        ]
+        # zero_settings = network_ansatz.zero_scenario_settings()
+        # match_settings = [0] * 19
 
-        assert len(zero_settings[0]) == 2
-        assert np.array_equal(zero_settings[0][0], match_settings[0][0])
-        assert np.array_equal(zero_settings[0][1], match_settings[0][1])
+        assert np.allclose(network_ansatz.zero_scenario_settings(), [0] * 19)
 
-        assert len(zero_settings[1]) == 3
-        assert np.array_equal(zero_settings[1][0], match_settings[1][0])
-        assert np.array_equal(zero_settings[1][1], match_settings[1][1])
-        assert np.array_equal(zero_settings[1][2], match_settings[1][2])
+        # assert len(zero_settings[0]) == 2
+        # assert np.array_equal(zero_settings[0][0], match_settings[0][0])
+        # assert np.array_equal(zero_settings[0][1], match_settings[0][1])
+
+        # assert len(zero_settings[1]) == 3
+        # assert np.array_equal(zero_settings[1][0], match_settings[1][0])
+        # assert np.array_equal(zero_settings[1][1], match_settings[1][1])
+        # assert np.array_equal(zero_settings[1][2], match_settings[1][2])
 
         np.random.seed(123)
         rand_settings = network_ansatz.rand_scenario_settings()
 
         match_settings = [
-            [
-                [[1.2344523, -1.34372619], [-1.71624293, 0.3224202], [1.37896421, -0.48313636]],
-                [
-                    [3.02073055, 1.1613195, -0.1198084, -0.67784562],
-                    [-0.98534158, 1.43916176, -0.38596197, -2.76662537],
-                ],
-            ],
-            [[[-0.64060684], [1.49536924]], [[-1.99496329, -2.03919676, 0.19824313]], [[]]],
+            1.2344523,
+            -1.34372619,
+            -1.71624293,
+            0.3224202,
+            1.37896421,
+            -0.48313636,
+            3.02073055,
+            1.1613195,
+            -0.1198084,
+            -0.67784562,
+            -0.98534158,
+            1.43916176,
+            -0.38596197,
+            -2.76662537,
+            -0.64060684,
+            1.49536924,
+            1.99496329,
+            -2.03919676,
+            0.19824313,
         ]
 
-        assert len(rand_settings[0]) == 2
-        assert np.allclose(rand_settings[0][0], match_settings[0][0])
-        assert np.allclose(rand_settings[0][1], match_settings[0][1])
+        assert np.allclose(rand_settings, match_settings)
 
-        assert len(rand_settings[1]) == 3
-        assert np.allclose(rand_settings[1][0], match_settings[1][0])
-        assert np.allclose(rand_settings[1][1], match_settings[1][1])
-        assert np.array_equal(rand_settings[1][2], match_settings[1][2])
+        # assert len(rand_settings[0]) == 2
+        # assert np.allclose(rand_settings[0][0], match_settings[0][0])
+        # assert np.allclose(rand_settings[0][1], match_settings[0][1])
+
+        # assert len(rand_settings[1]) == 3
+        # assert np.allclose(rand_settings[1][0], match_settings[1][0])
+        # assert np.allclose(rand_settings[1][1], match_settings[1][1])
+        # assert np.array_equal(rand_settings[1][2], match_settings[1][2])
 
         # tensorflow types
         np.random.seed(123)
         tf_rand_settings = network_ansatz.tf_rand_scenario_settings()
 
-        assert isinstance(tf_rand_settings[0][0], tf.Variable)
+        assert isinstance(tf_rand_settings, tf.Variable)
 
-        assert len(tf_rand_settings[0]) == 2
-        assert np.allclose(tf_rand_settings[0][0], match_settings[0][0])
-        assert np.allclose(tf_rand_settings[0][1], match_settings[0][1])
-
-        assert len(rand_settings[1]) == 3
-        assert np.allclose(tf_rand_settings[1][0], match_settings[1][0])
-        assert np.allclose(tf_rand_settings[1][1], match_settings[1][1])
-        assert np.array_equal(tf_rand_settings[1][2], match_settings[1][2])
+        assert np.allclose(tf_rand_settings, match_settings)

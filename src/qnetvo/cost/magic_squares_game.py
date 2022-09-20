@@ -20,7 +20,7 @@ def magic_squares_game_cost(network_ansatz, **qnode_kwargs):
         winning_probability = 0
         for x in [0, 1, 2]:
             for y in [0, 1, 2]:
-                settings = network_ansatz.qnode_settings(scenario_settings, prep_inputs, [x, y])
+                settings = network_ansatz.qnode_settings(scenario_settings, [prep_inputs, [x, y]])
                 probs = probs_qnode(settings)
 
                 for i in range(16):

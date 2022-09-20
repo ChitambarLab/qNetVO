@@ -27,7 +27,7 @@ def mutual_info_cost_fn(
     In a quantum prepare and measure network, we evaluate the mutual information between
     the collections of preparation and measurement nodes.
 
-    :param ansatz: The ansatz circuit on which the mutual information is evalutated.
+    :param ansatz: The ansatz circuit on which the mutual information is evaluated.
     :type ansatz: NetworkAnsatz
 
     :param priors: A list of prior distributions for the inputs of each preparation node.
@@ -85,7 +85,7 @@ def mutual_info_cost_fn(
                 prep_input_vals = [0] * num_prep_nodes
                 meas_input_vals = input_id_set[0:num_meas_nodes]
 
-            settings = ansatz.qnode_settings(scenario_settings, prep_input_vals, meas_input_vals)
+            settings = ansatz.qnode_settings(scenario_settings, [prep_input_vals, meas_input_vals])
 
             p_mac = postmap @ probs_qnode(settings)
 
@@ -132,7 +132,7 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
 
     def cost_fn(scenario_settings):
         settings = ansatz.qnode_settings(
-            scenario_settings, [0] * num_prep_nodes, [0] * num_meas_nodes
+            scenario_settings, [[0] * num_prep_nodes, [0] * num_meas_nodes]
         )
         probs_vec = probs_qnode(settings)
 

@@ -60,19 +60,13 @@ class TestMerminKlyshkoInequality:
 
         meas_nodes = [
             qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
-            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 2),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
         ]
 
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         mk_chsh_cost = qnet.mermin_klyshko_cost_fn(ansatz)
-
-        chsh_cost = mk_chsh_cost(
-            [
-                [np.array([[]])],
-                [np.array([[0], [np.pi / 2]]), np.array([[np.pi / 4], [-np.pi / 4]])],
-            ]
-        )
+        chsh_cost = mk_chsh_cost([0, np.pi / 2, np.pi / 4, -np.pi / 4])
 
         assert np.isclose(chsh_cost, -2 * np.sqrt(2))
 
@@ -84,19 +78,19 @@ class TestMerminKlyshkoInequality:
 
         cl_ansatz = qnet.NetworkAnsatz(cl_prep, meas_nodes)
 
-        meas_settings = [np.array([[np.pi], [0]]) for i in range(n - 1)]
+        meas_settings = []
+        for i in range(n - 1):
+            meas_settings += [np.pi, 0]
 
         if n in [5, 6, 9, 10]:
-            meas_settings.append(np.array([[0], [np.pi]]))
+            meas_settings += [0, np.pi]
         else:
-            meas_settings.append(np.array([[np.pi], [0]]))
-
-        cl_opt_settings = [[np.array([[]])], meas_settings]
+            meas_settings += [np.pi, 0]
 
         mermin_klyshko_cost = qnet.mermin_klyshko_cost_fn(cl_ansatz)
 
         assert np.isclose(
-            -(mermin_klyshko_cost(cl_opt_settings)), qnet.mermin_klyshko_classical_bound(n)
+            -(mermin_klyshko_cost(meas_settings)), qnet.mermin_klyshko_classical_bound(n)
         )
 
     @pytest.mark.parametrize("n", [3, 4, 5, 6, 7, 8])
@@ -113,15 +107,15 @@ class TestMerminKlyshkoInequality:
 
         mermin_klyshko_cost = qnet.mermin_klyshko_cost_fn(q_opt_ansatz)
 
-        opt_meas_settings = [np.array([[-np.pi / 4], [np.pi / 4]]) for i in range(n - 1)]
+        opt_meas_settings = []
+        for i in range(n - 1):
+            opt_meas_settings += [-np.pi / 4, np.pi / 4]
 
         if n % 2 == 0:
-            opt_meas_settings.append(np.array([[0], [np.pi / 2]]))
+            opt_meas_settings += [0, np.pi / 2]
         else:
-            opt_meas_settings.append(np.array([[np.pi], [3 * np.pi / 2]]))
-
-        opt_settings = [[np.array([[]])], opt_meas_settings]
+            opt_meas_settings += [np.pi, 3 * np.pi / 2]
 
         assert np.isclose(
-            -(mermin_klyshko_cost(opt_settings)), qnet.mermin_klyshko_quantum_bound(n)
+            -(mermin_klyshko_cost(opt_meas_settings)), qnet.mermin_klyshko_quantum_bound(n)
         )

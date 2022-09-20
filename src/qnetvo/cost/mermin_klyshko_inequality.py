@@ -91,7 +91,7 @@ def mermin_klyshko_cost_fn(ansatz, **qnode_kwargs):
             meas_inputs = meas_inputs_list[i]
             scalar = scalars_list[i]
 
-            settings = ansatz.qnode_settings(network_settings, prep_inputs, meas_inputs)
+            settings = ansatz.qnode_settings(network_settings, [prep_inputs, meas_inputs])
             score += scalar * mk_qnode(settings)
 
         return -(score)

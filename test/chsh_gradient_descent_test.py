@@ -64,7 +64,7 @@ class TestCHSHGradientDescent:
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
         chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
-        chsh_grad_fn = qnet.parallel_chsh_grad(chsh_ansatz)
+        chsh_grad_fn = qnet.parallel_chsh_grad_fn(chsh_ansatz)
 
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
@@ -90,7 +90,8 @@ class TestCHSHGradientDescent:
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
         chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
-        chsh_grad_fn = qnet.chsh_natural_grad(chsh_ansatz)
+        # chsh_grad_fn = qnet.chsh_natural_grad(chsh_ansatz)
+        nat_grad_fn = qnet.parallel_chsh_grad_fn(chsh_ansatz, natural_grad=True)
 
         np.random.seed(666)
         init_settings = chsh_ansatz.rand_scenario_settings()
@@ -99,8 +100,9 @@ class TestCHSHGradientDescent:
             init_settings,
             num_steps=15,
             step_size=0.1,
-            verbose=False,
-            grad_fn=chsh_grad_fn,
+            verbose=True,
+            sample_width=1,
+            grad_fn=nat_grad_fn,
         )
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
