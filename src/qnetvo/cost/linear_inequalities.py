@@ -78,11 +78,11 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
     base_digits = num_in_prep_nodes + num_in_meas_nodes
     node_input_ids = [mixed_base_num(i, base_digits) for i in range(net_num_in)]
 
-    def cost(scenario_settings):
+    def cost(*network_settings):
         score = 0
         for (i, input_id_set) in enumerate(node_input_ids):
             settings = network_ansatz.qnode_settings(
-                scenario_settings,
+                network_settings,
                 [
                     input_id_set[0 : len(network_ansatz.prepare_nodes)],
                     input_id_set[len(network_ansatz.prepare_nodes) :],

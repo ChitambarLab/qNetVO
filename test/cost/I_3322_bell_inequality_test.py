@@ -36,7 +36,7 @@ class TestCostI3322BellInequality:
         I_3322_cost = qnet.I_3322_bell_inequality_cost(ansatz)
 
         np.random.seed(13)
-        init_settings = ansatz.rand_scenario_settings()
+        init_settings = ansatz.rand_network_settings()
 
         opt_dict = qnet.gradient_descent(
             I_3322_cost, init_settings, step_size=0.5, num_steps=50, verbose=False
@@ -54,4 +54,4 @@ class TestCostI3322BellInequality:
             2 * np.pi / 5,
         ]
 
-        assert np.isclose(I_3322_cost(settings), -0.25, atol=1e-3)
+        assert np.isclose(I_3322_cost(*settings), -0.25, atol=1e-3)

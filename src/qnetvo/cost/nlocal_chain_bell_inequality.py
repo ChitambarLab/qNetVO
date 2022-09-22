@@ -16,7 +16,7 @@ def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     :param qnode_kwargs: keyword args to be passed to constructed QNodes.
     :type: *optional* dictionary
 
-    :returns: A function callable as ``I22(scenario_settings)`` that evaluates the :math:`I_{22}` quantity.
+    :returns: A function callable as ``I22(*network_settings)`` that evaluates the :math:`I_{22}` quantity.
     :rtype: function
     """
 
@@ -36,7 +36,7 @@ def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
     I22_xy_inputs = [[x_a] + [0 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
-    def I22(network_settings):
+    def I22(*network_settings):
 
         I22_xy_settings = [
             network_ansatz.qnode_settings(network_settings, [prep_inputs, meas_inputs])
@@ -70,7 +70,7 @@ def J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     :param qnode_kwargs: keyword args to be passed to constructed QNodes.
     :type: *optional* dictionary
 
-    :returns: A function callable as ``J22(scenario_settings)`` that evaluates the :math:`J_{22}` quantity.
+    :returns: A function callable as ``J22(*network_settings)`` that evaluates the :math:`J_{22}` quantity.
     :rtype: function
     """
 
@@ -90,7 +90,7 @@ def J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
     J22_xy_inputs = [[x_a] + [1 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
-    def J22(network_settings):
+    def J22(*network_settings):
 
         J22_xy_settings = [
             network_ansatz.qnode_settings(network_settings, [prep_inputs, meas_inputs])
@@ -149,18 +149,18 @@ def nlocal_chain_cost_22(network_ansatz, parallel=False, **qnode_kwargs):
     The maximal score for the dichotomic :math:`n` -local Bell inequality is known to be
     :math:`\\sqrt{2} \\approx 1.414 213`.
 
-    :returns: A cost function that can be evaluated as ``cost(scenario_settings)`` where
-              ``scenario_settings`` have the appropriate dimensions for the provided ``network_ansatz``
+    :returns: A cost function that can be evaluated as ``cost(*network_settings)`` where
+              ``network_settings`` have the appropriate dimensions for the provided ``network_ansatz``
     :rtype: Function
     """
 
     I22 = I22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
     J22 = J22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
 
-    def cost(scenario_settings):
+    def cost(*network_settings):
 
-        I22_score = I22(scenario_settings)
-        J22_score = J22(scenario_settings)
+        I22_score = I22(*network_settings)
+        J22_score = J22(*network_settings)
 
         return -(math.sqrt(math.abs(I22_score) / 4) + math.sqrt(math.abs(J22_score) / 4))
 
@@ -185,7 +185,7 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
     :param qnode_kwargs: A keyword argument passthrough to qnode construction.
     :type qnode_kwargs: *optional* dict
 
-    :returns: A parallelized (multithreaded) gradient function ``nlocal_chain_grad(scenario_settings)``.
+    :returns: A parallelized (multithreaded) gradient function ``nlocal_chain_grad(*network_settings)``.
     :rtype: function
     """
 
@@ -215,10 +215,10 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
 
     grad_fn = _nat_grad_fn if natural_grad else _grad_fn
 
-    def nlocal_chain_grad_fn(network_settings):
+    def nlocal_chain_grad_fn(*network_settings):
 
-        I22_score = I22(network_settings)
-        J22_score = J22(network_settings)
+        I22_score = I22(*network_settings)
+        J22_score = J22(*network_settings)
 
         I22_xy_settings = [
             network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
@@ -241,7 +241,7 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
         I22_grads = dask.compute(*I22_delayed_grads, scheduler="threads")
         J22_grads = dask.compute(*J22_delayed_grads, scheduler="threads")
 
-        settings_grad = network_ansatz.zero_scenario_settings()
+        settings_grad = network_ansatz.zero_network_settings()
 
         I22_scalar = -(1 / 4) * math.sign(I22_score) / math.sqrt(math.abs(I22_score))
         J22_scalar = -(1 / 4) * math.sign(J22_score) / math.sqrt(math.abs(J22_score))

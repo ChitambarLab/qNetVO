@@ -38,7 +38,7 @@ def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
                      each column sums to one and contains only positive values.
     :type postmap: *optional* np.ndarray
 
-    :returns: A function ``P_Net(scenario_settings)`` that evaluates the
+    :returns: A function ``P_Net(network_settings)`` that evaluates the
               behavior matrix for a given set of settings.
     :rtype: function
     """

@@ -26,7 +26,7 @@ class TestCHSHGradientDescent:
         chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
 
         np.random.seed(666)
-        init_settings = chsh_ansatz.rand_scenario_settings()
+        init_settings = chsh_ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
             chsh_cost, init_settings, num_steps=15, step_size=0.2, verbose=False
         )
@@ -46,7 +46,7 @@ class TestCHSHGradientDescent:
         chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
 
         np.random.seed(666)
-        init_settings = chsh_ansatz.rand_scenario_settings()
+        init_settings = chsh_ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
             chsh_cost, init_settings, num_steps=40, step_size=0.2, verbose=False
         )
@@ -67,7 +67,7 @@ class TestCHSHGradientDescent:
         chsh_grad_fn = qnet.parallel_chsh_grad_fn(chsh_ansatz)
 
         np.random.seed(666)
-        init_settings = chsh_ansatz.rand_scenario_settings()
+        init_settings = chsh_ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
             chsh_cost,
             init_settings,
@@ -94,7 +94,7 @@ class TestCHSHGradientDescent:
         nat_grad_fn = qnet.parallel_chsh_grad_fn(chsh_ansatz, natural_grad=True)
 
         np.random.seed(666)
-        init_settings = chsh_ansatz.rand_scenario_settings()
+        init_settings = chsh_ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
             chsh_cost,
             init_settings,
@@ -130,7 +130,7 @@ class TestCHSHGradientDescent:
         np.random.seed(666)
         opt_dict = qnet.gradient_descent(
             chsh_cost,
-            chsh_ansatz.rand_scenario_settings(),
+            chsh_ansatz.rand_network_settings(),
             num_steps=10,
             step_size=0.4,
             verbose=True,

@@ -66,7 +66,8 @@ class TestMerminKlyshkoInequality:
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         mk_chsh_cost = qnet.mermin_klyshko_cost_fn(ansatz)
-        chsh_cost = mk_chsh_cost([0, np.pi / 2, np.pi / 4, -np.pi / 4])
+        settings = [0, np.pi / 2, np.pi / 4, -np.pi / 4]
+        chsh_cost = mk_chsh_cost(*settings)
 
         assert np.isclose(chsh_cost, -2 * np.sqrt(2))
 
@@ -90,7 +91,7 @@ class TestMerminKlyshkoInequality:
         mermin_klyshko_cost = qnet.mermin_klyshko_cost_fn(cl_ansatz)
 
         assert np.isclose(
-            -(mermin_klyshko_cost(meas_settings)), qnet.mermin_klyshko_classical_bound(n)
+            -(mermin_klyshko_cost(*meas_settings)), qnet.mermin_klyshko_classical_bound(n)
         )
 
     @pytest.mark.parametrize("n", [3, 4, 5, 6, 7, 8])
@@ -117,5 +118,5 @@ class TestMerminKlyshkoInequality:
             opt_meas_settings += [np.pi, 3 * np.pi / 2]
 
         assert np.isclose(
-            -(mermin_klyshko_cost(opt_meas_settings)), qnet.mermin_klyshko_quantum_bound(n)
+            -(mermin_klyshko_cost(*opt_meas_settings)), qnet.mermin_klyshko_quantum_bound(n)
         )

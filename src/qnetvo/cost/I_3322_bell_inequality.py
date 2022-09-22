@@ -45,14 +45,14 @@ def I_3322_bell_inequality_cost(network_ansatz, **qnode_kwargs):
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
 
-    :returns: A cost function evaluated as ``cost(scenario_settings)`` where
-              the ``scenario_settings`` are obtained from the provided
+    :returns: A cost function evaluated as ``cost(*network_settings)`` where
+              the ``network_settings`` are obtained from the provided
               ``network_ansatz`` class.
     """
     I_3322_joint_probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
     I_3322_local_expval_qnode = local_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
-    def cost(network_settings):
+    def cost_fn(*network_settings):
         score = 0
         for (x, y, mult) in [
             (0, 0, 1),
@@ -88,4 +88,4 @@ def I_3322_bell_inequality_cost(network_ansatz, **qnode_kwargs):
 
         return -(score)
 
-    return cost
+    return cost_fn

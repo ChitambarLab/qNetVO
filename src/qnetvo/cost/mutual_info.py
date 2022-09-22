@@ -44,7 +44,7 @@ def mutual_info_cost_fn(
     :param qnode_kwargs: Keyword arguments passed to the execute qnodes.
     :type qnode_kwargs: dictionary
 
-    :returns: A cost function ``mutual_info_cost(scenario_settings)`` parameterized by
+    :returns: A cost function ``mutual_info_cost(*network_settings)`` parameterized by
               the ansatz-specific scenario settings.
     :rtype: Function
     """
@@ -73,7 +73,7 @@ def mutual_info_cost_fn(
 
     probs_qnode = joint_probs_qnode(ansatz, **qnode_kwargs)
 
-    def cost_fn(scenario_settings):
+    def cost_fn(*network_settings):
         Hxy = 0
         py_vec = np.zeros(net_num_out)
         for (i, input_id_set) in enumerate(node_input_ids):
@@ -85,7 +85,7 @@ def mutual_info_cost_fn(
                 prep_input_vals = [0] * num_prep_nodes
                 meas_input_vals = input_id_set[0:num_meas_nodes]
 
-            settings = ansatz.qnode_settings(scenario_settings, [prep_input_vals, meas_input_vals])
+            settings = ansatz.qnode_settings(network_settings, [prep_input_vals, meas_input_vals])
 
             p_mac = postmap @ probs_qnode(settings)
 
@@ -121,8 +121,8 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
     :param qnode_kwargs: Keyword arguments passed to the execute qnodes.
     :type qnode_kwargs: dictionary
 
-    :returns: A cost function ``shannon_entropy(scenario_settings)`` parameterized by
-              the ansatz-specific scenario settings.
+    :returns: A cost function ``shannon_entropy(*network_settings)`` parameterized by
+              the ansatz-specific network settings.
     :rtype: Function
     """
     num_prep_nodes = len(ansatz.prepare_nodes)
@@ -130,9 +130,9 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
 
     probs_qnode = joint_probs_qnode(ansatz, **qnode_kwargs)
 
-    def cost_fn(scenario_settings):
+    def cost_fn(*network_settings):
         settings = ansatz.qnode_settings(
-            scenario_settings, [[0] * num_prep_nodes, [0] * num_meas_nodes]
+            network_settings, [[0] * num_prep_nodes, [0] * num_meas_nodes]
         )
         probs_vec = probs_qnode(settings)
 

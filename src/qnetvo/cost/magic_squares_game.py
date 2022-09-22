@@ -8,19 +8,19 @@ def magic_squares_game_cost(network_ansatz, **qnode_kwargs):
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
 
-    :return: A cost function evaluated as ``cost(scenario_settings)`` where
-              the ``scenario_settings`` are obtained from the provided
+    :return: A cost function evaluated as ``cost(*network_settings)`` where
+              the ``network_settings`` are obtained from the provided
               ``network_ansatz`` class.
     :rtype: Function
     """
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
     prep_inputs = [0] * len(network_ansatz.prepare_nodes)
 
-    def cost(scenario_settings):
+    def cost(*network_settings):
         winning_probability = 0
         for x in [0, 1, 2]:
             for y in [0, 1, 2]:
-                settings = network_ansatz.qnode_settings(scenario_settings, [prep_inputs, [x, y]])
+                settings = network_ansatz.qnode_settings(network_settings, [prep_inputs, [x, y]])
                 probs = probs_qnode(settings)
 
                 for i in range(16):

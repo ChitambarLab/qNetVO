@@ -17,7 +17,7 @@ class TestBehaviorFn:
         ]
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
         P_Net = qnet.behavior_fn(ansatz)
-        zero_settings = ansatz.zero_scenario_settings()
+        zero_settings = ansatz.zero_network_settings()
 
         assert np.all(
             P_Net(zero_settings)
@@ -66,7 +66,7 @@ class TestBehaviorFn:
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         P_Net_no_postmap = qnet.behavior_fn(ansatz)
-        zero_settings = ansatz.zero_scenario_settings()
+        zero_settings = ansatz.zero_network_settings()
         assert np.all(
             P_Net_no_postmap(zero_settings)
             == [
@@ -115,7 +115,7 @@ class TestBehaviorFn:
         net_behavior = qnet.behavior_fn(net_ansatz)
 
         np.random.seed(419)
-        rand_settings = net_ansatz.rand_scenario_settings()
+        rand_settings = net_ansatz.rand_network_settings()
 
         P_Net = net_behavior(rand_settings)
 

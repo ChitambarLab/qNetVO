@@ -44,13 +44,13 @@ class TestNlocalStar22CostFn:
             bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
         )
 
-        zero_settings = bilocal_star_ansatz.zero_scenario_settings()
+        zero_settings = bilocal_star_ansatz.zero_network_settings()
 
-        assert np.isclose(bilocal_22_cost(zero_settings), -1)
+        assert np.isclose(bilocal_22_cost(*zero_settings), -1)
 
         ideal_settings = [0, np.pi / 2, np.pi / 4, -np.pi / 4, np.pi / 4, 0, -np.pi / 4, np.pi / 2]
 
-        assert np.isclose(bilocal_22_cost(ideal_settings), -(np.sqrt(2)))
+        assert np.isclose(bilocal_22_cost(*ideal_settings), -(np.sqrt(2)))
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
     def test_trilocal_star_cost(self, parallel_flag, nthreads):
@@ -61,9 +61,9 @@ class TestNlocalStar22CostFn:
             nthreads=nthreads,
         )
 
-        zero_settings = trilocal_star_ansatz.zero_scenario_settings()
+        zero_settings = trilocal_star_ansatz.zero_network_settings()
 
-        assert np.isclose(trilocal_22_cost(zero_settings), -1)
+        assert np.isclose(trilocal_22_cost(*zero_settings), -1)
 
         ideal_settings = [
             np.pi / 4,
@@ -80,18 +80,18 @@ class TestNlocalStar22CostFn:
             np.pi / 2,
         ]
 
-        assert np.isclose(trilocal_22_cost(ideal_settings), -np.sqrt(2))
+        assert np.isclose(trilocal_22_cost(*ideal_settings), -np.sqrt(2))
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
     def test_bilocal_star_22_cost_gradient_descent(self, parallel_flag, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
 
-        np.random.seed(45)
+        # np.random.seed(45)
         opt_dict = qnet.gradient_descent(
             qnet.nlocal_star_22_cost_fn(
                 bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
             ),
-            bilocal_star_ansatz.rand_scenario_settings(),
+            bilocal_star_ansatz.rand_network_settings(),
             num_steps=10,
             step_size=2,
             sample_width=10,
@@ -109,7 +109,7 @@ class TestNlocalStar22CostFn:
         np.random.seed(45)
         opt_dict = qnet.gradient_descent(
             qnet.nlocal_star_22_cost_fn(trilocal_star_ansatz, parallel=True, nthreads=nthreads),
-            trilocal_star_ansatz.rand_scenario_settings(),
+            trilocal_star_ansatz.rand_network_settings(),
             num_steps=8,
             step_size=2,
             sample_width=10,
@@ -127,7 +127,7 @@ class TestNlocalStar22CostFn:
         np.random.seed(45)
         opt_dict = qnet.gradient_descent(
             qnet.nlocal_star_22_cost_fn(bilocal_star_ansatz, parallel=True, nthreads=nthreads),
-            bilocal_star_ansatz.rand_scenario_settings(),
+            bilocal_star_ansatz.rand_network_settings(),
             num_steps=10,
             step_size=1.5,
             sample_width=1,

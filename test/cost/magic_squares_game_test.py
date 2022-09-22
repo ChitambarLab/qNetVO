@@ -16,7 +16,7 @@ class TestCostMagicSquaresGame:
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         np.random.seed(1)
-        settings = ansatz.rand_scenario_settings()
+        settings = ansatz.rand_network_settings()
         cost = qnet.magic_squares_game_cost(ansatz)
 
         opt_dict = qnet.gradient_descent(cost, settings, step_size=4.5, num_steps=15)

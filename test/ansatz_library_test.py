@@ -114,6 +114,8 @@ class TestNoiseAnsazes:
         dev = qml.device("default.qubit", wires=[0, 1])
         dev_mixed = qml.device("default.mixed", wires=[0])
 
+        state_prep_fn = lambda: qml.RX(np.pi / 4, wires=[0])
+
         # verifying state construction
         @qml.qnode(dev)
         def test_state(noise_param):
@@ -140,7 +142,7 @@ class TestNoiseAnsazes:
             A_state[1, 0] = np.trace(AB_state[2:4, 0:2])
             A_state[1, 1] = np.trace(AB_state[2:4, 2:4])
 
-            assert np.allclose(A_state, match_state(noise_param))
+            assert np.allclose(A_state, match_state(noise_param), atol=1e-7)
 
         # verifying expectation values
         for obs in [qml.PauliX, qml.PauliY, qml.PauliZ]:
@@ -161,7 +163,7 @@ class TestNoiseAnsazes:
 
             for noise_param in np.arange(0, 1.001, 1 / 10):
 
-                assert np.isclose(test_expval(noise_param), match_expval(noise_param))
+                assert np.isclose(test_expval(noise_param), match_expval(noise_param), atol=1e-7)
 
     @pytest.mark.parametrize(
         "state_prep_fn",
@@ -203,7 +205,7 @@ class TestNoiseAnsazes:
             A_state[1, 0] = np.trace(AB_state[2:4, 0:2])
             A_state[1, 1] = np.trace(AB_state[2:4, 2:4])
 
-            assert np.allclose(A_state, match_state(noise_param))
+            assert np.allclose(A_state, match_state(noise_param), atol=1e-7)
 
         # verifying expectation values
         for obs in [qml.PauliX, qml.PauliY, qml.PauliZ]:
@@ -224,7 +226,7 @@ class TestNoiseAnsazes:
 
             for noise_param in np.arange(0, 1.001, 1 / 10):
 
-                assert np.isclose(test_expval(noise_param), match_expval(noise_param))
+                assert np.isclose(test_expval(noise_param), match_expval(noise_param), atol=1e-7)
 
     @pytest.mark.parametrize("gamma", np.arange(-0.1, 1.11, 0.1))
     def test_two_qubit_depolarizing(self, gamma):

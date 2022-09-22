@@ -85,32 +85,32 @@ def read_optimization_json(filepath):
     return opt_dict
 
 
-def settings_to_list(np_scenario_settings):
+def settings_to_list(np_network_settings):
     """Converts the numpy array in scenario settings to lists.
     This function is intended for printing purposes.
 
-    :param np_scenario_settings: The scenario settings structure for a `NetworkAnsatz`.
+    :param np_network_settings: The scenario settings structure for a `NetworkAnsatz`.
 
     :returns: The same nested array elements and structure using lists.
     """
 
-    list_prep_settings = [node_settings.tolist() for node_settings in np_scenario_settings[0]]
-    list_meas_settings = [node_settings.tolist() for node_settings in np_scenario_settings[1]]
+    list_prep_settings = [node_settings.tolist() for node_settings in np_network_settings[0]]
+    list_meas_settings = [node_settings.tolist() for node_settings in np_network_settings[1]]
 
     return [list_prep_settings, list_meas_settings]
 
 
-def settings_to_np(list_scenario_settings):
+def settings_to_np(list_network_settings):
     """Converts the nested list elements in the scenario settings to numpy arrays.
     This function is intended for printing purposes.
 
-    :param list_scenario_settings: The scenario settings structure for a `NetworkAnsatz`.
+    :param list_network_settings: The scenario settings structure for a `NetworkAnsatz`.
 
     :returns: The same nested array elements and structure using numpy arrays.
     """
 
-    np_prep_settings = [np.array(node_settings) for node_settings in list_scenario_settings[0]]
-    np_meas_settings = [np.array(node_settings) for node_settings in list_scenario_settings[1]]
+    np_prep_settings = [np.array(node_settings) for node_settings in list_network_settings[0]]
+    np_meas_settings = [np.array(node_settings) for node_settings in list_network_settings[1]]
 
     return [np_prep_settings, np_meas_settings]
 

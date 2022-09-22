@@ -22,13 +22,13 @@ class TestNLocalChainBellInequality:
 
         bilocal_chain_cost = qnet.nlocal_chain_cost_22(bilocal_chain_ansatz, parallel=parallel_flag)
 
-        zero_settings = bilocal_chain_ansatz.zero_scenario_settings()
+        zero_settings = bilocal_chain_ansatz.zero_network_settings()
 
-        assert np.isclose(bilocal_chain_cost(zero_settings), -1)
+        assert np.isclose(bilocal_chain_cost(*zero_settings), -1)
 
         ideal_settings = [0, np.pi / 2, np.pi / 4, 0, -np.pi / 4, np.pi / 2, np.pi / 4, -np.pi / 4]
 
-        assert np.isclose(bilocal_chain_cost(ideal_settings), -(1 / np.sqrt(2) + 1 / np.sqrt(2)))
+        assert np.isclose(bilocal_chain_cost(*ideal_settings), -(1 / np.sqrt(2) + 1 / np.sqrt(2)))
 
     @pytest.mark.parametrize("natural_grad", [True, False])
     @pytest.mark.parametrize(
@@ -65,13 +65,13 @@ class TestNLocalChainBellInequality:
         chain_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         np.random.seed(45)
-        rand_settings = chain_ansatz.rand_scenario_settings()
+        rand_settings = chain_ansatz.rand_network_settings()
 
         chain_cost = qnet.nlocal_chain_cost_22(chain_ansatz)
-        grad_match = qml.grad(chain_cost, argnum=0)(rand_settings)
+        grad_match = qml.grad(chain_cost)(*rand_settings)
 
         chain_grad = qnet.parallel_nlocal_chain_grad_fn(chain_ansatz, natural_grad=natural_grad)
-        grad = chain_grad(rand_settings)
+        grad = chain_grad(*rand_settings)
 
         assert len(grad_match) == len(grad)
         if not (natural_grad):
@@ -96,8 +96,8 @@ class TestNLocalChainBellInequality:
 
         J22 = qnet.J22_fn(ansatz, parallel=parallel_flag)
 
-        zero_settings = ansatz.zero_scenario_settings()
-        assert np.isclose(0, J22(zero_settings))
+        zero_settings = ansatz.zero_network_settings()
+        assert np.isclose(0, J22(*zero_settings))
 
         settings = [
             0,
@@ -119,14 +119,14 @@ class TestNLocalChainBellInequality:
             0,
             0,
         ]
-        assert np.isclose(0, J22(settings))
+        assert np.isclose(0, J22(*settings))
 
         settings[7] = np.pi
         settings[16] = np.pi
-        assert np.isclose(-4, J22(settings))
+        assert np.isclose(-4, J22(*settings))
 
         settings[10:12] = [np.pi, 0]
-        assert np.isclose(4, J22(settings))
+        assert np.isclose(4, J22(*settings))
 
     @pytest.mark.parametrize("parallel_flag", [True, False])
     def test_I22_fn(self, parallel_flag):
@@ -147,8 +147,8 @@ class TestNLocalChainBellInequality:
 
         I22 = qnet.I22_fn(ansatz, parallel=parallel_flag)
 
-        zero_settings = ansatz.zero_scenario_settings()
-        assert np.isclose(4, I22(zero_settings))
+        zero_settings = ansatz.zero_network_settings()
+        assert np.isclose(4, I22(*zero_settings))
 
         settings = [
             0,
@@ -170,10 +170,10 @@ class TestNLocalChainBellInequality:
             0,
             0,
         ]
-        assert np.isclose(4, I22(settings))
+        assert np.isclose(4, I22(*settings))
 
         settings[8:10] = [np.pi, 0]
-        assert np.isclose(-4, I22(settings))
+        assert np.isclose(-4, I22(*settings))
 
         settings[7] = np.pi
-        assert np.isclose(0, I22(settings))
+        assert np.isclose(0, I22(*settings))

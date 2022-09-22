@@ -8,16 +8,17 @@ import qnetvo as qnet
 class TestObservables:
     def test_parity_observable(self):
         qubit_obs = qnet.parity_observable([0])
-        assert np.all(qubit_obs.matrix == np.array([[1, 0], [0, -1]]))
+
+        assert np.allclose(qubit_obs.matrix(), np.array([[1, 0], [0, -1]]))
         assert qubit_obs.wires == qml.wires.Wires([0])
 
         qubit2_obs = qnet.parity_observable([0, 1])
-        assert np.all(qubit2_obs.matrix == np.diag(np.kron([1, -1], [1, -1])))
+        assert np.allclose(qubit2_obs.matrix(), np.diag(np.kron([1, -1], [1, -1])))
         assert qubit2_obs.wires == qml.wires.Wires([0, 1])
 
         qubit3_obs = qnet.parity_observable([0, 1, 2])
         qubit3_match = np.diag(np.kron([1, -1], np.kron([1, -1], [1, -1])))
-        assert np.all(qubit3_obs.matrix == qubit3_match)
+        assert np.allclose(qubit3_obs.matrix(), qubit3_match)
         assert qubit3_obs.wires == qml.wires.Wires([0, 1, 2])
 
     def test_local_parity_observables(self):
@@ -30,13 +31,13 @@ class TestObservables:
 
         obs_matrix_match = np.diag(np.kron([1, -1], np.kron([1, -1], [1, -1])))
 
-        assert np.all(observables[0].matrix == obs_matrix_match)
+        assert np.allclose(observables[0].matrix(), obs_matrix_match)
         assert observables[0].wires == qml.wires.Wires([0, 1, 2])
 
-        assert np.all(observables[1].matrix == obs_matrix_match)
+        assert np.allclose(observables[1].matrix(), obs_matrix_match)
         assert observables[1].wires == qml.wires.Wires([3, 4, 5])
 
-        assert np.all(observables[2].matrix == obs_matrix_match)
+        assert np.allclose(observables[2].matrix(), obs_matrix_match)
         assert observables[2].wires == qml.wires.Wires([6, 7, 8])
 
 

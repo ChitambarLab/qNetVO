@@ -18,8 +18,8 @@ class TestCHSHInequalityCost:
 
         chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz, parallel=parallel_flag)
 
-        zero_settings = chsh_ansatz.zero_scenario_settings()
-        assert np.isclose(chsh_cost(zero_settings), -2)
+        zero_settings = chsh_ansatz.zero_network_settings()
+        assert np.isclose(chsh_cost(*zero_settings), -2)
 
         settings = [0, np.pi / 2, np.pi / 4, -np.pi / 4]
-        assert np.isclose(chsh_cost(settings), -2 * np.sqrt(2))
+        assert np.isclose(chsh_cost(*settings), -2 * np.sqrt(2))
