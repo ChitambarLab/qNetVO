@@ -275,7 +275,7 @@ class NetworkAnsatz:
         for i, layer_inputs in enumerate(network_inputs):
             settings += self.layer_settings(network_settings, i, layer_inputs)
 
-        return np.array(settings)
+        return qml.math.stack(settings)
 
     def expand_qnode_settings(self, qn_settings, network_inputs):
         layers = [self.prepare_nodes, self.measure_nodes]
@@ -292,7 +292,7 @@ class NetworkAnsatz:
 
                 qn_start_id = qn_stop_id
 
-        return np.array(expanded_settings)
+        return qml.math.stack(expanded_settings)
 
     @staticmethod
     def circuit_layer(network_nodes):

@@ -47,11 +47,11 @@ def chsh_inequality_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
                 dask.delayed(chsh_qnodes[i])(settings) for i, settings in enumerate(xy_settings)
             ]
 
-            results = math.array(dask.compute(*delayed_results, scheduler="threads"))
+            results = math.stack(dask.compute(*delayed_results, scheduler="threads"))
         else:
-            results = math.array([chsh_qnode(settings) for settings in xy_settings])
+            results = math.stack([chsh_qnode(settings) for settings in xy_settings])
 
-        return -(math.sum(results * math.array([1, 1, 1, -1])))
+        return -(math.sum(results * math.stack([1, 1, 1, -1])))
 
     return chsh_cost
 

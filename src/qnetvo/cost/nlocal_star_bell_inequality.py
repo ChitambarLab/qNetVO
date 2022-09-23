@@ -74,7 +74,7 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
                     [I22_results, dask.compute(*I22_delayed_results, scheduler="threads")]
                 )
         else:
-            I22_results = math.array([star_qnode(settings) for settings in I22_x_settings])
+            I22_results = math.stack([star_qnode(settings) for settings in I22_x_settings])
 
         return math.sum(I22_results) / (2**n)
 
@@ -152,9 +152,9 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
                     [J22_expvals, dask.compute(*J22_delayed_results, scheduler="threads")]
                 )
         else:
-            J22_expvals = math.array([star_qnode(settings) for settings in J22_x_settings])
+            J22_expvals = math.stack([star_qnode(settings) for settings in J22_x_settings])
 
-        J22_scalars = math.array(
+        J22_scalars = math.stack(
             [(-1) ** (math.sum(input_vals[1][0:n])) for input_vals in network_input_x_vals]
         )
 

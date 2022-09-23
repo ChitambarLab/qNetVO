@@ -49,9 +49,9 @@ def chain_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
                 for i, settings in enumerate(I22_xy_settings)
             ]
 
-            I22_results = math.array(dask.compute(*I22_delayed_results, scheduler="threads"))
+            I22_results = math.stack(dask.compute(*I22_delayed_results, scheduler="threads"))
         else:
-            I22_results = math.array([chain_qnode(settings) for settings in I22_xy_settings])
+            I22_results = math.stack([chain_qnode(settings) for settings in I22_xy_settings])
 
         return math.sum(I22_results)
 
@@ -103,11 +103,11 @@ def chain_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
                 for i, settings in enumerate(J22_xy_settings)
             ]
 
-            J22_results = math.array(dask.compute(*J22_delayed_results, scheduler="threads"))
+            J22_results = math.stack(dask.compute(*J22_delayed_results, scheduler="threads"))
         else:
-            J22_results = math.array([chain_qnode(settings) for settings in J22_xy_settings])
+            J22_results = math.stack([chain_qnode(settings) for settings in J22_xy_settings])
 
-        return math.sum(math.array([1, -1, -1, 1]) * J22_results)
+        return math.sum(math.stack([1, -1, -1, 1]) * J22_results)
 
     return J22
 
