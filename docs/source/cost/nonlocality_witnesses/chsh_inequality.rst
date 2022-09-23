@@ -25,9 +25,8 @@ Quantum entanglement yields a maximal CHSH score of of :math:`I_{CHSH}=\leq \bet
 
 .. autofunction:: chsh_inequality_cost_fn
 
-.. autofunction:: parallel_chsh_grad
+.. autofunction:: parallel_chsh_grad_fn
 
-.. autofunction:: chsh_natural_grad
 
 References
 ----------

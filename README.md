@@ -32,7 +32,7 @@ $ pip install qnetvo
 Install PennyLane:
 
 ```
-$ pip install pennylane==0.23
+$ pip install pennylane==0.26
 ```
 
 Import packages:
@@ -48,7 +48,7 @@ Note
 </p>
 <p>
 For optimal use, qNetVO should be used with PennyLane.
-QNetVO is currently compatible with PennyLane v0.23.
+QNetVO is currently compatible with PennyLane v0.26.
 </p>
 </div>
 

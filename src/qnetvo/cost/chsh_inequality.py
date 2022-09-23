@@ -62,19 +62,6 @@ def parallel_chsh_grad_fn(network_ansatz, natural_grad=False, **qnode_kwargs):
     The parallelization is achieved through multithreading and intended to improve the
     efficiency of remote qnode execution.
 
-    :param network_ansatz: The ansatz describing the network for which the CHSH inequality considered.
-    :type network_ansatz: NetworkAnsatz
-
-    :param natural_grad: If ``True`` the natural gradient is taken by rescaling the gradient by the
-                         metric tensor.
-    :type natural_grad: *optional* Bool
-
-    :param qnode_kwargs: A keyword argument passthrough to qnode construction.
-    :type qnode_kwargs: *optional* Dict
-
-    :returns: A parallelized (multithreaded) gradient function ``grad_fn(network_settings)``.
-    :rtype
-
     The natural gradient
 
     .. math::
@@ -97,10 +84,13 @@ def parallel_chsh_grad_fn(network_ansatz, natural_grad=False, **qnode_kwargs):
     :param network_ansatz: The ansatz describing the network for which the CHSH inequality considered.
     :type network_ansatz: NetworkAnsatz
 
+    :param natural_grad: If ``True``, then the natural gradient is evaluated. Default ``False``.
+    :type natural_grad: *optional* Bool
+
     :param qnode_kwargs: A keyword argument passthrough to qnode construction.
     :type qnode_kwargs: *optional* dict
 
-    :returns: A parallelized (multithreaded) gradient function ``grad_fn(network_settings)``.
+    :returns: A parallelized (multithreaded) gradient function ``grad_fn(*network_settings)``.
     :rtype: function
     """
 
