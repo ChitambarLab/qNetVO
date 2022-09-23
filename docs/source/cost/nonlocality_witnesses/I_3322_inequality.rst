@@ -33,7 +33,7 @@ infinite dimension [Pal2010]_.
 
 .. autofunction:: post_process_I_3322_joint_probs
 
-.. autofunction:: I_3322_bell_inequality_cost
+.. autofunction:: I_3322_bell_inequality_cost_fn
 
 
 References

@@ -4,8 +4,8 @@ from ..qnodes import global_parity_expval_qnode
 from scipy.linalg import pinvh
 
 
-def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
-    """Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_cost_22`` function.
+def chain_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
+    """Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.
 
     :param network_ansatz: The ansatz for the :math:`n`-local chain network.
     :type network_ansatz: qnet.NetworkAnsatz
@@ -58,8 +58,8 @@ def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     return I22
 
 
-def J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
-    """Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_cost_22`` function.
+def chain_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
+    """Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.
 
     :param network_ansatz: The ansatz for the :math:`n`-local chain network.
     :type network_ansatz: qnet.NetworkAnsatz
@@ -112,7 +112,7 @@ def J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     return J22
 
 
-def nlocal_chain_cost_22(network_ansatz, parallel=False, **qnode_kwargs):
+def nlocal_chain_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
     """For the provided ``network_ansatz``, constructs the cost function for the
     :math:`n`-local chain Bell inequality for binary inputs and outputs.
 
@@ -154,8 +154,8 @@ def nlocal_chain_cost_22(network_ansatz, parallel=False, **qnode_kwargs):
     :rtype: Function
     """
 
-    I22 = I22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
-    J22 = J22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
+    I22 = chain_I22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
+    J22 = chain_J22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
 
     def cost(*network_settings):
 
@@ -197,8 +197,8 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
     chain_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
     qnode_grads = [qml.grad(qnode) for qnode in chain_qnodes]
 
-    I22 = I22_fn(network_ansatz, parallel=True, **qnode_kwargs)
-    J22 = J22_fn(network_ansatz, parallel=True, **qnode_kwargs)
+    I22 = chain_I22_fn(network_ansatz, parallel=True, **qnode_kwargs)
+    J22 = chain_J22_fn(network_ansatz, parallel=True, **qnode_kwargs)
 
     I22_xy_meas_inputs = [[x] + [0 for i in range(n - 1)] + [y] for x, y in xy_vals]
     J22_xy_meas_inputs = [[x] + [1 for i in range(n - 1)] + [y] for x, y in xy_vals]

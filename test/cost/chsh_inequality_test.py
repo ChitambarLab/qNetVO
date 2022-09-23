@@ -6,7 +6,7 @@ import qnetvo as qnet
 
 class TestCHSHInequalityCost:
     @pytest.mark.parametrize("parallel_flag", [False, True])
-    def test_chsh_inequality_cost(self, parallel_flag):
+    def test_chsh_inequality_cost_fn(self, parallel_flag):
 
         prep_nodes = [qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0)]
         meas_nodes = [
@@ -16,7 +16,7 @@ class TestCHSHInequalityCost:
 
         chsh_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz, parallel=parallel_flag)
+        chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz, parallel=parallel_flag)
 
         zero_settings = chsh_ansatz.zero_network_settings()
         assert np.isclose(chsh_cost(*zero_settings), -2)

@@ -18,7 +18,7 @@ These :math:`n` -local Bell inequalities can witness quantum violations to the c
 The variations of these inequalities and their quantum violations are discussed further as they are
 integrated into cost functions.
 
-.. autofunction:: nlocal_chain_cost_22
+.. autofunction:: nlocal_chain_22_cost_fn
 
 .. autofunction:: I22_fn
 

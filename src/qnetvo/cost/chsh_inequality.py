@@ -4,7 +4,7 @@ from ..qnodes import global_parity_expval_qnode
 from scipy.linalg import pinvh
 
 
-def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
+def chsh_inequality_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
     """Constructs a cost function for maximizing the score against the CHSH Bell inequality.
     This inequality is defined as
 
@@ -24,7 +24,7 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
     :param qnode_kwargs: Keyword arguments used only for ``pennylane.qnode`` construction.
     :type qnode_kwargs: *optional* dict
 
-    :returns: A cost function evaluated as ``cost(network_settings)`` where
+    :returns: A cost function evaluated as ``cost(*network_settings)`` where
               the ``network_settings`` are obtained from the provided
               ``network_ansatz`` class.
     """
@@ -34,13 +34,13 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
     if parallel:
         from ..lazy_dask_import import dask
 
-        chsh_qnodes = [global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs) for i in range(4)]
+        chsh_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
     else:
-        chsh_qnode = global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs)
+        chsh_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     def chsh_cost(*network_settings):
 
-        xy_settings = [chsh_ansatz.qnode_settings(network_settings, [[0], xy]) for xy in xy_vals]
+        xy_settings = [network_ansatz.qnode_settings(network_settings, [[0], xy]) for xy in xy_vals]
 
         if parallel:
             delayed_results = [
@@ -56,14 +56,14 @@ def chsh_inequality_cost(chsh_ansatz, parallel=False, **qnode_kwargs):
     return chsh_cost
 
 
-def parallel_chsh_grad_fn(chsh_ansatz, natural_grad=False, **qnode_kwargs):
+def parallel_chsh_grad_fn(network_ansatz, natural_grad=False, **qnode_kwargs):
     """Constructs a parallelizeable gradient function ``grad_fn`` for the CHSH cost.
 
     The parallelization is achieved through multithreading and intended to improve the
     efficiency of remote qnode execution.
 
-    :param chsh_ansatz: The ansatz describing the network for which the CHSH inequality considered.
-    :type chsh_ansatz: NetworkAnsatz
+    :param network_ansatz: The ansatz describing the network for which the CHSH inequality considered.
+    :type network_ansatz: NetworkAnsatz
 
     :param natural_grad: If ``True`` the natural gradient is taken by rescaling the gradient by the
                          metric tensor.
@@ -94,8 +94,8 @@ def parallel_chsh_grad_fn(chsh_ansatz, natural_grad=False, **qnode_kwargs):
     where :math:`\\langle A_x B_y \\rangle(\\vec{\\theta}_{x,y})` is the expectation value of observables
     :math:`A_x` and :math:`B_y` parameterized by the settings :math:`\\vec{\\theta}_{x,y}`.
 
-    :param chsh_ansatz: The ansatz describing the network for which the CHSH inequality considered.
-    :type chsh_ansatz: NetworkAnsatz
+    :param network_ansatz: The ansatz describing the network for which the CHSH inequality considered.
+    :type network_ansatz: NetworkAnsatz
 
     :param qnode_kwargs: A keyword argument passthrough to qnode construction.
     :type qnode_kwargs: *optional* dict
@@ -110,7 +110,7 @@ def parallel_chsh_grad_fn(chsh_ansatz, natural_grad=False, **qnode_kwargs):
 
     qnodes = []
     for _ in network_inputs:
-        chsh_qnode = global_parity_expval_qnode(chsh_ansatz, **qnode_kwargs)
+        chsh_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
         qnodes.append(chsh_qnode)
 
     def _grad_fn(settings, qnode):
@@ -124,7 +124,7 @@ def parallel_chsh_grad_fn(chsh_ansatz, natural_grad=False, **qnode_kwargs):
 
     def parallel_chsh_grad(*network_settings):
         xy_settings = [
-            chsh_ansatz.qnode_settings(network_settings, input) for input in network_inputs
+            network_ansatz.qnode_settings(network_settings, input) for input in network_inputs
         ]
 
         delayed_grads = [
@@ -132,13 +132,13 @@ def parallel_chsh_grad_fn(chsh_ansatz, natural_grad=False, **qnode_kwargs):
         ]
         grads = dask.compute(*delayed_grads, scheduler="threads")
 
-        grad = chsh_ansatz.zero_network_settings()
+        grad = network_ansatz.zero_network_settings()
         for grad_id, inputs in enumerate(network_inputs):
             x = inputs[1][0]
             y = inputs[1][1]
 
             scalar = -1 * (-1) ** (x * y)
-            grad += scalar * chsh_ansatz.expand_qnode_settings(grads[grad_id], inputs)
+            grad += scalar * network_ansatz.expand_qnode_settings(grads[grad_id], inputs)
 
         return grad
 

@@ -98,16 +98,12 @@ def gradient_descent(
 
         start = time.time()
         if interface == "autograd":
-            print(settings)
             settings = opt.step(cost, *settings, grad_fn=grad_fn)
-            print(settings)
-            # print(isinstance(settings.tolist(), float))
-            if not(isinstance(settings, list)):
-                print("bnr")
+            if not (isinstance(settings, list)):
                 settings = [settings]
         elif interface == "tf":
             # opt.minimize updates settings in place
-            tf_cost = lambda: cost(settings)
+            tf_cost = lambda: cost(*settings)
             opt.minimize(tf_cost, settings)
 
         elapsed = time.time() - start

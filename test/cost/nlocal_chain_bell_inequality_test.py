@@ -7,7 +7,7 @@ import qnetvo as qnet
 
 class TestNLocalChainBellInequality:
     @pytest.mark.parametrize("parallel_flag", [False, True])
-    def test_nlocal_chain_cost_22(self, parallel_flag):
+    def test_nlocal_chain_22_cost_fn(self, parallel_flag):
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0),
             qnet.PrepareNode(1, [2, 3], qnet.ghz_state, 0),
@@ -20,7 +20,9 @@ class TestNLocalChainBellInequality:
 
         bilocal_chain_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        bilocal_chain_cost = qnet.nlocal_chain_cost_22(bilocal_chain_ansatz, parallel=parallel_flag)
+        bilocal_chain_cost = qnet.nlocal_chain_22_cost_fn(
+            bilocal_chain_ansatz, parallel=parallel_flag
+        )
 
         zero_settings = bilocal_chain_ansatz.zero_network_settings()
 
@@ -67,7 +69,7 @@ class TestNLocalChainBellInequality:
         np.random.seed(45)
         rand_settings = chain_ansatz.rand_network_settings()
 
-        chain_cost = qnet.nlocal_chain_cost_22(chain_ansatz)
+        chain_cost = qnet.nlocal_chain_22_cost_fn(chain_ansatz)
         grad_match = qml.grad(chain_cost)(*rand_settings)
 
         chain_grad = qnet.parallel_nlocal_chain_grad_fn(chain_ansatz, natural_grad=natural_grad)
@@ -78,7 +80,7 @@ class TestNLocalChainBellInequality:
             assert np.allclose(grad, grad_match)
 
     @pytest.mark.parametrize("parallel_flag", [True, False])
-    def test_J22_fn(self, parallel_flag):
+    def test_chain_J22_fn(self, parallel_flag):
 
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.local_RY, 2),
@@ -94,7 +96,7 @@ class TestNLocalChainBellInequality:
 
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        J22 = qnet.J22_fn(ansatz, parallel=parallel_flag)
+        J22 = qnet.chain_J22_fn(ansatz, parallel=parallel_flag)
 
         zero_settings = ansatz.zero_network_settings()
         assert np.isclose(0, J22(*zero_settings))
@@ -129,7 +131,7 @@ class TestNLocalChainBellInequality:
         assert np.isclose(4, J22(*settings))
 
     @pytest.mark.parametrize("parallel_flag", [True, False])
-    def test_I22_fn(self, parallel_flag):
+    def test_chain_I22_fn(self, parallel_flag):
 
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.local_RY, 2),
@@ -145,7 +147,7 @@ class TestNLocalChainBellInequality:
 
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        I22 = qnet.I22_fn(ansatz, parallel=parallel_flag)
+        I22 = qnet.chain_I22_fn(ansatz, parallel=parallel_flag)
 
         zero_settings = ansatz.zero_network_settings()
         assert np.isclose(4, I22(*zero_settings))

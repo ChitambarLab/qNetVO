@@ -205,14 +205,20 @@ class TestNetworkAnsatz:
     )
     def test_layer_settings(self, layer_inputs, layer_id, match):
         network_settings = [
-            np.array(0), np.array(1), np.array(2), np.array(3),
-            np.array(4), np.array(5), np.array(6), np.array(7)
+            np.array(0),
+            np.array(1),
+            np.array(2),
+            np.array(3),
+            np.array(4),
+            np.array(5),
+            np.array(6),
+            np.array(7),
         ]
         prep_nodes = [
             qnet.PrepareNode(2, [0], qnet.local_RY, 1),
             qnet.PrepareNode(2, [1], qnet.local_RY, 1),
         ]
-        meas_nodes = [qnet.MeasureNode(2, 2, [0,1], qnet.local_RY, 2)]
+        meas_nodes = [qnet.MeasureNode(2, 2, [0, 1], qnet.local_RY, 2)]
         network_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         settings = network_ansatz.layer_settings(network_settings, layer_id, layer_inputs)
@@ -362,7 +368,6 @@ class TestNetworkAnsatz:
         assert isinstance(tf_rand_settings, list)
         assert all([isinstance(setting, tf.Variable) for setting in tf_rand_settings])
 
-
     def test_fixed_network_settings(self):
         def ansatz_circuit(settings, wires):
             return None
@@ -378,7 +383,9 @@ class TestNetworkAnsatz:
         network_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         np.random.seed(123)
-        rand_settings = network_ansatz.rand_network_settings(fixed_setting_ids=[0,2,4,6], fixed_settings=[0,2,4,6])
+        rand_settings = network_ansatz.rand_network_settings(
+            fixed_setting_ids=[0, 2, 4, 6], fixed_settings=[0, 2, 4, 6]
+        )
 
         match_settings = [
             0,
@@ -392,12 +399,14 @@ class TestNetworkAnsatz:
         ]
 
         assert np.allclose(rand_settings, match_settings)
-        assert all([qml.math.requires_grad(rand_settings[i]) for i in [1,3,5,7]])
-        assert all([not(qml.math.requires_grad(rand_settings[i])) for i in [0,2,4,6]])
+        assert all([qml.math.requires_grad(rand_settings[i]) for i in [1, 3, 5, 7]])
+        assert all([not (qml.math.requires_grad(rand_settings[i])) for i in [0, 2, 4, 6]])
 
         np.random.seed(123)
-        tf_rand_settings = network_ansatz.tf_rand_network_settings(fixed_setting_ids=[0,2,4,6], fixed_settings=[0,2,4,6])
+        tf_rand_settings = network_ansatz.tf_rand_network_settings(
+            fixed_setting_ids=[0, 2, 4, 6], fixed_settings=[0, 2, 4, 6]
+        )
 
         assert np.allclose(tf_rand_settings, match_settings)
-        assert all([isinstance(tf_rand_settings[i], tf.Variable) for i in [1,3,5,7]])
-        assert all([isinstance(tf_rand_settings[i], tf.Tensor) for i in [0,2,4,6]])
+        assert all([isinstance(tf_rand_settings[i], tf.Variable) for i in [1, 3, 5, 7]])
+        assert all([isinstance(tf_rand_settings[i], tf.Tensor) for i in [0, 2, 4, 6]])

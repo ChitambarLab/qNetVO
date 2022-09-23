@@ -39,7 +39,7 @@ def post_process_I_3322_joint_probs(probs_vec):
     return sum([sum([probs[a, b] for b in even_ids]) for a in even_ids])
 
 
-def I_3322_bell_inequality_cost(network_ansatz, **qnode_kwargs):
+def I_3322_bell_inequality_cost_fn(network_ansatz, **qnode_kwargs):
     """Constructs a cost function that maximizes the score of the :math:`I_{3322}` Bell inequality.
 
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
@@ -52,7 +52,7 @@ def I_3322_bell_inequality_cost(network_ansatz, **qnode_kwargs):
     I_3322_joint_probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
     I_3322_local_expval_qnode = local_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
-    def cost_fn(*network_settings):
+    def cost(*network_settings):
         score = 0
         for (x, y, mult) in [
             (0, 0, 1),
@@ -88,4 +88,4 @@ def I_3322_bell_inequality_cost(network_ansatz, **qnode_kwargs):
 
         return -(score)
 
-    return cost_fn
+    return cost

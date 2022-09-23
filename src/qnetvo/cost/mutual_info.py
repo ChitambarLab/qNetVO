@@ -73,7 +73,7 @@ def mutual_info_cost_fn(
 
     probs_qnode = joint_probs_qnode(ansatz, **qnode_kwargs)
 
-    def cost_fn(*network_settings):
+    def cost(*network_settings):
         Hxy = 0
         py_vec = np.zeros(net_num_out)
         for (i, input_id_set) in enumerate(node_input_ids):
@@ -98,7 +98,7 @@ def mutual_info_cost_fn(
 
         return -(mutual_info)
 
-    return cost_fn
+    return cost
 
 
 def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
@@ -130,7 +130,7 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
 
     probs_qnode = joint_probs_qnode(ansatz, **qnode_kwargs)
 
-    def cost_fn(*network_settings):
+    def cost(*network_settings):
         settings = ansatz.qnode_settings(
             network_settings, [[0] * num_prep_nodes, [0] * num_meas_nodes]
         )
@@ -138,4 +138,4 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
 
         return shannon_entropy(probs_vec)
 
-    return cost_fn
+    return cost

@@ -67,7 +67,7 @@ def mermin_klyshko_cost_fn(ansatz, **qnode_kwargs):
 
     :param qnode_kwargs: Keyword arguments passed through to the qnode constructors.
 
-    :returns: A cost function, ``cost(network_settings)``, that evaluates :math:`-I_{\\text{MK}}`
+    :returns: A cost function, ``cost(*network_settings)``, that evaluates :math:`-I_{\\text{MK}}`
               for the supplied network settings.
     :rtype: Function
     """

@@ -306,6 +306,7 @@ class NetworkAnsatz:
                   is an array constructed via the ``layer_settings`` function.
         :rtype: function
         """
+
         def circuit(settings):
             current_id = 0
             for node_id in range(len(network_nodes)):
@@ -333,13 +334,14 @@ class NetworkAnsatz:
         :rtype: List[Float]
         """
         num_settings = self.parameter_partitions[-1][-1][-1][-1]
-        rand_settings = [np.array(2 * np.pi * np.random.rand() - np.pi) for _ in range(num_settings)]
+        rand_settings = [
+            np.array(2 * np.pi * np.random.rand() - np.pi) for _ in range(num_settings)
+        ]
         if len(fixed_setting_ids) > 0 and len(fixed_settings) > 0:
             for i, id in enumerate(fixed_setting_ids):
                 rand_settings[id] = np.array(fixed_settings[i], requires_grad=False)
-        
-        return rand_settings
 
+        return rand_settings
 
     def tf_rand_network_settings(self, fixed_setting_ids=[], fixed_settings=[]):
         """Creates a randomized settings array for the network ansatz using TensorFlow
@@ -357,7 +359,10 @@ class NetworkAnsatz:
         from .lazy_tensorflow_import import tensorflow as tf
 
         np_settings = self.rand_network_settings(fixed_setting_ids, fixed_settings)
-        return [tf.Variable(setting) if qml.math.requires_grad(setting) else tf.constant(setting) for setting in np_settings]
+        return [
+            tf.Variable(setting) if qml.math.requires_grad(setting) else tf.constant(setting)
+            for setting in np_settings
+        ]
 
     def zero_network_settings(self):
         """Creates a settings array for the network ansatz that consists of zeros.

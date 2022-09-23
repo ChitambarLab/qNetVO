@@ -32,7 +32,7 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
-    :returns: A function callable as ``I22(network_settings)`` that evaluates the :math:`I_{22,n}` quantity.
+    :returns: A function callable as ``I22(*network_settings)`` that evaluates the :math:`I_{22,n}` quantity.
     :rtype: function
     """
     n = len(network_ansatz.prepare_nodes)
@@ -108,7 +108,7 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
-    :returns: A function callable as ``J22(network_settings)`` that evaluates the :math:`J_{22,n}`
+    :returns: A function callable as ``J22(*network_settings)`` that evaluates the :math:`J_{22,n}`
               quantity for the given ``network_settings``.
     :rtype: function
     """
@@ -194,7 +194,7 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_k
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
-    :returns: A function callable as ``nlocal_star_22_cost(network_settings)`` that evaluates
+    :returns: A function callable as ``nlocal_star_22_cost(*network_settings)`` that evaluates
               the cost as :math:`-|I_{22,n}|^{1/n} - |J_{22,n}|^{1/n}`.
     :rtype: function
     """

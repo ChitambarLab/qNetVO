@@ -20,7 +20,7 @@ class TestCostI3322BellInequality:
         P00xy = qnet.post_process_I_3322_joint_probs(probs_vec)
         assert P00xy == 0
 
-    def test_I_3322_bell_inequality_cost_qubit_optimization(self):
+    def test_I_3322_bell_inequality_cost_fn_qubit_optimization(self):
         def local_RY(settings, wires):
             for i, wire in enumerate(wires):
                 qml.RY(settings[i], wires=wire)
@@ -33,7 +33,7 @@ class TestCostI3322BellInequality:
 
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
-        I_3322_cost = qnet.I_3322_bell_inequality_cost(ansatz)
+        I_3322_cost = qnet.I_3322_bell_inequality_cost_fn(ansatz)
 
         np.random.seed(13)
         init_settings = ansatz.rand_network_settings()
