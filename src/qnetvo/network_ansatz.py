@@ -354,7 +354,7 @@ class NetworkAnsatz:
         :param fixed_settings: The constant values for fixed settings.
         :type fixed_settings: *optional* List[Float]
 
-        :returns: See :meth:`qnetvo.NetworkAnsatz.rand_network_settings` for details.
+        :returns: A 1D list of ``tf.Variable`` and ``tf.constant`` scalar values.
         :rtype: List[tf.Tensor]
         """
         from .lazy_tensorflow_import import tensorflow as tf
