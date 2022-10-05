@@ -191,7 +191,7 @@ class NetworkAnsatz:
 
     def get_network_parameter_partitions(self):
         """
-        A ragged array containing tuples that specify how to partition a 1D array
+        A nested list containing tuples that specify how to partition a 1D array
         of network settings into the subset of settings passed to the qnode simulating
         the network. Each tuple ``(start_id, stop_id)`` is indexed by ``layer_id``,
         ``node_id``, and classical ``input_id`` as
