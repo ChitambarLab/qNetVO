@@ -325,6 +325,7 @@ class NetworkAnsatz:
         not differentatiated during optimzation.
 
         :param fixed_setting_ids: The ids of settings that are held constant during optimization.
+        Also requires `fixed_settings` to be provided.
         :type fixed_setting_ids: *optional* List[Int]
 
         :param fixed_settings: The constant values for fixed settings.
