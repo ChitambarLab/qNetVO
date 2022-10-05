@@ -191,7 +191,7 @@ class NetworkAnsatz:
 
     def get_network_parameter_partitions(self):
         """
-        A ragged array containing tuples that specify how to partition a 1D array
+        A nested list containing tuples that specify how to partition a 1D array
         of network settings into the subset of settings passed to the qnode simulating
         the network. Each tuple ``(start_id, stop_id)`` is indexed by ``layer_id``,
         ``node_id``, and classical ``input_id`` as
@@ -325,6 +325,7 @@ class NetworkAnsatz:
         not differentatiated during optimzation.
 
         :param fixed_setting_ids: The ids of settings that are held constant during optimization.
+        Also requires `fixed_settings` to be provided.
         :type fixed_setting_ids: *optional* List[Int]
 
         :param fixed_settings: The constant values for fixed settings.
@@ -348,12 +349,13 @@ class NetworkAnsatz:
         tensor types.
 
         :param fixed_setting_ids: The ids of settings that are held constant during optimization.
+        Also requires `fixed_settings` to be provided.
         :type fixed_setting_ids: *optional* List[Int]
 
         :param fixed_settings: The constant values for fixed settings.
         :type fixed_settings: *optional* List[Float]
 
-        :returns: See :meth:`qnetvo.NetworkAnsatz.rand_network_settings` for details.
+        :returns: A 1D list of ``tf.Variable`` and ``tf.constant`` scalar values.
         :rtype: List[tf.Tensor]
         """
         from .lazy_tensorflow_import import tensorflow as tf
@@ -371,4 +373,4 @@ class NetworkAnsatz:
         :rtype: List[Float]
         """
         num_settings = self.parameter_partitions[-1][-1][-1][-1]
-        return [np.array(0) for _ in range(num_settings)]
+        return [np.array(0, requires_grad=True) for _ in range(num_settings)]

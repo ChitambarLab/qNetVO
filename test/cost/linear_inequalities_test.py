@@ -12,7 +12,6 @@ class TestLinearInequalityCost:
             qnet.PrepareNode(4, [1, 2], qnet.local_RY, 2),
         ]
         meas_nodes = [
-            # qnet.MeasureNode(1, 2, [0, 1, 2], qnet.local_RY, 3),
             qnet.MeasureNode(1, 2, [0], qnet.local_RY, 1),
             qnet.MeasureNode(1, 4, [1, 2], qnet.local_RY, 2),
         ]
