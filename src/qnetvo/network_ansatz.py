@@ -372,4 +372,4 @@ class NetworkAnsatz:
         :rtype: List[Float]
         """
         num_settings = self.parameter_partitions[-1][-1][-1][-1]
-        return [np.array(0) for _ in range(num_settings)]
+        return [np.array(0, requires_grad=True) for _ in range(num_settings)]
