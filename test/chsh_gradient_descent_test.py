@@ -117,7 +117,6 @@ class TestCHSHGradientDescent:
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
         chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz)
-        # chsh_grad_fn = qnet.chsh_natural_grad(chsh_ansatz)
         nat_grad_fn = qnet.parallel_chsh_grad_fn(chsh_ansatz, natural_grad=True)
 
         np.random.seed(666)
