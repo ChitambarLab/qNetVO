@@ -86,7 +86,7 @@ class TestNlocalStar22CostFn:
     def test_bilocal_star_22_cost_gradient_descent(self, parallel_flag, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
 
-        # np.random.seed(45)
+        np.random.seed(45)
         opt_dict = qnet.gradient_descent(
             qnet.nlocal_star_22_cost_fn(
                 bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
