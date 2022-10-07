@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Ansatz Library" href="ansatz_library.html" /><link rel="prev" title="Network Nodes" href="network_nodes.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Network Ansatzes - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/qnetvo.css" />
     
@@ -142,7 +142,7 @@
           <i class="fa fa-github" style="font-size:16px"></i></a>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -221,7 +221,7 @@
 	          <i class="fa fa-github" style="font-size:16px"></i></a>
 	        </button>
 	      </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -281,6 +281,13 @@ for noisy networks.</p>
 </li>
 <li><p><strong>dev</strong> (<em>qml.device</em>) - <em>mutable</em>, the most recently constructed device for the ansatz.</p></li>
 <li><p><strong>fn</strong> (<em>function</em>) - A quantum function implementing the quantum network ansatz.</p></li>
+<li><dl class="simple">
+<dt><strong>parameter_partitions</strong> (<em>List[List[List[Tuple]]]</em>) - A ragged array containing tuples that specify</dt><dd><p>how to partition a 1D array of network settings into the subset of settings
+passed to the qnode simulating the network. See
+<a class="reference internal" href="#qnetvo.NetworkAnsatz.get_network_parameter_partitions" title="qnetvo.NetworkAnsatz.get_network_parameter_partitions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_network_parameter_partitions()</span></code></a> for details.</p>
+</dd>
+</dl>
+</li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
@@ -337,62 +344,80 @@ A distinct device is created each time this function runs.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.get_network_parameter_partitions">
+<span class="sig-name descname"><span class="pre">get_network_parameter_partitions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.get_network_parameter_partitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.get_network_parameter_partitions" title="Permalink to this definition">#</a></dt>
+<dd><p>A nested list containing tuples that specify how to partition a 1D array
+of network settings into the subset of settings passed to the qnode simulating
+the network. Each tuple <code class="docutils literal notranslate"><span class="pre">(start_id,</span> <span class="pre">stop_id)</span></code> is indexed by <code class="docutils literal notranslate"><span class="pre">layer_id</span></code>,
+<code class="docutils literal notranslate"><span class="pre">node_id</span></code>, and classical <code class="docutils literal notranslate"><span class="pre">input_id</span></code> as
+<code class="docutils literal notranslate"><span class="pre">parameter_partitions[layer_id][node_id][input_id]</span> <span class="pre">=&gt;</span> <span class="pre">(start_id,</span> <span class="pre">stop_id)</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">start_id</span></code> and <code class="docutils literal notranslate"><span class="pre">stop_id</span></code> describe the slice <code class="docutils literal notranslate"><span class="pre">network_settings[start_id:stop_id]</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.layer_settings">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">layer_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.layer_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.layer_settings" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">layer_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.layer_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.layer_settings" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs the list of settings for a circuit layer in the network ansatz.</p>
-<p>The type of tensor used for the returned layer settings matches the tensor
-type of the elements of <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>scenario_settings</strong> – A list containing the settings for all classical inputs.</p></li>
-<li><p><strong>node_inputs</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – A list of the classical inputs supplied to each network node.</p></li>
+<li><p><strong>network_settings</strong> (<em>List</em><em>[</em><em>Float</em><em>]</em>) – A list containing the circuit settings for each node
+in the network.</p></li>
+<li><p><strong>layer_id</strong> (<em>Int</em>) – The id for the targeted layer.</p></li>
+<li><p><strong>layer_inputs</strong> (<em>List</em><em>[</em><em>Int</em><em>]</em>) – A list of the classical inputs supplied to each network node.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A 1D array of all settings for the circuit layer.</p>
+<dd class="field-even"><p>A 1D array of settings for the circuit layer.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array[float]</p>
+<dd class="field-odd"><p>List[float]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.qnode_settings">
-<span class="sig-name descname"><span class="pre">qnode_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prep_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meas_inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.qnode_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.qnode_settings" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">qnode_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.qnode_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.qnode_settings" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a list of settings to pass to the qnode executing the network ansatz.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>scenario_settings</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>np.ndarray</em><em>]</em><em>]</em>) – The settings for the network ansatz scenario.</p></li>
-<li><p><strong>prep_inputs</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The classical inputs passed to each preparation node.</p></li>
-<li><p><strong>meas_inputs</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The classical inputs passed to each measurement node.</p></li>
+<li><p><strong>network_settings</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>np.ndarray</em><em>]</em><em>]</em>) – The settings for the network ansatz scenario.</p></li>
+<li><p><strong>network_inputs</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em>) – The classical inputs passed to each network node.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The settings to pass to the constructed qnode.</p>
+<dd class="field-even"><p>A list of settings to pass to the constructed qnode.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list[float]</p>
+<dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.rand_scenario_settings">
-<span class="sig-name descname"><span class="pre">rand_scenario_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.rand_scenario_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.rand_scenario_settings" title="Permalink to this definition">#</a></dt>
-<dd><p>Creates a randomized settings array for the network ansatz.</p>
+<dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.rand_network_settings">
+<span class="sig-name descname"><span class="pre">rand_network_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fixed_setting_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.rand_network_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.rand_network_settings" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates an array of randomized differentiable settings for the network ansatz.
+If fixed settings are specified, then they are marked as <code class="docutils literal notranslate"><span class="pre">requires_grad=False</span></code> and
+not differentatiated during optimzation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A nested list containing settings for each network node.
-<code class="docutils literal notranslate"><span class="pre">PreparNode</span></code> settings are listed under index <code class="docutils literal notranslate"><span class="pre">0</span></code> while
-<code class="docutils literal notranslate"><span class="pre">MeasureNode</span></code> settings are listed under index <code class="docutils literal notranslate"><span class="pre">1</span></code>.
-The measure and prepare layers settings are a list of numpy arrays
-where the dimension of each array is <code class="docutils literal notranslate"><span class="pre">(num_inputs,</span> <span class="pre">num_settings)</span></code>.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fixed_setting_ids</strong> – The ids of settings that are held constant during optimization.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[list[np.array]]</p>
+</dl>
+<p>Also requires <cite>fixed_settings</cite> to be provided.
+:type fixed_setting_ids: <em>optional</em> List[Int]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fixed_settings</strong> (<em>optional</em> List[Float]) – The constant values for fixed settings.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A 1D list of <code class="docutils literal notranslate"><span class="pre">np.tensor</span></code> scalar values having <code class="docutils literal notranslate"><span class="pre">requires_grad=True</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Float]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -414,34 +439,40 @@ This method updates the values stored in <code class="docutils literal notransla
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.tf_rand_scenario_settings">
-<span class="sig-name descname"><span class="pre">tf_rand_scenario_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.tf_rand_scenario_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.tf_rand_scenario_settings" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.tf_rand_network_settings">
+<span class="sig-name descname"><span class="pre">tf_rand_network_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fixed_setting_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.tf_rand_network_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.tf_rand_network_settings" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a randomized settings array for the network ansatz using TensorFlow
 tensor types.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>See <a class="reference internal" href="#qnetvo.NetworkAnsatz.rand_scenario_settings" title="qnetvo.NetworkAnsatz.rand_scenario_settings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">qnetvo.NetworkAnsatz.rand_scenario_settings()</span></code></a> for details.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fixed_setting_ids</strong> – The ids of settings that are held constant during optimization.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[list[tf.Tensor]]</p>
+</dl>
+<p>Also requires <cite>fixed_settings</cite> to be provided.
+:type fixed_setting_ids: <em>optional</em> List[Int]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fixed_settings</strong> (<em>optional</em> List[Float]) – The constant values for fixed settings.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A 1D list of <code class="docutils literal notranslate"><span class="pre">tf.Variable</span></code> and <code class="docutils literal notranslate"><span class="pre">tf.constant</span></code> scalar values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[tf.Tensor]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.zero_scenario_settings">
-<span class="sig-name descname"><span class="pre">zero_scenario_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.zero_scenario_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.zero_scenario_settings" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="qnetvo.NetworkAnsatz.zero_network_settings">
+<span class="sig-name descname"><span class="pre">zero_network_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NetworkAnsatz.zero_network_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkAnsatz.zero_network_settings" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a settings array for the network ansatz that consists of zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A nested list containing settings for each network node.
-<code class="docutils literal notranslate"><span class="pre">PrepareNode</span></code> settings are listed under index <code class="docutils literal notranslate"><span class="pre">0</span></code> while
-<code class="docutils literal notranslate"><span class="pre">MeasureNode</span></code> settings are listed under index <code class="docutils literal notranslate"><span class="pre">1</span></code>.
-The measure and prepare layers settings are a list of numpy arrays
-where the dimension of each array is <code class="docutils literal notranslate"><span class="pre">(num_inputs,</span> <span class="pre">num_settings)</span></code>.</p>
+<dd class="field-odd"><p>A 1D list of <code class="docutils literal notranslate"><span class="pre">np.tensor</span></code> scalar values having <code class="docutils literal notranslate"><span class="pre">requires_grad=True</span></code>.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[list[np.array]]</p>
+<dd class="field-even"><p>List[Float]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -488,8 +519,39 @@ where the dimension of each array is <code class="docutils literal notranslate">
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Network Ansatzes</a><ul>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code></a><ul>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.circuit_layer"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.circuit_layer()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.collect_wires"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.collect_wires()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.device"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.device()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.get_network_parameter_partitions"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.get_network_parameter_partitions()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.layer_settings"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.layer_settings()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.qnode_settings"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.qnode_settings()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.rand_network_settings"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.rand_network_settings()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.set_device"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.set_device()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.tf_rand_network_settings"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.tf_rand_network_settings()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.NetworkAnsatz.zero_network_settings"><code class="docutils literal notranslate"><span class="pre">NetworkAnsatz.zero_network_settings()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -499,6 +561,7 @@ where the dimension of each array is <code class="docutils literal notranslate">
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="The Magic Squares Game" href="magic_squares_game.html" /><link rel="prev" title="Linear Cost Functions" href="linear_inequalities.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Entropic Quantities - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/qnetvo.css" />
     
@@ -259,8 +259,8 @@ of the network ansatz.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A cost function <code class="docutils literal notranslate"><span class="pre">shannon_entropy(scenario_settings)</span></code> parameterized by
-the ansatz-specific scenario settings.</p>
+<dd class="field-even"><p>A cost function <code class="docutils literal notranslate"><span class="pre">shannon_entropy(*network_settings)</span></code> parameterized by
+the ansatz-specific network settings.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Function</p>
@@ -288,7 +288,7 @@ the collections of preparation and measurement nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz circuit on which the mutual information is evalutated.</p></li>
+<li><p><strong>ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz circuit on which the mutual information is evaluated.</p></li>
 <li><p><strong>priors</strong> (<em>list</em><em>[</em><em>np.array</em><em>]</em>) – A list of prior distributions for the inputs of each preparation node.</p></li>
 <li><p><strong>postmap</strong> (<em>np.array</em>) – The post-processing matrix mapping the bitstring output from the
 quantum device into the measurement node outputs.</p></li>
@@ -298,7 +298,7 @@ network layer is held constant over all inputs.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A cost function <code class="docutils literal notranslate"><span class="pre">mutual_info_cost(scenario_settings)</span></code> parameterized by
+<dd class="field-even"><p>A cost function <code class="docutils literal notranslate"><span class="pre">mutual_info_cost(*network_settings)</span></code> parameterized by
 the ansatz-specific scenario settings.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
@@ -340,7 +340,7 @@ each column sums to one and contains only positive values.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A function <code class="docutils literal notranslate"><span class="pre">P_Net(scenario_settings)</span></code> that evaluates the
+<dd class="field-even"><p>A function <code class="docutils literal notranslate"><span class="pre">P_Net(network_settings)</span></code> that evaluates the
 behavior matrix for a given set of settings.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
@@ -425,7 +425,13 @@ distribution <code class="docutils literal notranslate"><span class="pre">probs<
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Entropic Quantities</a><ul>
-<li><a class="reference internal" href="#helper-functions">Helper Functions</a></li>
+<li><a class="reference internal" href="#qnetvo.shannon_entropy_cost_fn"><code class="docutils literal notranslate"><span class="pre">shannon_entropy_cost_fn()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.mutual_info_cost_fn"><code class="docutils literal notranslate"><span class="pre">mutual_info_cost_fn()</span></code></a></li>
+<li><a class="reference internal" href="#helper-functions">Helper Functions</a><ul>
+<li><a class="reference internal" href="#qnetvo.behavior_fn"><code class="docutils literal notranslate"><span class="pre">behavior_fn()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.shannon_entropy"><code class="docutils literal notranslate"><span class="pre">shannon_entropy()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -442,6 +448,7 @@ distribution <code class="docutils literal notranslate"><span class="pre">probs<
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>

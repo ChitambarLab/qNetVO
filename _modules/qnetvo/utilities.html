@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>qnetvo.utilities - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -324,32 +324,32 @@
     <span class="k">return</span> <span class="n">opt_dict</span></div>
 
 
-<div class="viewcode-block" id="settings_to_list"><a class="viewcode-back" href="../../utilities.html#qnetvo.settings_to_list">[docs]</a><span class="k">def</span> <span class="nf">settings_to_list</span><span class="p">(</span><span class="n">np_scenario_settings</span><span class="p">):</span>
+<div class="viewcode-block" id="settings_to_list"><a class="viewcode-back" href="../../utilities.html#qnetvo.settings_to_list">[docs]</a><span class="k">def</span> <span class="nf">settings_to_list</span><span class="p">(</span><span class="n">np_network_settings</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Converts the numpy array in scenario settings to lists.</span>
 <span class="sd">    This function is intended for printing purposes.</span>
 
-<span class="sd">    :param np_scenario_settings: The scenario settings structure for a `NetworkAnsatz`.</span>
+<span class="sd">    :param np_network_settings: The scenario settings structure for a `NetworkAnsatz`.</span>
 
 <span class="sd">    :returns: The same nested array elements and structure using lists.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">list_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_settings</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">np_scenario_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">list_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_settings</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">np_scenario_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">list_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_settings</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">np_network_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">list_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_settings</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">np_network_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="k">return</span> <span class="p">[</span><span class="n">list_prep_settings</span><span class="p">,</span> <span class="n">list_meas_settings</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="settings_to_np"><a class="viewcode-back" href="../../utilities.html#qnetvo.settings_to_np">[docs]</a><span class="k">def</span> <span class="nf">settings_to_np</span><span class="p">(</span><span class="n">list_scenario_settings</span><span class="p">):</span>
+<div class="viewcode-block" id="settings_to_np"><a class="viewcode-back" href="../../utilities.html#qnetvo.settings_to_np">[docs]</a><span class="k">def</span> <span class="nf">settings_to_np</span><span class="p">(</span><span class="n">list_network_settings</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Converts the nested list elements in the scenario settings to numpy arrays.</span>
 <span class="sd">    This function is intended for printing purposes.</span>
 
-<span class="sd">    :param list_scenario_settings: The scenario settings structure for a `NetworkAnsatz`.</span>
+<span class="sd">    :param list_network_settings: The scenario settings structure for a `NetworkAnsatz`.</span>
 
 <span class="sd">    :returns: The same nested array elements and structure using numpy arrays.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">np_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_scenario_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">np_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_scenario_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">np_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_network_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">np_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_network_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="k">return</span> <span class="p">[</span><span class="n">np_prep_settings</span><span class="p">,</span> <span class="n">np_meas_settings</span><span class="p">]</span></div>
 
@@ -406,6 +406,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>
 </html>

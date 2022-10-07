@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>qnetvo.cost.I_3322_bell_inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/qnetvo.css" />
     
@@ -278,20 +278,20 @@
     <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">sum</span><span class="p">([</span><span class="n">probs</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">even_ids</span><span class="p">])</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">even_ids</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="I_3322_bell_inequality_cost"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/I_3322_inequality.html#qnetvo.I_3322_bell_inequality_cost">[docs]</a><span class="k">def</span> <span class="nf">I_3322_bell_inequality_cost</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="I_3322_bell_inequality_cost_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/I_3322_inequality.html#qnetvo.I_3322_bell_inequality_cost_fn">[docs]</a><span class="k">def</span> <span class="nf">I_3322_bell_inequality_cost_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Constructs a cost function that maximizes the score of the :math:`I_{3322}` Bell inequality.</span>
 
 <span class="sd">    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.</span>
 <span class="sd">    :type network_ansatz: NetworkAnsatz</span>
 
-<span class="sd">    :returns: A cost function evaluated as ``cost(scenario_settings)`` where</span>
-<span class="sd">              the ``scenario_settings`` are obtained from the provided</span>
+<span class="sd">    :returns: A cost function evaluated as ``cost(*network_settings)`` where</span>
+<span class="sd">              the ``network_settings`` are obtained from the provided</span>
 <span class="sd">              ``network_ansatz`` class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">I_3322_joint_probs_qnode</span> <span class="o">=</span> <span class="n">joint_probs_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
     <span class="n">I_3322_local_expval_qnode</span> <span class="o">=</span> <span class="n">local_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
         <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">mult</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
@@ -303,15 +303,15 @@
             <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
             <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
         <span class="p">]:</span>
-            <span class="n">settings</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]])</span>
 
             <span class="n">probs_vec_xy</span> <span class="o">=</span> <span class="n">I_3322_joint_probs_qnode</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
             <span class="n">prob00_xy</span> <span class="o">=</span> <span class="n">post_process_I_3322_joint_probs</span><span class="p">(</span><span class="n">probs_vec_xy</span><span class="p">)</span>
 
             <span class="n">score</span> <span class="o">+=</span> <span class="n">mult</span> <span class="o">*</span> <span class="n">prob00_xy</span>
 
-        <span class="n">settings_00</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">settings_11</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">settings_00</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+        <span class="n">settings_11</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
 
         <span class="n">expval_00</span> <span class="o">=</span> <span class="n">I_3322_local_expval_qnode</span><span class="p">(</span><span class="n">settings_00</span><span class="p">)</span>
         <span class="n">expval_11</span> <span class="o">=</span> <span class="n">I_3322_local_expval_qnode</span><span class="p">(</span><span class="n">settings_11</span><span class="p">)</span>
@@ -356,6 +356,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>
 </html>

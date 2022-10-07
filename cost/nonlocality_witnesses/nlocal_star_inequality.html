@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Optimization" href="../../optimization.html" /><link rel="prev" title="n-Local Chain Inequality" href="nlocal_chain_inequality.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>n-Local Star Inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -274,7 +274,7 @@ Default value: <code class="docutils literal notranslate"><span class="pre">Fals
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">nlocal_star_22_cost(scenario_settings)</span></code> that evaluates
+<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">nlocal_star_22_cost(*network_settings)</span></code> that evaluates
 the cost as <span class="math notranslate nohighlight">\(-|I_{22,n}|^{1/n} - |J_{22,n}|^{1/n}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
@@ -286,7 +286,7 @@ the cost as <span class="math notranslate nohighlight">\(-|I_{22,n}|^{1/n} - |J_
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.star_I22_fn">
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">star_I22_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_star_bell_inequality.html#star_I22_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.star_I22_fn" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a network-specific <code class="docutils literal notranslate"><span class="pre">I22(scenario_settings)</span></code> function that
+<dd><p>Constructs a network-specific <code class="docutils literal notranslate"><span class="pre">I22(network_settings)</span></code> function that
 evaluates the <span class="math notranslate nohighlight">\(I_{22,n}\)</span> quantity for the <span class="math notranslate nohighlight">\(n\)</span>-local star network.</p>
 <p>The <span class="math notranslate nohighlight">\(I_{22,n}\)</span> quantity is formally expressed as</p>
 <div class="math-wrapper docutils container">
@@ -307,7 +307,7 @@ Default value: <code class="docutils literal notranslate"><span class="pre">Fals
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">I22(scenario_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(I_{22,n}\)</span> quantity.</p>
+<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">I22(*network_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(I_{22,n}\)</span> quantity.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>function</p>
@@ -318,7 +318,7 @@ Default value: <code class="docutils literal notranslate"><span class="pre">Fals
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.star_J22_fn">
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">star_J22_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_star_bell_inequality.html#star_J22_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.star_J22_fn" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a network-specific <code class="docutils literal notranslate"><span class="pre">J22(scenario_settings)</span></code> function that
+<dd><p>Constructs a network-specific <code class="docutils literal notranslate"><span class="pre">J22(network_settings)</span></code> function that
 evaluates the <span class="math notranslate nohighlight">\(J_{22,n}\)</span> quantity for the <span class="math notranslate nohighlight">\(n\)</span>-local star network.</p>
 <p>The <span class="math notranslate nohighlight">\(J_{22,n}\)</span> quantity is formally expressed as</p>
 <div class="math-wrapper docutils container">
@@ -339,8 +339,8 @@ Default value: <code class="docutils literal notranslate"><span class="pre">Fals
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">J22(scenario_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(J_{22,n}\)</span>
-quantity for the given <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code>.</p>
+<dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">J22(*network_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(J_{22,n}\)</span>
+quantity for the given <code class="docutils literal notranslate"><span class="pre">network_settings</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>function</p>
@@ -350,7 +350,7 @@ quantity for the given <code class="docutils literal notranslate"><span class="p
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.parallel_nlocal_star_grad_fn">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parallel_nlocal_star_grad_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_star_bell_inequality.html#parallel_nlocal_star_grad_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parallel_nlocal_star_grad_fn" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parallel_nlocal_star_grad_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_star_bell_inequality.html#parallel_nlocal_star_grad_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parallel_nlocal_star_grad_fn" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a parallelizeable gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn</span></code> for the <span class="math notranslate nohighlight">\(n\)</span>-local
 star cost function.</p>
 <p>The gradient of the <a class="reference internal" href="#qnetvo.nlocal_star_22_cost_fn" title="qnetvo.nlocal_star_22_cost_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">nlocal_star_22_cost_fn()</span></code></a> is expressed as,</p>
@@ -367,14 +367,16 @@ efficiency of remote qnode execution.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the <span class="math notranslate nohighlight">\(n\)</span>-local chain network.</p></li>
 <li><p><strong>nthreads</strong> (<em>Int</em>) – Specifies the number of threads used when <code class="docutils literal notranslate"><span class="pre">parallel=True</span></code>.</p></li>
+<li><p><strong>natural_grad</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the natural gradient is evaluated by scaling the
+gradient by the inverse of the metric tensor.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">nlocal_star_grad(scenario_settings)</span></code>.</p>
+<dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">nlocal_star_grad(network_settings)</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
+<dd class="field-odd"><p>Function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -441,6 +443,10 @@ configuration.” Physical Review A 90.6 (2014): 062109.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">n-Local Star Inequality</a><ul>
+<li><a class="reference internal" href="#qnetvo.nlocal_star_22_cost_fn"><code class="docutils literal notranslate"><span class="pre">nlocal_star_22_cost_fn()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.star_I22_fn"><code class="docutils literal notranslate"><span class="pre">star_I22_fn()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.star_J22_fn"><code class="docutils literal notranslate"><span class="pre">star_J22_fn()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.parallel_nlocal_star_grad_fn"><code class="docutils literal notranslate"><span class="pre">parallel_nlocal_star_grad_fn()</span></code></a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -458,6 +464,7 @@ configuration.” Physical Review A 90.6 (2014): 062109.</p>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>

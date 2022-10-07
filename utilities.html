@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Contributing" href="contributing.html" /><link rel="prev" title="Optimization" href="optimization.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Utilities - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="_static/css/qnetvo.css" />
     
@@ -303,12 +303,12 @@ circuit in the computational basis.</p>
 <h2>Data Conversions<a class="headerlink" href="#data-conversions" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.settings_to_list">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">settings_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">np_scenario_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qnetvo/utilities.html#settings_to_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.settings_to_list" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">settings_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">np_network_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qnetvo/utilities.html#settings_to_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.settings_to_list" title="Permalink to this definition">#</a></dt>
 <dd><p>Converts the numpy array in scenario settings to lists.
 This function is intended for printing purposes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>np_scenario_settings</strong> – The scenario settings structure for a <cite>NetworkAnsatz</cite>.</p>
+<dd class="field-odd"><p><strong>np_network_settings</strong> – The scenario settings structure for a <cite>NetworkAnsatz</cite>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The same nested array elements and structure using lists.</p>
@@ -318,12 +318,12 @@ This function is intended for printing purposes.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.settings_to_np">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">settings_to_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_scenario_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qnetvo/utilities.html#settings_to_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.settings_to_np" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">settings_to_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_network_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qnetvo/utilities.html#settings_to_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.settings_to_np" title="Permalink to this definition">#</a></dt>
 <dd><p>Converts the nested list elements in the scenario settings to numpy arrays.
 This function is intended for printing purposes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>list_scenario_settings</strong> – The scenario settings structure for a <cite>NetworkAnsatz</cite>.</p>
+<dd class="field-odd"><p><strong>list_network_settings</strong> – The scenario settings structure for a <cite>NetworkAnsatz</cite>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The same nested array elements and structure using numpy arrays.</p>
@@ -407,9 +407,21 @@ digit in the mixed base number</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Utilities</a><ul>
-<li><a class="reference internal" href="#circuit-tomography">Circuit Tomography</a></li>
-<li><a class="reference internal" href="#file-i-o">File I/O</a></li>
-<li><a class="reference internal" href="#data-conversions">Data Conversions</a></li>
+<li><a class="reference internal" href="#circuit-tomography">Circuit Tomography</a><ul>
+<li><a class="reference internal" href="#qnetvo.unitary_matrix"><code class="docutils literal notranslate"><span class="pre">unitary_matrix()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-i-o">File I/O</a><ul>
+<li><a class="reference internal" href="#qnetvo.write_optimization_json"><code class="docutils literal notranslate"><span class="pre">write_optimization_json()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.read_optimization_json"><code class="docutils literal notranslate"><span class="pre">read_optimization_json()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-conversions">Data Conversions</a><ul>
+<li><a class="reference internal" href="#qnetvo.settings_to_list"><code class="docutils literal notranslate"><span class="pre">settings_to_list()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.settings_to_np"><code class="docutils literal notranslate"><span class="pre">settings_to_np()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.mixed_base_num"><code class="docutils literal notranslate"><span class="pre">mixed_base_num()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -426,6 +438,7 @@ digit in the mixed base number</p></li>
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/scripts/furo.js"></script>
     </body>
 </html>

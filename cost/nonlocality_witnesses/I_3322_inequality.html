@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Mermin-Klyshko Inequality" href="mermin_klyshko_inequality.html" /><link rel="prev" title="CHSH Inequality" href="chsh_inequality.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>I-3322 Inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -295,16 +295,16 @@ computational basis.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.I_3322_bell_inequality_cost">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">I_3322_bell_inequality_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/I_3322_bell_inequality.html#I_3322_bell_inequality_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.I_3322_bell_inequality_cost" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="qnetvo.I_3322_bell_inequality_cost_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">I_3322_bell_inequality_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/I_3322_bell_inequality.html#I_3322_bell_inequality_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.I_3322_bell_inequality_cost_fn" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a cost function that maximizes the score of the <span class="math notranslate nohighlight">\(I_{3322}\)</span> Bell inequality.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(scenario_settings)</span></code> where
-the <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code> are obtained from the provided
+<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(*network_settings)</span></code> where
+the <code class="docutils literal notranslate"><span class="pre">network_settings</span></code> are obtained from the provided
 <code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
 </dd>
 </dl>
@@ -382,6 +382,8 @@ two-outcome Bell inequality using infinite-dimensional quantum systems.” Physi
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">I-3322 Inequality</a><ul>
+<li><a class="reference internal" href="#qnetvo.post_process_I_3322_joint_probs"><code class="docutils literal notranslate"><span class="pre">post_process_I_3322_joint_probs()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.I_3322_bell_inequality_cost_fn"><code class="docutils literal notranslate"><span class="pre">I_3322_bell_inequality_cost_fn()</span></code></a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -399,6 +401,7 @@ two-outcome Bell inequality using infinite-dimensional quantum systems.” Physi
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>

@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Cost Functions" href="../cost/index.html" /><link rel="prev" title="Network Ansatzes" href="network_ansatzes.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Ansatz Library - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/qnetvo.css" />
     
@@ -484,9 +484,24 @@ represented by the following function:</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Ansatz Library</a><ul>
-<li><a class="reference internal" href="#state-preparations">State Preparations</a></li>
-<li><a class="reference internal" href="#unitary-layers">Unitary Layers</a></li>
-<li><a class="reference internal" href="#noise-models">Noise Models</a></li>
+<li><a class="reference internal" href="#state-preparations">State Preparations</a><ul>
+<li><a class="reference internal" href="#qnetvo.bell_state_copies"><code class="docutils literal notranslate"><span class="pre">bell_state_copies()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.ghz_state"><code class="docutils literal notranslate"><span class="pre">ghz_state()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.max_entangled_state"><code class="docutils literal notranslate"><span class="pre">max_entangled_state()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#unitary-layers">Unitary Layers</a><ul>
+<li><a class="reference internal" href="#qnetvo.local_RY"><code class="docutils literal notranslate"><span class="pre">local_RY()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.local_RXRY"><code class="docutils literal notranslate"><span class="pre">local_RXRY()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#noise-models">Noise Models</a><ul>
+<li><a class="reference internal" href="#qnetvo.pure_amplitude_damping"><code class="docutils literal notranslate"><span class="pre">pure_amplitude_damping()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.pure_phase_damping"><code class="docutils literal notranslate"><span class="pre">pure_phase_damping()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.two_qubit_depolarizing"><code class="docutils literal notranslate"><span class="pre">two_qubit_depolarizing()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.colored_noise"><code class="docutils literal notranslate"><span class="pre">colored_noise()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -503,6 +518,7 @@ represented by the following function:</p>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>

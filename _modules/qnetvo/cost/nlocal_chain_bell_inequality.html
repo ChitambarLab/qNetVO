@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>qnetvo.cost.nlocal_chain_bell_inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/qnetvo.css" />
     
@@ -243,8 +243,8 @@
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">pinvh</span>
 
 
-<div class="viewcode-block" id="I22_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.I22_fn">[docs]</a><span class="k">def</span> <span class="nf">I22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_cost_22`` function.</span>
+<div class="viewcode-block" id="chain_I22_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.chain_I22_fn">[docs]</a><span class="k">def</span> <span class="nf">chain_I22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.</span>
 
 <span class="sd">    :param network_ansatz: The ansatz for the :math:`n`-local chain network.</span>
 <span class="sd">    :type network_ansatz: qnet.NetworkAnsatz</span>
@@ -255,7 +255,7 @@
 <span class="sd">    :param qnode_kwargs: keyword args to be passed to constructed QNodes.</span>
 <span class="sd">    :type: *optional* dictionary</span>
 
-<span class="sd">    :returns: A function callable as ``I22(scenario_settings)`` that evaluates the :math:`I_{22}` quantity.</span>
+<span class="sd">    :returns: A function callable as ``I22(*network_settings)`` that evaluates the :math:`I_{22}` quantity.</span>
 <span class="sd">    :rtype: function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -275,10 +275,10 @@
 
     <span class="n">I22_xy_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x_a</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_interior_nodes</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x_b</span><span class="p">]</span> <span class="k">for</span> <span class="n">x_a</span><span class="p">,</span> <span class="n">x_b</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">I22</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
 
         <span class="n">I22_xy_settings</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="n">prep_inputs</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">)</span>
+            <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="p">[</span><span class="n">prep_inputs</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">meas_inputs</span> <span class="ow">in</span> <span class="n">I22_xy_inputs</span>
         <span class="p">]</span>
 
@@ -288,17 +288,17 @@
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">I22_xy_settings</span><span class="p">)</span>
             <span class="p">]</span>
 
-            <span class="n">I22_results</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">I22_delayed_results</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">))</span>
+            <span class="n">I22_results</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">I22_delayed_results</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">I22_results</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">chain_qnode</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">I22_xy_settings</span><span class="p">])</span>
+            <span class="n">I22_results</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">chain_qnode</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">I22_xy_settings</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">I22_results</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">I22</span></div>
 
 
-<div class="viewcode-block" id="J22_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.J22_fn">[docs]</a><span class="k">def</span> <span class="nf">J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nthreads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_cost_22`` function.</span>
+<div class="viewcode-block" id="chain_J22_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.chain_J22_fn">[docs]</a><span class="k">def</span> <span class="nf">chain_J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.</span>
 
 <span class="sd">    :param network_ansatz: The ansatz for the :math:`n`-local chain network.</span>
 <span class="sd">    :type network_ansatz: qnet.NetworkAnsatz</span>
@@ -309,7 +309,7 @@
 <span class="sd">    :param qnode_kwargs: keyword args to be passed to constructed QNodes.</span>
 <span class="sd">    :type: *optional* dictionary</span>
 
-<span class="sd">    :returns: A function callable as ``J22(scenario_settings)`` that evaluates the :math:`J_{22}` quantity.</span>
+<span class="sd">    :returns: A function callable as ``J22(*network_settings)`` that evaluates the :math:`J_{22}` quantity.</span>
 <span class="sd">    :rtype: function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -329,10 +329,10 @@
 
     <span class="n">J22_xy_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x_a</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_interior_nodes</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x_b</span><span class="p">]</span> <span class="k">for</span> <span class="n">x_a</span><span class="p">,</span> <span class="n">x_b</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">J22</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
 
         <span class="n">J22_xy_settings</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="n">prep_inputs</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">)</span>
+            <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="p">[</span><span class="n">prep_inputs</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">meas_inputs</span> <span class="ow">in</span> <span class="n">J22_xy_inputs</span>
         <span class="p">]</span>
 
@@ -342,16 +342,16 @@
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">J22_xy_settings</span><span class="p">)</span>
             <span class="p">]</span>
 
-            <span class="n">J22_results</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">J22_delayed_results</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">))</span>
+            <span class="n">J22_results</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">J22_delayed_results</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">J22_results</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">chain_qnode</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">J22_xy_settings</span><span class="p">])</span>
+            <span class="n">J22_results</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">chain_qnode</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">J22_xy_settings</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">J22_results</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">J22_results</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">J22</span></div>
 
 
-<div class="viewcode-block" id="nlocal_chain_cost_22"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.nlocal_chain_cost_22">[docs]</a><span class="k">def</span> <span class="nf">nlocal_chain_cost_22</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="nlocal_chain_22_cost_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.nlocal_chain_22_cost_fn">[docs]</a><span class="k">def</span> <span class="nf">nlocal_chain_22_cost_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;For the provided ``network_ansatz``, constructs the cost function for the</span>
 <span class="sd">    :math:`n`-local chain Bell inequality for binary inputs and outputs.</span>
 
@@ -388,25 +388,25 @@
 <span class="sd">    The maximal score for the dichotomic :math:`n` -local Bell inequality is known to be</span>
 <span class="sd">    :math:`\\sqrt{2} \\approx 1.414 213`.</span>
 
-<span class="sd">    :returns: A cost function that can be evaluated as ``cost(scenario_settings)`` where</span>
-<span class="sd">              ``scenario_settings`` have the appropriate dimensions for the provided ``network_ansatz``</span>
+<span class="sd">    :returns: A cost function that can be evaluated as ``cost(*network_settings)`` where</span>
+<span class="sd">              ``network_settings`` have the appropriate dimensions for the provided ``network_ansatz``</span>
 <span class="sd">    :rtype: Function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">I22</span> <span class="o">=</span> <span class="n">I22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
-    <span class="n">J22</span> <span class="o">=</span> <span class="n">J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
+    <span class="n">I22</span> <span class="o">=</span> <span class="n">chain_I22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
+    <span class="n">J22</span> <span class="o">=</span> <span class="n">chain_J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
 
-        <span class="n">I22_score</span> <span class="o">=</span> <span class="n">I22</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">)</span>
-        <span class="n">J22_score</span> <span class="o">=</span> <span class="n">J22</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">)</span>
+        <span class="n">I22_score</span> <span class="o">=</span> <span class="n">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
+        <span class="n">J22_score</span> <span class="o">=</span> <span class="n">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">I22_score</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">J22_score</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">cost</span></div>
 
 
-<div class="viewcode-block" id="parallel_nlocal_chain_grad_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.parallel_nlocal_chain_grad_fn">[docs]</a><span class="k">def</span> <span class="nf">parallel_nlocal_chain_grad_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">natural_gradient</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="parallel_nlocal_chain_grad_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.parallel_nlocal_chain_grad_fn">[docs]</a><span class="k">def</span> <span class="nf">parallel_nlocal_chain_grad_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">natural_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Constructs a parallelizeable gradient function ``grad_fn`` for the :math:`n`-local</span>
 <span class="sd">    chain cost.</span>
 
@@ -417,10 +417,14 @@
 <span class="sd">    :param network_ansatz: The ansatz describing the :math:`n`-local chain network.</span>
 <span class="sd">    :type network_ansatz: NetworkAnsatz</span>
 
+<span class="sd">    :param natural_grad: If ``True``, the natural gradient is evaluated by scaling the</span>
+<span class="sd">                         gradient by the inverse of the metric tensor.</span>
+<span class="sd">    :type natural_grad: *optional* Bool</span>
+
 <span class="sd">    :param qnode_kwargs: A keyword argument passthrough to qnode construction.</span>
 <span class="sd">    :type qnode_kwargs: *optional* dict</span>
 
-<span class="sd">    :returns: A parallelized (multithreaded) gradient function ``nlocal_chain_grad(scenario_settings)``.</span>
+<span class="sd">    :returns: A parallelized (multithreaded) gradient function ``nlocal_chain_grad(*network_settings)``.</span>
 <span class="sd">    :rtype: function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -432,8 +436,8 @@
     <span class="n">chain_qnodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">global_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
     <span class="n">qnode_grads</span> <span class="o">=</span> <span class="p">[</span><span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">qnode</span><span class="p">)</span> <span class="k">for</span> <span class="n">qnode</span> <span class="ow">in</span> <span class="n">chain_qnodes</span><span class="p">]</span>
 
-    <span class="n">I22</span> <span class="o">=</span> <span class="n">I22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
-    <span class="n">J22</span> <span class="o">=</span> <span class="n">J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
+    <span class="n">I22</span> <span class="o">=</span> <span class="n">chain_I22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
+    <span class="n">J22</span> <span class="o">=</span> <span class="n">chain_J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
     <span class="n">I22_xy_meas_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
     <span class="n">J22_xy_meas_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
@@ -441,86 +445,66 @@
     <span class="n">prep_num_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">num_settings</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">]</span>
     <span class="n">meas_num_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">num_settings</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_ng</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">qnode</span><span class="p">):</span>
-        <span class="n">grad</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">qnode</span><span class="p">)(</span><span class="n">settings</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_grad_fn</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">qnode</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">qnode</span><span class="p">)(</span><span class="n">settings</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_nat_grad_fn</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">qnode</span><span class="p">):</span>
         <span class="n">ginv</span> <span class="o">=</span> <span class="n">pinvh</span><span class="p">(</span><span class="n">qml</span><span class="o">.</span><span class="n">metric_tensor</span><span class="p">(</span><span class="n">qnode</span><span class="p">,</span> <span class="n">approx</span><span class="o">=</span><span class="s2">&quot;block-diag&quot;</span><span class="p">)(</span><span class="n">settings</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ginv</span> <span class="o">@</span> <span class="n">_grad_fn</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">qnode</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">ginv</span> <span class="o">@</span> <span class="n">grad</span>
+    <span class="n">grad_fn</span> <span class="o">=</span> <span class="n">_nat_grad_fn</span> <span class="k">if</span> <span class="n">natural_grad</span> <span class="k">else</span> <span class="n">_grad_fn</span>
 
-    <span class="k">def</span> <span class="nf">nlocal_chain_grad</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">nlocal_chain_grad_fn</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
 
-        <span class="n">I22_score</span> <span class="o">=</span> <span class="n">I22</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">)</span>
-        <span class="n">J22_score</span> <span class="o">=</span> <span class="n">J22</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">)</span>
+        <span class="n">I22_score</span> <span class="o">=</span> <span class="n">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
+        <span class="n">J22_score</span> <span class="o">=</span> <span class="n">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
 
         <span class="n">I22_xy_settings</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">)</span>
+            <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">meas_inputs</span> <span class="ow">in</span> <span class="n">I22_xy_meas_inputs</span>
         <span class="p">]</span>
         <span class="n">J22_xy_settings</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">scenario_settings</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">)</span>
+            <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">meas_inputs</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">meas_inputs</span> <span class="ow">in</span> <span class="n">J22_xy_meas_inputs</span>
         <span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">natural_gradient</span><span class="p">:</span>
-            <span class="n">I22_delayed_results</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">_ng</span><span class="p">)(</span><span class="n">settings</span><span class="p">,</span> <span class="n">chain_qnodes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">I22_xy_settings</span><span class="p">)</span>
-            <span class="p">]</span>
-            <span class="n">J22_delayed_results</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">_ng</span><span class="p">)(</span><span class="n">settings</span><span class="p">,</span> <span class="n">chain_qnodes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">J22_xy_settings</span><span class="p">)</span>
-            <span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">I22_delayed_results</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">qnode_grads</span><span class="p">[</span><span class="n">i</span><span class="p">])(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">I22_xy_settings</span><span class="p">)</span>
-            <span class="p">]</span>
-            <span class="n">J22_delayed_results</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">qnode_grads</span><span class="p">[</span><span class="n">i</span><span class="p">])(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">J22_xy_settings</span><span class="p">)</span>
-            <span class="p">]</span>
+        <span class="n">I22_delayed_grads</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">grad_fn</span><span class="p">)(</span><span class="n">settings</span><span class="p">,</span> <span class="n">chain_qnodes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">I22_xy_settings</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">J22_delayed_grads</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">grad_fn</span><span class="p">)(</span><span class="n">settings</span><span class="p">,</span> <span class="n">chain_qnodes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">J22_xy_settings</span><span class="p">)</span>
+        <span class="p">]</span>
 
-        <span class="n">I22_results</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">I22_delayed_results</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">)</span>
-        <span class="n">J22_results</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">J22_delayed_results</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">)</span>
+        <span class="n">I22_grads</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">I22_delayed_grads</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">)</span>
+        <span class="n">J22_grads</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">J22_delayed_grads</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">)</span>
 
-        <span class="n">grad</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">zero_scenario_settings</span><span class="p">()</span>
+        <span class="n">settings_grad</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">zero_network_settings</span><span class="p">()</span>
 
         <span class="n">I22_scalar</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">I22_score</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">I22_score</span><span class="p">))</span>
         <span class="n">J22_scalar</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">J22_score</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">J22_score</span><span class="p">))</span>
 
-        <span class="n">results_id</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">:</span>
-            <span class="n">xy_scalar</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
 
-            <span class="n">I22_result</span> <span class="o">=</span> <span class="n">I22_results</span><span class="p">[</span><span class="n">results_id</span><span class="p">]</span>
-            <span class="n">J22_result</span> <span class="o">=</span> <span class="n">J22_results</span><span class="p">[</span><span class="n">results_id</span><span class="p">]</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">I22_xy_meas_inputs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">I22_xy_meas_inputs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">J22_sign</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
 
-            <span class="n">settings_id</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">settings_grad</span> <span class="o">+=</span> <span class="n">I22_scalar</span> <span class="o">*</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">expand_qnode_settings</span><span class="p">(</span>
+                <span class="n">I22_grads</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">I22_xy_meas_inputs</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="p">)</span>
+            <span class="n">settings_grad</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="n">J22_sign</span>
+                <span class="o">*</span> <span class="n">J22_scalar</span>
+                <span class="o">*</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">expand_qnode_settings</span><span class="p">(</span>
+                    <span class="n">J22_grads</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">J22_xy_meas_inputs</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-                <span class="n">next_id</span> <span class="o">=</span> <span class="n">settings_id</span> <span class="o">+</span> <span class="n">prep_num_settings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">grad</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">I22_scalar</span> <span class="o">*</span> <span class="n">I22_result</span><span class="p">[</span><span class="n">settings_id</span><span class="p">:</span><span class="n">next_id</span><span class="p">]</span>
-                <span class="n">grad</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">xy_scalar</span> <span class="o">*</span> <span class="n">J22_scalar</span> <span class="o">*</span> <span class="n">J22_result</span><span class="p">[</span><span class="n">settings_id</span><span class="p">:</span><span class="n">next_id</span><span class="p">]</span>
-                <span class="n">settings_id</span> <span class="o">=</span> <span class="n">next_id</span>
+        <span class="k">return</span> <span class="n">settings_grad</span>
 
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="n">next_id</span> <span class="o">=</span> <span class="n">settings_id</span> <span class="o">+</span> <span class="n">meas_num_settings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">grad</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">I22_scalar</span> <span class="o">*</span> <span class="n">I22_result</span><span class="p">[</span><span class="n">settings_id</span><span class="p">:</span><span class="n">next_id</span><span class="p">]</span>
-                    <span class="n">grad</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">xy_scalar</span> <span class="o">*</span> <span class="n">J22_scalar</span> <span class="o">*</span> <span class="n">J22_result</span><span class="p">[</span><span class="n">settings_id</span><span class="p">:</span><span class="n">next_id</span><span class="p">]</span>
-                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
-                    <span class="n">grad</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+=</span> <span class="n">I22_scalar</span> <span class="o">*</span> <span class="n">I22_result</span><span class="p">[</span><span class="n">settings_id</span><span class="p">:</span><span class="n">next_id</span><span class="p">]</span>
-                    <span class="n">grad</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+=</span> <span class="n">xy_scalar</span> <span class="o">*</span> <span class="n">J22_scalar</span> <span class="o">*</span> <span class="n">J22_result</span><span class="p">[</span><span class="n">settings_id</span><span class="p">:</span><span class="n">next_id</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">grad</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">I22_scalar</span> <span class="o">*</span> <span class="n">I22_result</span><span class="p">[</span><span class="n">settings_id</span><span class="p">:</span><span class="n">next_id</span><span class="p">]</span>
-                    <span class="n">grad</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">xy_scalar</span> <span class="o">*</span> <span class="n">J22_scalar</span> <span class="o">*</span> <span class="n">J22_result</span><span class="p">[</span><span class="n">settings_id</span><span class="p">:</span><span class="n">next_id</span><span class="p">]</span>
-
-                <span class="n">settings_id</span> <span class="o">=</span> <span class="n">next_id</span>
-
-            <span class="n">results_id</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="k">return</span> <span class="n">grad</span>
-
-    <span class="k">return</span> <span class="n">nlocal_chain_grad</span></div>
+    <span class="k">return</span> <span class="n">nlocal_chain_grad_fn</span></div>
 </pre></div>
         </article>
       </div>
@@ -549,6 +533,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>
 </html>

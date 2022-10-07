@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="I-3322 Inequality" href="I_3322_inequality.html" /><link rel="prev" title="Nonlocality Witnesses" href="index.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>CHSH Inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -256,8 +256,8 @@ correlator for dichotomic observables <span class="math notranslate nohighlight"
 Quantum entanglement yields a maximal CHSH score of of <span class="math notranslate nohighlight">\(I_{CHSH}=\leq \beta^Q_{CHSH} = 2\sqrt{2}\)</span>
 <a class="reference internal" href="#cirelson1980" id="id2"><span>[Cirelson1980]</span></a>.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.chsh_inequality_cost">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">chsh_inequality_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chsh_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/chsh_inequality.html#chsh_inequality_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.chsh_inequality_cost" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="qnetvo.chsh_inequality_cost_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">chsh_inequality_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/chsh_inequality.html#chsh_inequality_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.chsh_inequality_cost_fn" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a cost function for maximizing the score against the CHSH Bell inequality.
 This inequality is defined as</p>
 <div class="math-wrapper docutils container">
@@ -275,44 +275,20 @@ the two-body correlator between dichotomic observables <span class="math notrans
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(scenario_settings)</span></code> where
-the <code class="docutils literal notranslate"><span class="pre">scenario_settings</span></code> are obtained from the provided
+<dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(*network_settings)</span></code> where
+the <code class="docutils literal notranslate"><span class="pre">network_settings</span></code> are obtained from the provided
 <code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.parallel_chsh_grad">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parallel_chsh_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chsh_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/chsh_inequality.html#parallel_chsh_grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parallel_chsh_grad" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a parallelizeable gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn</span></code> for the CHSH
-cost.</p>
+<dt class="sig sig-object py" id="qnetvo.parallel_chsh_grad_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">parallel_chsh_grad_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/chsh_inequality.html#parallel_chsh_grad_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.parallel_chsh_grad_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a parallelizeable gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn</span></code> for the CHSH cost.</p>
 <p>The parallelization is achieved through multithreading and intended to improve the
 efficiency of remote qnode execution.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>chsh_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the network for which the CHSH inequality considered.</p></li>
-<li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn(scenario_settings)</span></code>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="qnetvo.chsh_natural_grad">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">chsh_natural_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chsh_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/chsh_inequality.html#chsh_natural_grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.chsh_natural_grad" title="Permalink to this definition">#</a></dt>
-<dd><p>Constructs a parallelized natural gradient function <code class="docutils literal notranslate"><span class="pre">natural_grad</span></code> for the CHSH
-cost function.</p>
-<p>The parallelization is achieved through multithreading and intended to improve the
-efficiency of remote qnode execution.
-The natural gradient</p>
+<p>The natural gradient</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
 \[\nabla_{ng}I_{CHSH}(\vec{\theta}):= g^{-1}(\vec{\theta})\nabla I_{CHSH}(\vec{\theta})\]</div>
@@ -331,12 +307,13 @@ The natural gradient of the <span class="math notranslate nohighlight">\(-I_{CHS
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>chsh_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the network for which the CHSH inequality considered.</p></li>
+<li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the network for which the CHSH inequality considered.</p></li>
+<li><p><strong>natural_grad</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the natural gradient is evaluated. Default <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn(scenario_settings)</span></code>.</p>
+<dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn(*network_settings)</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>function</p>
@@ -410,6 +387,8 @@ Letters in Mathematical Physics 4.2 (1980): 93-100.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">CHSH Inequality</a><ul>
+<li><a class="reference internal" href="#qnetvo.chsh_inequality_cost_fn"><code class="docutils literal notranslate"><span class="pre">chsh_inequality_cost_fn()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.parallel_chsh_grad_fn"><code class="docutils literal notranslate"><span class="pre">parallel_chsh_grad_fn()</span></code></a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -427,6 +406,7 @@ Letters in Mathematical Physics 4.2 (1980): 93-100.</p>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>

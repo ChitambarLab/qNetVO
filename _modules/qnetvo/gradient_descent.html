@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>qnetvo.gradient_descent - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -325,13 +325,10 @@
     <span class="n">start_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
     <span class="n">elapsed</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">if</span> <span class="n">grad_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">grad_fn</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="n">argnum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
     <span class="c1"># performing gradient descent</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">sample_width</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">score</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">cost</span><span class="p">(</span><span class="n">settings</span><span class="p">))</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">cost</span><span class="p">(</span><span class="o">*</span><span class="n">settings</span><span class="p">))</span>
             <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
             <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
@@ -340,10 +337,12 @@
 
         <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">interface</span> <span class="o">==</span> <span class="s2">&quot;autograd&quot;</span><span class="p">:</span>
-            <span class="n">settings</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">grad_fn</span><span class="o">=</span><span class="n">grad_fn</span><span class="p">)</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="o">*</span><span class="n">settings</span><span class="p">,</span> <span class="n">grad_fn</span><span class="o">=</span><span class="n">grad_fn</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                <span class="n">settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">settings</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">interface</span> <span class="o">==</span> <span class="s2">&quot;tf&quot;</span><span class="p">:</span>
             <span class="c1"># opt.minimize updates settings in place</span>
-            <span class="n">tf_cost</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">cost</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+            <span class="n">tf_cost</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">cost</span><span class="p">(</span><span class="o">*</span><span class="n">settings</span><span class="p">)</span>
             <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">tf_cost</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
 
         <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
@@ -356,7 +355,7 @@
 
         <span class="n">settings_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
 
-    <span class="n">opt_score</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">cost</span><span class="p">(</span><span class="n">settings</span><span class="p">))</span>
+    <span class="n">opt_score</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">cost</span><span class="p">(</span><span class="o">*</span><span class="n">settings</span><span class="p">))</span>
     <span class="n">step_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elapsed</span><span class="p">)</span>
 
     <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">opt_score</span><span class="p">)</span>
@@ -400,6 +399,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>
 </html>
