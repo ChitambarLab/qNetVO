@@ -28,10 +28,10 @@ class TestNLocalChainGradientDescent:
     @pytest.fixture
     def optimization_args(self, bilocal_chain_ansatz):
 
-        bilocal_chain_cost = qnet.nlocal_chain_cost_22(bilocal_chain_ansatz)
+        bilocal_chain_cost = qnet.nlocal_chain_22_cost_fn(bilocal_chain_ansatz)
 
         np.random.seed(9)
-        init_settings = bilocal_chain_ansatz.rand_scenario_settings()
+        init_settings = bilocal_chain_ansatz.rand_network_settings()
 
         return bilocal_chain_cost, init_settings
 
@@ -71,13 +71,13 @@ class TestNLocalChainGradientDescent:
         ]
 
         bilocal_chain_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
-        bilocal_chain_cost = qnet.nlocal_chain_cost_22(bilocal_chain_ansatz)
+        bilocal_chain_cost = qnet.nlocal_chain_22_cost_fn(bilocal_chain_ansatz)
 
         np.random.seed(9)
-        init_settings = bilocal_chain_ansatz.rand_scenario_settings()
+        init_settings = bilocal_chain_ansatz.rand_network_settings()
 
         nat_grad = qnet.parallel_nlocal_chain_grad_fn(
-            bilocal_chain_ansatz, natural_gradient=True, diff_method="parameter-shift"
+            bilocal_chain_ansatz, natural_grad=True, diff_method="parameter-shift"
         )
 
         opt_dict = qnet.gradient_descent(

@@ -86,13 +86,10 @@ def gradient_descent(
     start_datetime = datetime.utcnow()
     elapsed = 0
 
-    if grad_fn is None:
-        grad_fn = qml.grad(cost, argnum=0)
-
     # performing gradient descent
     for i in range(num_steps):
         if i % sample_width == 0:
-            score = -(cost(settings))
+            score = -(cost(*settings))
             scores.append(score)
             samples.append(i)
 
@@ -101,10 +98,12 @@ def gradient_descent(
 
         start = time.time()
         if interface == "autograd":
-            settings = opt.step(cost, settings, grad_fn=grad_fn)
+            settings = opt.step(cost, *settings, grad_fn=grad_fn)
+            if not (isinstance(settings, list)):
+                settings = [settings]
         elif interface == "tf":
             # opt.minimize updates settings in place
-            tf_cost = lambda: cost(settings)
+            tf_cost = lambda: cost(*settings)
             opt.minimize(tf_cost, settings)
 
         elapsed = time.time() - start
@@ -117,7 +116,7 @@ def gradient_descent(
 
         settings_history.append(settings)
 
-    opt_score = -(cost(settings))
+    opt_score = -(cost(*settings))
     step_times.append(elapsed)
 
     scores.append(opt_score)

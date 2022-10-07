@@ -6,7 +6,7 @@ from scipy.linalg import pinvh
 
 
 def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
-    """Constructs a network-specific ``I22(scenario_settings)`` function that
+    """Constructs a network-specific ``I22(network_settings)`` function that
     evaluates the :math:`I_{22,n}` quantity for the :math:`n`-local star network.
 
     The :math:`I_{22,n}` quantity is formally expressed as
@@ -32,13 +32,15 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
-    :returns: A function callable as ``I22(scenario_settings)`` that evaluates the :math:`I_{22,n}` quantity.
+    :returns: A function callable as ``I22(*network_settings)`` that evaluates the :math:`I_{22,n}` quantity.
     :rtype: function
     """
     n = len(network_ansatz.prepare_nodes)
 
     prep_inputs = [0] * n
-    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
+    network_input_x_vals = [
+        [prep_inputs, [int(bit) for bit in np.binary_repr(x, width=n) + "0"]] for x in range(2**n)
+    ]
 
     if parallel:
         from ..lazy_dask_import import dask
@@ -49,11 +51,11 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     else:
         star_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
-    def I22(scenario_settings):
+    def I22(*network_settings):
 
         I22_x_settings = [
-            network_ansatz.qnode_settings(scenario_settings, prep_inputs, meas_inputs)
-            for meas_inputs in input_x_vals
+            network_ansatz.qnode_settings(network_settings, network_inputs)
+            for network_inputs in network_input_x_vals
         ]
 
         if parallel:
@@ -72,7 +74,7 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
                     [I22_results, dask.compute(*I22_delayed_results, scheduler="threads")]
                 )
         else:
-            I22_results = math.array([star_qnode(settings) for settings in I22_x_settings])
+            I22_results = math.stack([star_qnode(settings) for settings in I22_x_settings])
 
         return math.sum(I22_results) / (2**n)
 
@@ -80,7 +82,7 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
 
 
 def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
-    """Constructs a network-specific ``J22(scenario_settings)`` function that
+    """Constructs a network-specific ``J22(network_settings)`` function that
     evaluates the :math:`J_{22,n}` quantity for the :math:`n`-local star network.
 
     The :math:`J_{22,n}` quantity is formally expressed as
@@ -106,15 +108,17 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
-    :returns: A function callable as ``J22(scenario_settings)`` that evaluates the :math:`J_{22,n}`
-              quantity for the given ``scenario_settings``.
+    :returns: A function callable as ``J22(*network_settings)`` that evaluates the :math:`J_{22,n}`
+              quantity for the given ``network_settings``.
     :rtype: function
     """
 
     n = len(network_ansatz.prepare_nodes)
 
     prep_inputs = [0] * n
-    input_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
+    network_input_x_vals = [
+        [prep_inputs, [int(bit) for bit in np.binary_repr(x, width=n) + "1"]] for x in range(2**n)
+    ]
 
     if parallel:
         from ..lazy_dask_import import dask
@@ -125,11 +129,11 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     else:
         star_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
-    def J22(scenario_settings):
+    def J22(*network_settings):
 
         J22_x_settings = [
-            network_ansatz.qnode_settings(scenario_settings, prep_inputs, meas_inputs)
-            for meas_inputs in input_x_vals
+            network_ansatz.qnode_settings(network_settings, network_inputs)
+            for network_inputs in network_input_x_vals
         ]
 
         if parallel:
@@ -148,10 +152,10 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
                     [J22_expvals, dask.compute(*J22_delayed_results, scheduler="threads")]
                 )
         else:
-            J22_expvals = math.array([star_qnode(settings) for settings in J22_x_settings])
+            J22_expvals = math.stack([star_qnode(settings) for settings in J22_x_settings])
 
-        J22_scalars = math.array(
-            [(-1) ** (math.sum(input_vals[0:n])) for input_vals in input_x_vals]
+        J22_scalars = math.stack(
+            [(-1) ** (math.sum(input_vals[1][0:n])) for input_vals in network_input_x_vals]
         )
 
         return math.sum(J22_scalars * J22_expvals) / (2**n)
@@ -190,7 +194,7 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_k
     :param qnode_kwargs: keyword args passed through to the QNode constructor.
     :type qnode_kwargs: *optional* dictionary
 
-    :returns: A function callable as ``nlocal_star_22_cost(scenario_settings)`` that evaluates
+    :returns: A function callable as ``nlocal_star_22_cost(*network_settings)`` that evaluates
               the cost as :math:`-|I_{22,n}|^{1/n} - |J_{22,n}|^{1/n}`.
     :rtype: function
     """
@@ -200,19 +204,17 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_k
     I22 = star_I22_fn(network_ansatz, parallel=parallel, nthreads=nthreads, **qnode_kwargs)
     J22 = star_J22_fn(network_ansatz, parallel=parallel, nthreads=nthreads, **qnode_kwargs)
 
-    def cost(scenario_settings):
+    def cost(*network_settings):
 
-        I22_score = I22(scenario_settings)
-        J22_score = J22(scenario_settings)
+        I22_score = I22(*network_settings)
+        J22_score = J22(*network_settings)
 
         return -(np.power(math.abs(I22_score), 1 / n) + np.power(math.abs(J22_score), 1 / n))
 
     return cost
 
 
-def parallel_nlocal_star_grad_fn(
-    network_ansatz, nthreads=4, natural_gradient=False, **qnode_kwargs
-):
+def parallel_nlocal_star_grad_fn(network_ansatz, nthreads=4, natural_grad=False, **qnode_kwargs):
     """Constructs a parallelizeable gradient function ``grad_fn`` for the :math:`n`-local
     star cost function.
 
@@ -234,11 +236,15 @@ def parallel_nlocal_star_grad_fn(
     :param nthreads: Specifies the number of threads used when ``parallel=True``.
     :type nthreads: Int
 
+    :param natural_grad: If ``True``, the natural gradient is evaluated by scaling the
+                         gradient by the inverse of the metric tensor.
+    :type natural_grad: *optional* Bool
+
     :param qnode_kwargs: A keyword argument passthrough to qnode construction.
     :type qnode_kwargs: *optional* dict
 
-    :returns: A parallelized (multithreaded) gradient function ``nlocal_star_grad(scenario_settings)``.
-    :rtype: function
+    :returns: A parallelized (multithreaded) gradient function ``nlocal_star_grad(network_settings)``.
+    :rtype: Function
     """
 
     from ..lazy_dask_import import dask
@@ -255,9 +261,6 @@ def parallel_nlocal_star_grad_fn(
     I22 = star_I22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
     J22 = star_J22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
 
-    prep_num_settings = [node.num_settings for node in network_ansatz.prepare_nodes]
-    meas_num_settings = [node.num_settings for node in network_ansatz.measure_nodes]
-
     # gradient helper functions
     def _g(qnode, settings):
         return qml.grad(qnode)(settings)
@@ -266,19 +269,19 @@ def parallel_nlocal_star_grad_fn(
         metric_inv = pinvh(qml.metric_tensor(qnode, approx="block-diag")(settings))
         return metric_inv @ _g(qnode, settings)
 
-    _grad = _ng if natural_gradient else _g
+    _grad = _ng if natural_grad else _g
 
-    def nlocal_star_grad(scenario_settings):
+    def nlocal_star_grad(*network_settings):
 
-        I22_score = I22(scenario_settings)
-        J22_score = J22(scenario_settings)
+        I22_score = I22(*network_settings)
+        J22_score = J22(*network_settings)
 
         I22_x_settings = [
-            network_ansatz.qnode_settings(scenario_settings, [0] * n, meas_inputs)
+            network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
             for meas_inputs in I22_x_vals
         ]
         J22_x_settings = [
-            network_ansatz.qnode_settings(scenario_settings, [0] * n, meas_inputs)
+            network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
             for meas_inputs in J22_x_vals
         ]
 
@@ -302,7 +305,7 @@ def parallel_nlocal_star_grad_fn(
             ]
             grad_J22_results.extend(dask.compute(*grad_J22_delayed_results, scheduler="threads"))
 
-        settings_grad = network_ansatz.zero_scenario_settings()
+        settings_grad = network_ansatz.zero_network_settings()
 
         I22_scalar = (
             -(1 / n)
@@ -323,33 +326,14 @@ def parallel_nlocal_star_grad_fn(
 
             J22_sign = (-1) ** math.sum(J22_inputs[0:n])
 
-            grad_I22_result = grad_I22_results[i]
-            grad_J22_result = grad_J22_results[i]
-
-            # aggregating gradient contributions from each qnode
-            settings_id = 0
-            for j in range(n):
-                next_id = settings_id + prep_num_settings[j]
-
-                settings_grad[0][j][0] += I22_scalar * grad_I22_result[settings_id:next_id]
-                settings_grad[0][j][0] += (
-                    J22_sign * J22_scalar * grad_J22_result[settings_id:next_id]
-                )
-
-                settings_id = next_id
-
-            for j in range(n + 1):
-                next_id = settings_id + meas_num_settings[j]
-
-                I22_x = I22_inputs[j]
-                J22_x = J22_inputs[j]
-
-                settings_grad[1][j][I22_x] += I22_scalar * grad_I22_result[settings_id:next_id]
-                settings_grad[1][j][J22_x] += (
-                    J22_sign * J22_scalar * grad_J22_result[settings_id:next_id]
-                )
-
-                settings_id = next_id
+            settings_grad += I22_scalar * network_ansatz.expand_qnode_settings(
+                grad_I22_results[i], [[0] * n, I22_inputs]
+            )
+            settings_grad += (
+                J22_sign
+                * J22_scalar
+                * network_ansatz.expand_qnode_settings(grad_J22_results[i], [[0] * n, J22_inputs])
+            )
 
         return settings_grad
 

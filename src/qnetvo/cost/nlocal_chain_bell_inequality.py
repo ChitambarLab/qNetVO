@@ -4,8 +4,8 @@ from ..qnodes import global_parity_expval_qnode
 from scipy.linalg import pinvh
 
 
-def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
-    """Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_cost_22`` function.
+def chain_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
+    """Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.
 
     :param network_ansatz: The ansatz for the :math:`n`-local chain network.
     :type network_ansatz: qnet.NetworkAnsatz
@@ -16,7 +16,7 @@ def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     :param qnode_kwargs: keyword args to be passed to constructed QNodes.
     :type: *optional* dictionary
 
-    :returns: A function callable as ``I22(scenario_settings)`` that evaluates the :math:`I_{22}` quantity.
+    :returns: A function callable as ``I22(*network_settings)`` that evaluates the :math:`I_{22}` quantity.
     :rtype: function
     """
 
@@ -36,10 +36,10 @@ def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
     I22_xy_inputs = [[x_a] + [0 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
-    def I22(scenario_settings):
+    def I22(*network_settings):
 
         I22_xy_settings = [
-            network_ansatz.qnode_settings(scenario_settings, prep_inputs, meas_inputs)
+            network_ansatz.qnode_settings(network_settings, [prep_inputs, meas_inputs])
             for meas_inputs in I22_xy_inputs
         ]
 
@@ -49,17 +49,17 @@ def I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
                 for i, settings in enumerate(I22_xy_settings)
             ]
 
-            I22_results = math.array(dask.compute(*I22_delayed_results, scheduler="threads"))
+            I22_results = math.stack(dask.compute(*I22_delayed_results, scheduler="threads"))
         else:
-            I22_results = math.array([chain_qnode(settings) for settings in I22_xy_settings])
+            I22_results = math.stack([chain_qnode(settings) for settings in I22_xy_settings])
 
         return math.sum(I22_results)
 
     return I22
 
 
-def J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
-    """Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_cost_22`` function.
+def chain_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
+    """Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.
 
     :param network_ansatz: The ansatz for the :math:`n`-local chain network.
     :type network_ansatz: qnet.NetworkAnsatz
@@ -70,7 +70,7 @@ def J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     :param qnode_kwargs: keyword args to be passed to constructed QNodes.
     :type: *optional* dictionary
 
-    :returns: A function callable as ``J22(scenario_settings)`` that evaluates the :math:`J_{22}` quantity.
+    :returns: A function callable as ``J22(*network_settings)`` that evaluates the :math:`J_{22}` quantity.
     :rtype: function
     """
 
@@ -90,10 +90,10 @@ def J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
 
     J22_xy_inputs = [[x_a] + [1 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
-    def J22(scenario_settings):
+    def J22(*network_settings):
 
         J22_xy_settings = [
-            network_ansatz.qnode_settings(scenario_settings, prep_inputs, meas_inputs)
+            network_ansatz.qnode_settings(network_settings, [prep_inputs, meas_inputs])
             for meas_inputs in J22_xy_inputs
         ]
 
@@ -103,16 +103,16 @@ def J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
                 for i, settings in enumerate(J22_xy_settings)
             ]
 
-            J22_results = math.array(dask.compute(*J22_delayed_results, scheduler="threads"))
+            J22_results = math.stack(dask.compute(*J22_delayed_results, scheduler="threads"))
         else:
-            J22_results = math.array([chain_qnode(settings) for settings in J22_xy_settings])
+            J22_results = math.stack([chain_qnode(settings) for settings in J22_xy_settings])
 
-        return math.sum(math.array([1, -1, -1, 1]) * J22_results)
+        return math.sum(math.stack([1, -1, -1, 1]) * J22_results)
 
     return J22
 
 
-def nlocal_chain_cost_22(network_ansatz, parallel=False, **qnode_kwargs):
+def nlocal_chain_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
     """For the provided ``network_ansatz``, constructs the cost function for the
     :math:`n`-local chain Bell inequality for binary inputs and outputs.
 
@@ -149,25 +149,25 @@ def nlocal_chain_cost_22(network_ansatz, parallel=False, **qnode_kwargs):
     The maximal score for the dichotomic :math:`n` -local Bell inequality is known to be
     :math:`\\sqrt{2} \\approx 1.414 213`.
 
-    :returns: A cost function that can be evaluated as ``cost(scenario_settings)`` where
-              ``scenario_settings`` have the appropriate dimensions for the provided ``network_ansatz``
+    :returns: A cost function that can be evaluated as ``cost(*network_settings)`` where
+              ``network_settings`` have the appropriate dimensions for the provided ``network_ansatz``
     :rtype: Function
     """
 
-    I22 = I22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
-    J22 = J22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
+    I22 = chain_I22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
+    J22 = chain_J22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
 
-    def cost(scenario_settings):
+    def cost(*network_settings):
 
-        I22_score = I22(scenario_settings)
-        J22_score = J22(scenario_settings)
+        I22_score = I22(*network_settings)
+        J22_score = J22(*network_settings)
 
         return -(math.sqrt(math.abs(I22_score) / 4) + math.sqrt(math.abs(J22_score) / 4))
 
     return cost
 
 
-def parallel_nlocal_chain_grad_fn(network_ansatz, natural_gradient=False, **qnode_kwargs):
+def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kwargs):
     """Constructs a parallelizeable gradient function ``grad_fn`` for the :math:`n`-local
     chain cost.
 
@@ -178,10 +178,14 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_gradient=False, **qnod
     :param network_ansatz: The ansatz describing the :math:`n`-local chain network.
     :type network_ansatz: NetworkAnsatz
 
+    :param natural_grad: If ``True``, the natural gradient is evaluated by scaling the
+                         gradient by the inverse of the metric tensor.
+    :type natural_grad: *optional* Bool
+
     :param qnode_kwargs: A keyword argument passthrough to qnode construction.
     :type qnode_kwargs: *optional* dict
 
-    :returns: A parallelized (multithreaded) gradient function ``nlocal_chain_grad(scenario_settings)``.
+    :returns: A parallelized (multithreaded) gradient function ``nlocal_chain_grad(*network_settings)``.
     :rtype: function
     """
 
@@ -193,8 +197,8 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_gradient=False, **qnod
     chain_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
     qnode_grads = [qml.grad(qnode) for qnode in chain_qnodes]
 
-    I22 = I22_fn(network_ansatz, parallel=True, **qnode_kwargs)
-    J22 = J22_fn(network_ansatz, parallel=True, **qnode_kwargs)
+    I22 = chain_I22_fn(network_ansatz, parallel=True, **qnode_kwargs)
+    J22 = chain_J22_fn(network_ansatz, parallel=True, **qnode_kwargs)
 
     I22_xy_meas_inputs = [[x] + [0 for i in range(n - 1)] + [y] for x, y in xy_vals]
     J22_xy_meas_inputs = [[x] + [1 for i in range(n - 1)] + [y] for x, y in xy_vals]
@@ -202,83 +206,63 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_gradient=False, **qnod
     prep_num_settings = [node.num_settings for node in network_ansatz.prepare_nodes]
     meas_num_settings = [node.num_settings for node in network_ansatz.measure_nodes]
 
-    def _ng(settings, qnode):
-        grad = qml.grad(qnode)(settings)
+    def _grad_fn(settings, qnode):
+        return qml.grad(qnode)(settings)
+
+    def _nat_grad_fn(settings, qnode):
         ginv = pinvh(qml.metric_tensor(qnode, approx="block-diag")(settings))
+        return ginv @ _grad_fn(settings, qnode)
 
-        return ginv @ grad
+    grad_fn = _nat_grad_fn if natural_grad else _grad_fn
 
-    def nlocal_chain_grad(scenario_settings):
+    def nlocal_chain_grad_fn(*network_settings):
 
-        I22_score = I22(scenario_settings)
-        J22_score = J22(scenario_settings)
+        I22_score = I22(*network_settings)
+        J22_score = J22(*network_settings)
 
         I22_xy_settings = [
-            network_ansatz.qnode_settings(scenario_settings, [0] * n, meas_inputs)
+            network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
             for meas_inputs in I22_xy_meas_inputs
         ]
         J22_xy_settings = [
-            network_ansatz.qnode_settings(scenario_settings, [0] * n, meas_inputs)
+            network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
             for meas_inputs in J22_xy_meas_inputs
         ]
 
-        if natural_gradient:
-            I22_delayed_results = [
-                dask.delayed(_ng)(settings, chain_qnodes[i])
-                for i, settings in enumerate(I22_xy_settings)
-            ]
-            J22_delayed_results = [
-                dask.delayed(_ng)(settings, chain_qnodes[i])
-                for i, settings in enumerate(J22_xy_settings)
-            ]
-        else:
-            I22_delayed_results = [
-                dask.delayed(qnode_grads[i])(settings) for i, settings in enumerate(I22_xy_settings)
-            ]
-            J22_delayed_results = [
-                dask.delayed(qnode_grads[i])(settings) for i, settings in enumerate(J22_xy_settings)
-            ]
+        I22_delayed_grads = [
+            dask.delayed(grad_fn)(settings, chain_qnodes[i])
+            for i, settings in enumerate(I22_xy_settings)
+        ]
+        J22_delayed_grads = [
+            dask.delayed(grad_fn)(settings, chain_qnodes[i])
+            for i, settings in enumerate(J22_xy_settings)
+        ]
 
-        I22_results = dask.compute(*I22_delayed_results, scheduler="threads")
-        J22_results = dask.compute(*J22_delayed_results, scheduler="threads")
+        I22_grads = dask.compute(*I22_delayed_grads, scheduler="threads")
+        J22_grads = dask.compute(*J22_delayed_grads, scheduler="threads")
 
-        grad = network_ansatz.zero_scenario_settings()
+        settings_grad = network_ansatz.zero_network_settings()
 
         I22_scalar = -(1 / 4) * math.sign(I22_score) / math.sqrt(math.abs(I22_score))
         J22_scalar = -(1 / 4) * math.sign(J22_score) / math.sqrt(math.abs(J22_score))
 
-        results_id = 0
-        for x, y in xy_vals:
-            xy_scalar = (-1) ** (x + y)
+        for i in range(4):
 
-            I22_result = I22_results[results_id]
-            J22_result = J22_results[results_id]
+            x = I22_xy_meas_inputs[i][0]
+            y = I22_xy_meas_inputs[i][-1]
+            J22_sign = (-1) ** (x + y)
 
-            settings_id = 0
+            settings_grad += I22_scalar * network_ansatz.expand_qnode_settings(
+                I22_grads[i], [[0] * n, I22_xy_meas_inputs[i]]
+            )
+            settings_grad += (
+                J22_sign
+                * J22_scalar
+                * network_ansatz.expand_qnode_settings(
+                    J22_grads[i], [[0] * n, J22_xy_meas_inputs[i]]
+                )
+            )
 
-            for i in range(n):
-                next_id = settings_id + prep_num_settings[i]
-                grad[0][i][0] += I22_scalar * I22_result[settings_id:next_id]
-                grad[0][i][0] += xy_scalar * J22_scalar * J22_result[settings_id:next_id]
-                settings_id = next_id
+        return settings_grad
 
-            for i in range(n + 1):
-                next_id = settings_id + meas_num_settings[i]
-
-                if i == 0:
-                    grad[1][i][x] += I22_scalar * I22_result[settings_id:next_id]
-                    grad[1][i][x] += xy_scalar * J22_scalar * J22_result[settings_id:next_id]
-                elif i == n:
-                    grad[1][i][y] += I22_scalar * I22_result[settings_id:next_id]
-                    grad[1][i][y] += xy_scalar * J22_scalar * J22_result[settings_id:next_id]
-                else:
-                    grad[1][i][0] += I22_scalar * I22_result[settings_id:next_id]
-                    grad[1][i][1] += xy_scalar * J22_scalar * J22_result[settings_id:next_id]
-
-                settings_id = next_id
-
-            results_id += 1
-
-        return grad
-
-    return nlocal_chain_grad
+    return nlocal_chain_grad_fn

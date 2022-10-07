@@ -39,20 +39,20 @@ def post_process_I_3322_joint_probs(probs_vec):
     return sum([sum([probs[a, b] for b in even_ids]) for a in even_ids])
 
 
-def I_3322_bell_inequality_cost(network_ansatz, **qnode_kwargs):
+def I_3322_bell_inequality_cost_fn(network_ansatz, **qnode_kwargs):
     """Constructs a cost function that maximizes the score of the :math:`I_{3322}` Bell inequality.
 
     :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
     :type network_ansatz: NetworkAnsatz
 
-    :returns: A cost function evaluated as ``cost(scenario_settings)`` where
-              the ``scenario_settings`` are obtained from the provided
+    :returns: A cost function evaluated as ``cost(*network_settings)`` where
+              the ``network_settings`` are obtained from the provided
               ``network_ansatz`` class.
     """
     I_3322_joint_probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
     I_3322_local_expval_qnode = local_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
-    def cost(scenario_settings):
+    def cost(*network_settings):
         score = 0
         for (x, y, mult) in [
             (0, 0, 1),
@@ -64,15 +64,15 @@ def I_3322_bell_inequality_cost(network_ansatz, **qnode_kwargs):
             (2, 0, 1),
             (2, 1, -1),
         ]:
-            settings = network_ansatz.qnode_settings(scenario_settings, [0], [x, y])
+            settings = network_ansatz.qnode_settings(network_settings, [[0], [x, y]])
 
             probs_vec_xy = I_3322_joint_probs_qnode(settings)
             prob00_xy = post_process_I_3322_joint_probs(probs_vec_xy)
 
             score += mult * prob00_xy
 
-        settings_00 = network_ansatz.qnode_settings(scenario_settings, [0], [0, 0])
-        settings_11 = network_ansatz.qnode_settings(scenario_settings, [0], [1, 1])
+        settings_00 = network_ansatz.qnode_settings(network_settings, [[0], [0, 0]])
+        settings_11 = network_ansatz.qnode_settings(network_settings, [[0], [1, 1]])
 
         expval_00 = I_3322_local_expval_qnode(settings_00)
         expval_11 = I_3322_local_expval_qnode(settings_11)

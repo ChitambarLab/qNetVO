@@ -12,51 +12,42 @@ class TestLinearInequalityCost:
             qnet.PrepareNode(4, [1, 2], qnet.local_RY, 2),
         ]
         meas_nodes = [
-            qnet.MeasureNode(1, 2, [0, 1, 2], qnet.local_RY, 3),
+            qnet.MeasureNode(1, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(1, 4, [1, 2], qnet.local_RY, 2),
         ]
 
         return qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
     def test_linear_probs_inequality_cost_no_post_processing(self):
-        prep_nodes = [
-            qnet.PrepareNode(2, [0], qnet.local_RY, 1),
-            qnet.PrepareNode(4, [1, 2], qnet.local_RY, 2),
-        ]
-
-        meas_nodes = [
-            qnet.MeasureNode(1, 2, [0], qnet.local_RY, 1),
-            qnet.MeasureNode(1, 4, [1, 2], qnet.local_RY, 2),
-        ]
-
-        network_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
+        network_ansatz = self.example_ansatz()
 
         game = np.eye(8)
 
         cost = qnet.linear_probs_cost_fn(network_ansatz, game)
 
-        zero_settings = network_ansatz.zero_scenario_settings()
-        assert np.isclose(cost(zero_settings), -1)
+        zero_settings = network_ansatz.zero_network_settings()
+        assert np.isclose(cost(*zero_settings), -1)
 
-        settings = network_ansatz.zero_scenario_settings()
-        settings[0][0][1, 0] = np.pi
-        assert np.isclose(cost(settings), -2)
+        settings = network_ansatz.zero_network_settings()
+        settings[1] = np.pi
+        assert np.isclose(cost(*settings), -2)
 
-        settings[0][1][1, :] = [0, np.pi]
-        assert np.isclose(cost(settings), -4)
+        settings[4:6] = [0, np.pi]
+        assert np.isclose(cost(*settings), -4)
 
-        settings[0][1][2, :] = [np.pi, 0]
-        assert np.isclose(cost(settings), -6)
+        settings[6:8] = [np.pi, 0]
+        assert np.isclose(cost(*settings), -6)
 
-        settings[0][1][3, :] = [np.pi, np.pi]
-        assert np.isclose(cost(settings), -8)
+        settings[8:10] = [np.pi, np.pi]
+        assert np.isclose(cost(*settings), -8)
 
     def test_linear_probs_cost_dichotomic_game(self):
         network_ansatz = self.example_ansatz()
 
-        zero_settings = network_ansatz.zero_scenario_settings()
-        settings = network_ansatz.zero_scenario_settings()
-        settings[0][0][1, 0] = np.pi
-        settings[0][1][1, :] = [0, np.pi]
+        zero_settings = network_ansatz.zero_network_settings()
+        settings = network_ansatz.zero_network_settings()
+        settings[2] = np.pi
+        settings[11:13] = [0, np.pi]
 
         dichotomic_game = np.array([[1, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]])
         dichotomic_cost = qnet.linear_probs_cost_fn(
@@ -65,8 +56,8 @@ class TestLinearInequalityCost:
             postmap=np.array([[1, 0, 0, 1, 0, 1, 1, 0], [0, 1, 1, 0, 1, 0, 0, 1]]),
         )
 
-        assert np.isclose(dichotomic_cost(zero_settings), -1)
-        assert np.isclose(dichotomic_cost(settings), -2)
+        assert np.isclose(dichotomic_cost(*zero_settings), -1)
+        assert np.isclose(dichotomic_cost(*settings), -2)
 
     @pytest.mark.parametrize(
         "game,postmap,match",

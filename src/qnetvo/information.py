@@ -38,7 +38,7 @@ def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
                      each column sums to one and contains only positive values.
     :type postmap: *optional* np.ndarray
 
-    :returns: A function ``P_Net(scenario_settings)`` that evaluates the
+    :returns: A function ``P_Net(network_settings)`` that evaluates the
               behavior matrix for a given set of settings.
     :rtype: function
     """
@@ -62,13 +62,12 @@ def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
 
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
 
-    def behavior(scenario_settings):
+    def behavior(network_settings):
         raw_behavior = np.zeros((raw_net_num_out, net_num_in))
         for (i, input_id_set) in enumerate(node_input_ids):
             settings = network_ansatz.qnode_settings(
-                scenario_settings,
-                input_id_set[0 : len(num_in_prep_nodes)],
-                input_id_set[len(num_in_prep_nodes) :],
+                network_settings,
+                [input_id_set[0 : len(num_in_prep_nodes)], input_id_set[len(num_in_prep_nodes) :]],
             )
 
             raw_behavior[:, i] += probs_qnode(settings)

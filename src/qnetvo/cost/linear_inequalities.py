@@ -37,7 +37,7 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
                      each column sums to one and contains only positive values.
     :type postmap: *optional* np.ndarray
 
-    :returns: A cost function evaluated as ``cost(prepare_settings, measure_settings)``.
+    :returns: A cost function evaluated as ``cost(*network_settings)``.
     :rtype: function
 
     :raises ValueError: If the number of outputs from the qnode do not match the
@@ -48,10 +48,7 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
 
     num_in_prep_nodes = [node.num_in for node in network_ansatz.prepare_nodes]
     num_in_meas_nodes = [node.num_in for node in network_ansatz.measure_nodes]
-    num_out_meas_nodes = [node.num_out for node in network_ansatz.measure_nodes]
-
     net_num_in = math.prod(num_in_prep_nodes) * math.prod(num_in_meas_nodes)
-    net_num_out = math.prod(num_out_meas_nodes)
 
     raw_net_num_out = 2 ** len(network_ansatz.measure_wires)
 
@@ -78,13 +75,15 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
     base_digits = num_in_prep_nodes + num_in_meas_nodes
     node_input_ids = [mixed_base_num(i, base_digits) for i in range(net_num_in)]
 
-    def cost(scenario_settings):
+    def cost(*network_settings):
         score = 0
         for (i, input_id_set) in enumerate(node_input_ids):
             settings = network_ansatz.qnode_settings(
-                scenario_settings,
-                input_id_set[0 : len(network_ansatz.prepare_nodes)],
-                input_id_set[len(network_ansatz.prepare_nodes) :],
+                network_settings,
+                [
+                    input_id_set[0 : len(network_ansatz.prepare_nodes)],
+                    input_id_set[len(network_ansatz.prepare_nodes) :],
+                ],
             )
 
             raw_probs = probs_qnode(settings)

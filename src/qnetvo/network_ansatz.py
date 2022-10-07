@@ -40,18 +40,14 @@ class PrepareNode(NoiseNode):
     :param num_settings: The number of settings that the quantum function accepts.
     :type num_settings: int
 
-    :param static_settings: A set of fixed settings for the preparation node.
-    :type static_settings: optional, array-like
-
     :returns: An instantiated ``PrepareNode`` class.
     """
 
-    def __init__(self, num_in, wires, quantum_fn, num_settings, static_settings=[]):
+    def __init__(self, num_in, wires, quantum_fn, num_settings):
         super().__init__(wires, quantum_fn)
         self.num_in = num_in
         self.num_settings = num_settings
         self.settings_dims = (num_in, num_settings)
-        self.static_settings = static_settings
 
 
 class MeasureNode(PrepareNode):
@@ -74,14 +70,11 @@ class MeasureNode(PrepareNode):
     :param num_settings: The number of settings that the quantum function accepts.
     :type num_settings: int
 
-    :param static_settings: A set of fixed settings for the preparation node.
-    :type static_settings: optional, array-like
-
     :returns: An instantiated ``MeasureNode`` class.
     """
 
-    def __init__(self, num_in, num_out, wires, quantum_fn, num_settings, static_settings=[]):
-        super().__init__(num_in, wires, quantum_fn, num_settings, static_settings=static_settings)
+    def __init__(self, num_in, num_out, wires, quantum_fn, num_settings):
+        super().__init__(num_in, wires, quantum_fn, num_settings)
         self.num_out = num_out
 
 
@@ -119,6 +112,10 @@ class NetworkAnsatz:
                        for noisy networks.
     * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
+    * **parameter_partitions** (*List[List[List[Tuple]]]*) - A ragged array containing tuples that specify
+                               how to partition a 1D array of network settings into the subset of settings
+                               passed to the qnode simulating the network. See
+                               :meth:`get_network_parameter_partitions` for details.
 
     :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
     """
@@ -144,6 +141,7 @@ class NetworkAnsatz:
         self.dev = self.device()
 
         self.fn = self.construct_ansatz_circuit()
+        self.parameter_partitions = self.get_network_parameter_partitions()
 
     def set_device(self, name, **kwargs):
         """Configures a new PennyLane device for executing the network ansatz circuit.
@@ -191,6 +189,31 @@ class NetworkAnsatz:
 
         return ansatz_circuit
 
+    def get_network_parameter_partitions(self):
+        """
+        A nested list containing tuples that specify how to partition a 1D array
+        of network settings into the subset of settings passed to the qnode simulating
+        the network. Each tuple ``(start_id, stop_id)`` is indexed by ``layer_id``,
+        ``node_id``, and classical ``input_id`` as
+        ``parameter_partitions[layer_id][node_id][input_id] => (start_id, stop_id)``.
+        The ``start_id`` and ``stop_id`` describe the slice ``network_settings[start_id:stop_id]``.
+        """
+        layers = [self.prepare_nodes, self.measure_nodes]
+        parameter_partitions = []
+
+        start_id = 0
+        for i, layer in enumerate(layers):
+            parameter_partitions += [[]]
+            for j, node in enumerate(layer):
+
+                parameter_partitions[i] += [[]]
+                for _ in range(node.num_in):
+                    stop_id = start_id + node.num_settings
+                    parameter_partitions[i][j] += [(start_id, stop_id)]
+                    start_id = stop_id
+
+        return parameter_partitions
+
     @staticmethod
     def collect_wires(network_nodes):
         """A helper method for the ``NetworkAnsatz`` class which collects and aggregates the
@@ -213,50 +236,63 @@ class NetworkAnsatz:
 
         return all_wires
 
-    @staticmethod
-    def layer_settings(scenario_settings, node_inputs, nodes):
+    def layer_settings(self, network_settings, layer_id, layer_inputs):
         """Constructs the list of settings for a circuit layer in the network ansatz.
 
-        The type of tensor used for the returned layer settings matches the tensor
-        type of the elements of ``scenario_settings``.
+        :param network_settings: A list containing the circuit settings for each node
+                                 in the network.
+        :type network_settings: List[Float]
 
-        :param scenario_settings: A list containing the settings for all classical inputs.
-        :type network_nodes: list[array[float]]
+        :param layer_id: The id for the targeted layer.
+        :type layer_id: Int
 
-        :param node_inputs: A list of the classical inputs supplied to each network node.
-        :type node_inputs: list[int]
+        :param layer_inputs: A list of the classical inputs supplied to each network node.
+        :type layer_inputs: List[Int]
 
-        :returns: A 1D array of all settings for the circuit layer.
-        :rtype: array[float]
+        :returns: A 1D array of settings for the circuit layer.
+        :rtype: List[float]
         """
-        return math.concatenate(
-            [
-                scenario_settings[i][node_input]
-                if len(nodes[i].static_settings) == 0
-                else nodes[i].static_settings[node_input]
-                for i, node_input in enumerate(node_inputs)
-            ]
-        )
+        settings = []
+        for j, node_input in enumerate(layer_inputs):
+            start_id, stop_id = self.parameter_partitions[layer_id][j][node_input]
+            settings += [network_settings[k] for k in range(start_id, stop_id)]
 
-    def qnode_settings(self, scenario_settings, prep_inputs, meas_inputs):
+        return settings
+
+    def qnode_settings(self, network_settings, network_inputs):
         """Constructs a list of settings to pass to the qnode executing the network ansatz.
 
-        :param scenario_settings: The settings for the network ansatz scenario.
-        :type scenario_settings: list[list[np.ndarray]]
+        :param network_settings: The settings for the network ansatz scenario.
+        :type network_settings: list[list[np.ndarray]]
 
-        :param prep_inputs: The classical inputs passed to each preparation node.
-        :type prep_inputs: list[int]
+        :param network_inputs: The classical inputs passed to each network node.
+        :type network_inputs: List[List[int]]
 
-        :param meas_inputs: The classical inputs passed to each measurement node.
-        :type meas_inputs: list[int]
-
-        :returns: The settings to pass to the constructed qnode.
-        :rtype: list[float]
+        :returns: A list of settings to pass to the constructed qnode.
+        :rtype: np.array
         """
+        settings = []
+        for i, layer_inputs in enumerate(network_inputs):
+            settings += self.layer_settings(network_settings, i, layer_inputs)
 
-        prep_settings = self.layer_settings(scenario_settings[0], prep_inputs, self.prepare_nodes)
-        meas_settings = self.layer_settings(scenario_settings[1], meas_inputs, self.measure_nodes)
-        return np.concatenate([prep_settings, meas_settings])
+        return qml.math.stack(settings)
+
+    def expand_qnode_settings(self, qn_settings, network_inputs):
+        layers = [self.prepare_nodes, self.measure_nodes]
+        expanded_settings = self.zero_network_settings()
+
+        qn_start_id = 0
+        for i, layer_inputs in enumerate(network_inputs):
+            for j, node_input in enumerate(layer_inputs):
+                node = layers[i][j]
+                qn_stop_id = qn_start_id + node.num_settings
+                start_id, stop_id = self.parameter_partitions[i][j][node_input]
+
+                expanded_settings[start_id:stop_id] = qn_settings[qn_start_id:qn_stop_id]
+
+                qn_start_id = qn_stop_id
+
+        return qml.math.stack(expanded_settings)
 
     @staticmethod
     def circuit_layer(network_nodes):
@@ -283,64 +319,58 @@ class NetworkAnsatz:
 
         return circuit
 
-    def rand_scenario_settings(self):
-        """Creates a randomized settings array for the network ansatz.
+    def rand_network_settings(self, fixed_setting_ids=[], fixed_settings=[]):
+        """Creates an array of randomized differentiable settings for the network ansatz.
+        If fixed settings are specified, then they are marked as ``requires_grad=False`` and
+        not differentatiated during optimzation.
 
-        :returns: A nested list containing settings for each network node.
-                  ``PreparNode`` settings are listed under index ``0`` while
-                  ``MeasureNode`` settings are listed under index ``1``.
-                  The measure and prepare layers settings are a list of numpy arrays
-                  where the dimension of each array is ``(num_inputs, num_settings)``.
-        :rtype: list[list[np.array]]
+        :param fixed_setting_ids: The ids of settings that are held constant during optimization.
+        Also requires `fixed_settings` to be provided.
+        :type fixed_setting_ids: *optional* List[Int]
+
+        :param fixed_settings: The constant values for fixed settings.
+        :type fixed_settings: *optional* List[Float]
+
+        :returns: A 1D list of ``np.tensor`` scalar values having ``requires_grad=True``.
+        :rtype: List[Float]
         """
-        prepare_settings = [
-            2 * np.pi * np.random.random(node.settings_dims) - np.pi
-            if len(node.static_settings) == 0
-            else np.array([[]])
-            for node in self.prepare_nodes
+        num_settings = self.parameter_partitions[-1][-1][-1][-1]
+        rand_settings = [
+            np.array(2 * np.pi * np.random.rand() - np.pi) for _ in range(num_settings)
         ]
-        measure_settings = [
-            2 * np.pi * np.random.random(node.settings_dims) - np.pi
-            if len(node.static_settings) == 0
-            else np.array([[]])
-            for node in self.measure_nodes
-        ]
+        if len(fixed_setting_ids) > 0 and len(fixed_settings) > 0:
+            for i, id in enumerate(fixed_setting_ids):
+                rand_settings[id] = np.array(fixed_settings[i], requires_grad=False)
 
-        return [prepare_settings, measure_settings]
+        return rand_settings
 
-    def tf_rand_scenario_settings(self):
+    def tf_rand_network_settings(self, fixed_setting_ids=[], fixed_settings=[]):
         """Creates a randomized settings array for the network ansatz using TensorFlow
         tensor types.
 
-        :returns: See :meth:`qnetvo.NetworkAnsatz.rand_scenario_settings` for details.
-        :rtype: list[list[tf.Tensor]]
+        :param fixed_setting_ids: The ids of settings that are held constant during optimization.
+        Also requires `fixed_settings` to be provided.
+        :type fixed_setting_ids: *optional* List[Int]
+
+        :param fixed_settings: The constant values for fixed settings.
+        :type fixed_settings: *optional* List[Float]
+
+        :returns: A 1D list of ``tf.Variable`` and ``tf.constant`` scalar values.
+        :rtype: List[tf.Tensor]
         """
         from .lazy_tensorflow_import import tensorflow as tf
 
-        np_settings = self.rand_scenario_settings()
-
+        np_settings = self.rand_network_settings(fixed_setting_ids, fixed_settings)
         return [
-            [tf.Variable(settings) for settings in np_settings[0]],
-            [tf.Variable(settings) for settings in np_settings[1]],
+            tf.Variable(setting) if qml.math.requires_grad(setting) else tf.constant(setting)
+            for setting in np_settings
         ]
 
-    def zero_scenario_settings(self):
+    def zero_network_settings(self):
         """Creates a settings array for the network ansatz that consists of zeros.
 
-        :returns: A nested list containing settings for each network node.
-                  ``PrepareNode`` settings are listed under index ``0`` while
-                  ``MeasureNode`` settings are listed under index ``1``.
-                  The measure and prepare layers settings are a list of numpy arrays
-                  where the dimension of each array is ``(num_inputs, num_settings)``.
-        :rtype: list[list[np.array]]
+        :returns: A 1D list of ``np.tensor`` scalar values having ``requires_grad=True``.
+        :rtype: List[Float]
         """
-        prepare_settings = [
-            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
-            for node in self.prepare_nodes
-        ]
-        measure_settings = [
-            np.zeros(node.settings_dims) if len(node.static_settings) == 0 else np.array([[]])
-            for node in self.measure_nodes
-        ]
-
-        return [prepare_settings, measure_settings]
+        num_settings = self.parameter_partitions[-1][-1][-1][-1]
+        return [np.array(0, requires_grad=True) for _ in range(num_settings)]

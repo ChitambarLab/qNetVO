@@ -44,21 +44,13 @@ class TestNlocalStar22CostFn:
             bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
         )
 
-        zero_settings = bilocal_star_ansatz.zero_scenario_settings()
+        zero_settings = bilocal_star_ansatz.zero_network_settings()
 
-        assert np.isclose(bilocal_22_cost(zero_settings), -1)
+        assert np.isclose(bilocal_22_cost(*zero_settings), -1)
 
-        ideal_settings = zero_settings
-        ideal_settings[1][0][1, 0] = np.pi / 2
+        ideal_settings = [0, np.pi / 2, np.pi / 4, -np.pi / 4, np.pi / 4, 0, -np.pi / 4, np.pi / 2]
 
-        ideal_settings[1][1][0, 0] = np.pi / 4
-        ideal_settings[1][1][1, 0] = -np.pi / 4
-
-        ideal_settings[1][2][0, 0] = np.pi / 4
-        ideal_settings[1][2][1, 0] = -np.pi / 4
-        ideal_settings[1][2][1, 1] = np.pi / 2
-
-        assert np.isclose(bilocal_22_cost(ideal_settings), -(np.sqrt(2)))
+        assert np.isclose(bilocal_22_cost(*ideal_settings), -(np.sqrt(2)))
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
     def test_trilocal_star_cost(self, parallel_flag, nthreads):
@@ -69,25 +61,26 @@ class TestNlocalStar22CostFn:
             nthreads=nthreads,
         )
 
-        zero_settings = trilocal_star_ansatz.zero_scenario_settings()
+        zero_settings = trilocal_star_ansatz.zero_network_settings()
 
-        assert np.isclose(trilocal_22_cost(zero_settings), -1)
+        assert np.isclose(trilocal_22_cost(*zero_settings), -1)
 
-        ideal_settings = zero_settings
-        ideal_settings[1][0][0, 0] = np.pi / 4
-        ideal_settings[1][0][1, 0] = -np.pi / 4
+        ideal_settings = [
+            np.pi / 4,
+            -np.pi / 4,
+            np.pi / 4,
+            -np.pi / 4,
+            np.pi / 4,
+            -np.pi / 4,
+            0,
+            0,
+            0,
+            np.pi / 2,
+            np.pi / 2,
+            np.pi / 2,
+        ]
 
-        ideal_settings[1][1][0, 0] = np.pi / 4
-        ideal_settings[1][1][1, 0] = -np.pi / 4
-
-        ideal_settings[1][2][0, 0] = np.pi / 4
-        ideal_settings[1][2][1, 0] = -np.pi / 4
-
-        ideal_settings[1][3][1, 0] = np.pi / 2
-        ideal_settings[1][3][1, 1] = np.pi / 2
-        ideal_settings[1][3][1, 2] = np.pi / 2
-
-        assert np.isclose(trilocal_22_cost(ideal_settings), -np.sqrt(2))
+        assert np.isclose(trilocal_22_cost(*ideal_settings), -np.sqrt(2))
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
     def test_bilocal_star_22_cost_gradient_descent(self, parallel_flag, nthreads):
@@ -98,7 +91,7 @@ class TestNlocalStar22CostFn:
             qnet.nlocal_star_22_cost_fn(
                 bilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads
             ),
-            bilocal_star_ansatz.rand_scenario_settings(),
+            bilocal_star_ansatz.rand_network_settings(),
             num_steps=10,
             step_size=2,
             sample_width=10,
@@ -116,7 +109,7 @@ class TestNlocalStar22CostFn:
         np.random.seed(45)
         opt_dict = qnet.gradient_descent(
             qnet.nlocal_star_22_cost_fn(trilocal_star_ansatz, parallel=True, nthreads=nthreads),
-            trilocal_star_ansatz.rand_scenario_settings(),
+            trilocal_star_ansatz.rand_network_settings(),
             num_steps=8,
             step_size=2,
             sample_width=10,
@@ -134,13 +127,13 @@ class TestNlocalStar22CostFn:
         np.random.seed(45)
         opt_dict = qnet.gradient_descent(
             qnet.nlocal_star_22_cost_fn(bilocal_star_ansatz, parallel=True, nthreads=nthreads),
-            bilocal_star_ansatz.rand_scenario_settings(),
+            bilocal_star_ansatz.rand_network_settings(),
             num_steps=10,
-            step_size=1,
+            step_size=1.5,
             sample_width=1,
             grad_fn=qnet.parallel_nlocal_star_grad_fn(
                 bilocal_star_ansatz, nthreads=nthreads, natural_gradient=True
             ),
         )
 
-        assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
+        assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=1e-4)

@@ -34,7 +34,7 @@ The optimal quantum protocol is performed as follows:
 
 As an example, optimal state preparation and measurements are provided in [Brassard2005]_.
 
-.. autofunction:: magic_squares_game_cost
+.. autofunction:: magic_squares_game_cost_fn
 
 -----
 

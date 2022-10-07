@@ -6,7 +6,7 @@ import qnetvo as qnet
 
 
 class TestCostMagicSquaresGame:
-    def test_magic_squares_game_cost(self):
+    def test_magic_squares_game_cost_fn(self):
 
         prep_nodes = [qnet.PrepareNode(1, range(4), qnet.bell_state_copies, 0)]
         meas_nodes = [
@@ -16,8 +16,8 @@ class TestCostMagicSquaresGame:
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         np.random.seed(1)
-        settings = ansatz.rand_scenario_settings()
-        cost = qnet.magic_squares_game_cost(ansatz)
+        settings = ansatz.rand_network_settings()
+        cost = qnet.magic_squares_game_cost_fn(ansatz)
 
         opt_dict = qnet.gradient_descent(cost, settings, step_size=4.5, num_steps=15)
         assert np.isclose(opt_dict["opt_score"], 1, atol=0.01)

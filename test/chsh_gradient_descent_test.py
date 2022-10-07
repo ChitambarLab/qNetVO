@@ -23,12 +23,39 @@ class TestCHSHGradientDescent:
         ]
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
-        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
+        chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz)
 
         np.random.seed(666)
-        init_settings = chsh_ansatz.rand_scenario_settings()
+        init_settings = chsh_ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
             chsh_cost, init_settings, num_steps=15, step_size=0.2, verbose=False
+        )
+
+        assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
+
+    def test_tf_chsh_gradient_descent(self):
+        prepare_nodes = [
+            qnet.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
+        ]
+        measure_nodes = [
+            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
+            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
+        ]
+
+        chsh_ansatz = qnet.NetworkAnsatz(
+            prepare_nodes, measure_nodes, dev_kwargs={"name": "default.qubit.tf"}
+        )
+        chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz, interface="tf")
+
+        np.random.seed(666)
+        init_settings = chsh_ansatz.tf_rand_network_settings()
+        opt_dict = qnet.gradient_descent(
+            chsh_cost,
+            init_settings,
+            num_steps=15,
+            step_size=0.2,
+            verbose=False,
+            interface="tf",
         )
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
@@ -43,10 +70,10 @@ class TestCHSHGradientDescent:
         ]
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
-        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
+        chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz)
 
         np.random.seed(666)
-        init_settings = chsh_ansatz.rand_scenario_settings()
+        init_settings = chsh_ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
             chsh_cost, init_settings, num_steps=40, step_size=0.2, verbose=False
         )
@@ -63,11 +90,11 @@ class TestCHSHGradientDescent:
         ]
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
-        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
-        chsh_grad_fn = qnet.parallel_chsh_grad(chsh_ansatz)
+        chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz)
+        chsh_grad_fn = qnet.parallel_chsh_grad_fn(chsh_ansatz)
 
         np.random.seed(666)
-        init_settings = chsh_ansatz.rand_scenario_settings()
+        init_settings = chsh_ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
             chsh_cost,
             init_settings,
@@ -89,18 +116,19 @@ class TestCHSHGradientDescent:
         ]
 
         chsh_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
-        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
-        chsh_grad_fn = qnet.chsh_natural_grad(chsh_ansatz)
+        chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz)
+        nat_grad_fn = qnet.parallel_chsh_grad_fn(chsh_ansatz, natural_grad=True)
 
         np.random.seed(666)
-        init_settings = chsh_ansatz.rand_scenario_settings()
+        init_settings = chsh_ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
             chsh_cost,
             init_settings,
             num_steps=15,
             step_size=0.1,
-            verbose=False,
-            grad_fn=chsh_grad_fn,
+            verbose=True,
+            sample_width=1,
+            grad_fn=nat_grad_fn,
         )
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
@@ -123,12 +151,12 @@ class TestCHSHGradientDescent:
 
         chsh_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes, noise_nodes)
 
-        chsh_cost = qnet.chsh_inequality_cost(chsh_ansatz)
+        chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz)
 
         np.random.seed(666)
         opt_dict = qnet.gradient_descent(
             chsh_cost,
-            chsh_ansatz.rand_scenario_settings(),
+            chsh_ansatz.rand_network_settings(),
             num_steps=10,
             step_size=0.4,
             verbose=True,
