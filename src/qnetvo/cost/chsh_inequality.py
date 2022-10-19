@@ -29,7 +29,10 @@ def chsh_inequality_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
               ``network_ansatz`` class.
     """
 
-    xy_vals = [[0, 0], [0, 1], [1, 0], [1, 1]]
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
+    network_inputs = [static_prep_inputs + [xy] for xy in [[0, 0], [0, 1], [1, 0], [1, 1]]]
 
     if parallel:
         from ..lazy_dask_import import dask
@@ -40,7 +43,10 @@ def chsh_inequality_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
 
     def chsh_cost(*network_settings):
 
-        xy_settings = [network_ansatz.qnode_settings(network_settings, [[0], xy]) for xy in xy_vals]
+        xy_settings = [
+            network_ansatz.qnode_settings(network_settings, network_input)
+            for network_input in network_inputs
+        ]
 
         if parallel:
             delayed_results = [
@@ -96,7 +102,10 @@ def parallel_chsh_grad_fn(network_ansatz, natural_grad=False, **qnode_kwargs):
 
     from ..lazy_dask_import import dask
 
-    network_inputs = [[[0], [0, 0]], [[0], [0, 1]], [[0], [1, 0]], [[0], [1, 1]]]
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
+    network_inputs = [static_prep_inputs + [xy] for xy in [[0, 0], [0, 1], [1, 0], [1, 1]]]
 
     qnodes = []
     for _ in network_inputs:

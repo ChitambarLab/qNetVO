@@ -32,14 +32,16 @@ def chain_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
         chain_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     num_interior_nodes = len(network_ansatz.measure_nodes) - 2
-    prep_inputs = [0] * len(network_ansatz.prepare_nodes)
 
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
     I22_xy_inputs = [[x_a] + [0 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
     def I22(*network_settings):
 
         I22_xy_settings = [
-            network_ansatz.qnode_settings(network_settings, [prep_inputs, meas_inputs])
+            network_ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             for meas_inputs in I22_xy_inputs
         ]
 
@@ -86,14 +88,16 @@ def chain_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
         chain_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     num_interior_nodes = len(network_ansatz.measure_nodes) - 2
-    prep_inputs = [0] * len(network_ansatz.prepare_nodes)
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
 
     J22_xy_inputs = [[x_a] + [1 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
     def J22(*network_settings):
 
         J22_xy_settings = [
-            network_ansatz.qnode_settings(network_settings, [prep_inputs, meas_inputs])
+            network_ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             for meas_inputs in J22_xy_inputs
         ]
 
@@ -203,8 +207,9 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
     I22_xy_meas_inputs = [[x] + [0 for i in range(n - 1)] + [y] for x, y in xy_vals]
     J22_xy_meas_inputs = [[x] + [1 for i in range(n - 1)] + [y] for x, y in xy_vals]
 
-    prep_num_settings = [node.num_settings for node in network_ansatz.prepare_nodes]
-    meas_num_settings = [node.num_settings for node in network_ansatz.measure_nodes]
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
 
     def _grad_fn(settings, qnode):
         return qml.grad(qnode)(settings)
@@ -221,11 +226,11 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
         J22_score = J22(*network_settings)
 
         I22_xy_settings = [
-            network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
+            network_ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             for meas_inputs in I22_xy_meas_inputs
         ]
         J22_xy_settings = [
-            network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
+            network_ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             for meas_inputs in J22_xy_meas_inputs
         ]
 

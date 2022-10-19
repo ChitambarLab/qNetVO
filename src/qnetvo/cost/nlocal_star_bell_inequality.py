@@ -37,9 +37,12 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     """
     n = len(network_ansatz.prepare_nodes)
 
-    prep_inputs = [0] * n
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
     network_input_x_vals = [
-        [prep_inputs, [int(bit) for bit in np.binary_repr(x, width=n) + "0"]] for x in range(2**n)
+        static_prep_inputs + [[int(bit) for bit in np.binary_repr(x, width=n) + "0"]]
+        for x in range(2**n)
     ]
 
     if parallel:
@@ -115,9 +118,12 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
 
     n = len(network_ansatz.prepare_nodes)
 
-    prep_inputs = [0] * n
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
     network_input_x_vals = [
-        [prep_inputs, [int(bit) for bit in np.binary_repr(x, width=n) + "1"]] for x in range(2**n)
+        static_prep_inputs + [[int(bit) for bit in np.binary_repr(x, width=n) + "1"]]
+        for x in range(2**n)
     ]
 
     if parallel:
@@ -258,6 +264,10 @@ def parallel_nlocal_star_grad_fn(network_ansatz, nthreads=4, natural_grad=False,
     I22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
     J22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
+
     I22 = star_I22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
     J22 = star_J22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
 
@@ -277,11 +287,11 @@ def parallel_nlocal_star_grad_fn(network_ansatz, nthreads=4, natural_grad=False,
         J22_score = J22(*network_settings)
 
         I22_x_settings = [
-            network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
+            network_ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             for meas_inputs in I22_x_vals
         ]
         J22_x_settings = [
-            network_ansatz.qnode_settings(network_settings, [[0] * n, meas_inputs])
+            network_ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             for meas_inputs in J22_x_vals
         ]
 

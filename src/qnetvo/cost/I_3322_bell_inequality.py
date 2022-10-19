@@ -52,6 +52,10 @@ def I_3322_bell_inequality_cost_fn(network_ansatz, **qnode_kwargs):
     I_3322_joint_probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
     I_3322_local_expval_qnode = local_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
+    static_prep_inputs = [
+        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
+    ]
+
     def cost(*network_settings):
         score = 0
         for (x, y, mult) in [
@@ -64,15 +68,17 @@ def I_3322_bell_inequality_cost_fn(network_ansatz, **qnode_kwargs):
             (2, 0, 1),
             (2, 1, -1),
         ]:
-            settings = network_ansatz.qnode_settings(network_settings, [[0], [x, y]])
+            settings = network_ansatz.qnode_settings(
+                network_settings, static_prep_inputs + [[x, y]]
+            )
 
             probs_vec_xy = I_3322_joint_probs_qnode(settings)
             prob00_xy = post_process_I_3322_joint_probs(probs_vec_xy)
 
             score += mult * prob00_xy
 
-        settings_00 = network_ansatz.qnode_settings(network_settings, [[0], [0, 0]])
-        settings_11 = network_ansatz.qnode_settings(network_settings, [[0], [1, 1]])
+        settings_00 = network_ansatz.qnode_settings(network_settings, static_prep_inputs + [[0, 0]])
+        settings_11 = network_ansatz.qnode_settings(network_settings, static_prep_inputs + [[1, 1]])
 
         expval_00 = I_3322_local_expval_qnode(settings_00)
         expval_11 = I_3322_local_expval_qnode(settings_11)
