@@ -102,15 +102,17 @@ class TestShannonEntropy:
     def test_von_neumann_entropy_mixed_state(self):
         np.random.seed(123)
 
-        prep_node = [qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0)]
-        meas_node = [qnet.MeasureNode(1, 4, [0, 1], qml.ArbitraryUnitary, 4**2 - 1)]
+        prep_nodes = [qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0)]
+        meas_nodes = [qnet.MeasureNode(1, 4, [0, 1], qml.ArbitraryUnitary, 4**2 - 1)]
         gamma = 0.04
-        noise_node = [
+        noise_nodes = [
             qnet.NoiseNode([0], lambda settings, wires: qml.DepolarizingChannel(gamma, wires)),
             qnet.NoiseNode([1], lambda settings, wires: qml.DepolarizingChannel(gamma, wires)),
         ]
 
-        ansatz = qnet.NetworkAnsatz(prep_node, meas_node, noise_node)
+        ansatz = qnet.NetworkAnsatz(
+            prep_nodes, noise_nodes, meas_nodes, dev_kwargs={"name": "default.mixed"}
+        )
         shannon_entropy = qnet.shannon_entropy_cost_fn(ansatz)
 
         settings = ansatz.rand_network_settings()

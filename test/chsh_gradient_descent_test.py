@@ -149,7 +149,9 @@ class TestCHSHGradientDescent:
             qnet.NoiseNode([0, 1], lambda settings, wires: qnet.colored_noise(0.25, wires=wires)),
         ]
 
-        chsh_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes, noise_nodes)
+        chsh_ansatz = qnet.NetworkAnsatz(
+            prep_nodes, noise_nodes, meas_nodes, dev_kwargs={"name": "default.mixed"}
+        )
 
         chsh_cost = qnet.chsh_inequality_cost_fn(chsh_ansatz)
 
