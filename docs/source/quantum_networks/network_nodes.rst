@@ -12,6 +12,7 @@ operation and/or a classical output obtained after the applying the quantum oper
 Netwok nodes are categorized by their function:
 
 * **Prepare Node:** Initializes a quantum state on the local wires.
+* **Processing Node:** Applies an operation on its local wires 
 * **Noise Node:** Applies a static "noisy" operation to the local wires.
 * **Measure Node:** Performs a measurement operation on the local wires.
 
@@ -19,6 +20,12 @@ Prepare Nodes
 -------------
 
 .. autoclass:: PrepareNode
+	:members:
+
+Processing Nodes
+-------------
+
+.. autoclass:: ProcessingNode
 	:members:
 
 Noise Nodes

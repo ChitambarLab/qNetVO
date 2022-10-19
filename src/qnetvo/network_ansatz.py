@@ -50,6 +50,33 @@ class PrepareNode(NoiseNode):
         self.settings_dims = (num_in, num_settings)
 
 
+class ProcessingNode(NoiseNode):
+    """A class that configures each processing node in the quantum network.
+
+    :param num_in: The number of classical inputs for the node.
+    :type num_in: int
+
+    :param wires: A list of wires on which the node is defined.
+    :type wires: array[int]
+
+    :param quantum_fn: A PennyLane quantum function which accepts as input the
+        positional arguments ``(settings, wires)`` where settings is an *array[float]*
+        of length ``num_settings``.
+    :type quantum_fn: function
+
+    :param num_settings: The number of settings that the quantum function accepts.
+    :type num_settings: int
+
+    :returns: An instantiated ``ProcessingNode`` class.
+    """
+
+    def __init__(self, num_in, wires, quantum_fn, num_settings):
+        super().__init__(wires, quantum_fn)
+        self.num_in = num_in
+        self.num_settings = num_settings
+        self.settings_dims = (num_in, num_settings)
+
+
 class MeasureNode(PrepareNode):
     """A class that configures each measurement node in the quantum network.
 

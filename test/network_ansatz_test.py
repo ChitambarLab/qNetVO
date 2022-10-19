@@ -33,6 +33,21 @@ class TestPrepareNode:
         assert prep_node.settings_dims == (3, 2)
 
 
+class TestProcessingNode:
+    def test_init(self):
+        def circuit(settings, wires=[0, 1]):
+            qml.RY(settings[0], wires=wires[0])
+            qml.RY(settings[1], wires=wires[1])
+
+        proc_node = qnet.ProcessingNode(3, [0, 1], circuit, 2)
+
+        assert proc_node.num_in == 3
+        assert proc_node.wires == [0, 1]
+        assert proc_node.ansatz_fn == circuit
+        assert proc_node.num_settings == 2
+        assert proc_node.settings_dims == (3, 2)
+
+
 class TestMeasureNode:
     def test_init(self):
         def circuit(settings, wires=[0, 1]):
