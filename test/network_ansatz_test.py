@@ -103,11 +103,12 @@ class TestNetworkAnsatz:
         # verify network layer settings
         assert len(network_ansatz.network_layers) == 2
 
-        assert len(network_ansatz.network_layer_wires) == 2
-        assert network_ansatz.network_layer_wires[0].tolist() == [0, 1, 2]
-        assert network_ansatz.network_layer_wires[1].tolist() == [0, 1]
+        assert len(network_ansatz.network_layers_wires) == 2
+        assert network_ansatz.network_layers_wires[0].tolist() == [0, 1, 2]
+        assert network_ansatz.network_layers_wires[1].tolist() == [0, 1]
 
-        assert network_ansatz.network_layer_num_settings == [3, 2]
+        assert network_ansatz.network_layers_num_settings == [3, 2]
+        assert network_ansatz.network_layers_total_num_in == [1, 1]
 
         # verify network nodes
         assert network_ansatz.prepare_nodes == prepare_nodes
@@ -147,12 +148,13 @@ class TestNetworkAnsatz:
         # verify network layer settings
         assert len(noisy_network_ansatz.network_layers) == 3
 
-        assert len(noisy_network_ansatz.network_layer_wires) == 3
-        assert noisy_network_ansatz.network_layer_wires[0].tolist() == [0, 1, 2]
-        assert noisy_network_ansatz.network_layer_wires[1].tolist() == [1, 2]
-        assert noisy_network_ansatz.network_layer_wires[2].tolist() == [0, 1]
+        assert len(noisy_network_ansatz.network_layers_wires) == 3
+        assert noisy_network_ansatz.network_layers_wires[0].tolist() == [0, 1, 2]
+        assert noisy_network_ansatz.network_layers_wires[1].tolist() == [1, 2]
+        assert noisy_network_ansatz.network_layers_wires[2].tolist() == [0, 1]
 
-        assert noisy_network_ansatz.network_layer_num_settings == [3, 0, 2]
+        assert noisy_network_ansatz.network_layers_num_settings == [3, 0, 2]
+        assert noisy_network_ansatz.network_layers_total_num_in == [1, 1, 1]
 
         # verify network nodes
         assert noisy_network_ansatz.prepare_nodes == prepare_nodes

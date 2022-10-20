@@ -1,7 +1,7 @@
 from pennylane import math
 from pennylane import numpy as np
 from ..qnodes import joint_probs_qnode, global_parity_expval_qnode
-from ..utilities import mixed_base_num
+from ..utilities import mixed_base_num, ragged_reshape
 
 
 def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwargs={}):
@@ -46,9 +46,12 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
 
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
 
-    num_in_prep_nodes = [node.num_in for node in network_ansatz.prepare_nodes]
-    num_in_meas_nodes = [node.num_in for node in network_ansatz.measure_nodes]
-    net_num_in = math.prod(num_in_prep_nodes) * math.prod(num_in_meas_nodes)
+    net_num_in = math.prod(network_ansatz.network_layers_total_num_in)
+    num_inputs_list = math.concatenate(network_ansatz.network_layers_node_num_in).tolist()
+    node_input_ids = [
+        ragged_reshape(mixed_base_num(i, num_inputs_list), network_ansatz.network_layers_num_nodes)
+        for i in range(net_num_in)
+    ]
 
     raw_net_num_out = 2 ** len(network_ansatz.measure_wires)
 
@@ -71,20 +74,10 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
         elif postmap.shape[1] != raw_net_num_out:
             raise ValueError("The `postmap` must have " + str(raw_net_num_out) + " columns.")
 
-    # convert coefficient ids into a list of prep/meas node inputs
-    base_digits = num_in_prep_nodes + num_in_meas_nodes
-    node_input_ids = [mixed_base_num(i, base_digits) for i in range(net_num_in)]
-
     def cost(*network_settings):
         score = 0
         for (i, input_id_set) in enumerate(node_input_ids):
-            settings = network_ansatz.qnode_settings(
-                network_settings,
-                [
-                    input_id_set[0 : len(network_ansatz.prepare_nodes)],
-                    input_id_set[len(network_ansatz.prepare_nodes) :],
-                ],
-            )
+            settings = network_ansatz.qnode_settings(network_settings, input_id_set)
 
             raw_probs = probs_qnode(settings)
             probs = postmap @ raw_probs if has_postmap else raw_probs

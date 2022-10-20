@@ -139,3 +139,15 @@ def mixed_base_num(n, base_digits):
         n_tmp = n_tmp % place
 
     return mixed_base_digits
+
+
+def ragged_reshape(input_list, list_dims):
+    output_list = []
+    start_id = 0
+    for i, num_nodes in enumerate(list_dims):
+        output_list += [[]]
+        end_id = start_id + num_nodes
+        output_list[i] += input_list[start_id:end_id]
+        start_id = end_id
+
+    return output_list

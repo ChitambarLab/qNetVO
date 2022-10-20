@@ -128,8 +128,9 @@ class NetworkAnsatz:
     :returns: An instantiated ``NetworkAnsatz`` class with the following fields:
 
     * **network_layers** - ``list[list[NetworkNode]]``, The input layers of network nodes.
-    * **network_layer_wires** - ``list[list[qml.Wires]]``, The wires used for each layer.
-    * **network_layer_num_settings** - ``list[int]``, The number of setting used in each layer.
+    * **network_layers_wires** - ``list[list[qml.Wires]]``, The wires used for each layer.
+    * **network_layers_num_settings** - ``list[int]``, The number of setting used in each layer.
+    * **network_layers_total_num_in** - ``list[int]``, The total number of inputs for each layer.
     * **prepare_nodes** - The list of ``PrepareNode`` classes.
     * **measure_nodes** - The list of ``MeasureNode`` classes.
     * **prepare_wires** - The list of wires used by the ``prepare_nodes``.
@@ -154,16 +155,23 @@ class NetworkAnsatz:
         self.prepare_nodes = network_layers[0]
         self.measure_nodes = network_layers[-1]
 
-        self.network_layer_wires = [
+        self.network_layers_wires = [
             self.collect_wires(layer_nodes) for layer_nodes in network_layers
         ]
-        self.network_layer_num_settings = [
-            math.sum([node.num_settings for node in layer_nodes]) for layer_nodes in network_layers
+        self.network_layers_num_settings = [
+            math.sum([node.num_settings for node in layer]) for layer in network_layers
         ]
+        self.network_layers_total_num_in = [
+            math.prod([node.num_in for node in layer]) for layer in network_layers
+        ]
+        self.network_layers_node_num_in = [
+            [node.num_in for node in layer] for layer in self.network_layers
+        ]
+        self.network_layers_num_nodes = [len(layer) for layer in self.network_layers]
 
-        self.prepare_wires = self.network_layer_wires[0]
-        self.measure_wires = self.network_layer_wires[-1]
-        self.network_wires = qml.wires.Wires.all_wires(self.network_layer_wires)
+        self.prepare_wires = self.network_layers_wires[0]
+        self.measure_wires = self.network_layers_wires[-1]
+        self.network_wires = qml.wires.Wires.all_wires(self.network_layers_wires)
 
         default_dev_name = "default.qubit"
         self.dev_kwargs = dev_kwargs or {"name": default_dev_name}
@@ -206,7 +214,7 @@ class NetworkAnsatz:
         def ansatz_circuit(settings):
             start_id = 0
             for i, layer_fn in enumerate(layer_fns):
-                end_id = start_id + self.network_layer_num_settings[i]
+                end_id = start_id + self.network_layers_num_settings[i]
                 layer_settings = settings[start_id:end_id]
                 layer_fn(layer_settings)
                 start_id = end_id
