@@ -236,24 +236,23 @@ class TestOptimzationFileIO:
     @pytest.mark.parametrize(
         "input, list_dims, match",
         [
-            (list(range(10)), [1,2,3,4], [[0],[1,2],[3,4,5],[6,7,8,9]]),
-            (list(range(10)), [5,4,1], [[0,1,2,3,4],[5,6,7,8],[9]]),
+            (list(range(10)), [1, 2, 3, 4], [[0], [1, 2], [3, 4, 5], [6, 7, 8, 9]]),
+            (list(range(10)), [5, 4, 1], [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9]]),
         ],
     )
     def test_ragged_reshape(self, input, list_dims, match):
         assert qnet.ragged_reshape(input, list_dims) == match
-    
 
     @pytest.mark.parametrize(
         "input, list_dims",
         [
-            (list(range(10)), [2,3,4]),
-            (list(range(4)), [5,4,1]),
+            (list(range(10)), [2, 3, 4]),
+            (list(range(4)), [5, 4, 1]),
         ],
     )
     def test_ragged_reshape_error(self, input, list_dims):
         with pytest.raises(
-                ValueError,
-                match=r"`len\(input_list\)` must match the sum of `list_dims`\.",
-            ):
-                qnet.ragged_reshape(input, list_dims)
+            ValueError,
+            match=r"`len\(input_list\)` must match the sum of `list_dims`\.",
+        ):
+            qnet.ragged_reshape(input, list_dims)

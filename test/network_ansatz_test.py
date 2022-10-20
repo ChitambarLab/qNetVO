@@ -110,6 +110,9 @@ class TestNetworkAnsatz:
         assert network_ansatz.network_layers_num_settings == [3, 2]
         assert network_ansatz.network_layers_total_num_in == [1, 1]
 
+        assert network_ansatz.network_layers_node_num_in == [[1, 1, 1], [1, 1]]
+        assert network_ansatz.network_layers_num_nodes == [3, 2]
+
         # verify network nodes
         assert network_ansatz.prepare_nodes == prepare_nodes
         assert network_ansatz.measure_nodes == measure_nodes
@@ -155,6 +158,9 @@ class TestNetworkAnsatz:
 
         assert noisy_network_ansatz.network_layers_num_settings == [3, 0, 2]
         assert noisy_network_ansatz.network_layers_total_num_in == [1, 1, 1]
+
+        assert noisy_network_ansatz.network_layers_node_num_in == [[1, 1, 1], [1, 1], [1, 1]]
+        assert noisy_network_ansatz.network_layers_num_nodes == [3, 2, 2]
 
         # verify network nodes
         assert noisy_network_ansatz.prepare_nodes == prepare_nodes

@@ -158,9 +158,7 @@ def ragged_reshape(input_list, list_dims):
     :raises ValueError: If `len(input_list) != sum(list_dims)` because list cannot be repartitioned.
     """
     if math.sum(list_dims) != len(input_list):
-        raise ValueError(
-                "`len(input_list)` must match the sum of `list_dims`."
-            )
+        raise ValueError("`len(input_list)` must match the sum of `list_dims`.")
 
     output_list = []
     start_id = 0

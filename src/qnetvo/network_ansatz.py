@@ -131,6 +131,8 @@ class NetworkAnsatz:
     * **network_layers_wires** - ``list[list[qml.Wires]]``, The wires used for each layer.
     * **network_layers_num_settings** - ``list[int]``, The number of setting used in each layer.
     * **network_layers_total_num_in** - ``list[int]``, The total number of inputs for each layer.
+    * **network_layers_node_num_in** - ``list[list[int]]``, The number of inputs for each node in the layer.
+    * **network_layers_num_nodes** - ``list[int]``, The number of nodes in each layer.
     * **prepare_nodes** - The list of ``PrepareNode`` classes.
     * **measure_nodes** - The list of ``MeasureNode`` classes.
     * **prepare_wires** - The list of wires used by the ``prepare_nodes``.
