@@ -6,9 +6,7 @@ from ..information import shannon_entropy
 from ..utilities import mixed_base_num, ragged_reshape
 
 
-def mutual_info_cost_fn(
-    ansatz, priors, postmap=np.array([]), static_layer="measure", **qnode_kwargs
-):
+def mutual_info_cost_fn(ansatz, priors, postmap=np.array([]), **qnode_kwargs):
     """Constructs an ansatz-specific mutual information cost function.
 
     The mutual information quantifies the information shared by two distributions
@@ -36,10 +34,6 @@ def mutual_info_cost_fn(
     :param postmap: The post-processing matrix mapping the bitstring output from the
                     quantum device into the measurement node outputs.
     :type postmap: np.array
-
-    :param static_layer: Either ``"prepare"`` or ``"measure"``, specifies which
-                         network layer is held constant over all inputs.
-    :type static_layer: String, default ``"measure"``.
 
     :param qnode_kwargs: Keyword arguments passed to the execute qnodes.
     :type qnode_kwargs: dictionary
