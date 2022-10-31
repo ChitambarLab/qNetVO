@@ -6,7 +6,7 @@ from pennylane import math
 class NoiseNode:
     """A class that configures each noise node in the quantum network.
 
-    :param wires: A list of wires on which the node is defined.
+    :param wires: A list of wires on which the node operates.
     :type wires: array[int]
 
     :param quantum_fn: A PennyLane quantum function which accepts as input the
@@ -30,11 +30,11 @@ class PrepareNode(NoiseNode):
     :param num_in: The number of classical inputs for the node.
     :type num_in: int
 
-    :param wires: A list of wires on which the node is defined.
+    :param wires: A list of wires on which the node operates.
     :type wires: array[int]
 
     :param quantum_fn: A PennyLane quantum function which accepts as input the
-        positional arguments ``(settings, wires)`` where settings is an *array[float]*
+        positional arguments ``(settings, wires)``, where settings is an *array[float]*
         of length ``num_settings``.
     :type quantum_fn: function
 
@@ -57,7 +57,7 @@ class ProcessingNode(NoiseNode):
     :param num_in: The number of classical inputs for the node.
     :type num_in: int
 
-    :param wires: A list of wires on which the node is defined.
+    :param wires: A list of wires on which the node operates.
     :type wires: array[int]
 
     :param quantum_fn: A PennyLane quantum function which accepts as input the
@@ -87,10 +87,10 @@ class MeasureNode(PrepareNode):
     :param num_out: The number of classical outputs for the node.
     :type num_out: int
 
-    :param wires: A list of wires on which the node is defined.
+    :param wires: A list of wires on which the node operates.
     :type wires: array[int]
 
-    :param quantum_fn: A PennyLane quantum function which accepts as input the
+    :param quantum_fn: A PennyLane quantum function that accepts as input the
         positional arguments ``(settings, wires)`` where settings is an *array[float]*
         of length ``num_settings``.
     :type quantum_fn: function

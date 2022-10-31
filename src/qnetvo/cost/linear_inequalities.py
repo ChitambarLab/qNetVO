@@ -13,9 +13,10 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
 
     .. math::
 
-        \\langle\\mathbf{G},\\mathbf{P}\\rangle = \\sum_{\\vec{x},\\vec{y},\\vec{b}} G_{b|x,y} P(b|x,y),
+        \\langle\\mathbf{G},\\mathbf{P}\\rangle = \\sum_{\\{\\vec{x}_i\\}_i,\\vec{a}} G_{a|\\{x_i\\}_i} P(a|\\{x_i\\}),
 
-    where :math:`\\mathbf{P}` is a behavior (see :meth:`qnetvo.behavior_fn`).
+    where :math:`\\mathbf{P}` is a behavior (see :meth:`qnetvo.behavior_fn`) and :math:`\\{\\vec{x}_i\\}_i` specifies
+    the collection of inputs for each layer as indexed by :math:`i`.
 
     A post-processing map :math:`\\mathbf{L}` may optionally be applied as
     :math:`\\mathbf{L}\\mathbf{P}_{Net}` where
@@ -29,7 +30,7 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
     :param network_ansatz: The network to which the cost function is applied.
     :type network_ansatz: ``NetworkAnsatz`` class
 
-    :param game: A matrix with dimensions ``B x (X x Y)`` for
+    :param game: A matrix with dimensions ``A x (\\prod_i X_i)`` for
     :type game: np.arrray
 
     :param postmap: A post-processing map applied to the bitstrings output from the
