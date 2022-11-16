@@ -6,7 +6,7 @@ Network Nodes
 A quantum network is constructed from a collection of quantum devices serving
 as nodes in the network.
 A network node performs a quantum operation on its local set of qubits.
-The applied operation is conditioned upon a classical input. 
+The applied operation can be conditioned upon a classical input. 
 
 Network nodes are categorized by their function:
 
