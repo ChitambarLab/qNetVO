@@ -22,7 +22,7 @@ Prepare Nodes
 	:members:
 
 Processing Nodes
--------------
+----------------
 
 .. autoclass:: ProcessingNode
 	:members:
