@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>qnetvo.network_ansatz - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
@@ -245,7 +245,7 @@
 <div class="viewcode-block" id="NoiseNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.NoiseNode">[docs]</a><span class="k">class</span> <span class="nc">NoiseNode</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A class that configures each noise node in the quantum network.</span>
 
-<span class="sd">    :param wires: A list of wires on which the node is defined.</span>
+<span class="sd">    :param wires: A list of wires on which the node operates.</span>
 <span class="sd">    :type wires: array[int]</span>
 
 <span class="sd">    :param quantum_fn: A PennyLane quantum function which accepts as input the</span>
@@ -259,7 +259,8 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wires</span> <span class="o">=</span> <span class="n">wires</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ansatz_fn</span> <span class="o">=</span> <span class="n">quantum_fn</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_settings</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_settings</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_in</span> <span class="o">=</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="PrepareNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.PrepareNode">[docs]</a><span class="k">class</span> <span class="nc">PrepareNode</span><span class="p">(</span><span class="n">NoiseNode</span><span class="p">):</span>
@@ -268,7 +269,34 @@
 <span class="sd">    :param num_in: The number of classical inputs for the node.</span>
 <span class="sd">    :type num_in: int</span>
 
-<span class="sd">    :param wires: A list of wires on which the node is defined.</span>
+<span class="sd">    :param wires: A list of wires on which the node operates.</span>
+<span class="sd">    :type wires: array[int]</span>
+
+<span class="sd">    :param quantum_fn: A PennyLane quantum function which accepts as input the</span>
+<span class="sd">        positional arguments ``(settings, wires)``, where settings is an *array[float]*</span>
+<span class="sd">        of length ``num_settings``.</span>
+<span class="sd">    :type quantum_fn: function</span>
+
+<span class="sd">    :param num_settings: The number of settings that the quantum function accepts.</span>
+<span class="sd">    :type num_settings: int</span>
+
+<span class="sd">    :returns: An instantiated ``PrepareNode`` class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_in</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_in</span> <span class="o">=</span> <span class="n">num_in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_settings</span> <span class="o">=</span> <span class="n">num_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_dims</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_in</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessingNode"><a class="viewcode-back" href="../../quantum_networks/network_nodes.html#qnetvo.ProcessingNode">[docs]</a><span class="k">class</span> <span class="nc">ProcessingNode</span><span class="p">(</span><span class="n">NoiseNode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A class that configures each processing node in the quantum network.</span>
+
+<span class="sd">    :param num_in: The number of classical inputs for the node.</span>
+<span class="sd">    :type num_in: int</span>
+
+<span class="sd">    :param wires: A list of wires on which the node operates.</span>
 <span class="sd">    :type wires: array[int]</span>
 
 <span class="sd">    :param quantum_fn: A PennyLane quantum function which accepts as input the</span>
@@ -279,7 +307,7 @@
 <span class="sd">    :param num_settings: The number of settings that the quantum function accepts.</span>
 <span class="sd">    :type num_settings: int</span>
 
-<span class="sd">    :returns: An instantiated ``PrepareNode`` class.</span>
+<span class="sd">    :returns: An instantiated ``ProcessingNode`` class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_in</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">quantum_fn</span><span class="p">,</span> <span class="n">num_settings</span><span class="p">):</span>
@@ -298,10 +326,10 @@
 <span class="sd">    :param num_out: The number of classical outputs for the node.</span>
 <span class="sd">    :type num_out: int</span>
 
-<span class="sd">    :param wires: A list of wires on which the node is defined.</span>
+<span class="sd">    :param wires: A list of wires on which the node operates.</span>
 <span class="sd">    :type wires: array[int]</span>
 
-<span class="sd">    :param quantum_fn: A PennyLane quantum function which accepts as input the</span>
+<span class="sd">    :param quantum_fn: A PennyLane quantum function that accepts as input the</span>
 <span class="sd">        positional arguments ``(settings, wires)`` where settings is an *array[float]*</span>
 <span class="sd">        of length ``num_settings``.</span>
 <span class="sd">    :type quantum_fn: function</span>
@@ -324,14 +352,12 @@
 <span class="sd">    measure layer is a collection of unitaries which encode the measurement basis.</span>
 <span class="sd">    These layers are constructed from the ``prepare_nodes`` and ``measure_nodes`` inputs respectively.</span>
 
-<span class="sd">    :param prepare_nodes: A list of ``PrepareNode`` classes.</span>
-<span class="sd">    :type prepare_nodes: list[PrepareNode]</span>
-
-<span class="sd">    :param measure_nodes: A list of ``MeasureNode`` classes.</span>
-<span class="sd">    :type measure_nodes: list[MeasureNode]</span>
-
-<span class="sd">    :param noise_nodes: A list of ``NoiseNode`` classes.</span>
-<span class="sd">    :type noise_nodes: *optional* list[NoiseNode]</span>
+<span class="sd">    :param network_layers: Positional arguments each being a list of nodes designating a circuit layer.</span>
+<span class="sd">                           The first layer must contain ``PrepareNode`` classes while the last layer must</span>
+<span class="sd">                           contain ``MeasureNode`` classes.</span>
+<span class="sd">                           Intermediate layers can contain either ``NoiseNode`` or ``ProcessingNode`` classes,</span>
+<span class="sd">                           but all elements must be the same type.</span>
+<span class="sd">    :type network_layers: list[list[NetworkNode]]</span>
 
 <span class="sd">    :param dev_kwargs: Keyword arguments for the `pennylane.device`_ function.</span>
 <span class="sd">    :type dev_kwargs: *optional* dict</span>
@@ -340,6 +366,12 @@
 
 <span class="sd">    :returns: An instantiated ``NetworkAnsatz`` class with the following fields:</span>
 
+<span class="sd">    * **network_layers** - ``list[list[NetworkNode]]``, The input layers of network nodes.</span>
+<span class="sd">    * **network_layers_wires** - ``list[list[qml.Wires]]``, The wires used for each layer.</span>
+<span class="sd">    * **network_layers_num_settings** - ``list[int]``, The number of setting used in each layer.</span>
+<span class="sd">    * **network_layers_total_num_in** - ``list[int]``, The total number of inputs for each layer.</span>
+<span class="sd">    * **network_layers_node_num_in** - ``list[list[int]]``, The number of inputs for each node in the layer.</span>
+<span class="sd">    * **network_layers_num_nodes** - ``list[int]``, The number of nodes in each layer.</span>
 <span class="sd">    * **prepare_nodes** - The list of ``PrepareNode`` classes.</span>
 <span class="sd">    * **measure_nodes** - The list of ``MeasureNode`` classes.</span>
 <span class="sd">    * **prepare_wires** - The list of wires used by the ``prepare_nodes``.</span>
@@ -359,27 +391,35 @@
 <span class="sd">    :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prepare_nodes</span><span class="p">,</span> <span class="n">measure_nodes</span><span class="p">,</span> <span class="n">noise_nodes</span><span class="o">=</span><span class="p">[],</span> <span class="n">dev_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span> <span class="o">=</span> <span class="n">prepare_nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span> <span class="o">=</span> <span class="n">measure_nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span> <span class="o">=</span> <span class="n">noise_nodes</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">network_layers</span><span class="p">,</span> <span class="n">dev_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span> <span class="o">=</span> <span class="n">network_layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span> <span class="o">=</span> <span class="n">network_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span> <span class="o">=</span> <span class="n">network_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_wires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_wires</span><span class="p">(</span><span class="n">prepare_nodes</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">measure_wires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_wires</span><span class="p">(</span><span class="n">measure_nodes</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">noise_wires</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="p">([])</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span> <span class="o">==</span> <span class="p">[]</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_wires</span><span class="p">(</span><span class="n">noise_nodes</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_layers_wires</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collect_wires</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer_nodes</span> <span class="ow">in</span> <span class="n">network_layers</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_layers_num_settings</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">num_settings</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">layer</span><span class="p">])</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">network_layers</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_layers_total_num_in</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">num_in</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">layer</span><span class="p">])</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">network_layers</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_layers_node_num_in</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">num_in</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">layer</span><span class="p">]</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_layers_num_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="o">.</span><span class="n">all_wires</span><span class="p">(</span>
-            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prepare_wires</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_wires</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_wires</span><span class="p">]</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_wires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_layers_wires</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measure_wires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_layers_wires</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">wires</span><span class="o">.</span><span class="n">Wires</span><span class="o">.</span><span class="n">all_wires</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network_layers_wires</span><span class="p">)</span>
 
-        <span class="n">default_dev_name</span> <span class="o">=</span> <span class="s2">&quot;default.qubit&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;default.mixed&quot;</span>
+        <span class="n">default_dev_name</span> <span class="o">=</span> <span class="s2">&quot;default.qubit&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span> <span class="o">=</span> <span class="n">dev_kwargs</span> <span class="ow">or</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">default_dev_name</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">[</span><span class="s2">&quot;wires&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_wires</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_ansatz_circuit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ansatz_circuit_fn</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameter_partitions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_network_parameter_partitions</span><span class="p">()</span>
 
 <div class="viewcode-block" id="NetworkAnsatz.set_device"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.set_device">[docs]</a>    <span class="k">def</span> <span class="nf">set_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -409,22 +449,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev</span></div>
 
-    <span class="k">def</span> <span class="nf">construct_ansatz_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">prepare_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">)</span>
-        <span class="n">noise_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span><span class="p">)</span>
-        <span class="n">measure_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span>
-
-        <span class="n">noise_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_nodes</span><span class="p">))]</span>
-
-        <span class="n">num_prep_settings</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">num_settings</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">ansatz_circuit_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">layer_fns</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">circuit_layer_fn</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer_nodes</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span><span class="p">]</span>
 
         <span class="k">def</span> <span class="nf">ansatz_circuit</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
-            <span class="n">prep_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">num_prep_settings</span><span class="p">]</span>
-            <span class="n">meas_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="n">num_prep_settings</span><span class="p">:]</span>
-
-            <span class="n">prepare_layer</span><span class="p">(</span><span class="n">prep_settings</span><span class="p">)</span>
-            <span class="n">noise_layer</span><span class="p">(</span><span class="n">noise_settings</span><span class="p">)</span>
-            <span class="n">measure_layer</span><span class="p">(</span><span class="n">meas_settings</span><span class="p">)</span>
+            <span class="n">start_id</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer_fn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layer_fns</span><span class="p">):</span>
+                <span class="n">end_id</span> <span class="o">=</span> <span class="n">start_id</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_layers_num_settings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">layer_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="n">start_id</span><span class="p">:</span><span class="n">end_id</span><span class="p">]</span>
+                <span class="n">layer_fn</span><span class="p">(</span><span class="n">layer_settings</span><span class="p">)</span>
+                <span class="n">start_id</span> <span class="o">=</span> <span class="n">end_id</span>
 
         <span class="k">return</span> <span class="n">ansatz_circuit</span>
 
@@ -437,11 +471,10 @@
 <span class="sd">        ``parameter_partitions[layer_id][node_id][input_id] =&gt; (start_id, stop_id)``.</span>
 <span class="sd">        The ``start_id`` and ``stop_id`` describe the slice ``network_settings[start_id:stop_id]``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">]</span>
         <span class="n">parameter_partitions</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="n">start_id</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span><span class="p">):</span>
             <span class="n">parameter_partitions</span> <span class="o">+=</span> <span class="p">[[]]</span>
             <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
 
@@ -533,30 +566,27 @@
 
         <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">expanded_settings</span><span class="p">)</span>
 
-<div class="viewcode-block" id="NetworkAnsatz.circuit_layer"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.circuit_layer">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">circuit_layer</span><span class="p">(</span><span class="n">network_nodes</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkAnsatz.circuit_layer_fn"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.circuit_layer_fn">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">circuit_layer_fn</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Constructs a quantum function for an ansatz layer of provided network nodes.</span>
 
-<span class="sd">        :param network_nodes: A list of network nodes which can be either</span>
-<span class="sd">                              ``NoiseNode``, ``PrepareNode``, or ``MeasureNode``</span>
-<span class="sd">        :type network_nodes: list[NetworkNode]</span>
+<span class="sd">        :param layer_nodes: A list of nodes in a network layer.</span>
+<span class="sd">        :type layer_nodes: list[NetworkNode]</span>
 
-<span class="sd">        :returns: A quantum function evaluated as ``circuit(settings)`` where ``settings``</span>
+<span class="sd">        :returns: A quantum function evaluated as ``circuit_layer(settings)`` where ``settings``</span>
 <span class="sd">                  is an array constructed via the ``layer_settings`` function.</span>
 <span class="sd">        :rtype: function</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
-            <span class="n">current_id</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">network_nodes</span><span class="p">)):</span>
-                <span class="n">node</span> <span class="o">=</span> <span class="n">network_nodes</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span>
-                <span class="n">node_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="n">current_id</span> <span class="p">:</span> <span class="n">current_id</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">num_settings</span><span class="p">]</span>
-
-                <span class="n">current_id</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="n">num_settings</span>
-
+        <span class="k">def</span> <span class="nf">circuit_layer</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
+            <span class="n">start_id</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">layer_nodes</span><span class="p">:</span>
+                <span class="n">end_id</span> <span class="o">=</span> <span class="n">start_id</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">num_settings</span>
+                <span class="n">node_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="n">start_id</span><span class="p">:</span><span class="n">end_id</span><span class="p">]</span>
                 <span class="n">node</span><span class="o">.</span><span class="n">ansatz_fn</span><span class="p">(</span><span class="n">node_settings</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">wires</span><span class="p">)</span>
+                <span class="n">start_id</span> <span class="o">=</span> <span class="n">end_id</span>
 
-        <span class="k">return</span> <span class="n">circuit</span></div>
+        <span class="k">return</span> <span class="n">circuit_layer</span></div>
 
 <div class="viewcode-block" id="NetworkAnsatz.rand_network_settings"><a class="viewcode-back" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz.rand_network_settings">[docs]</a>    <span class="k">def</span> <span class="nf">rand_network_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed_setting_ids</span><span class="o">=</span><span class="p">[],</span> <span class="n">fixed_settings</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;Creates an array of randomized differentiable settings for the network ansatz.</span>

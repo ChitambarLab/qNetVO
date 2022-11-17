@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>qnetvo.utilities - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
@@ -378,6 +378,36 @@
         <span class="n">n_tmp</span> <span class="o">=</span> <span class="n">n_tmp</span> <span class="o">%</span> <span class="n">place</span>
 
     <span class="k">return</span> <span class="n">mixed_base_digits</span></div>
+
+
+<span class="k">def</span> <span class="nf">ragged_reshape</span><span class="p">(</span><span class="n">input_list</span><span class="p">,</span> <span class="n">list_dims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes a 1D list ``input_list`` and breaks it into smaller lists having lengths specified by the</span>
+<span class="sd">    elements of ``list_dims``.</span>
+
+<span class="sd">    :param input_list: The list to reshape.</span>
+<span class="sd">    :type input_list: list</span>
+
+<span class="sd">    :param list_dims: The length of each element in the output list</span>
+<span class="sd">    :type list_dims: list[int]</span>
+
+<span class="sd">    :returns: The original list reshaped as a list of lists where each element has length specified</span>
+<span class="sd">        by ``list_dims``.</span>
+<span class="sd">    :rtype: list[list]</span>
+
+<span class="sd">    :raises ValueError: If `len(input_list) != sum(list_dims)` because list cannot be repartitioned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">list_dims</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`len(input_list)` must match the sum of `list_dims`.&quot;</span><span class="p">)</span>
+
+    <span class="n">output_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">start_id</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">num_nodes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list_dims</span><span class="p">):</span>
+        <span class="n">output_list</span> <span class="o">+=</span> <span class="p">[[]]</span>
+        <span class="n">end_id</span> <span class="o">=</span> <span class="n">start_id</span> <span class="o">+</span> <span class="n">num_nodes</span>
+        <span class="n">output_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">input_list</span><span class="p">[</span><span class="n">start_id</span><span class="p">:</span><span class="n">end_id</span><span class="p">]</span>
+        <span class="n">start_id</span> <span class="o">=</span> <span class="n">end_id</span>
+
+    <span class="k">return</span> <span class="n">output_list</span>
 </pre></div>
         </article>
       </div>

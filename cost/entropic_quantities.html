@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="The Magic Squares Game" href="magic_squares_game.html" /><link rel="prev" title="Linear Cost Functions" href="linear_inequalities.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>Entropic Quantities - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
@@ -243,11 +243,11 @@
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">shannon_entropy_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/mutual_info.html#shannon_entropy_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.shannon_entropy_cost_fn" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs an ansatz-specific Shannon entropy cost function</p>
 <p>The Shannon entropy characterizes the amount of randomness, or similarly, the amount of
-information is present in a random variable. Formally, let :math:’X’ be a discrete random
+information is present in a random variable. Formally, let <span class="math notranslate nohighlight">\(X\)</span> be a discrete random
 variable, then the Shannon entropy is defined by the expression:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[H(X) = \sum_{x} P(x) \log_{2} P(x)\]</div>
+\[H(X) = -\sum_{x} P(x) \log_{2} P(x)\]</div>
 </div>
 <p>In the case of a quantum network, the Shannon entropy is defined on the measurement outcome
 of the network ansatz.</p>
@@ -270,7 +270,7 @@ the ansatz-specific network settings.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.mutual_info_cost_fn">
-<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">mutual_info_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">tensor([],</span> <span class="pre">dtype=float64,</span> <span class="pre">requires_grad=True)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'measure'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/mutual_info.html#mutual_info_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.mutual_info_cost_fn" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">mutual_info_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">tensor([],</span> <span class="pre">dtype=float64,</span> <span class="pre">requires_grad=True)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/cost/mutual_info.html#mutual_info_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.mutual_info_cost_fn" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs an ansatz-specific mutual information cost function.</p>
 <p>The mutual information quantifies the information shared by two distributions
 <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.
@@ -292,8 +292,6 @@ the collections of preparation and measurement nodes.</p>
 <li><p><strong>priors</strong> (<em>list</em><em>[</em><em>np.array</em><em>]</em>) – A list of prior distributions for the inputs of each preparation node.</p></li>
 <li><p><strong>postmap</strong> (<em>np.array</em>) – The post-processing matrix mapping the bitstring output from the
 quantum device into the measurement node outputs.</p></li>
-<li><p><strong>static_layer</strong> (String, default <code class="docutils literal notranslate"><span class="pre">&quot;measure&quot;</span></code>.) – Either <code class="docutils literal notranslate"><span class="pre">&quot;prepare&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;measure&quot;</span></code>, specifies which
-network layer is held constant over all inputs.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>dictionary</em>) – Keyword arguments passed to the execute qnodes.</p></li>
 </ul>
 </dd>
@@ -319,17 +317,18 @@ The network behavior <code class="docutils literal notranslate"><span class="pre
 conditional probabilities,</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\mathbf{P}_{Net} = \sum_{x,y,z}P(z|x,y)|z\rangle\langle x,y|,\]</div>
+\[\mathbf{P}_{Net} = \sum_{\{x_i\}_i,y}P(y|\{x_i\}_i)|y\rangle\langle \{x_i\}_i|,\]</div>
 </div>
-<p>where <span class="math notranslate nohighlight">\(P(z|x,y)\)</span> is evaluated by a qnode for each set of inputs
-<span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<p>where <span class="math notranslate nohighlight">\(P(y|\{x_i\}_i)\)</span> is evaluated by a qnode for each set of inputs
+<span class="math notranslate nohighlight">\(\{x_i\}_i\)</span>.
+The number of outputs <span class="math notranslate nohighlight">\(y\)</span> is <span class="math notranslate nohighlight">\(2^N\)</span> where <span class="math notranslate nohighlight">\(N\)</span> is the number of qubits.</p>
 <p>A post-processing map <span class="math notranslate nohighlight">\(\mathbf{L}\)</span> may optionally be applied as
 <span class="math notranslate nohighlight">\(\mathbf{L}\mathbf{P}_{Net}\)</span> where</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\mathbf{L} = \sum_{z',z}P(z'|z)|z'\rangle\langle z|.\]</div>
+\[\mathbf{L} = \sum_{z,y}P(z|y)|z\rangle\langle y|.\]</div>
 </div>
-<p>In the above expression, <span class="math notranslate nohighlight">\(z'\)</span> is a new output drawn from a new alphabet.</p>
+<p>In the above expression, <span class="math notranslate nohighlight">\(z\)</span> is a new output drawn from a new alphabet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Entropic Quantities" href="entropic_quantities.html" /><link rel="prev" title="QNodes" href="qnodes.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>Linear Cost Functions - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
@@ -250,9 +250,10 @@ coefficients scale conditional probabilities for the network.
 The cost is derived from the score which is evaluated as,</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\langle\mathbf{G},\mathbf{P}\rangle = \sum_{\vec{x},\vec{y},\vec{b}} G_{b|x,y} P(b|x,y),\]</div>
+\[\langle\mathbf{G},\mathbf{P}\rangle = \sum_{\{\vec{x}_i\}_i,\vec{a}} G_{a|\{x_i\}_i} P(a|\{x_i\}),\]</div>
 </div>
-<p>where <span class="math notranslate nohighlight">\(\mathbf{P}\)</span> is a behavior (see <a class="reference internal" href="entropic_quantities.html#qnetvo.behavior_fn" title="qnetvo.behavior_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">qnetvo.behavior_fn()</span></code></a>).</p>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{P}\)</span> is a behavior (see <a class="reference internal" href="entropic_quantities.html#qnetvo.behavior_fn" title="qnetvo.behavior_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">qnetvo.behavior_fn()</span></code></a>) and <span class="math notranslate nohighlight">\(\{\vec{x}_i\}_i\)</span> specifies
+the collection of inputs for each layer as indexed by <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <p>A post-processing map <span class="math notranslate nohighlight">\(\mathbf{L}\)</span> may optionally be applied as
 <span class="math notranslate nohighlight">\(\mathbf{L}\mathbf{P}_{Net}\)</span> where</p>
 <div class="math-wrapper docutils container">
@@ -264,7 +265,7 @@ The cost is derived from the score which is evaluated as,</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class) – The network to which the cost function is applied.</p></li>
-<li><p><strong>game</strong> (<em>np.arrray</em>) – A matrix with dimensions <code class="docutils literal notranslate"><span class="pre">B</span> <span class="pre">x</span> <span class="pre">(X</span> <span class="pre">x</span> <span class="pre">Y)</span></code> for</p></li>
+<li><p><strong>game</strong> (<em>np.arrray</em>) – A matrix with dimensions <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">x</span> <span class="pre">(\prod_i</span> <span class="pre">X_i)</span></code> for</p></li>
 <li><p><strong>postmap</strong> (<em>optional</em> np.ndarray) – A post-processing map applied to the bitstrings output from the
 quantum circuit. The <code class="docutils literal notranslate"><span class="pre">postmap</span></code> matrix is column stochastic, that is,
 each column sums to one and contains only positive values.</p></li>

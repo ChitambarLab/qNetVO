@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>qnetvo.information - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
@@ -253,21 +253,22 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        \\mathbf{P}_{Net} = \\sum_{x,y,z}P(z|x,y)|z\\rangle\\langle x,y|,</span>
+<span class="sd">        \\mathbf{P}_{Net} = \\sum_{\\{x_i\\}_i,y}P(y|\\{x_i\\}_i)|y\\rangle\\langle \\{x_i\\}_i|,</span>
 
 
-<span class="sd">    where :math:`P(z|x,y)` is evaluated by a qnode for each set of inputs</span>
-<span class="sd">    :math:`x` and :math:`y`.</span>
+<span class="sd">    where :math:`P(y|\\{x_i\\}_i)` is evaluated by a qnode for each set of inputs</span>
+<span class="sd">    :math:`\\{x_i\\}_i`.</span>
+<span class="sd">    The number of outputs :math:`y` is :math:`2^N` where :math:`N` is the number of qubits.</span>
 
 <span class="sd">    A post-processing map :math:`\\mathbf{L}` may optionally be applied as</span>
 <span class="sd">    :math:`\\mathbf{L}\\mathbf{P}_{Net}` where</span>
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        \\mathbf{L} = \\sum_{z&#39;,z}P(z&#39;|z)|z&#39;\\rangle\\langle z|.</span>
+<span class="sd">        \\mathbf{L} = \\sum_{z,y}P(z|y)|z\\rangle\\langle y|.</span>
 
 
-<span class="sd">    In the above expression, :math:`z&#39;` is a new output drawn from a new alphabet.</span>
+<span class="sd">    In the above expression, :math:`z` is a new output drawn from a new alphabet.</span>
 
 <span class="sd">    :param network_ansatz: A class describing the particular quantum network.</span>
 <span class="sd">    :type network_ansatz: NetworkAnsatz</span>
