@@ -139,3 +139,33 @@ def mixed_base_num(n, base_digits):
         n_tmp = n_tmp % place
 
     return mixed_base_digits
+
+
+def ragged_reshape(input_list, list_dims):
+    """Takes a 1D list ``input_list`` and breaks it into smaller lists having lengths specified by the
+    elements of ``list_dims``.
+
+    :param input_list: The list to reshape.
+    :type input_list: list
+
+    :param list_dims: The length of each element in the output list
+    :type list_dims: list[int]
+
+    :returns: The original list reshaped as a list of lists where each element has length specified
+        by ``list_dims``.
+    :rtype: list[list]
+
+    :raises ValueError: If `len(input_list) != sum(list_dims)` because list cannot be repartitioned.
+    """
+    if math.sum(list_dims) != len(input_list):
+        raise ValueError("`len(input_list)` must match the sum of `list_dims`.")
+
+    output_list = []
+    start_id = 0
+    for i, num_nodes in enumerate(list_dims):
+        output_list += [[]]
+        end_id = start_id + num_nodes
+        output_list[i] += input_list[start_id:end_id]
+        start_id = end_id
+
+    return output_list

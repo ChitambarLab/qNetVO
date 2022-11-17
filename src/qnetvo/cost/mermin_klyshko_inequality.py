@@ -73,12 +73,10 @@ def mermin_klyshko_cost_fn(ansatz, **qnode_kwargs):
     """
     mk_qnode = global_parity_expval_qnode(ansatz, **qnode_kwargs)
 
-    num_meas_nodes = len(ansatz.measure_nodes)
-    num_prep_nodes = len(ansatz.prepare_nodes)
-
-    prep_inputs = [0] * num_prep_nodes
-
+    num_meas_nodes = len(ansatz.network_layers[-1])
     meas_inputs_list, scalars_list = mermin_klyshko_inputs_scalars(num_meas_nodes)
+
+    static_prep_inputs = [[0] * len(layer_nodes) for layer_nodes in ansatz.network_layers[0:-1]]
 
     def cost(*network_settings):
 
@@ -91,7 +89,7 @@ def mermin_klyshko_cost_fn(ansatz, **qnode_kwargs):
             meas_inputs = meas_inputs_list[i]
             scalar = scalars_list[i]
 
-            settings = ansatz.qnode_settings(network_settings, [prep_inputs, meas_inputs])
+            settings = ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             score += scalar * mk_qnode(settings)
 
         return -(score)

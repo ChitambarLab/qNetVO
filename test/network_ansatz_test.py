@@ -16,6 +16,8 @@ class TestNoiseNode:
 
         assert noise_node.wires == [0, 1]
         assert noise_node.ansatz_fn == circuit
+        assert noise_node.num_in == 1
+        assert noise_node.num_settings == 0
 
 
 class TestPrepareNode:
@@ -31,6 +33,21 @@ class TestPrepareNode:
         assert prep_node.ansatz_fn == circuit
         assert prep_node.num_settings == 2
         assert prep_node.settings_dims == (3, 2)
+
+
+class TestProcessingNode:
+    def test_init(self):
+        def circuit(settings, wires=[0, 1]):
+            qml.RY(settings[0], wires=wires[0])
+            qml.RY(settings[1], wires=wires[1])
+
+        proc_node = qnet.ProcessingNode(3, [0, 1], circuit, 2)
+
+        assert proc_node.num_in == 3
+        assert proc_node.wires == [0, 1]
+        assert proc_node.ansatz_fn == circuit
+        assert proc_node.num_settings == 2
+        assert proc_node.settings_dims == (3, 2)
 
 
 class TestMeasureNode:
@@ -82,12 +99,23 @@ class TestNetworkAnsatz:
         ]
 
         network_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes)
-        noisy_network_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
+
+        # verify network layer settings
+        assert len(network_ansatz.network_layers) == 2
+
+        assert len(network_ansatz.network_layers_wires) == 2
+        assert network_ansatz.network_layers_wires[0].tolist() == [0, 1, 2]
+        assert network_ansatz.network_layers_wires[1].tolist() == [0, 1]
+
+        assert network_ansatz.network_layers_num_settings == [3, 2]
+        assert network_ansatz.network_layers_total_num_in == [1, 1]
+
+        assert network_ansatz.network_layers_node_num_in == [[1, 1, 1], [1, 1]]
+        assert network_ansatz.network_layers_num_nodes == [3, 2]
 
         # verify network nodes
         assert network_ansatz.prepare_nodes == prepare_nodes
         assert network_ansatz.measure_nodes == measure_nodes
-        assert network_ansatz.noise_nodes == []
 
         # verify network settings partitions
         assert network_ansatz.parameter_partitions == [
@@ -98,7 +126,6 @@ class TestNetworkAnsatz:
         # verify wires
         assert network_ansatz.prepare_wires.tolist() == [0, 1, 2]
         assert network_ansatz.measure_wires.tolist() == [0, 1]
-        assert network_ansatz.noise_wires.tolist() == []
         assert network_ansatz.network_wires.tolist() == [0, 1, 2]
 
         # verify device
@@ -117,23 +144,38 @@ class TestNetworkAnsatz:
         assert np.isclose(test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]), 1)
 
         # Noisy network Case
-        noisy_network_ansatz = qnet.NetworkAnsatz(prepare_nodes, measure_nodes, noise_nodes)
+        noisy_network_ansatz = qnet.NetworkAnsatz(
+            prepare_nodes, noise_nodes, measure_nodes, dev_kwargs={"name": "default.mixed"}
+        )
+
+        # verify network layer settings
+        assert len(noisy_network_ansatz.network_layers) == 3
+
+        assert len(noisy_network_ansatz.network_layers_wires) == 3
+        assert noisy_network_ansatz.network_layers_wires[0].tolist() == [0, 1, 2]
+        assert noisy_network_ansatz.network_layers_wires[1].tolist() == [1, 2]
+        assert noisy_network_ansatz.network_layers_wires[2].tolist() == [0, 1]
+
+        assert noisy_network_ansatz.network_layers_num_settings == [3, 0, 2]
+        assert noisy_network_ansatz.network_layers_total_num_in == [1, 1, 1]
+
+        assert noisy_network_ansatz.network_layers_node_num_in == [[1, 1, 1], [1, 1], [1, 1]]
+        assert noisy_network_ansatz.network_layers_num_nodes == [3, 2, 2]
 
         # verify network nodes
         assert noisy_network_ansatz.prepare_nodes == prepare_nodes
         assert noisy_network_ansatz.measure_nodes == measure_nodes
-        assert noisy_network_ansatz.noise_nodes == noise_nodes
 
         # verify network settings partitions
-        assert network_ansatz.parameter_partitions == [
+        assert noisy_network_ansatz.parameter_partitions == [
             [[(0, 1)], [(1, 2)], [(2, 3)]],
+            [[(3, 3)], [(3, 3)]],
             [[(3, 4)], [(4, 5)]],
         ]
 
         # verify wires
         assert noisy_network_ansatz.prepare_wires.tolist() == [0, 1, 2]
         assert noisy_network_ansatz.measure_wires.tolist() == [0, 1]
-        assert noisy_network_ansatz.noise_wires.tolist() == [1, 2]
         assert noisy_network_ansatz.network_wires.tolist() == [0, 1, 2]
 
         # verify device
@@ -164,13 +206,13 @@ class TestNetworkAnsatz:
 
         mixed_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes, noise_nodes)
 
-        assert mixed_ansatz.dev.short_name == "default.mixed"
+        assert mixed_ansatz.dev.short_name == "default.qubit"
 
         pure_ansatz = qnet.NetworkAnsatz(
-            prep_nodes, meas_nodes, noise_nodes, dev_kwargs={"name": "default.qubit"}
+            prep_nodes, meas_nodes, noise_nodes, dev_kwargs={"name": "default.mixed"}
         )
 
-        assert pure_ansatz.dev.short_name == "default.qubit"
+        assert pure_ansatz.dev.short_name == "default.mixed"
 
     def test_partition_settings_slices(self):
         prep_nodes = [
@@ -261,7 +303,7 @@ class TestNetworkAnsatz:
 
         @qml.qnode(qml.device("default.qubit", wires=2))
         def test_circuit(settings):
-            qnet.NetworkAnsatz.circuit_layer([node1, node2])(settings)
+            qnet.NetworkAnsatz.circuit_layer_fn([node1, node2])(settings)
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
@@ -273,7 +315,7 @@ class TestNetworkAnsatz:
 
         @qml.qnode(qml.device("default.mixed", wires=2))
         def noisy_test_circuit(settings):
-            qnet.NetworkAnsatz.circuit_layer([noisy_node1, noisy_node2])(settings)
+            qnet.NetworkAnsatz.circuit_layer_fn([noisy_node1, noisy_node2])(settings)
 
             return qml.state()
 

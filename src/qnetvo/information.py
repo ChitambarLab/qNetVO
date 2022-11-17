@@ -14,21 +14,22 @@ def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
 
     .. math::
 
-        \\mathbf{P}_{Net} = \\sum_{x,y,z}P(z|x,y)|z\\rangle\\langle x,y|,
+        \\mathbf{P}_{Net} = \\sum_{\\{x_i\\}_i,y}P(y|\\{x_i\\}_i)|y\\rangle\\langle \\{x_i\\}_i|,
 
 
-    where :math:`P(z|x,y)` is evaluated by a qnode for each set of inputs
-    :math:`x` and :math:`y`.
+    where :math:`P(y|\\{x_i\\}_i)` is evaluated by a qnode for each set of inputs
+    :math:`\\{x_i\\}_i`.
+    The number of outputs :math:`y` is :math:`2^N` where :math:`N` is the number of qubits.
 
     A post-processing map :math:`\\mathbf{L}` may optionally be applied as
     :math:`\\mathbf{L}\\mathbf{P}_{Net}` where
 
     .. math::
 
-        \\mathbf{L} = \\sum_{z',z}P(z'|z)|z'\\rangle\\langle z|.
+        \\mathbf{L} = \\sum_{z,y}P(z|y)|z\\rangle\\langle y|.
 
 
-    In the above expression, :math:`z'` is a new output drawn from a new alphabet.
+    In the above expression, :math:`z` is a new output drawn from a new alphabet.
 
     :param network_ansatz: A class describing the particular quantum network.
     :type network_ansatz: NetworkAnsatz

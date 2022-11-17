@@ -3,12 +3,10 @@ from pennylane import math
 from pennylane import numpy as np
 from ..qnodes import joint_probs_qnode
 from ..information import shannon_entropy
-from ..utilities import mixed_base_num
+from ..utilities import mixed_base_num, ragged_reshape
 
 
-def mutual_info_cost_fn(
-    ansatz, priors, postmap=np.array([]), static_layer="measure", **qnode_kwargs
-):
+def mutual_info_cost_fn(ansatz, priors, postmap=np.array([]), **qnode_kwargs):
     """Constructs an ansatz-specific mutual information cost function.
 
     The mutual information quantifies the information shared by two distributions
@@ -37,10 +35,6 @@ def mutual_info_cost_fn(
                     quantum device into the measurement node outputs.
     :type postmap: np.array
 
-    :param static_layer: Either ``"prepare"`` or ``"measure"``, specifies which
-                         network layer is held constant over all inputs.
-    :type static_layer: String, default ``"measure"``.
-
     :param qnode_kwargs: Keyword arguments passed to the execute qnodes.
     :type qnode_kwargs: dictionary
 
@@ -49,16 +43,12 @@ def mutual_info_cost_fn(
     :rtype: Function
     """
 
-    num_prep_inputs = [prep_node.num_in for prep_node in ansatz.prepare_nodes]
-    num_prep_nodes = len(ansatz.prepare_nodes)
-
-    num_meas_inputs = [meas_node.num_in for meas_node in ansatz.measure_nodes]
-    num_meas_nodes = len(ansatz.measure_nodes)
-
-    num_inputs = num_prep_inputs if static_layer == "measure" else num_meas_inputs
-
-    net_num_in = math.prod(num_inputs)
-    node_input_ids = [mixed_base_num(i, num_inputs) for i in range(net_num_in)]
+    net_num_in = math.prod(ansatz.network_layers_total_num_in)
+    num_inputs_list = math.concatenate(ansatz.network_layers_node_num_in).tolist()
+    node_input_ids = [
+        ragged_reshape(mixed_base_num(i, num_inputs_list), ansatz.network_layers_num_nodes)
+        for i in range(net_num_in)
+    ]
 
     net_num_out = math.prod([meas_node.num_out for meas_node in ansatz.measure_nodes])
 
@@ -77,20 +67,11 @@ def mutual_info_cost_fn(
         Hxy = 0
         py_vec = np.zeros(net_num_out)
         for (i, input_id_set) in enumerate(node_input_ids):
+            settings = ansatz.qnode_settings(network_settings, input_id_set)
+            p_net = postmap @ probs_qnode(settings)
 
-            if static_layer == "measure":
-                prep_input_vals = input_id_set[0:num_prep_nodes]
-                meas_input_vals = [0] * num_meas_nodes
-            else:
-                prep_input_vals = [0] * num_prep_nodes
-                meas_input_vals = input_id_set[0:num_meas_nodes]
-
-            settings = ansatz.qnode_settings(network_settings, [prep_input_vals, meas_input_vals])
-
-            p_mac = postmap @ probs_qnode(settings)
-
-            Hxy += shannon_entropy(p_mac * px_vec[i])
-            py_vec += p_mac * px_vec[i]
+            Hxy += shannon_entropy(p_net * px_vec[i])
+            py_vec += p_net * px_vec[i]
 
         Hy = shannon_entropy(py_vec)
 
@@ -105,12 +86,12 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
     """Constructs an ansatz-specific Shannon entropy cost function
 
     The Shannon entropy characterizes the amount of randomness, or similarly, the amount of
-    information is present in a random variable. Formally, let :math:'X' be a discrete random
+    information is present in a random variable. Formally, let :math:`X` be a discrete random
     variable, then the Shannon entropy is defined by the expression:
 
     .. math::
 
-            H(X) = \\sum_{x} P(x) \\log_{2} P(x)
+            H(X) = -\\sum_{x} P(x) \\log_{2} P(x)
 
     In the case of a quantum network, the Shannon entropy is defined on the measurement outcome
     of the network ansatz.
@@ -125,15 +106,11 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
               the ansatz-specific network settings.
     :rtype: Function
     """
-    num_prep_nodes = len(ansatz.prepare_nodes)
-    num_meas_nodes = len(ansatz.measure_nodes)
-
+    static_inputs = [[0] * num_nodes for num_nodes in ansatz.network_layers_num_nodes]
     probs_qnode = joint_probs_qnode(ansatz, **qnode_kwargs)
 
     def cost(*network_settings):
-        settings = ansatz.qnode_settings(
-            network_settings, [[0] * num_prep_nodes, [0] * num_meas_nodes]
-        )
+        settings = ansatz.qnode_settings(network_settings, static_inputs)
         probs_vec = probs_qnode(settings)
 
         return shannon_entropy(probs_vec)
