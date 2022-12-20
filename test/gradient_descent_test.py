@@ -26,7 +26,7 @@ class TestGradientDescent:
 
         # tensor flow interface
         tf_opt_dict = qnet.gradient_descent(
-            cost, tf.Variable(settings), num_steps=50, step_size=0.1, verbose=False, interface="tf"
+            cost, [tf.Variable(2.0)], num_steps=50, step_size=0.1, verbose=False, interface="tf"
         )
 
         assert np.isclose(tf_opt_dict["opt_score"], 0, atol=1e-6)

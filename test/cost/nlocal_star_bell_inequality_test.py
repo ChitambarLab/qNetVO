@@ -108,7 +108,7 @@ class TestNlocalStar22CostFn:
 
         np.random.seed(45)
         opt_dict = qnet.gradient_descent(
-            qnet.nlocal_star_22_cost_fn(trilocal_star_ansatz, parallel=True, nthreads=nthreads),
+            qnet.nlocal_star_22_cost_fn(trilocal_star_ansatz, parallel=parallel_flag, nthreads=nthreads),
             trilocal_star_ansatz.rand_network_settings(),
             num_steps=8,
             step_size=2,

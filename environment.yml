@@ -8,6 +8,7 @@ dependencies:
   - pytest
   - notebook
   - matplotlib
+  - dask
   - pip
   - pip:
     - -r requirements.txt

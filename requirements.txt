@@ -1,6 +1,6 @@
-pennylane==0.27
+pennylane==0.28
 qiskit==0.34
 pennylane-qiskit==0.20
-dask[delayed]
+dask[complete]
 tensorflow>=2.0,<3.0
 tensornetwork>=0.3,<0.4
