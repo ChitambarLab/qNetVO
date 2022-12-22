@@ -33,6 +33,7 @@ class TestPrepareNode:
         assert prep_node.ansatz_fn == circuit
         assert prep_node.num_settings == 2
         assert prep_node.settings_dims == (3, 2)
+        assert prep_node.cc_wires_in == []
 
 
 class TestProcessingNode:
@@ -48,6 +49,7 @@ class TestProcessingNode:
         assert proc_node.ansatz_fn == circuit
         assert proc_node.num_settings == 2
         assert proc_node.settings_dims == (3, 2)
+        assert proc_node.cc_wires_in == []
 
 
 class TestMeasureNode:
@@ -64,6 +66,29 @@ class TestMeasureNode:
         assert measure_node.ansatz_fn == circuit
         assert measure_node.num_settings == 2
         assert measure_node.settings_dims == (3, 2)
+        assert measure_node.cc_wires_in == []
+
+class TestCCMeasureNode:
+    def test_init(self):
+        def circuit(settings, wires):
+            qml.CNOT(wires[0:2])
+            qml.Hadamard(wires[0])
+
+            bit_0 = qml.measure(wires[0])
+            bit_1 = qml.measure(wires[1])
+
+            return [bit_0, bit_1]
+
+        cc_wires_out = [1,2]
+        cc_measure_node = qnet.CCMeasureNode(1, [0,1], cc_wires_out, circuit, 0)
+
+        assert cc_measure_node.num_in == 1
+        assert cc_measure_node.wires == [0, 1]
+        assert cc_measure_node.cc_wires_out == [1, 2]
+        assert cc_measure_node.ansatz_fn == circuit
+        assert cc_measure_node.num_settings == 0
+        assert cc_measure_node.settings_dims == (1, 0)
+        assert cc_measure_node.cc_wires_in == []
 
 
 class TestNetworkAnsatz:
@@ -128,6 +153,10 @@ class TestNetworkAnsatz:
         assert network_ansatz.measure_wires.tolist() == [0, 1]
         assert network_ansatz.network_wires.tolist() == [0, 1, 2]
 
+        # verify cc_wires
+        assert network_ansatz.network_cc_wires.tolist() == []
+        assert network_ansatz.num_cc_wires == 0
+
         # verify device
         assert network_ansatz.dev_kwargs["name"] == "default.qubit"
         assert network_ansatz.dev.wires.tolist() == [0, 1, 2]
@@ -177,6 +206,10 @@ class TestNetworkAnsatz:
         assert noisy_network_ansatz.prepare_wires.tolist() == [0, 1, 2]
         assert noisy_network_ansatz.measure_wires.tolist() == [0, 1]
         assert noisy_network_ansatz.network_wires.tolist() == [0, 1, 2]
+
+        # verify cc_wires
+        assert network_ansatz.network_cc_wires.tolist() == []
+        assert network_ansatz.num_cc_wires == 0
 
         # verify device
         assert noisy_network_ansatz.dev_kwargs["name"] == "default.mixed"
@@ -303,7 +336,7 @@ class TestNetworkAnsatz:
 
         @qml.qnode(qml.device("default.qubit", wires=2))
         def test_circuit(settings):
-            qnet.NetworkAnsatz.circuit_layer_fn([node1, node2])(settings)
+            qnet.NetworkAnsatz.circuit_layer_fn([node1, node2])(settings, cc_wires=[])
 
             return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
@@ -315,7 +348,7 @@ class TestNetworkAnsatz:
 
         @qml.qnode(qml.device("default.mixed", wires=2))
         def noisy_test_circuit(settings):
-            qnet.NetworkAnsatz.circuit_layer_fn([noisy_node1, noisy_node2])(settings)
+            qnet.NetworkAnsatz.circuit_layer_fn([noisy_node1, noisy_node2])(settings, cc_wires=[])
 
             return qml.state()
 
