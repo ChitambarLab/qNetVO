@@ -15,21 +15,16 @@ class TestTeleportationOptimization:
         def circuit(settings, wires):
             qml.QubitStateVector(state_vec, wires=wires[0])
 
-        return qnetvo.PrepareNode(
-            num_in = 1,
-            wires = [0],
-            quantum_fn = circuit,
-            num_settings = 0
-        )
-    
+        return qnetvo.PrepareNode(num_in=1, wires=[0], quantum_fn=circuit, num_settings=0)
+
     # prep node for shared entanglement
     @property
     def ent_prep_node(self):
         return qnetvo.PrepareNode(
-            num_in = 1,
-            wires = [1, 2],
-            quantum_fn = qml.ArbitraryStatePreparation,
-            num_settings = 6,
+            num_in=1,
+            wires=[1, 2],
+            quantum_fn=qml.ArbitraryStatePreparation,
+            num_settings=6,
         )
 
     # locc measurement node
@@ -40,8 +35,6 @@ class TestTeleportationOptimization:
             # qml.Hadamard(wires=wires[0])
             qml.Rot(*settings[0:3], wires=wires[0])
 
-
-
             b0 = qml.measure(wires[0])
             b1 = qml.measure(wires[1])
 
@@ -49,14 +42,14 @@ class TestTeleportationOptimization:
 
         return [
             qnetvo.CCMeasureNode(
-                num_in = 1,
-                wires = [0, 1],
-                cc_wires_out = [0, 1],
-                quantum_fn = locc_circuit,
-                num_settings = 3,
+                num_in=1,
+                wires=[0, 1],
+                cc_wires_out=[0, 1],
+                quantum_fn=locc_circuit,
+                num_settings=3,
             ),
         ]
-    
+
     # teleportation output measurement node
     @property
     def measure_nodes(self):
@@ -68,22 +61,22 @@ class TestTeleportationOptimization:
 
         return [
             qnetvo.MeasureNode(
-                num_in = 1,
-                num_out = 2,
-                wires = [2],
-                quantum_fn = measure_circuit,
-                num_settings = 12,
-                cc_wires_in = [0, 1],
+                num_in=1,
+                num_out=2,
+                wires=[2],
+                quantum_fn=measure_circuit,
+                num_settings=12,
+                cc_wires_in=[0, 1],
             )
         ]
 
     # constructs a cost function that trains a teleportation protocol
     def cost_fn(self, input_states):
-        input_prep_nodes = [
-            self.input_prep_node(state) for state in input_states
-        ]
+        input_prep_nodes = [self.input_prep_node(state) for state in input_states]
         ansatzes = [
-            qnetvo.NetworkAnsatz([node, self.ent_prep_node], self.cc_measure_nodes, self.measure_nodes)
+            qnetvo.NetworkAnsatz(
+                [node, self.ent_prep_node], self.cc_measure_nodes, self.measure_nodes
+            )
             for node in input_prep_nodes
         ]
 
@@ -109,20 +102,19 @@ class TestTeleportationOptimization:
                 rho_target = np.outer(input_state, input_state.conj())
 
                 cost_val -= qml.math.fidelity(rho, rho_target)
-            
+
             return cost_val / len(teleport_circuits)
-        
+
         return cost
 
-
     def test_teleportation_optimization(self):
-        
+
         # setting up optimization
         training_states = [
-            np.array([1,0]),
-            np.array([1,1])/np.sqrt(2),
-            np.array([1,-1])/np.sqrt(2),
-            np.array([1,1j])/np.sqrt(2)
+            np.array([1, 0]),
+            np.array([1, 1]) / np.sqrt(2),
+            np.array([1, -1]) / np.sqrt(2),
+            np.array([1, 1j]) / np.sqrt(2),
         ]
 
         training_cost = self.cost_fn(training_states)
@@ -131,7 +123,7 @@ class TestTeleportationOptimization:
         init_settings = qnetvo.NetworkAnsatz(
             [self.input_prep_node(training_states[0]), self.ent_prep_node],
             self.cc_measure_nodes,
-            self.measure_nodes
+            self.measure_nodes,
         ).rand_network_settings()
 
         # optimizing teleportation protocol
@@ -141,7 +133,7 @@ class TestTeleportationOptimization:
             step_size=3.1,
             num_steps=90,
             sample_width=90,
-            verbose=False
+            verbose=False,
         )
 
         # generating new random states to test teleportation protocol

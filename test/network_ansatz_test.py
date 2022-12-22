@@ -68,6 +68,7 @@ class TestMeasureNode:
         assert measure_node.settings_dims == (3, 2)
         assert measure_node.cc_wires_in == []
 
+
 class TestCCMeasureNode:
     def test_init(self):
         def circuit(settings, wires):
@@ -79,8 +80,8 @@ class TestCCMeasureNode:
 
             return [bit_0, bit_1]
 
-        cc_wires_out = [1,2]
-        cc_measure_node = qnet.CCMeasureNode(1, [0,1], cc_wires_out, circuit, 0)
+        cc_wires_out = [1, 2]
+        cc_measure_node = qnet.CCMeasureNode(1, [0, 1], cc_wires_out, circuit, 0)
 
         assert cc_measure_node.num_in == 1
         assert cc_measure_node.wires == [0, 1]
