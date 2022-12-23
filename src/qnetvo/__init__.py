@@ -1,12 +1,13 @@
 from .version import __version__
-from qnetvo.utilities import *
-from qnetvo.network_ansatz import *
-from qnetvo.ansatz_library import *
-from qnetvo.qnodes import *
-from qnetvo.postprocessing import *
-from qnetvo.information import *
-from qnetvo.gradient_descent import *
-from qnetvo.cost import *
+from .utilities import *
+from .network_nodes import *
+from .network_ansatz import *
+from .ansatz_library import *
+from .qnodes import *
+from .postprocessing import *
+from .information import *
+from .gradient_descent import *
+from .cost import *
 
 # adding the quantum channels to "default.mixed" device
 from pennylane.devices import DefaultMixed

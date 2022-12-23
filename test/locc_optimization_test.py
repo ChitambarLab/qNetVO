@@ -15,7 +15,7 @@ class TestTeleportationOptimization:
         def circuit(settings, wires):
             qml.QubitStateVector(state_vec, wires=wires[0])
 
-        return qnetvo.PrepareNode(num_in=1, wires=[0], quantum_fn=circuit, num_settings=0)
+        return qnetvo.PrepareNode(num_in=1, wires=[0], ansatz_fn=circuit, num_settings=0)
 
     # prep node for shared entanglement
     @property
@@ -23,7 +23,7 @@ class TestTeleportationOptimization:
         return qnetvo.PrepareNode(
             num_in=1,
             wires=[1, 2],
-            quantum_fn=qml.ArbitraryStatePreparation,
+            ansatz_fn=qml.ArbitraryStatePreparation,
             num_settings=6,
         )
 
@@ -45,7 +45,7 @@ class TestTeleportationOptimization:
                 num_in=1,
                 wires=[0, 1],
                 cc_wires_out=[0, 1],
-                quantum_fn=locc_circuit,
+                ansatz_fn=locc_circuit,
                 num_settings=3,
             ),
         ]
@@ -64,7 +64,7 @@ class TestTeleportationOptimization:
                 num_in=1,
                 num_out=2,
                 wires=[2],
-                quantum_fn=measure_circuit,
+                ansatz_fn=measure_circuit,
                 num_settings=12,
                 cc_wires_in=[0, 1],
             )

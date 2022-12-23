@@ -2,125 +2,7 @@ import pennylane as qml
 from pennylane import numpy as np
 from pennylane import math
 
-
-class NoiseNode:
-    """A class that configures each noise node in the quantum network.
-
-    :param wires: A list of wires on which the node operates.
-    :type wires: array[int]
-
-    :param quantum_fn: A PennyLane quantum function which accepts as input the
-        positional arguments ``(settings, wires)`` where settings is an *array[float]*
-        of length ``num_settings``.
-    :type quantum_fn: function
-
-    :returns: An instantiated ``NoiseNode`` class.
-    """
-
-    def __init__(self, wires, quantum_fn):
-        self.wires = wires
-        self.ansatz_fn = quantum_fn
-        self.num_settings = 0
-        self.num_in = 1
-        self.cc_wires_in = []
-
-    def fn(self, settings, cc_wires):
-        self.ansatz_fn(settings, self.wires)
-
-
-class ProcessingNode(NoiseNode):
-    """A class that configures each processing node in the quantum network.
-
-    :param num_in: The number of classical inputs for the node.
-    :type num_in: int
-
-    :param wires: A list of wires on which the node operates.
-    :type wires: array[int]
-
-    :param quantum_fn: A PennyLane quantum function which accepts as input the
-        positional arguments ``(settings, wires)`` where settings is an *array[float]*
-        of length ``num_settings``.
-    :type quantum_fn: function
-
-    :param num_settings: The number of settings that the quantum function accepts.
-    :type num_settings: int
-
-    :returns: An instantiated ``ProcessingNode`` class.
-    """
-
-    def __init__(self, num_in, wires, quantum_fn, num_settings, cc_wires_in=[]):
-        super().__init__(wires, quantum_fn)
-        self.num_in = num_in
-        self.num_settings = num_settings
-        self.cc_wires_in = cc_wires_in
-        self.settings_dims = (num_in, num_settings)
-
-    def fn(self, settings, cc_wires):
-        args = [settings, self.wires]
-        if cc_wires:
-            args += [cc_wires]
-
-        return self.ansatz_fn(*args)
-
-
-class PrepareNode(ProcessingNode):
-    """A class that configures each preparation node in the quantum network.
-
-    :param num_in: The number of classical inputs for the node.
-    :type num_in: int
-
-    :param wires: A list of wires on which the node operates.
-    :type wires: array[int]
-
-    :param quantum_fn: A PennyLane quantum function which accepts as input the
-        positional arguments ``(settings, wires)``, where settings is an *array[float]*
-        of length ``num_settings``.
-    :type quantum_fn: function
-
-    :param num_settings: The number of settings that the quantum function accepts.
-    :type num_settings: int
-
-    :returns: An instantiated ``PrepareNode`` class.
-    """
-
-    def __init__(self, num_in, wires, quantum_fn, num_settings, cc_wires_in=[]):
-        super().__init__(num_in, wires, quantum_fn, num_settings, cc_wires_in)
-
-
-class MeasureNode(ProcessingNode):
-    """A class that configures each measurement node in the quantum network.
-
-    :param num_in: The number of classical inputs for the node.
-    :type num_in: int
-
-    :param num_out: The number of classical outputs for the node.
-    :type num_out: int
-
-    :param wires: A list of wires on which the node operates.
-    :type wires: array[int]
-
-    :param quantum_fn: A PennyLane quantum function that accepts as input the
-        positional arguments ``(settings, wires)`` where settings is an *array[float]*
-        of length ``num_settings``.
-    :type quantum_fn: function
-
-    :param num_settings: The number of settings that the quantum function accepts.
-    :type num_settings: int
-
-    :returns: An instantiated ``MeasureNode`` class.
-    """
-
-    def __init__(self, num_in, num_out, wires, quantum_fn, num_settings, cc_wires_in=[]):
-        super().__init__(num_in, wires, quantum_fn, num_settings, cc_wires_in)
-        self.num_out = num_out
-
-
-class CCMeasureNode(ProcessingNode):
-    """ """
-
-    def __init__(self, num_in, wires, cc_wires_out, quantum_fn, num_settings, cc_wires_in=[]):
-        super().__init__(num_in, wires, quantum_fn, num_settings, cc_wires_in)
-        self.cc_wires_out = cc_wires_out
+from .network_nodes import *
 
 
 class NetworkAnsatz:
@@ -382,11 +264,11 @@ class NetworkAnsatz:
                 cc_wires_in = [cc_wires[i] for i in node.cc_wires_in]
 
                 if isinstance(node, CCMeasureNode):
-                    cc_out = node.fn(node_settings, cc_wires_in)
+                    cc_out = node(node_settings, cc_wires_in)
                     for i in range(len(cc_out)):
                         cc_wires[node.cc_wires_out[i]] = cc_out[i]
                 else:
-                    node.fn(node_settings, cc_wires_in)
+                    node(node_settings, cc_wires_in)
 
                 start_id = end_id
 

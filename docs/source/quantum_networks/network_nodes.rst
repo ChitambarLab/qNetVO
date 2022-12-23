@@ -5,15 +5,20 @@ Network Nodes
 
 A quantum network is constructed from a collection of quantum devices serving
 as nodes in the network.
-A network node performs a quantum operation on its local set of qubits.
-The applied operation can be conditioned upon a classical input. 
+Each network node operates on its local set of qubits.
+Each node's operation can be conditioned upon both classical inputs and
+the measurement results of other nodes in the network. 
+
+.. autoclass:: NetworkNode
+	:members:
 
 Network nodes are categorized by their function:
 
-* **Prepare Node:** Initializes a quantum state on the local wires. 
-* **Processing Node:** Applies a quantum operation on its local wires.
-* **Noise Node:** Applies a static "noisy" operation to the local wires.
-* **Measure Node:** Performs a measurement operation on the local wires and outputs a classical value.
+* **Prepare Node:** Initializes a quantum state on the local qubits. 
+* **Processing Node:** Applies an operation to its local qubits.
+* **Noise Node:** Applies noise to the local qubits.
+* **Measure Node:** Measures local qubits and outputs a classical value.
+* **CC Measure Node:** Measures local qubits and communicates the result to other nodes.
 
 Prepare Nodes
 -------------
