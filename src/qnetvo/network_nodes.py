@@ -4,8 +4,17 @@ class NetworkNode:
     :param num_in: The number of discrete classical inputs that the node accepts.
     :type num_in: int
 
+    :param num_out: The number of classical outputs for the node.
+    :type num_out: int
+
     :param wires: The wires on which the node operates.
     :type wires: list[int]
+
+    :param cc_wires_in: The classical communication wires input to the node.
+    :type cc_wires_in: list[int]
+
+    :param cc_wires_out: The classical communication wires to output measurement results on.
+    :type cc_wires_out: list[int]
 
     :param ansatz_fn: A `PennyLane quantum circuit function <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`_
         called either as ``circuit(settings, wires)``, or as ``circuit(settings, wires, cc_wires)`` where
@@ -15,9 +24,6 @@ class NetworkNode:
 
     :param num_settings: The number of settings parameterizing the ``ansatz_fn`` circuit.
     :type num_settings: int
-
-    :param cc_wires_in: The classical communication wires input to the node.
-    :type cc_wires_in: list[int]
 
     :returns: An instance of the ``NetworkNode`` class.
 
@@ -33,38 +39,49 @@ class NetworkNode:
     is stored as ``node.num_in``.
     """
 
-    def __init__(self, num_in, wires, ansatz_fn, num_settings, cc_wires_in=[]):
-        self.wires = wires
+    def __init__(
+        self,
+        num_in=1,
+        num_out=1,
+        wires=[],
+        cc_wires_in=[],
+        cc_wires_out=[],
+        ansatz_fn=None,
+        num_settings=0,
+    ):
         self.num_in = num_in
-        self.ansatz_fn = ansatz_fn
-        self.num_settings = num_settings
-        self.cc_wires_in = cc_wires_in
+        self.num_out = num_out
 
-    def __call__(self, settings, cc_wires=[]):
+        self.wires = wires
+        self.cc_wires_in = cc_wires_in
+        self.cc_wires_out = cc_wires_out
+
+        self.ansatz_fn = ansatz_fn if ansatz_fn else self.default_ansatz_fn
+        self.num_settings = num_settings
+
+    def __call__(self, settings=[], cc_wires=[]):
         args = [settings, self.wires]
         if cc_wires:
             args += [cc_wires]
 
         return self.ansatz_fn(*args)
 
+    def default_ansatz_fn(self, settings, wires, cc_wires=[]):
+        pass
+
 
 class NoiseNode(NetworkNode):
     """A network node that applies noise to its local qubit wires.
 
-    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
-
     We model noise to be independent from classical inputs and upstream measurement results.
-    Thus, the following class attributes are set as:
-
-    * ``noise_node.num_in == 1``
-    * ``noise_node.num_settings == 0``
-    * ``noise_node.cc_wires_in == []``
+    Therefore, only the ``wires`` and ``ansatz_fn`` attributes can be set.
+    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
     :returns: An instantiated ``NoiseNode`` class.
     """
 
-    def __init__(self, wires, ansatz_fn):
-        super().__init__(num_in=1, wires=wires, ansatz_fn=ansatz_fn, num_settings=0, cc_wires_in=[])
+    def __init__(self, wires=[], ansatz_fn=None):
+        super().__init__(wires=wires, ansatz_fn=ansatz_fn)
 
 
 class ProcessingNode(NetworkNode):
@@ -76,7 +93,14 @@ class ProcessingNode(NetworkNode):
     :returns: An instantiated ``ProcessingNode`` class.
     """
 
-    pass
+    def __init__(self, num_in=1, wires=[], ansatz_fn=None, num_settings=0, cc_wires_in=[]):
+        super().__init__(
+            num_in=num_in,
+            wires=wires,
+            cc_wires_in=cc_wires_in,
+            ansatz_fn=ansatz_fn,
+            num_settings=num_settings,
+        )
 
 
 class PrepareNode(ProcessingNode):
@@ -98,15 +122,20 @@ class MeasureNode(NetworkNode):
     All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
     In addition, the number of classical outputs are specified.
 
-    :param num_out: The number of classical outputs for the node.
-    :type num_out: int
-
     :returns: An instantiated ``MeasureNode`` class.
     """
 
-    def __init__(self, num_in, num_out, wires, ansatz_fn, num_settings, cc_wires_in=[]):
-        super().__init__(num_in, wires, ansatz_fn, num_settings, cc_wires_in)
-        self.num_out = num_out
+    def __init__(
+        self, num_in=1, num_out=1, wires=[], ansatz_fn=None, num_settings=0, cc_wires_in=[]
+    ):
+        super().__init__(
+            num_in=num_in,
+            num_out=num_out,
+            wires=wires,
+            ansatz_fn=ansatz_fn,
+            num_settings=num_settings,
+            cc_wires_in=cc_wires_in,
+        )
 
 
 class CCMeasureNode(NetworkNode):
@@ -117,12 +146,17 @@ class CCMeasureNode(NetworkNode):
     In addition, the classical communication output wires are specified.
     These wires store the results of mid-circuit measurements.
 
-    :param cc_wires_out: The classical communication wires to output measurement results on.
-    :type cc_wires_out: list[int]
-
     :returns: An instantiated ``MeasureNode`` class.
     """
 
-    def __init__(self, num_in, wires, cc_wires_out, ansatz_fn, num_settings, cc_wires_in=[]):
-        super().__init__(num_in, wires, ansatz_fn, num_settings, cc_wires_in)
-        self.cc_wires_out = cc_wires_out
+    def __init__(
+        self, num_in=1, wires=[], cc_wires_out=[], ansatz_fn=None, num_settings=0, cc_wires_in=[]
+    ):
+        super().__init__(
+            num_in=num_in,
+            wires=wires,
+            ansatz_fn=ansatz_fn,
+            num_settings=num_settings,
+            cc_wires_in=cc_wires_in,
+            cc_wires_out=cc_wires_out,
+        )

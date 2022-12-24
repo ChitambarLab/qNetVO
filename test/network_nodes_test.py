@@ -19,10 +19,12 @@ def test_network_node():
     assert isinstance(node, qnetvo.NetworkNode)
 
     assert node.num_in == 2
+    assert node.num_out == 1
     assert node.wires == [0, 1]
+    assert node.cc_wires_in == [4]
+    assert node.cc_wires_out == []
     assert node.ansatz_fn == circuit
     assert node.num_settings == 15
-    assert node.cc_wires_in == [4]
 
     mock_measurement = qml.measurements.MeasurementValue(["12345678"], lambda v: v)
     mock_settings = list(range(15))
@@ -36,6 +38,28 @@ def test_network_node():
     assert tape.get_parameters() == []
 
 
+def test_network_node_defaults():
+    node = qnetvo.NetworkNode()
+
+    assert isinstance(node, qnetvo.NetworkNode)
+
+    assert node.num_in == 1
+    assert node.num_out == 1
+    assert node.wires == []
+    assert node.cc_wires_in == []
+    assert node.cc_wires_out == []
+    assert node.num_settings == 0
+    assert node.ansatz_fn == node.default_ansatz_fn
+
+    with qml.tape.QuantumTape() as tape:
+        node()
+
+    assert len(tape) == 0
+    assert tape.wires.tolist() == []
+    assert tape.num_params == 0
+    assert tape.get_parameters() == []
+
+
 def test_noise_node():
     def circuit(settings, wires):
         qml.AmplitudeDamping(0.7, wires[0])
@@ -45,9 +69,11 @@ def test_noise_node():
 
     assert noise_node.wires == [0, 1]
     assert noise_node.ansatz_fn == circuit
-    assert noise_node.num_in == 1
     assert noise_node.num_settings == 0
+    assert noise_node.num_in == 1
+    assert noise_node.num_out == 1
     assert noise_node.cc_wires_in == []
+    assert noise_node.cc_wires_out == []
 
     with qml.tape.QuantumTape() as tape:
         noise_node([])
@@ -68,10 +94,12 @@ def test_processing_node():
     assert isinstance(proc_node, qnetvo.ProcessingNode)
 
     assert proc_node.num_in == 3
+    assert proc_node.num_out == 1
     assert proc_node.wires == [0, 1]
     assert proc_node.ansatz_fn == circuit
     assert proc_node.num_settings == 2
     assert proc_node.cc_wires_in == []
+    assert proc_node.cc_wires_out == []
 
     with qml.tape.QuantumTape() as tape:
         proc_node([0.5, 0.6])
@@ -91,10 +119,12 @@ def test_prepare_node():
     assert isinstance(prep_node, qnetvo.PrepareNode)
 
     assert prep_node.num_in == 4
+    assert prep_node.num_out == 1
     assert prep_node.wires == [2, 3]
     assert prep_node.ansatz_fn == circuit
     assert prep_node.num_settings == 6
     assert prep_node.cc_wires_in == []
+    assert prep_node.cc_wires_out == []
 
     with qml.tape.QuantumTape() as tape:
         prep_node([0, 0.1, 0.2, 0.3, 0.4, 0.5])
@@ -120,6 +150,7 @@ def test_measure_node():
     assert meas_node.ansatz_fn == circuit
     assert meas_node.num_settings == 2
     assert meas_node.cc_wires_in == []
+    assert meas_node.cc_wires_out == []
 
     with qml.tape.QuantumTape() as tape:
         meas_node([0.1, 0.5])
@@ -152,6 +183,7 @@ def test_cc_measure_node():
     assert cc_meas_node.ansatz_fn == circuit
     assert cc_meas_node.num_settings == 0
     assert cc_meas_node.cc_wires_in == []
+    assert cc_meas_node.num_out == 1
 
     with qml.tape.QuantumTape() as tape:
         cc_meas_node([])
@@ -160,61 +192,3 @@ def test_cc_measure_node():
     assert tape.wires.tolist() == [0, 1]
     assert tape.num_params == 0
     assert tape.get_parameters() == []
-
-
-# class TestNoiseNode:
-#     def test_init(self):
-#         def circuit(settings, wires=[0, 1]):
-#             qml.AmplitudeDamping(0.7, wires=[0])
-#             qml.AmplitudeDamping(0.3, wires=[1])
-
-#         noise_node = qnet.NoiseNode([0, 1], circuit)
-
-#         assert noise_node.wires == [0, 1]
-#         assert noise_node.ansatz_fn == circuit
-#         assert noise_node.num_in == 1
-#         assert noise_node.num_settings == 0
-
-
-# @pytest.fixture
-# def base_node_kwargs():
-#     return {
-#         "num_in":2,
-#         "wires":[0,1],
-#         "ansatz_fn" : lambda settings, wires, cc_wires: qml.cond(cc_wires[0], qml.ArbitraryUnitary(*settings, wires=wires)),
-#         "num_settings" : 15,
-#         "cc_wires_in" : [4],
-#     }
-
-# @pytest.fixture
-# def base_node2_kwargs():
-#     return {
-#         "num_in": 1,
-#         "wires": [0],
-#         "ansatz_fn" : lambda settings, wires: qml.Rot(*settings, wires),
-#         "num_settings": 3,
-#         "cc_wires_in":[],
-#     }
-
-# @pytest.fixture
-# def base_node(base_node_kwargs):
-#     return qnetvo.NetworkNode(**base_node_kwargs)
-
-# @pytest.fixture
-# def base_node2(base_node2_kwargs):
-#     return qnetvo.NetworkNode(**base_node2_kwargs)
-
-
-# @pytest.mark.parametrize(
-#     "node_class, node_kwargs",
-#     [
-#         (base_node_kwargs, base_node),
-#         (base_node2_kwargs, base_node2),
-#     ],
-#     indirect=True
-# )
-# def test_network_node(node_class, node_kwargs):
-
-#     assert isinstance(node, qnetvo.NetworkNode)
-
-#     assert node.num_in == node_kwargs["num_in"]
