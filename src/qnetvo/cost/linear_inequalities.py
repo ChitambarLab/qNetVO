@@ -47,14 +47,14 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
 
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
 
-    net_num_in = math.prod(network_ansatz.network_layers_total_num_in)
-    num_inputs_list = math.concatenate(network_ansatz.network_layers_node_num_in).tolist()
+    net_num_in = math.prod(network_ansatz.layers_total_num_in)
+    num_inputs_list = math.concatenate(network_ansatz.layers_node_num_in).tolist()
     node_input_ids = [
-        ragged_reshape(mixed_base_num(i, num_inputs_list), network_ansatz.network_layers_num_nodes)
+        ragged_reshape(mixed_base_num(i, num_inputs_list), network_ansatz.layers_num_nodes)
         for i in range(net_num_in)
     ]
 
-    raw_net_num_out = 2 ** len(network_ansatz.measure_wires)
+    raw_net_num_out = 2 ** len(network_ansatz.layers_wires[-1])
 
     game_outputs, game_inputs = game.shape
 

@@ -35,11 +35,9 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     :returns: A function callable as ``I22(*network_settings)`` that evaluates the :math:`I_{22,n}` quantity.
     :rtype: function
     """
-    n = len(network_ansatz.prepare_nodes)
+    n = len(network_ansatz.layers[0])
 
-    static_prep_inputs = [
-        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
-    ]
+    static_prep_inputs = [[0] * len(layer_nodes) for layer_nodes in network_ansatz.layers[0:-1]]
     network_input_x_vals = [
         static_prep_inputs + [[int(bit) for bit in np.binary_repr(x, width=n) + "0"]]
         for x in range(2**n)
@@ -116,11 +114,9 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
     :rtype: function
     """
 
-    n = len(network_ansatz.prepare_nodes)
+    n = len(network_ansatz.layers[0])
 
-    static_prep_inputs = [
-        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
-    ]
+    static_prep_inputs = [[0] * len(layer_nodes) for layer_nodes in network_ansatz.layers[0:-1]]
     network_input_x_vals = [
         static_prep_inputs + [[int(bit) for bit in np.binary_repr(x, width=n) + "1"]]
         for x in range(2**n)
@@ -205,7 +201,7 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_k
     :rtype: function
     """
 
-    n = len(network_ansatz.prepare_nodes)
+    n = len(network_ansatz.layers[0])
 
     I22 = star_I22_fn(network_ansatz, parallel=parallel, nthreads=nthreads, **qnode_kwargs)
     J22 = star_J22_fn(network_ansatz, parallel=parallel, nthreads=nthreads, **qnode_kwargs)
@@ -255,7 +251,7 @@ def parallel_nlocal_star_grad_fn(network_ansatz, nthreads=4, natural_grad=False,
 
     from ..lazy_dask_import import dask
 
-    n = len(network_ansatz.prepare_nodes)
+    n = len(network_ansatz.layers[0])
 
     star_qnodes = [
         global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(nthreads)
@@ -264,9 +260,7 @@ def parallel_nlocal_star_grad_fn(network_ansatz, nthreads=4, natural_grad=False,
     I22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "0"] for x in range(2**n)]
     J22_x_vals = [[int(bit) for bit in np.binary_repr(x, width=n) + "1"] for x in range(2**n)]
 
-    static_prep_inputs = [
-        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
-    ]
+    static_prep_inputs = [[0] * len(layer_nodes) for layer_nodes in network_ansatz.layers[0:-1]]
 
     I22 = star_I22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)
     J22 = star_J22_fn(network_ansatz, parallel=True, nthreads=nthreads, **qnode_kwargs)

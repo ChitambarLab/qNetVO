@@ -43,16 +43,13 @@ def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
               behavior matrix for a given set of settings.
     :rtype: function
     """
-    num_in_prep_nodes = [node.num_in for node in network_ansatz.prepare_nodes]
-    num_in_meas_nodes = [node.num_in for node in network_ansatz.measure_nodes]
-
-    num_out_meas_nodes = [node.num_out for node in network_ansatz.measure_nodes]
+    num_in_prep_nodes = [node.num_in for node in network_ansatz.layers[0]]
+    num_in_meas_nodes = [node.num_in for node in network_ansatz.layers[-1]]
 
     base_digits = num_in_prep_nodes + num_in_meas_nodes
     net_num_in = math.prod(base_digits)
-    net_num_out = math.prod(num_out_meas_nodes)
 
-    raw_net_num_out = 2 ** len(network_ansatz.measure_wires)
+    raw_net_num_out = 2 ** len(network_ansatz.layers_wires[-1])
 
     has_postmap = len(postmap) != 0
     if has_postmap:
