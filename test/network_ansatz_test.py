@@ -19,70 +19,101 @@ def chsh_ansatz():
 
 
 @pytest.fixture
-def noisy_prep_meas_ansatz():
+def ex_network_ansatz():
     circuit = lambda settings, wires: qml.RY(settings[0], wires=wires[0])
     noise = lambda settings, wires: qml.DepolarizingChannel(0.5 * 3 / 4, wires=wires[0])
+    cc_meas = lambda settings, wires: [qml.measure(wires[0])]
+    cond_circ = lambda settings, wires, classical_wires: qml.cond(classical_wires[0], qml.PauliX)(
+        wires[0]
+    )
 
     prepare_nodes = [
         qnetvo.PrepareNode(1, [0], circuit, 1),
         qnetvo.PrepareNode(1, [1], circuit, 1),
         qnetvo.PrepareNode(1, [2], circuit, 1),
     ]
+    cc_measure_nodes = [qnetvo.CCMeasureNode(2, [3], [0], cc_meas, 0)]
     noise_nodes = [
         qnetvo.NoiseNode([1], noise),
         qnetvo.NoiseNode([2], noise),
     ]
+    processing_nodes = [qnetvo.ProcessingNode(1, [0], cond_circ, 0, cc_wires_in=[0])]
     measure_nodes = [
-        qnetvo.MeasureNode(1, 2, [0], circuit, 1),
-        qnetvo.MeasureNode(1, 2, [1], circuit, 1),
+        qnetvo.MeasureNode(3, 2, [0], circuit, 1),
+        qnetvo.MeasureNode(2, 2, [1], circuit, 1),
     ]
 
     return qnetvo.NetworkAnsatz(
-        prepare_nodes, noise_nodes, measure_nodes, dev_kwargs={"name": "default.mixed"}
+        prepare_nodes,
+        cc_measure_nodes,
+        noise_nodes,
+        processing_nodes,
+        measure_nodes,
+        dev_kwargs={"name": "default.mixed"},
     )
 
 
-def test_network_ansatz_init_attributes(noisy_prep_meas_ansatz):
+def test_network_ansatz_init_attributes(ex_network_ansatz):
     # verify network layers
-    assert len(noisy_prep_meas_ansatz.layers) == 3
-    assert all([isinstance(node, qnetvo.PrepareNode) for node in noisy_prep_meas_ansatz.layers[0]])
-    assert all([isinstance(node, qnetvo.NoiseNode) for node in noisy_prep_meas_ansatz.layers[1]])
-    assert all([isinstance(node, qnetvo.MeasureNode) for node in noisy_prep_meas_ansatz.layers[2]])
+    assert len(ex_network_ansatz.layers) == 5
+    assert all([isinstance(node, qnetvo.PrepareNode) for node in ex_network_ansatz.layers[0]])
+    assert all([isinstance(node, qnetvo.CCMeasureNode) for node in ex_network_ansatz.layers[1]])
+    assert all([isinstance(node, qnetvo.NoiseNode) for node in ex_network_ansatz.layers[2]])
+    assert all([isinstance(node, qnetvo.ProcessingNode) for node in ex_network_ansatz.layers[3]])
+    assert all([isinstance(node, qnetvo.MeasureNode) for node in ex_network_ansatz.layers[4]])
 
-    assert noisy_prep_meas_ansatz.layers_num_settings == [3, 0, 2]
-    assert noisy_prep_meas_ansatz.layers_total_num_in == [1, 1, 1]
+    assert ex_network_ansatz.layers_num_settings == [3, 0, 0, 0, 2]
+    assert ex_network_ansatz.layers_total_num_in == [1, 2, 1, 1, 6]
 
-    assert noisy_prep_meas_ansatz.layers_node_num_in == [[1, 1, 1], [1, 1], [1, 1]]
-    assert noisy_prep_meas_ansatz.layers_num_nodes == [3, 2, 2]
+    assert ex_network_ansatz.layers_node_num_in == [[1, 1, 1], [2], [1, 1], [1], [3, 2]]
+    assert ex_network_ansatz.layers_num_nodes == [3, 1, 2, 1, 2]
 
     # verify network wires
-    assert len(noisy_prep_meas_ansatz.layers_wires) == 3
-    assert noisy_prep_meas_ansatz.layers_wires[0].tolist() == [0, 1, 2]
-    assert noisy_prep_meas_ansatz.layers_wires[1].tolist() == [1, 2]
-    assert noisy_prep_meas_ansatz.layers_wires[2].tolist() == [0, 1]
+    assert len(ex_network_ansatz.layers_wires) == 5
+    assert ex_network_ansatz.layers_wires[0].tolist() == [0, 1, 2]
+    assert ex_network_ansatz.layers_wires[1].tolist() == [3]
+    assert ex_network_ansatz.layers_wires[2].tolist() == [1, 2]
+    assert ex_network_ansatz.layers_wires[3].tolist() == [0]
+    assert ex_network_ansatz.layers_wires[4].tolist() == [0, 1]
 
-    assert noisy_prep_meas_ansatz.network_wires.tolist() == [0, 1, 2]
+    assert ex_network_ansatz.network_wires.tolist() == [0, 1, 2, 3]
 
     # verify cc_wires
-    assert noisy_prep_meas_ansatz.network_cc_wires.tolist() == []
-    assert noisy_prep_meas_ansatz.num_cc_wires == 0
+    assert ex_network_ansatz.network_cc_wires.tolist() == [0]
+    assert ex_network_ansatz.num_cc_wires == 1
+
+    assert ex_network_ansatz.layers_cc_wires_in[0].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires_in[1].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires_in[2].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires_in[3].tolist() == [0]
+    assert ex_network_ansatz.layers_cc_wires_in[4].tolist() == []
+
+    assert ex_network_ansatz.layers_cc_wires_out[0].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires_out[1].tolist() == [0]
+    assert ex_network_ansatz.layers_cc_wires_out[2].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires_out[3].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires_out[4].tolist() == []
 
     # verify parameter partitions
-    assert noisy_prep_meas_ansatz.parameter_partitions == [
+
+    print(ex_network_ansatz.parameter_partitions)
+    assert ex_network_ansatz.parameter_partitions == [
         [[(0, 1)], [(1, 2)], [(2, 3)]],
+        [[(3, 3), (3, 3)]],
         [[(3, 3)], [(3, 3)]],
-        [[(3, 4)], [(4, 5)]],
+        [[(3, 3)]],
+        [[(3, 4), (4, 5), (5, 6)], [(6, 7), (7, 8)]],
     ]
 
     # verify device
-    assert noisy_prep_meas_ansatz.dev_kwargs["name"] == "default.mixed"
-    assert noisy_prep_meas_ansatz.dev.wires.tolist() == [0, 1, 2]
-    assert noisy_prep_meas_ansatz.dev.short_name == "default.mixed"
+    assert ex_network_ansatz.dev_kwargs["name"] == "default.mixed"
+    assert ex_network_ansatz.dev.wires.tolist() == [0, 1, 2, 3]
+    assert ex_network_ansatz.dev.short_name == "default.mixed"
 
     # verify qnode construction and execution
-    @qml.qnode(noisy_prep_meas_ansatz.dev)
+    @qml.qnode(ex_network_ansatz.dev)
     def noisy_test_circuit(settings):
-        noisy_prep_meas_ansatz.fn(settings)
+        ex_network_ansatz.fn(settings)
 
         return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
