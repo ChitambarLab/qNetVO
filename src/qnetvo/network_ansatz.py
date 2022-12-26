@@ -6,30 +6,34 @@ from .network_nodes import *
 
 
 class NetworkAnsatz:
-    """The ``NetworkAnsatz`` class describes a parameterized quantum prepare and measure network.
-    The ansatz is constructed from a prepare layer and a measure layer.
-    The prepare layer is a collection of unitaries which prepare quantum states while the
-    measure layer is a collection of unitaries which encode the measurement basis.
-    These layers are constructed from the ``prepare_nodes`` and ``measure_nodes`` inputs respectively.
+    """The ``NetworkAnsatz`` class describes a parameterized quantum network.
 
-    :param layers: Positional arguments each being a list of nodes designating a circuit layer.
-                           The first layer must contain ``PrepareNode`` classes while the last layer must
-                           contain ``MeasureNode`` classes.
-                           Intermediate layers can contain either ``NoiseNode`` or ``ProcessingNode`` classes,
-                           but all elements must be the same type.
-    :type layers: list[list[NetworkNode]]
+    :param layers: Each layer represents a chronological step in the network simulation.
+                   The nodes in each layer apply their operations in parallel where no two nodes can
+                   operate on the same wire.
+    :type layers: list[list[:class:`qnetvo.NetworkNode`]]
 
     :param dev_kwargs: Keyword arguments for the `pennylane.device`_ function.
-    :type dev_kwargs: *optional* dict
+    :type dev_kwargs: *optional* dictionary
 
     .. _pennylane.device: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.device.html?highlight=device#qml-device
 
-    :returns: An instantiated ``NetworkAnsatz`` class with the following attributes:
+    :returns: An instantiated ``NetworkAnsatz``.
+
+    There are some conventions that should be followed when defining network layers:
+
+    1. The first layer should contain all :class:`qnetvo.PrepareNode` s in the network.
+    2. The last layer should contain all :class:`qnetvo.MeasureNode` s in the network.
+    3. If classical communication is conisdered, then a :class:`qnetvo.CCMeasureNode` must be used
+       to obtain the communicated values in a layer preceding its use as specified by the ``cc_wire_in``
+       node attribute.
+
+    ATTRIBUTES:
 
     * **layers** - ``list[list[NetworkNode]]``, The input layers of network nodes.
     * **layers_wires** - ``list[qml.wires.Wires]``, The wires used for each layer.
-    * **network_layer_cc_wires_in** - ``list[qml.wires.Wires]``, The classical communication wires input to each network layer.
-    * **network_layer_cc_wires_out** - ``list[qml.wires.Wires]``, The classical communication wires output from each network layer.
+    * **layers_cc_wires_in** - ``list[qml.wires.Wires]``, The classical communication wires input to each network layer.
+    * **layers_cc_wires_out** - ``list[qml.wires.Wires]``, The classical communication wires output from each network layer.
     * **layers_num_settings** - ``list[int]``, The number of setting used in each layer.
     * **layers_total_num_in** - ``list[int]``, The total number of inputs for each layer.
     * **layers_node_num_in** - ``list[list[int]]``, The number of inputs for each node in the layer.
@@ -55,17 +59,8 @@ class NetworkAnsatz:
     def __init__(self, *layers, dev_kwargs=None):
         self.layers = layers
 
+        # layers attributes
         self.layers_wires = [self.collect_wires([node.wires for node in layer]) for layer in layers]
-
-        self.layers_num_settings = [
-            math.sum([node.num_settings for node in layer]) for layer in layers
-        ]
-        self.layers_total_num_in = [math.prod([node.num_in for node in layer]) for layer in layers]
-        self.layers_node_num_in = [[node.num_in for node in layer] for layer in self.layers]
-        self.layers_num_nodes = [len(layer) for layer in self.layers]
-
-        self.network_wires = qml.wires.Wires.all_wires(self.layers_wires)
-
         self.layers_cc_wires_in = [
             self.collect_wires([node.cc_wires_in for node in layer], check_unique=False)
             for layer in layers
@@ -75,18 +70,32 @@ class NetworkAnsatz:
         ]
         self.check_cc_causal_structure(self.layers_cc_wires_in, self.layers_cc_wires_out)
 
+        self.layers_num_settings = [
+            math.sum([node.num_settings for node in layer]) for layer in layers
+        ]
+        self.layers_total_num_in = [math.prod([node.num_in for node in layer]) for layer in layers]
+        self.layers_node_num_in = [[node.num_in for node in layer] for layer in self.layers]
+        self.layers_num_nodes = [len(layer) for layer in self.layers]
+
+        # network attributes
+        self.network_wires = qml.wires.Wires.all_wires(self.layers_wires)
         self.network_cc_wires = self.collect_wires(
             [node.cc_wires_out for layer in layers for node in layer]
         )
         self.num_cc_wires = len(self.network_cc_wires)
 
+        # device attributes
         default_dev_name = "default.qubit"
         self.dev_kwargs = dev_kwargs or {"name": default_dev_name}
         self.dev_kwargs["wires"] = self.network_wires
         self.dev = self.device()
 
+        # ansatz function attributes
         self.fn = self.ansatz_circuit_fn()
         self.parameter_partitions = self.get_network_parameter_partitions()
+
+    def __call__(self, settings=[]):
+        self.fn(settings)
 
     def set_device(self, name, **kwargs):
         """Configures a new PennyLane device for executing the network ansatz circuit.
@@ -118,7 +127,7 @@ class NetworkAnsatz:
     def ansatz_circuit_fn(self):
         layer_fns = [self.circuit_layer_fn(layer_nodes) for layer_nodes in self.layers]
 
-        def ansatz_circuit(settings):
+        def ansatz_circuit(settings=[]):
             cc_wires = [None] * self.num_cc_wires
 
             start_id = 0
@@ -324,7 +333,7 @@ class NetworkAnsatz:
         not differentatiated during optimzation.
 
         :param fixed_setting_ids: The ids of settings that are held constant during optimization.
-        Also requires `fixed_settings` to be provided.
+                                  Also requires `fixed_settings` to be provided.
         :type fixed_setting_ids: *optional* List[Int]
 
         :param fixed_settings: The constant values for fixed settings.
@@ -348,7 +357,7 @@ class NetworkAnsatz:
         tensor types.
 
         :param fixed_setting_ids: The ids of settings that are held constant during optimization.
-        Also requires `fixed_settings` to be provided.
+                                  Also requires `fixed_settings` to be provided.
         :type fixed_setting_ids: *optional* List[Int]
 
         :param fixed_settings: The constant values for fixed settings.
