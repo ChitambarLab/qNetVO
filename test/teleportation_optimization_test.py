@@ -29,10 +29,9 @@ class TestTeleportationOptimization:
 
     # locc measurement node
     @property
-    def cc_measure_nodes(self):
+    def cc_sender_nodes(self):
         def locc_circuit(settings, wires):
             qml.CNOT(wires=wires[0:2])
-            # qml.Hadamard(wires=wires[0])
             qml.Rot(*settings[0:3], wires=wires[0])
 
             b0 = qml.measure(wires[0])
@@ -41,7 +40,7 @@ class TestTeleportationOptimization:
             return [b0, b1]
 
         return [
-            qnetvo.CCMeasureNode(
+            qnetvo.CCSenderNode(
                 num_in=1,
                 wires=[0, 1],
                 cc_wires_out=[0, 1],
@@ -52,7 +51,7 @@ class TestTeleportationOptimization:
 
     # teleportation output measurement node
     @property
-    def measure_nodes(self):
+    def cc_receiver_nodes(self):
         def measure_circuit(settings, wires, cc_wires):
             qml.cond((cc_wires[0] == 0) & (cc_wires[1] == 1), qml.Rot)(*settings[0:3], wires=[2])
             qml.cond((cc_wires[0] == 1) & (cc_wires[1] == 0), qml.Rot)(*settings[3:6], wires=[2])
@@ -60,13 +59,12 @@ class TestTeleportationOptimization:
             qml.cond((cc_wires[0] == 1) & (cc_wires[1] == 1), qml.Rot)(*settings[9:12], wires=[2])
 
         return [
-            qnetvo.MeasureNode(
+            qnetvo.CCReceiverNode(
                 num_in=1,
-                num_out=2,
                 wires=[2],
+                cc_wires=[0, 1],
                 ansatz_fn=measure_circuit,
                 num_settings=12,
-                cc_wires_in=[0, 1],
             )
         ]
 
@@ -75,7 +73,7 @@ class TestTeleportationOptimization:
         input_prep_nodes = [self.input_prep_node(state) for state in input_states]
         ansatzes = [
             qnetvo.NetworkAnsatz(
-                [node, self.ent_prep_node], self.cc_measure_nodes, self.measure_nodes
+                [node, self.ent_prep_node], self.cc_sender_nodes, self.cc_receiver_nodes
             )
             for node in input_prep_nodes
         ]
@@ -122,8 +120,8 @@ class TestTeleportationOptimization:
         qnp.random.seed(49)
         init_settings = qnetvo.NetworkAnsatz(
             [self.input_prep_node(training_states[0]), self.ent_prep_node],
-            self.cc_measure_nodes,
-            self.measure_nodes,
+            self.cc_sender_nodes,
+            self.cc_receiver_nodes,
         ).rand_network_settings()
 
         # optimizing teleportation protocol

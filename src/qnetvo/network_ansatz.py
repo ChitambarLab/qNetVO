@@ -16,7 +16,7 @@ class NetworkAnsatz:
     :param dev_kwargs: Keyword arguments for the `pennylane.device`_ function.
     :type dev_kwargs: *optional* dictionary
 
-    .. _pennylane.device: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.device.html?highlight=device#qml-device
+    .. _pennylane.device: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.device.html
 
     :returns: An instantiated ``NetworkAnsatz``.
 
@@ -24,15 +24,15 @@ class NetworkAnsatz:
 
     1. The first layer should contain all :class:`qnetvo.PrepareNode` s in the network.
     2. The last layer should contain all :class:`qnetvo.MeasureNode` s in the network.
-    3. If classical communication is conisdered, then a :class:`qnetvo.CCMeasureNode` must be used
-       to obtain the communicated values in a layer preceding its use as specified by the ``cc_wire_in``
-       node attribute.
+    3. If classical communication is conisdered, then a :class:`qnetvo.CCSenderNode` must be used
+       to obtain the communicated values in a layer preceding the layers where :class:`qnetvo.CCReceiverNode` s
+       consume the classical communication.
 
     ATTRIBUTES:
 
     * **layers** - ``list[list[NetworkNode]]``, The input layers of network nodes.
     * **layers_wires** - ``list[qml.wires.Wires]``, The wires used for each layer.
-    * **layers_cc_wires_in** - ``list[qml.wires.Wires]``, The classical communication wires input to each network layer.
+    * **layers_cc_wires** - ``list[qml.wires.Wires]``, The classical communication wires input to each network layer.
     * **layers_cc_wires_out** - ``list[qml.wires.Wires]``, The classical communication wires output from each network layer.
     * **layers_num_settings** - ``list[int]``, The number of setting used in each layer.
     * **layers_total_num_in** - ``list[int]``, The total number of inputs for each layer.
@@ -53,7 +53,7 @@ class NetworkAnsatz:
                                :meth:`get_network_parameter_partitions` for details.
 
     :raises ValueError: If the ``wires`` are not unique across all nodes in an ansatz layer or thee ``cc_wires_out`` are not unique across all layers.
-    :raises ValueError: If ``cc_wires_in`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
+    :raises ValueError: If ``cc_wires`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
     """
 
     def __init__(self, *layers, dev_kwargs=None):
@@ -61,14 +61,14 @@ class NetworkAnsatz:
 
         # layers attributes
         self.layers_wires = [self.collect_wires([node.wires for node in layer]) for layer in layers]
-        self.layers_cc_wires_in = [
-            self.collect_wires([node.cc_wires_in for node in layer], check_unique=False)
+        self.layers_cc_wires = [
+            self.collect_wires([node.cc_wires for node in layer], check_unique=False)
             for layer in layers
         ]
         self.layers_cc_wires_out = [
             self.collect_wires([node.cc_wires_out for node in layer]) for layer in layers
         ]
-        self.check_cc_causal_structure(self.layers_cc_wires_in, self.layers_cc_wires_out)
+        self.check_cc_causal_structure(self.layers_cc_wires, self.layers_cc_wires_out)
 
         self.layers_num_settings = [
             math.sum([node.num_settings for node in layer]) for layer in layers
@@ -138,6 +138,37 @@ class NetworkAnsatz:
                 start_id = end_id
 
         return ansatz_circuit
+    
+    @staticmethod
+    def circuit_layer_fn(layer_nodes):
+        """Constructs a quantum function for an ansatz layer of provided network nodes.
+
+        :param layer_nodes: A list of nodes in a network layer.
+        :type layer_nodes: list[:class:`qnetvo.NetworkNode`]
+
+        :returns: A quantum function evaluated as ``circuit_layer(settings)`` where ``settings``
+                  is an array constructed via the ``layer_settings`` function.
+        :rtype: function
+        """
+
+        def circuit_layer(settings, cc_wires):
+            start_id = 0
+            for node in layer_nodes:
+                end_id = start_id + node.num_settings
+                node_settings = settings[start_id:end_id]
+
+                node_cc_wires = [cc_wires[i] for i in node.cc_wires]
+
+                if isinstance(node, CCSenderNode):
+                    cc_out = node(node_settings, node_cc_wires)
+                    for i in range(len(cc_out)):
+                        cc_wires[node.cc_wires_out[i]] = cc_out[i]
+                else:
+                    node(node_settings, node_cc_wires)
+
+                start_id = end_id
+
+        return circuit_layer
 
     def get_network_parameter_partitions(self):
         """
@@ -189,25 +220,25 @@ class NetworkAnsatz:
         return all_wires
 
     @staticmethod
-    def check_cc_causal_structure(cc_wires_in_layers, cc_wires_out_layers):
+    def check_cc_causal_structure(cc_wires_layers, cc_wires_out_layers):
         """Verifies that the classical communication is causal.
 
-        Note that ``cc_wires_out`` describes the classical communication senders while ``cc_wires_in`` describe
+        Note that ``cc_wires_out`` describes the classical communication senders while ``cc_wires`` describe
         classical communication receivers.
         All network ansatzes must have a causal structure where nodes output their classical communication in
         layers that precede the nodes that use that classical communication.
 
-        :params cc_wires_in_layers: The classical communication input wires, `cc_wires_in`, considered for each layer.
-        :type cc_wires_in_layers: list[qml.wires.Wires]
+        :params cc_wires_layers: The classical communication input wires, `cc_wires`, considered for each layer.
+        :type cc_wires_layers: list[qml.wires.Wires]
 
         :params cc_wires_out_layers: The classical communication output wires, `cc_wires_out`, considered for each layer.
         :type cc_wires_out_layers: list[qml.wires.Wires]
 
         :returns: ``True`` if the
 
-        :raises ValueError: If ``cc_wires_in`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
+        :raises ValueError: If ``cc_wires`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
         """
-        num_layers = len(cc_wires_in_layers)
+        num_layers = len(cc_wires_layers)
         for i in range(num_layers):
             measured_cc_wires = (
                 qml.wires.Wires.all_wires([measured_cc_wires, cc_wires_out_layers[i - 1]])
@@ -215,9 +246,9 @@ class NetworkAnsatz:
                 else qml.wires.Wires([])
             )
 
-            if not measured_cc_wires.contains_wires(cc_wires_in_layers[i]):
+            if not measured_cc_wires.contains_wires(cc_wires_layers[i]):
                 raise ValueError(
-                    "The `cc_wires_in` of layer "
+                    "The `cc_wires` of layer "
                     + str(i)
                     + " do not have corresponding `cc_wires_out` in a preceding layer."
                 )
@@ -295,37 +326,6 @@ class NetworkAnsatz:
                 qn_start_id = qn_stop_id
 
         return qml.math.stack(expanded_settings)
-
-    @staticmethod
-    def circuit_layer_fn(layer_nodes):
-        """Constructs a quantum function for an ansatz layer of provided network nodes.
-
-        :param layer_nodes: A list of nodes in a network layer.
-        :type layer_nodes: list[NetworkNode]
-
-        :returns: A quantum function evaluated as ``circuit_layer(settings)`` where ``settings``
-                  is an array constructed via the ``layer_settings`` function.
-        :rtype: function
-        """
-
-        def circuit_layer(settings, cc_wires):
-            start_id = 0
-            for node in layer_nodes:
-                end_id = start_id + node.num_settings
-                node_settings = settings[start_id:end_id]
-
-                cc_wires_in = [cc_wires[i] for i in node.cc_wires_in]
-
-                if isinstance(node, CCMeasureNode):
-                    cc_out = node(node_settings, cc_wires_in)
-                    for i in range(len(cc_out)):
-                        cc_wires[node.cc_wires_out[i]] = cc_out[i]
-                else:
-                    node(node_settings, cc_wires_in)
-
-                start_id = end_id
-
-        return circuit_layer
 
     def rand_network_settings(self, fixed_setting_ids=[], fixed_settings=[]):
         """Creates an array of randomized differentiable settings for the network ansatz.

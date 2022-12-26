@@ -20,7 +20,7 @@ def teleportation_ansatz():
         ),
     ]
 
-    def cc_meas_circ(settings, wires):
+    def cc_send_circ(settings, wires):
         qml.adjoint(qnetvo.ghz_state)(settings, wires[0:2])
 
         b0 = qml.measure(wires[0])
@@ -28,11 +28,11 @@ def teleportation_ansatz():
 
         return [b0, b1]
 
-    cc_measure_nodes = [
-        qnetvo.CCMeasureNode(
+    cc_sender_nodes = [
+        qnetvo.CCSenderNode(
             wires=[0, 1],
             cc_wires_out=[0, 1],
-            ansatz_fn=cc_meas_circ,
+            ansatz_fn=cc_send_circ,
         )
     ]
 
@@ -40,11 +40,9 @@ def teleportation_ansatz():
         qml.cond(cc_wires[0], qml.PauliZ)(wires[0])
         qml.cond(cc_wires[1], qml.PauliX)(wires[0])
 
-    measure_nodes = [
-        qnetvo.MeasureNode(num_out=2, wires=[2], ansatz_fn=meas_circ, cc_wires_in=[0, 1])
-    ]
+    cc_receiver_nodes = [qnetvo.CCReceiverNode(wires=[2], ansatz_fn=meas_circ, cc_wires=[0, 1])]
 
-    return qnetvo.NetworkAnsatz(prep_nodes, cc_measure_nodes, measure_nodes)
+    return qnetvo.NetworkAnsatz(prep_nodes, cc_sender_nodes, cc_receiver_nodes)
 
 
 @pytest.mark.parametrize(
@@ -75,17 +73,17 @@ def test_shared_randomness():
         qml.Hadamard(wires[0])
         return [qml.measure(wires[0])]
 
-    cc_measure_nodes = [qnetvo.CCMeasureNode(wires=[0], cc_wires_out=[0], ansatz_fn=cc_meas_circ)]
+    cc_sender_nodes = [qnetvo.CCSenderNode(wires=[0], cc_wires_out=[0], ansatz_fn=cc_meas_circ)]
 
     def shared_random_circ(settings, wires, cc_wires):
         qml.cond(cc_wires[0], qml.PauliX)(wires[0])
         qml.cond(cc_wires[0], qml.PauliX)(wires[1])
 
-    proc_nodes = [
-        qnetvo.ProcessingNode(wires=[1, 2], ansatz_fn=shared_random_circ, cc_wires_in=[0])
+    cc_receiver_nodes = [
+        qnetvo.CCReceiverNode(wires=[1, 2], ansatz_fn=shared_random_circ, cc_wires=[0])
     ]
 
-    ansatz = qnetvo.NetworkAnsatz(cc_measure_nodes, proc_nodes)
+    ansatz = qnetvo.NetworkAnsatz(cc_sender_nodes, cc_receiver_nodes)
 
     @qml.qnode(ansatz.dev)
     def circ():

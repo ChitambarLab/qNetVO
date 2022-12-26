@@ -10,8 +10,8 @@ class NetworkNode:
     :param wires: The wires on which the node operates.
     :type wires: list[int]
 
-    :param cc_wires_in: The classical communication wires input to the node.
-    :type cc_wires_in: list[int]
+    :param cc_wires: The classical communication wires input to the node.
+    :type cc_wires: list[int]
 
     :param cc_wires_out: The classical communication wires to output measurement results on.
     :type cc_wires_out: list[int]
@@ -30,8 +30,8 @@ class NetworkNode:
     **Calling a Network Node's Ansatz Function:**
 
     Given an instantiated network node, ``node = NetworkNode(*args)``, its ansatz quantum circuit functtion
-    can be called as ``node(settings, cc_wires)`` or, if ``node.cc_wires_in==[]``, the node can be called
-    as  ``node(settings)`` if ``cc_wires_in=[]``.
+    can be called as ``node(settings, cc_wires)`` or, if ``node.cc_wires==[]``, the node can be called
+    as  ``node(settings)`` if ``cc_wires=[]``.
 
     **Attributes:**
 
@@ -44,7 +44,7 @@ class NetworkNode:
         num_in=1,
         num_out=1,
         wires=[],
-        cc_wires_in=[],
+        cc_wires=[],
         cc_wires_out=[],
         ansatz_fn=None,
         num_settings=0,
@@ -53,7 +53,7 @@ class NetworkNode:
         self.num_out = num_out
 
         self.wires = wires
-        self.cc_wires_in = cc_wires_in
+        self.cc_wires = cc_wires
         self.cc_wires_out = cc_wires_out
 
         self.ansatz_fn = ansatz_fn if ansatz_fn else self.default_ansatz_fn
@@ -77,6 +77,17 @@ class NoiseNode(NetworkNode):
     Therefore, only the ``wires`` and ``ansatz_fn`` attributes can be set.
     All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
+    The ``ansatz_fn`` for a ``NoiseNode`` should take the following form:
+
+    .. code-block:: python
+    
+        def noise_ansatz(settings, wires):
+            # apply noise operation
+            qml.Depolarizing(0.5, wires=wires[0])
+            qml.AmplitudeDamping(0.5, wires=wires[1])
+
+    Note that the ``settings`` parameter is not typically used in a noise node.
+
     :returns: An instantiated ``NoiseNode`` class.
     """
 
@@ -90,14 +101,21 @@ class ProcessingNode(NetworkNode):
 
     All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
+    The ``ansatz_fn`` for a ``ProcessingNode`` should take the following form:
+
+    .. code-block:: python
+    
+        def processing_ansatz(settings, wires):
+            # apply processing operation
+            qml.ArbitraryUnitary(settings[0:16], wires=wires[0:2])
+
     :returns: An instantiated ``ProcessingNode`` class.
     """
 
-    def __init__(self, num_in=1, wires=[], ansatz_fn=None, num_settings=0, cc_wires_in=[]):
+    def __init__(self, num_in=1, wires=[], ansatz_fn=None, num_settings=0):
         super().__init__(
             num_in=num_in,
             wires=wires,
-            cc_wires_in=cc_wires_in,
             ansatz_fn=ansatz_fn,
             num_settings=num_settings,
         )
@@ -108,6 +126,14 @@ class PrepareNode(ProcessingNode):
     preparation can be conditioned on a classical input or upstream measurement results.
 
     All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
+
+    The ``ansatz_fn`` for a ``PrepareNode`` should take the following form:
+
+    .. code-block:: python
+    
+        def prepare_ansatz(settings, wires):
+            # initalize quantum state from |0...0>
+            qml.ArbitraryStatePreparation(settings[0:6], wires=wires[0:2])
 
     :returns: An instantiated ``PrepareNode`` class.
     """
@@ -122,11 +148,23 @@ class MeasureNode(NetworkNode):
     All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
     In addition, the number of classical outputs are specified.
 
+    The ``ansatz_fn`` for a ``MeasureNode`` should take the following form:
+
+    .. code-block:: python
+    
+        def measure_ansatz(settings, wires):
+            # rotate measurement basis
+            qml.Rot(*settings[0:3], wires=wires[0])
+
+    Note that the measurement ansatz does not apply a measurement operation.
+    Measurement operations are specified later when :class:`qnetvo.NetworkAnsatz`
+    class is used to construct qnodes and cost functions.
+
     :returns: An instantiated ``MeasureNode`` class.
     """
 
     def __init__(
-        self, num_in=1, num_out=1, wires=[], ansatz_fn=None, num_settings=0, cc_wires_in=[]
+        self, num_in=1, num_out=1, wires=[], ansatz_fn=None, num_settings=0
     ):
         super().__init__(
             num_in=num_in,
@@ -134,29 +172,78 @@ class MeasureNode(NetworkNode):
             wires=wires,
             ansatz_fn=ansatz_fn,
             num_settings=num_settings,
-            cc_wires_in=cc_wires_in,
         )
 
 
-class CCMeasureNode(NetworkNode):
-    """A network node that measures its local qubit wires where the measurement can be
-    conditioned on a classical input or upstream measurement results.
+class CCSenderNode(NetworkNode):
+    """A network node that measures its local qubits and sends its results using classical
+    communication.
 
     All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
-    In addition, the classical communication output wires are specified.
-    These wires store the results of mid-circuit measurements.
 
-    :returns: An instantiated ``MeasureNode`` class.
+    The ``ansatz_fn`` for a ``CCSenderNode`` should take the following form:
+
+    .. code-block:: python
+    
+        def cc_sender_ansatz(settings, wires):
+            # apply quantum circuit operations
+            qml.Rot(*settings[0:3], wires=wires[0])
+            
+            # measure qubit to obtain classical communication bit
+            cc_bit_out = qml.measure(wires[0])
+            
+            # output list of measurement results
+            return [cc_bit_out]
+
+    Note that for each specified ``cc_wires_out``, there should be a corresponding
+    ``cc_bit_out`` result obtained using `qml.measure`_.
+
+    .. _qml.measure: https://docs.pennylane.ai/en/stable/code/api/pennylane.measure.html 
+
+    :returns: An instantiated ``CCSenderNode`` class.
     """
 
     def __init__(
-        self, num_in=1, wires=[], cc_wires_out=[], ansatz_fn=None, num_settings=0, cc_wires_in=[]
+        self, num_in=1, wires=[], cc_wires_out=[], ansatz_fn=None, num_settings=0
     ):
         super().__init__(
             num_in=num_in,
             wires=wires,
             ansatz_fn=ansatz_fn,
             num_settings=num_settings,
-            cc_wires_in=cc_wires_in,
             cc_wires_out=cc_wires_out,
+        )
+
+
+class CCReceiverNode(NetworkNode):
+    """A network node that receives classical communication from and upstream :class:`qnetvo.CCSenderNode`.
+
+    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
+
+    The ``ansatz_fn`` for a ``CCSenderNode`` should take the following form:
+
+    .. code-block:: python
+    
+        def cc_receive_ansatz(settings, wires, cc_wires):
+            # apply quantum operations conditioned on classical communication
+            qml.cond(cc_wires[0], qml.Rot)(*settings[0:3], wires=wires[0])
+            qml.cond(cc_wires[1], qml.Rot)(*settings[3:6], wires=wires[0])
+
+    Note that the classical inputs specified by ``num_in`` are distinct from the classical
+    communication inputs passed through ``cc_wires``.
+    That is, the classical inputs ``num_in`` are known before the network simulation is run
+    whereas the classical communication in ``cc_wires`` are determined during the simulation.
+
+    :returns: An instantiated ``CCReceiverNode`` class.
+    """
+
+    def __init__(
+        self, num_in=1, wires=[], cc_wires=[], ansatz_fn=None, num_settings=0,
+    ):
+        super().__init__(
+            num_in=num_in,
+            wires=wires,
+            ansatz_fn=ansatz_fn,
+            num_settings=num_settings,
+            cc_wires=cc_wires,
         )

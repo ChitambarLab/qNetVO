@@ -18,7 +18,8 @@ Network nodes are categorized by their function:
 * **Processing Node:** Applies an operation to its local qubits.
 * **Noise Node:** Applies noise to the local qubits.
 * **Measure Node:** Measures local qubits and outputs a classical value.
-* **CC Measure Node:** Measures local qubits and communicates the result to other nodes.
+* **CC Sender Node:** Measures local qubits and sends the result to CC receiver nodes.
+* **CC Receiver Node:** Applies an operation to its local qubits conditioned upon receieved classical data.
 
 Prepare Nodes
 -------------
@@ -32,20 +33,25 @@ Processing Nodes
 .. autoclass:: ProcessingNode
 	:members:
 
-Noise Nodes
------------
-
-.. autoclass:: NoiseNode
-    :members:
-
-Classical Communication Measure Nodes
--------------------------------------
-
-.. autoclass:: CCMeasureNode
-	:members:
-
 Measure Nodes
 -------------
 
 .. autoclass:: MeasureNode
 	:members:
+
+
+Classical Communication Nodes
+-----------------------------
+
+.. autoclass:: CCSenderNode
+	:members:
+
+.. autoclass:: CCReceiverNode
+	:members:
+
+
+Noise Nodes
+-----------
+
+.. autoclass:: NoiseNode
+    :members:

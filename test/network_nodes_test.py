@@ -13,7 +13,7 @@ def test_network_node():
         wires=[0, 1],
         ansatz_fn=circuit,
         num_settings=15,
-        cc_wires_in=[4],
+        cc_wires=[4],
     )
 
     assert isinstance(node, qnetvo.NetworkNode)
@@ -21,7 +21,7 @@ def test_network_node():
     assert node.num_in == 2
     assert node.num_out == 1
     assert node.wires == [0, 1]
-    assert node.cc_wires_in == [4]
+    assert node.cc_wires == [4]
     assert node.cc_wires_out == []
     assert node.ansatz_fn == circuit
     assert node.num_settings == 15
@@ -46,7 +46,7 @@ def test_network_node_defaults():
     assert node.num_in == 1
     assert node.num_out == 1
     assert node.wires == []
-    assert node.cc_wires_in == []
+    assert node.cc_wires == []
     assert node.cc_wires_out == []
     assert node.num_settings == 0
     assert node.ansatz_fn == node.default_ansatz_fn
@@ -72,7 +72,7 @@ def test_noise_node():
     assert noise_node.num_settings == 0
     assert noise_node.num_in == 1
     assert noise_node.num_out == 1
-    assert noise_node.cc_wires_in == []
+    assert noise_node.cc_wires == []
     assert noise_node.cc_wires_out == []
 
     with qml.tape.QuantumTape() as tape:
@@ -98,7 +98,7 @@ def test_processing_node():
     assert proc_node.wires == [0, 1]
     assert proc_node.ansatz_fn == circuit
     assert proc_node.num_settings == 2
-    assert proc_node.cc_wires_in == []
+    assert proc_node.cc_wires == []
     assert proc_node.cc_wires_out == []
 
     with qml.tape.QuantumTape() as tape:
@@ -123,7 +123,7 @@ def test_prepare_node():
     assert prep_node.wires == [2, 3]
     assert prep_node.ansatz_fn == circuit
     assert prep_node.num_settings == 6
-    assert prep_node.cc_wires_in == []
+    assert prep_node.cc_wires == []
     assert prep_node.cc_wires_out == []
 
     with qml.tape.QuantumTape() as tape:
@@ -149,7 +149,7 @@ def test_measure_node():
     assert meas_node.wires == [0, 1]
     assert meas_node.ansatz_fn == circuit
     assert meas_node.num_settings == 2
-    assert meas_node.cc_wires_in == []
+    assert meas_node.cc_wires == []
     assert meas_node.cc_wires_out == []
 
     with qml.tape.QuantumTape() as tape:
@@ -161,7 +161,7 @@ def test_measure_node():
     assert tape.get_parameters() == [0.1, 0.5]
 
 
-def test_cc_measure_node():
+def test_cc_sender_node():
     def circuit(settings, wires):
         qml.CNOT(wires[0:2])
         qml.Hadamard(wires[0])
@@ -171,24 +171,54 @@ def test_cc_measure_node():
 
         return [bit_0, bit_1]
 
-    cc_meas_node = qnetvo.CCMeasureNode(
+    cc_meas_node = qnetvo.CCSenderNode(
         num_in=1, wires=[0, 1], cc_wires_out=[1, 2], ansatz_fn=circuit, num_settings=0
     )
 
-    assert isinstance(cc_meas_node, qnetvo.CCMeasureNode)
+    assert isinstance(cc_meas_node, qnetvo.CCSenderNode)
 
     assert cc_meas_node.num_in == 1
     assert cc_meas_node.wires == [0, 1]
     assert cc_meas_node.cc_wires_out == [1, 2]
     assert cc_meas_node.ansatz_fn == circuit
     assert cc_meas_node.num_settings == 0
-    assert cc_meas_node.cc_wires_in == []
+    assert cc_meas_node.cc_wires == []
     assert cc_meas_node.num_out == 1
 
     with qml.tape.QuantumTape() as tape:
         cc_meas_node([])
 
     assert len(tape) == 4
+    assert tape.wires.tolist() == [0, 1]
+    assert tape.num_params == 0
+    assert tape.get_parameters() == []
+
+
+def test_cc_receiver_node():
+    def circuit(settings, wires, cc_wires):
+        qml.cond(cc_wires[0], qml.ArbitraryUnitary)(settings, wires)
+
+    cc_receiver_node = qnetvo.CCReceiverNode(
+        num_in=2, wires=[0, 1], cc_wires=[1, 2], ansatz_fn=circuit, num_settings=15
+    )
+
+    assert isinstance(cc_receiver_node, qnetvo.CCReceiverNode)
+
+    assert cc_receiver_node.num_in == 2
+    assert cc_receiver_node.wires == [0, 1]
+    assert cc_receiver_node.cc_wires == [1, 2]
+    assert cc_receiver_node.ansatz_fn == circuit
+    assert cc_receiver_node.num_settings == 15
+    assert cc_receiver_node.cc_wires_out == []
+    assert cc_receiver_node.num_out == 1
+
+    mock_measurement = qml.measurements.MeasurementValue(["12345678"], lambda v: v)
+    mock_settings = list(range(15))
+
+    with qml.tape.QuantumTape() as tape:
+        cc_receiver_node(mock_settings, [mock_measurement])
+
+    assert len(tape) == 1
     assert tape.wires.tolist() == [0, 1]
     assert tape.num_params == 0
     assert tape.get_parameters() == []

@@ -32,12 +32,12 @@ def ex_network_ansatz():
         qnetvo.PrepareNode(1, [1], circuit, 1),
         qnetvo.PrepareNode(1, [2], circuit, 1),
     ]
-    cc_measure_nodes = [qnetvo.CCMeasureNode(2, [3], [0], cc_meas, 0)]
+    cc_sender_nodes = [qnetvo.CCSenderNode(2, [3], [0], cc_meas, 0)]
     noise_nodes = [
         qnetvo.NoiseNode([1], noise),
         qnetvo.NoiseNode([2], noise),
     ]
-    processing_nodes = [qnetvo.ProcessingNode(1, [0], cond_circ, 0, cc_wires_in=[0])]
+    cc_receiver_nodes = [qnetvo.CCReceiverNode(1, [0], [0], cond_circ, 0)]
     measure_nodes = [
         qnetvo.MeasureNode(3, 2, [0], circuit, 1),
         qnetvo.MeasureNode(2, 2, [1], circuit, 1),
@@ -45,9 +45,9 @@ def ex_network_ansatz():
 
     return qnetvo.NetworkAnsatz(
         prepare_nodes,
-        cc_measure_nodes,
+        cc_sender_nodes,
         noise_nodes,
-        processing_nodes,
+        cc_receiver_nodes,
         measure_nodes,
         dev_kwargs={"name": "default.mixed"},
     )
@@ -57,9 +57,9 @@ def test_network_ansatz_init_attributes(ex_network_ansatz):
     # verify network layers
     assert len(ex_network_ansatz.layers) == 5
     assert all([isinstance(node, qnetvo.PrepareNode) for node in ex_network_ansatz.layers[0]])
-    assert all([isinstance(node, qnetvo.CCMeasureNode) for node in ex_network_ansatz.layers[1]])
+    assert all([isinstance(node, qnetvo.CCSenderNode) for node in ex_network_ansatz.layers[1]])
     assert all([isinstance(node, qnetvo.NoiseNode) for node in ex_network_ansatz.layers[2]])
-    assert all([isinstance(node, qnetvo.ProcessingNode) for node in ex_network_ansatz.layers[3]])
+    assert all([isinstance(node, qnetvo.CCReceiverNode) for node in ex_network_ansatz.layers[3]])
     assert all([isinstance(node, qnetvo.MeasureNode) for node in ex_network_ansatz.layers[4]])
 
     assert ex_network_ansatz.layers_num_settings == [3, 0, 0, 0, 2]
@@ -82,11 +82,11 @@ def test_network_ansatz_init_attributes(ex_network_ansatz):
     assert ex_network_ansatz.network_cc_wires.tolist() == [0]
     assert ex_network_ansatz.num_cc_wires == 1
 
-    assert ex_network_ansatz.layers_cc_wires_in[0].tolist() == []
-    assert ex_network_ansatz.layers_cc_wires_in[1].tolist() == []
-    assert ex_network_ansatz.layers_cc_wires_in[2].tolist() == []
-    assert ex_network_ansatz.layers_cc_wires_in[3].tolist() == [0]
-    assert ex_network_ansatz.layers_cc_wires_in[4].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires[0].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires[1].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires[2].tolist() == []
+    assert ex_network_ansatz.layers_cc_wires[3].tolist() == [0]
+    assert ex_network_ansatz.layers_cc_wires[4].tolist() == []
 
     assert ex_network_ansatz.layers_cc_wires_out[0].tolist() == []
     assert ex_network_ansatz.layers_cc_wires_out[1].tolist() == [0]
@@ -274,37 +274,37 @@ def test_collect_wires_check_unique_failures(wires_lists):
 
 
 @pytest.mark.parametrize(
-    "cc_wires_in_layers, cc_wires_out_layers",
+    "cc_wires_layers, cc_wires_out_layers",
     [
         ([[], [0, 1], [2, 3]], [[0, 1, 2], [3], []]),
         ([[], [], [], []], [[], [], [], []]),
         ([[], [], [0, 1, 2, 3]], [[0, 3], [1, 2], [4]]),
     ],
 )
-def test_check_cc_causal_structure_success(cc_wires_in_layers, cc_wires_out_layers):
+def test_check_cc_causal_structure_success(cc_wires_layers, cc_wires_out_layers):
     assert qnetvo.NetworkAnsatz.check_cc_causal_structure(
-        list(map(qml.wires.Wires, cc_wires_in_layers)),
+        list(map(qml.wires.Wires, cc_wires_layers)),
         list(map(qml.wires.Wires, cc_wires_out_layers)),
     )
 
 
 @pytest.mark.parametrize(
-    "cc_wires_in_layers, cc_wires_out_layers, i",
+    "cc_wires_layers, cc_wires_out_layers, i",
     [
         ([[0], [1]], [[0, 1], []], 0),
         ([[], [1], [2], [4]], [[1], [2, 3], []], 3),
         ([[], [0, 1]], [[0], [1]], 1),
     ],
 )
-def test_check_cc_causal_structure_errors(cc_wires_in_layers, cc_wires_out_layers, i):
+def test_check_cc_causal_structure_errors(cc_wires_layers, cc_wires_out_layers, i):
     with pytest.raises(
         ValueError,
-        match="The `cc_wires_in` of layer "
+        match="The `cc_wires` of layer "
         + str(i)
         + " do not have corresponding `cc_wires_out` in a preceding layer.",
     ):
         qnetvo.NetworkAnsatz.check_cc_causal_structure(
-            list(map(qml.wires.Wires, cc_wires_in_layers)),
+            list(map(qml.wires.Wires, cc_wires_layers)),
             list(map(qml.wires.Wires, cc_wires_out_layers)),
         )
 
