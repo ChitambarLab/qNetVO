@@ -38,6 +38,12 @@ Noise Nodes
 .. autoclass:: NoiseNode
     :members:
 
+Classical Communication Measure Nodes
+-------------------------------------
+
+.. autoclass:: CCMeasureNode
+	:members:
+
 Measure Nodes
 -------------
 
