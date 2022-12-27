@@ -138,7 +138,7 @@ class NetworkAnsatz:
                 start_id = end_id
 
         return ansatz_circuit
-    
+
     @staticmethod
     def circuit_layer_fn(layer_nodes):
         """Constructs a quantum function for an ansatz layer of provided network nodes.

@@ -80,7 +80,7 @@ class NoiseNode(NetworkNode):
     The ``ansatz_fn`` for a ``NoiseNode`` should take the following form:
 
     .. code-block:: python
-    
+
         def noise_ansatz(settings, wires):
             # apply noise operation
             qml.Depolarizing(0.5, wires=wires[0])
@@ -104,7 +104,7 @@ class ProcessingNode(NetworkNode):
     The ``ansatz_fn`` for a ``ProcessingNode`` should take the following form:
 
     .. code-block:: python
-    
+
         def processing_ansatz(settings, wires):
             # apply processing operation
             qml.ArbitraryUnitary(settings[0:16], wires=wires[0:2])
@@ -130,7 +130,7 @@ class PrepareNode(ProcessingNode):
     The ``ansatz_fn`` for a ``PrepareNode`` should take the following form:
 
     .. code-block:: python
-    
+
         def prepare_ansatz(settings, wires):
             # initalize quantum state from |0...0>
             qml.ArbitraryStatePreparation(settings[0:6], wires=wires[0:2])
@@ -151,7 +151,7 @@ class MeasureNode(NetworkNode):
     The ``ansatz_fn`` for a ``MeasureNode`` should take the following form:
 
     .. code-block:: python
-    
+
         def measure_ansatz(settings, wires):
             # rotate measurement basis
             qml.Rot(*settings[0:3], wires=wires[0])
@@ -163,9 +163,7 @@ class MeasureNode(NetworkNode):
     :returns: An instantiated ``MeasureNode`` class.
     """
 
-    def __init__(
-        self, num_in=1, num_out=1, wires=[], ansatz_fn=None, num_settings=0
-    ):
+    def __init__(self, num_in=1, num_out=1, wires=[], ansatz_fn=None, num_settings=0):
         super().__init__(
             num_in=num_in,
             num_out=num_out,
@@ -184,28 +182,26 @@ class CCSenderNode(NetworkNode):
     The ``ansatz_fn`` for a ``CCSenderNode`` should take the following form:
 
     .. code-block:: python
-    
+
         def cc_sender_ansatz(settings, wires):
             # apply quantum circuit operations
             qml.Rot(*settings[0:3], wires=wires[0])
-            
+
             # measure qubit to obtain classical communication bit
             cc_bit_out = qml.measure(wires[0])
-            
+
             # output list of measurement results
             return [cc_bit_out]
 
     Note that for each specified ``cc_wires_out``, there should be a corresponding
     ``cc_bit_out`` result obtained using `qml.measure`_.
 
-    .. _qml.measure: https://docs.pennylane.ai/en/stable/code/api/pennylane.measure.html 
+    .. _qml.measure: https://docs.pennylane.ai/en/stable/code/api/pennylane.measure.html
 
     :returns: An instantiated ``CCSenderNode`` class.
     """
 
-    def __init__(
-        self, num_in=1, wires=[], cc_wires_out=[], ansatz_fn=None, num_settings=0
-    ):
+    def __init__(self, num_in=1, wires=[], cc_wires_out=[], ansatz_fn=None, num_settings=0):
         super().__init__(
             num_in=num_in,
             wires=wires,
@@ -223,7 +219,7 @@ class CCReceiverNode(NetworkNode):
     The ``ansatz_fn`` for a ``CCSenderNode`` should take the following form:
 
     .. code-block:: python
-    
+
         def cc_receive_ansatz(settings, wires, cc_wires):
             # apply quantum operations conditioned on classical communication
             qml.cond(cc_wires[0], qml.Rot)(*settings[0:3], wires=wires[0])
@@ -238,7 +234,12 @@ class CCReceiverNode(NetworkNode):
     """
 
     def __init__(
-        self, num_in=1, wires=[], cc_wires=[], ansatz_fn=None, num_settings=0,
+        self,
+        num_in=1,
+        wires=[],
+        cc_wires=[],
+        ansatz_fn=None,
+        num_settings=0,
     ):
         super().__init__(
             num_in=num_in,
