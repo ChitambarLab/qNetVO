@@ -73,20 +73,26 @@ class NetworkNode:
 class NoiseNode(NetworkNode):
     """A network node that applies noise to its local qubit wires.
 
+    :param wires: The wires on which the node operates.
+    :type wires: list[int
+
+    :param ansatz_fn: A `PennyLane quantum circuit function <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`
+        that takes the following form:
+
+        .. code-block:: python
+
+            def noise_ansatz(settings, wires):
+                # apply noise operation
+                qml.Depolarizing(0.5, wires=wires[0])
+                qml.AmplitudeDamping(0.5, wires=wires[1])
+
+        where ``settings=[]`` is unused because noise is considered to be static.
+
+    :type ansatz_fn: function
+
     We model noise to be independent from classical inputs and upstream measurement results.
     Therefore, only the ``wires`` and ``ansatz_fn`` attributes can be set.
-    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
-
-    The ``ansatz_fn`` for a ``NoiseNode`` should take the following form:
-
-    .. code-block:: python
-
-        def noise_ansatz(settings, wires):
-            # apply noise operation
-            qml.Depolarizing(0.5, wires=wires[0])
-            qml.AmplitudeDamping(0.5, wires=wires[1])
-
-    Note that the ``settings`` parameter is not typically used in a noise node.
+    All attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
     :returns: An instantiated ``NoiseNode`` class.
     """
@@ -99,15 +105,28 @@ class ProcessingNode(NetworkNode):
     """A network node that operates upon its local qubit wires where the operation can
     be conditioned upon a classical input or upstream measurement results.
 
-    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
+    :param num_in: The number of discrete classical inputs that the node accepts.
+    :type num_in: int
 
-    The ``ansatz_fn`` for a ``ProcessingNode`` should take the following form:
+    :param wires: The wires on which the node operates.
+    :type wires: list[int]
 
-    .. code-block:: python
+    :param ansatz_fn: A `PennyLane quantum circuit function <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`_
+        that takes the following form:
 
-        def processing_ansatz(settings, wires):
-            # apply processing operation
-            qml.ArbitraryUnitary(settings[0:16], wires=wires[0:2])
+        .. code-block:: python
+
+            def processing_ansatz(settings, wires):
+                # apply processing operation
+                qml.ArbitraryUnitary(settings[0:16], wires=wires[0:2])
+
+        where ``settings`` is an *array[float]* of length ``num_settings``.
+    :type ansatz_fn: function
+
+    :param num_settings: The number of settings parameterizing the ``ansatz_fn`` circuit.
+    :type num_settings: int
+
+    All attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
     :returns: An instantiated ``ProcessingNode`` class.
     """
@@ -125,15 +144,28 @@ class PrepareNode(ProcessingNode):
     """A network node that initializes a state on its local qubit wires where the
     preparation can be conditioned on a classical input or upstream measurement results.
 
-    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
+    :param num_in: The number of discrete classical inputs that the node accepts.
+    :type num_in: int
 
-    The ``ansatz_fn`` for a ``PrepareNode`` should take the following form:
+    :param wires: The wires on which the node operates.
+    :type wires: list[int]
 
-    .. code-block:: python
+    :param ansatz_fn: A `PennyLane quantum circuit function <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`_
+        that takes the following form:
 
-        def prepare_ansatz(settings, wires):
-            # initalize quantum state from |0...0>
-            qml.ArbitraryStatePreparation(settings[0:6], wires=wires[0:2])
+        .. code-block:: python
+
+            def prepare_ansatz(settings, wires):
+                # initalize quantum state from |0...0>
+                qml.ArbitraryStatePreparation(settings[0:6], wires=wires[0:2])
+
+        where ``settings`` is an *array[float]* of length ``num_settings``.
+    :type ansatz_fn: function
+
+    :param num_settings: The number of settings parameterizing the ``ansatz_fn`` circuit.
+    :type num_settings: int
+
+    All attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
     :returns: An instantiated ``PrepareNode`` class.
     """
@@ -145,20 +177,35 @@ class MeasureNode(NetworkNode):
     """A network node that measures its local qubit wires where the measurement can be
     conditioned on a classical input or upstream measurement results.
 
-    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
+    :param num_in: The number of discrete classical inputs that the node accepts.
+    :type num_in: int
+
+    :param num_out: The number of classical outputs for the node.
+    :type num_out: int
+
+    :param wires: The wires on which the node operates.
+    :type wires: list[int]
+
+    :param ansatz_fn: A `PennyLane quantum circuit function <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`_
+        that takes the following form:
+
+        .. code-block:: python
+
+            def measure_ansatz(settings, wires):
+                # rotate measurement basis
+                qml.Rot(*settings[0:3], wires=wires[0])
+
+        where ``settings`` is an *array[float]* of length ``num_settings``.
+        Note that the measurement ansatz does not apply a measurement operation.
+        Measurement operations are specified later when :class:`qnetvo.NetworkAnsatz`
+        class is used to construct qnodes and cost functions.
+    :type ansatz_fn: function
+
+    :param num_settings: The number of settings parameterizing the ``ansatz_fn`` circuit.
+    :type num_settings: int
+
+    All attributes are inherited from the :class:`qnetvo.NetworkNode` class.
     In addition, the number of classical outputs are specified.
-
-    The ``ansatz_fn`` for a ``MeasureNode`` should take the following form:
-
-    .. code-block:: python
-
-        def measure_ansatz(settings, wires):
-            # rotate measurement basis
-            qml.Rot(*settings[0:3], wires=wires[0])
-
-    Note that the measurement ansatz does not apply a measurement operation.
-    Measurement operations are specified later when :class:`qnetvo.NetworkAnsatz`
-    class is used to construct qnodes and cost functions.
 
     :returns: An instantiated ``MeasureNode`` class.
     """
@@ -177,24 +224,39 @@ class CCSenderNode(NetworkNode):
     """A network node that measures its local qubits and sends its results using classical
     communication.
 
-    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
+    :param num_in: The number of discrete classical inputs that the node accepts.
+    :type num_in: int
 
-    The ``ansatz_fn`` for a ``CCSenderNode`` should take the following form:
+    :param wires: The wires on which the node operates.
+    :type wires: list[int]
 
-    .. code-block:: python
+    :param cc_wires_out: The classical communication wires to output measurement results on.
+    :type cc_wires_out: list[int]
 
-        def cc_sender_ansatz(settings, wires):
-            # apply quantum circuit operations
-            qml.Rot(*settings[0:3], wires=wires[0])
+    :param ansatz_fn: A `PennyLane quantum circuit function <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`_
+        that takes the following form:
 
-            # measure qubit to obtain classical communication bit
-            cc_bit_out = qml.measure(wires[0])
+        .. code-block:: python
 
-            # output list of measurement results
-            return [cc_bit_out]
+            def cc_sender_ansatz(settings, wires):
+                # apply quantum circuit operations
+                qml.Rot(*settings[0:3], wires=wires[0])
 
-    Note that for each wire specified in ``cc_wires_out``, there should be a corresponding
-    ``cc_bit_out`` result obtained using `qml.measure`_.
+                # measure qubit to obtain classical communication bit
+                cc_bit_out = qml.measure(wires[0])
+
+                # output list of measurement results
+                return [cc_bit_out]
+
+        where ``settings`` is an *array[float]* of length ``num_settings``.
+        Note that for each wire specified in ``cc_wires_out``, there should be a corresponding
+        ``cc_bit_out`` result obtained using `qml.measure`_.
+    :type ansatz_fn: function
+
+    :param num_settings: The number of settings parameterizing the ``ansatz_fn`` circuit.
+    :type num_settings: int
+
+    All attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
     .. _qml.measure: https://docs.pennylane.ai/en/stable/code/api/pennylane.measure.html
 
@@ -214,16 +276,33 @@ class CCSenderNode(NetworkNode):
 class CCReceiverNode(NetworkNode):
     """A network node that receives classical communication from an upstream :class:`qnetvo.CCSenderNode`.
 
-    All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
+    :param num_in: The number of discrete classical inputs that the node accepts.
+    :type num_in: int
 
-    The ``ansatz_fn`` for a ``CCSenderNode`` should take the following form:
+    :param wires: The wires on which the node operates.
+    :type wires: list[int]
 
-    .. code-block:: python
+    :param cc_wires: The classical communication wires input to the node.
+    :type cc_wires: list[int]
 
-        def cc_receive_ansatz(settings, wires, cc_wires):
-            # apply quantum operations conditioned on classical communication
-            qml.cond(cc_wires[0], qml.Rot)(*settings[0:3], wires=wires[0])
-            qml.cond(cc_wires[1], qml.Rot)(*settings[3:6], wires=wires[0])
+    :param ansatz_fn: A `PennyLane quantum circuit function <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`_
+        that takes the following form:
+
+        .. code-block:: python
+
+            def cc_receive_ansatz(settings, wires, cc_wires):
+                # apply quantum operations conditioned on classical communication
+                qml.cond(cc_wires[0], qml.Rot)(*settings[0:3], wires=wires[0])
+                qml.cond(cc_wires[1], qml.Rot)(*settings[3:6], wires=wires[0])
+
+        where ``settings`` is an *array[float]* of length ``num_settings`` and ``cc_wires`` contains
+        the measurement results received from upstream nodes.
+    :type ansatz_fn: function
+
+    :param num_settings: The number of settings parameterizing the ``ansatz_fn`` circuit.
+    :type num_settings: int
+
+    All attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
     Note that the classical inputs specified by ``num_in`` are distinct from the classical
     communication inputs passed through ``cc_wires``.
