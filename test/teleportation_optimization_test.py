@@ -62,7 +62,7 @@ class TestTeleportationOptimization:
             qnetvo.CCReceiverNode(
                 num_in=1,
                 wires=[2],
-                cc_wires=[0, 1],
+                cc_wires_in=[0, 1],
                 ansatz_fn=measure_circuit,
                 num_settings=12,
             )

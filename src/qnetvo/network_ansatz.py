@@ -32,7 +32,7 @@ class NetworkAnsatz:
 
     * **layers** - ``list[list[NetworkNode]]``, The input layers of network nodes.
     * **layers_wires** - ``list[qml.wires.Wires]``, The wires used for each layer.
-    * **layers_cc_wires** - ``list[qml.wires.Wires]``, The classical communication wires input to each network layer.
+    * **layers_cc_wires_in** - ``list[qml.wires.Wires]``, The classical communication wires input to each network layer.
     * **layers_cc_wires_out** - ``list[qml.wires.Wires]``, The classical communication wires output from each network layer.
     * **layers_num_settings** - ``list[int]``, The number of setting used in each layer.
     * **layers_total_num_in** - ``list[int]``, The total number of inputs for each layer.
@@ -53,7 +53,7 @@ class NetworkAnsatz:
                                :meth:`get_network_parameter_partitions` for details.
 
     :raises ValueError: If the ``wires`` are not unique across all nodes in an ansatz layer or the ``cc_wires_out`` are not unique across all layers.
-    :raises ValueError: If ``cc_wires`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
+    :raises ValueError: If ``cc_wires_in`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
     """
 
     def __init__(self, *layers, dev_kwargs=None):
@@ -61,14 +61,14 @@ class NetworkAnsatz:
 
         # layers attributes
         self.layers_wires = [self.collect_wires([node.wires for node in layer]) for layer in layers]
-        self.layers_cc_wires = [
-            self.collect_wires([node.cc_wires for node in layer], check_unique=False)
+        self.layers_cc_wires_in = [
+            self.collect_wires([node.cc_wires_in for node in layer], check_unique=False)
             for layer in layers
         ]
         self.layers_cc_wires_out = [
             self.collect_wires([node.cc_wires_out for node in layer]) for layer in layers
         ]
-        self.check_cc_causal_structure(self.layers_cc_wires, self.layers_cc_wires_out)
+        self.check_cc_causal_structure(self.layers_cc_wires_in, self.layers_cc_wires_out)
 
         self.layers_num_settings = [
             math.sum([node.num_settings for node in layer]) for layer in layers
@@ -157,7 +157,7 @@ class NetworkAnsatz:
                 end_id = start_id + node.num_settings
                 node_settings = settings[start_id:end_id]
 
-                node_cc_wires = [cc_wires[i] for i in node.cc_wires]
+                node_cc_wires = [cc_wires[i] for i in node.cc_wires_in]
 
                 if isinstance(node, CCSenderNode):
                     cc_out = node(node_settings, node_cc_wires)
@@ -220,25 +220,25 @@ class NetworkAnsatz:
         return all_wires
 
     @staticmethod
-    def check_cc_causal_structure(cc_wires_layers, cc_wires_out_layers):
+    def check_cc_causal_structure(cc_wires_in_layers, cc_wires_out_layers):
         """Verifies that the classical communication is causal.
 
-        Note that ``cc_wires_out`` describes the classical communication senders while ``cc_wires`` describe
+        Note that ``cc_wires_out`` describes the classical communication senders while ``cc_wires_in`` describe
         classical communication receivers.
         All network ansatzes must have a causal structure where nodes output their classical communication in
         layers that precede the nodes that use that classical communication.
 
-        :params cc_wires_layers: The classical communication input wires, `cc_wires`, considered for each layer.
-        :type cc_wires_layers: list[qml.wires.Wires]
+        :params cc_wires_in_layers: The classical communication input wires, ``cc_wires_in``, considered for each layer.
+        :type cc_wires_in_layers: list[qml.wires.Wires]
 
-        :params cc_wires_out_layers: The classical communication output wires, `cc_wires_out`, considered for each layer.
+        :params cc_wires_out_layers: The classical communication output wires, ``cc_wires_out``, considered for each layer.
         :type cc_wires_out_layers: list[qml.wires.Wires]
 
         :returns: ``True`` if the
 
-        :raises ValueError: If ``cc_wires`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
+        :raises ValueError: If ``cc_wires_in`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
         """
-        num_layers = len(cc_wires_layers)
+        num_layers = len(cc_wires_in_layers)
         for i in range(num_layers):
             measured_cc_wires = (
                 qml.wires.Wires.all_wires([measured_cc_wires, cc_wires_out_layers[i - 1]])
@@ -246,9 +246,9 @@ class NetworkAnsatz:
                 else qml.wires.Wires([])
             )
 
-            if not measured_cc_wires.contains_wires(cc_wires_layers[i]):
+            if not measured_cc_wires.contains_wires(cc_wires_in_layers[i]):
                 raise ValueError(
-                    "The `cc_wires` of layer "
+                    "The `cc_wires_in` of layer "
                     + str(i)
                     + " do not have corresponding `cc_wires_out` in a preceding layer."
                 )

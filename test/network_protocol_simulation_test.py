@@ -40,7 +40,7 @@ def teleportation_ansatz():
         qml.cond(cc_wires[0], qml.PauliZ)(wires[0])
         qml.cond(cc_wires[1], qml.PauliX)(wires[0])
 
-    cc_receiver_nodes = [qnetvo.CCReceiverNode(wires=[2], ansatz_fn=meas_circ, cc_wires=[0, 1])]
+    cc_receiver_nodes = [qnetvo.CCReceiverNode(wires=[2], ansatz_fn=meas_circ, cc_wires_in=[0, 1])]
 
     return qnetvo.NetworkAnsatz(prep_nodes, cc_sender_nodes, cc_receiver_nodes)
 
@@ -80,7 +80,7 @@ def test_shared_randomness():
         qml.cond(cc_wires[0], qml.PauliX)(wires[1])
 
     cc_receiver_nodes = [
-        qnetvo.CCReceiverNode(wires=[1, 2], ansatz_fn=shared_random_circ, cc_wires=[0])
+        qnetvo.CCReceiverNode(wires=[1, 2], ansatz_fn=shared_random_circ, cc_wires_in=[0])
     ]
 
     ansatz = qnetvo.NetworkAnsatz(cc_sender_nodes, cc_receiver_nodes)

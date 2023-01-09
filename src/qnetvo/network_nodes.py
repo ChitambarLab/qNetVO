@@ -10,8 +10,8 @@ class NetworkNode:
     :param wires: The wires on which the node operates.
     :type wires: list[int]
 
-    :param cc_wires: The classical communication wires input to the node.
-    :type cc_wires: list[int]
+    :param cc_wires_in: The classical communication wires input to the node.
+    :type cc_wires_in: list[int]
 
     :param cc_wires_out: The classical communication wires to output measurement results on.
     :type cc_wires_out: list[int]
@@ -30,8 +30,8 @@ class NetworkNode:
     **Calling a Network Node's Ansatz Function:**
 
     Given an instantiated network node, ``node = NetworkNode(*args)``, its ansatz quantum circuit functtion
-    can be called as ``node(settings, cc_wires)`` or, if ``node.cc_wires==[]``, the node can be called
-    as  ``node(settings)`` if ``cc_wires=[]``.
+    can be called as ``node(settings, cc_wires)`` or, if ``node.cc_wires_in==[]``, the node can be called
+    as  ``node(settings)`` provided that ``cc_wires=[]``.
 
     **Attributes:**
 
@@ -44,7 +44,7 @@ class NetworkNode:
         num_in=1,
         num_out=1,
         wires=[],
-        cc_wires=[],
+        cc_wires_in=[],
         cc_wires_out=[],
         ansatz_fn=None,
         num_settings=0,
@@ -53,7 +53,7 @@ class NetworkNode:
         self.num_out = num_out
 
         self.wires = wires
-        self.cc_wires = cc_wires
+        self.cc_wires_in = cc_wires_in
         self.cc_wires_out = cc_wires_out
 
         self.ansatz_fn = ansatz_fn if ansatz_fn else self.default_ansatz_fn
@@ -221,8 +221,8 @@ class MeasureNode(NetworkNode):
 
 
 class CCSenderNode(NetworkNode):
-    """A network node that measures its local qubits and sends its results using classical
-    communication.
+    """A network node that measures one or more of its local qubits and sends the measurement
+    result(s) to one or more downstream :class:`qnetvo.CCReceiverNode` instances.
 
     :param num_in: The number of discrete classical inputs that the node accepts.
     :type num_in: int
@@ -282,8 +282,8 @@ class CCReceiverNode(NetworkNode):
     :param wires: The wires on which the node operates.
     :type wires: list[int]
 
-    :param cc_wires: The classical communication wires input to the node.
-    :type cc_wires: list[int]
+    :param cc_wires_in: The classical communication wires input to the node.
+    :type cc_wires_in: list[int]
 
     :param ansatz_fn: A `PennyLane quantum circuit function <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`_
         that takes the following form:
@@ -316,7 +316,7 @@ class CCReceiverNode(NetworkNode):
         self,
         num_in=1,
         wires=[],
-        cc_wires=[],
+        cc_wires_in=[],
         ansatz_fn=None,
         num_settings=0,
     ):
@@ -325,5 +325,5 @@ class CCReceiverNode(NetworkNode):
             wires=wires,
             ansatz_fn=ansatz_fn,
             num_settings=num_settings,
-            cc_wires=cc_wires,
+            cc_wires_in=cc_wires_in,
         )
