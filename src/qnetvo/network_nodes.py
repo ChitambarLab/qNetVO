@@ -212,7 +212,7 @@ class CCSenderNode(NetworkNode):
 
 
 class CCReceiverNode(NetworkNode):
-    """A network node that receives classical communication from and upstream :class:`qnetvo.CCSenderNode`.
+    """A network node that receives classical communication from an upstream :class:`qnetvo.CCSenderNode`.
 
     All inputs and attributes are inherited from the :class:`qnetvo.NetworkNode` class.
 
