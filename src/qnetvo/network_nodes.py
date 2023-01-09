@@ -193,7 +193,7 @@ class CCSenderNode(NetworkNode):
             # output list of measurement results
             return [cc_bit_out]
 
-    Note that for each specified ``cc_wires_out``, there should be a corresponding
+    Note that for each wire specified in ``cc_wires_out``, there should be a corresponding
     ``cc_bit_out`` result obtained using `qml.measure`_.
 
     .. _qml.measure: https://docs.pennylane.ai/en/stable/code/api/pennylane.measure.html
