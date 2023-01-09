@@ -18,7 +18,7 @@ Network nodes are categorized by their function:
 * **Processing Node:** Applies an operation to its local qubits.
 * **Noise Node:** Applies noise to the local qubits.
 * **Measure Node:** Measures local qubits and outputs a classical value.
-* **CC Sender Node:** Measures local qubits and sends the result to CC receiver nodes.
+* **CC Sender Node:** Measures local qubits and sends the result to classical communication (CC) receiver nodes.
 * **CC Receiver Node:** Applies an operation to its local qubits conditioned upon receieved classical data.
 
 Prepare Nodes
