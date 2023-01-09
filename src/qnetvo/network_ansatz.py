@@ -24,7 +24,7 @@ class NetworkAnsatz:
 
     1. The first layer should contain all :class:`qnetvo.PrepareNode` s in the network.
     2. The last layer should contain all :class:`qnetvo.MeasureNode` s in the network.
-    3. If classical communication is conisdered, then a :class:`qnetvo.CCSenderNode` must be used
+    3. If classical communication is considered, then a :class:`qnetvo.CCSenderNode` must be used
        to obtain the communicated values in a layer preceding the layers where :class:`qnetvo.CCReceiverNode` s
        consume the classical communication.
 
