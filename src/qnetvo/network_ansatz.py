@@ -52,7 +52,7 @@ class NetworkAnsatz:
                                passed to the qnode simulating the network. See
                                :meth:`get_network_parameter_partitions` for details.
 
-    :raises ValueError: If the ``wires`` are not unique across all nodes in an ansatz layer or thee ``cc_wires_out`` are not unique across all layers.
+    :raises ValueError: If the ``wires`` are not unique across all nodes in an ansatz layer or the ``cc_wires_out`` are not unique across all layers.
     :raises ValueError: If ``cc_wires`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
     """
 
