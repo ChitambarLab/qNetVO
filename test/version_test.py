@@ -8,4 +8,4 @@ def test_version():
     version_str = qnetvo.__version__
 
     assert isinstance(version_str, str)
-    assert re.fullmatch(r"0\.3\.\d+", version_str) != None
+    assert re.fullmatch(r"0\.4\.\d+", version_str) != None
