@@ -43,17 +43,17 @@ def mutual_info_cost_fn(ansatz, priors, postmap=np.array([]), **qnode_kwargs):
     :rtype: Function
     """
 
-    net_num_in = math.prod(ansatz.network_layers_total_num_in)
-    num_inputs_list = math.concatenate(ansatz.network_layers_node_num_in).tolist()
+    net_num_in = math.prod(ansatz.layers_total_num_in)
+    num_inputs_list = math.concatenate(ansatz.layers_node_num_in).tolist()
     node_input_ids = [
-        ragged_reshape(mixed_base_num(i, num_inputs_list), ansatz.network_layers_num_nodes)
+        ragged_reshape(mixed_base_num(i, num_inputs_list), ansatz.layers_num_nodes)
         for i in range(net_num_in)
     ]
 
-    net_num_out = math.prod([meas_node.num_out for meas_node in ansatz.measure_nodes])
+    net_num_out = math.prod([meas_node.num_out for meas_node in ansatz.layers[-1]])
 
     if len(postmap) == 0:
-        postmap = np.eye(2 ** len(ansatz.measure_wires))
+        postmap = np.eye(2 ** len(ansatz.layers_wires[-1]))
 
     px_vec = 1
     for i in range(len(priors)):
@@ -106,7 +106,7 @@ def shannon_entropy_cost_fn(ansatz, **qnode_kwargs):
               the ansatz-specific network settings.
     :rtype: Function
     """
-    static_inputs = [[0] * num_nodes for num_nodes in ansatz.network_layers_num_nodes]
+    static_inputs = [[0] * num_nodes for num_nodes in ansatz.layers_num_nodes]
     probs_qnode = joint_probs_qnode(ansatz, **qnode_kwargs)
 
     def cost(*network_settings):

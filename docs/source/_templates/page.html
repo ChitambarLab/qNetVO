@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block body -%}
+{{ super() }}
 {% include "partials/icons.html" %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -110,12 +111,12 @@
                 </div>
                 <div class="title">{{ next.title }}</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
             </a>
           {%- endif %}
           {% if prev -%}
             <a class="prev-page" href="{{ prev.link }}">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>{{ _("Previous") }}</span>

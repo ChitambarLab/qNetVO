@@ -1,227 +1,144 @@
 import pennylane as qml
-from pennylane import numpy as np
+from pennylane import numpy as qnp
 from pennylane import math
 
-
-class NoiseNode:
-    """A class that configures each noise node in the quantum network.
-
-    :param wires: A list of wires on which the node operates.
-    :type wires: array[int]
-
-    :param quantum_fn: A PennyLane quantum function which accepts as input the
-        positional arguments ``(settings, wires)`` where settings is an *array[float]*
-        of length ``num_settings``.
-    :type quantum_fn: function
-
-    :returns: An instantiated ``NoiseNode`` class.
-    """
-
-    def __init__(self, wires, quantum_fn):
-        self.wires = wires
-        self.ansatz_fn = quantum_fn
-        self.num_settings = 0
-        self.num_in = 1
-
-
-class PrepareNode(NoiseNode):
-    """A class that configures each preparation node in the quantum network.
-
-    :param num_in: The number of classical inputs for the node.
-    :type num_in: int
-
-    :param wires: A list of wires on which the node operates.
-    :type wires: array[int]
-
-    :param quantum_fn: A PennyLane quantum function which accepts as input the
-        positional arguments ``(settings, wires)``, where settings is an *array[float]*
-        of length ``num_settings``.
-    :type quantum_fn: function
-
-    :param num_settings: The number of settings that the quantum function accepts.
-    :type num_settings: int
-
-    :returns: An instantiated ``PrepareNode`` class.
-    """
-
-    def __init__(self, num_in, wires, quantum_fn, num_settings):
-        super().__init__(wires, quantum_fn)
-        self.num_in = num_in
-        self.num_settings = num_settings
-        self.settings_dims = (num_in, num_settings)
-
-
-class ProcessingNode(NoiseNode):
-    """A class that configures each processing node in the quantum network.
-
-    :param num_in: The number of classical inputs for the node.
-    :type num_in: int
-
-    :param wires: A list of wires on which the node operates.
-    :type wires: array[int]
-
-    :param quantum_fn: A PennyLane quantum function which accepts as input the
-        positional arguments ``(settings, wires)`` where settings is an *array[float]*
-        of length ``num_settings``.
-    :type quantum_fn: function
-
-    :param num_settings: The number of settings that the quantum function accepts.
-    :type num_settings: int
-
-    :returns: An instantiated ``ProcessingNode`` class.
-    """
-
-    def __init__(self, num_in, wires, quantum_fn, num_settings):
-        super().__init__(wires, quantum_fn)
-        self.num_in = num_in
-        self.num_settings = num_settings
-        self.settings_dims = (num_in, num_settings)
-
-
-class MeasureNode(PrepareNode):
-    """A class that configures each measurement node in the quantum network.
-
-    :param num_in: The number of classical inputs for the node.
-    :type num_in: int
-
-    :param num_out: The number of classical outputs for the node.
-    :type num_out: int
-
-    :param wires: A list of wires on which the node operates.
-    :type wires: array[int]
-
-    :param quantum_fn: A PennyLane quantum function that accepts as input the
-        positional arguments ``(settings, wires)`` where settings is an *array[float]*
-        of length ``num_settings``.
-    :type quantum_fn: function
-
-    :param num_settings: The number of settings that the quantum function accepts.
-    :type num_settings: int
-
-    :returns: An instantiated ``MeasureNode`` class.
-    """
-
-    def __init__(self, num_in, num_out, wires, quantum_fn, num_settings):
-        super().__init__(num_in, wires, quantum_fn, num_settings)
-        self.num_out = num_out
+from .network_nodes import *
 
 
 class NetworkAnsatz:
-    """The ``NetworkAnsatz`` class describes a parameterized quantum prepare and measure network.
-    The ansatz is constructed from a prepare layer and a measure layer.
-    The prepare layer is a collection of unitaries which prepare quantum states while the
-    measure layer is a collection of unitaries which encode the measurement basis.
-    These layers are constructed from the ``prepare_nodes`` and ``measure_nodes`` inputs respectively.
+    """The ``NetworkAnsatz`` class describes a parameterized quantum network.
 
-    :param network_layers: Positional arguments each being a list of nodes designating a circuit layer.
-                           The first layer must contain ``PrepareNode`` classes while the last layer must
-                           contain ``MeasureNode`` classes.
-                           Intermediate layers can contain either ``NoiseNode`` or ``ProcessingNode`` classes,
-                           but all elements must be the same type.
-    :type network_layers: list[list[NetworkNode]]
+    :param layers: Each layer represents a chronological step in the network simulation.
+                   The nodes in each layer apply their operations in parallel where no two nodes can
+                   operate on the same wire.
+    :type layers: list[list[:class:`qnetvo.NetworkNode`]]
 
     :param dev_kwargs: Keyword arguments for the `pennylane.device`_ function.
-    :type dev_kwargs: *optional* dict
+    :type dev_kwargs: *optional* dictionary
 
-    .. _pennylane.device: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.device.html?highlight=device#qml-device
+    .. _pennylane.device: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.device.html
 
-    :returns: An instantiated ``NetworkAnsatz`` class with the following fields:
+    :returns: An instantiated ``NetworkAnsatz``.
 
-    * **network_layers** - ``list[list[NetworkNode]]``, The input layers of network nodes.
-    * **network_layers_wires** - ``list[list[qml.Wires]]``, The wires used for each layer.
-    * **network_layers_num_settings** - ``list[int]``, The number of setting used in each layer.
-    * **network_layers_total_num_in** - ``list[int]``, The total number of inputs for each layer.
-    * **network_layers_node_num_in** - ``list[list[int]]``, The number of inputs for each node in the layer.
-    * **network_layers_num_nodes** - ``list[int]``, The number of nodes in each layer.
-    * **prepare_nodes** - The list of ``PrepareNode`` classes.
-    * **measure_nodes** - The list of ``MeasureNode`` classes.
-    * **prepare_wires** - The list of wires used by the ``prepare_nodes``.
-    * **measure_wires** - The list of wires used by the ``measure_nodes``.
+    There are some conventions that should be followed when defining network layers:
+
+    1. The first layer should contain all :class:`qnetvo.PrepareNode` s in the network.
+    2. The last layer should contain all :class:`qnetvo.MeasureNode` s in the network.
+    3. If classical communication is considered, then a :class:`qnetvo.CCSenderNode` must be used
+       to obtain the communicated values in a layer preceding the layers where :class:`qnetvo.CCReceiverNode` s
+       consume the classical communication.
+
+    ATTRIBUTES:
+
+    * **layers** - ``list[list[NetworkNode]]``, The input layers of network nodes.
+    * **layers_wires** - ``list[qml.wires.Wires]``, The wires used for each layer.
+    * **layers_cc_wires_in** - ``list[qml.wires.Wires]``, The classical communication wires input to each network layer.
+    * **layers_cc_wires_out** - ``list[qml.wires.Wires]``, The classical communication wires output from each network layer.
+    * **layers_num_settings** - ``list[int]``, The number of setting used in each layer.
+    * **layers_total_num_in** - ``list[int]``, The total number of inputs for each layer.
+    * **layers_node_num_in** - ``list[list[int]]``, The number of inputs for each node in the layer.
+    * **layers_num_nodes** - ``list[int]``, The number of nodes in each layer.
     * **network_wires** - The list of wires used by the network ansatz.
+    * **network_cc_wires** - The list of classical communication wires in the network.
+    * **num_cc_wires** - The number of classical communication wires.
     * **dev_kwargs** - *mutable*, the keyword args to pass to the `pennylane.device`_ function.
                        If no ``dev_kwargs`` are provided, a ``"default.qubit"`` is constructed for
-                       noiseless networks and ``"default.mixed"`` device is constructed
-                       for noisy networks.
-    * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.
+                       noiseless networks.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
     * **parameter_partitions** (*List[List[List[Tuple]]]*) - A ragged array containing tuples that specify
                                how to partition a 1D array of network settings into the subset of settings
                                passed to the qnode simulating the network. See
                                :meth:`get_network_parameter_partitions` for details.
 
-    :raises ValueError: If the wires for each ``PrepareNode`` (or ``MeasureNode``) are not unique.
+    :raises ValueError: If the ``wires`` are not unique across all nodes in an ansatz layer or the ``cc_wires_out`` are not unique across all layers.
+    :raises ValueError: If ``cc_wires_in`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
     """
 
-    def __init__(self, *network_layers, dev_kwargs=None):
-        self.network_layers = network_layers
-        self.prepare_nodes = network_layers[0]
-        self.measure_nodes = network_layers[-1]
+    def __init__(self, *layers, dev_kwargs=None):
+        self.layers = layers
 
-        self.network_layers_wires = [
-            self.collect_wires(layer_nodes) for layer_nodes in network_layers
+        # layers attributes
+        self.layers_wires = [self.collect_wires([node.wires for node in layer]) for layer in layers]
+        self.layers_cc_wires_in = [
+            self.collect_wires([node.cc_wires_in for node in layer], check_unique=False)
+            for layer in layers
         ]
-        self.network_layers_num_settings = [
-            math.sum([node.num_settings for node in layer]) for layer in network_layers
+        self.layers_cc_wires_out = [
+            self.collect_wires([node.cc_wires_out for node in layer]) for layer in layers
         ]
-        self.network_layers_total_num_in = [
-            math.prod([node.num_in for node in layer]) for layer in network_layers
-        ]
-        self.network_layers_node_num_in = [
-            [node.num_in for node in layer] for layer in self.network_layers
-        ]
-        self.network_layers_num_nodes = [len(layer) for layer in self.network_layers]
+        self.check_cc_causal_structure(self.layers_cc_wires_in, self.layers_cc_wires_out)
 
-        self.prepare_wires = self.network_layers_wires[0]
-        self.measure_wires = self.network_layers_wires[-1]
-        self.network_wires = qml.wires.Wires.all_wires(self.network_layers_wires)
+        self.layers_num_settings = [
+            math.sum([node.num_settings for node in layer]) for layer in layers
+        ]
+        self.layers_total_num_in = [math.prod([node.num_in for node in layer]) for layer in layers]
+        self.layers_node_num_in = [[node.num_in for node in layer] for layer in self.layers]
+        self.layers_num_nodes = [len(layer) for layer in self.layers]
 
+        # network attributes
+        self.network_wires = qml.wires.Wires.all_wires(self.layers_wires)
+        self.network_cc_wires = self.collect_wires(
+            [node.cc_wires_out for layer in layers for node in layer]
+        )
+        self.num_cc_wires = len(self.network_cc_wires)
+
+        # device attributes
         default_dev_name = "default.qubit"
         self.dev_kwargs = dev_kwargs or {"name": default_dev_name}
         self.dev_kwargs["wires"] = self.network_wires
-        self.dev = self.device()
 
+        # ansatz function attributes
         self.fn = self.ansatz_circuit_fn()
         self.parameter_partitions = self.get_network_parameter_partitions()
 
-    def set_device(self, name, **kwargs):
-        """Configures a new PennyLane device for executing the network ansatz circuit.
-        For more details on parameters see `pennylane.device`_.
-        This method updates the values stored in ``self.dev_kwargs`` and ``self.dev``.
-
-        :returns: The instantiated device.
-        :rtype: ``pennylane.device``
-        """
-
-        dev_kwargs = kwargs.copy() if kwargs else {}
-        dev_kwargs["name"] = name
-        dev_kwargs["wires"] = self.network_wires
-
-        self.dev_kwargs = dev_kwargs
-        self.dev = qml.device(**self.dev_kwargs)
-        return self.dev
-
-    def device(self):
-        """Instantiates a new PennyLane device configured using the ``self.dev_kwargs`` parameters.
-        A distinct device is created each time this function runs.
-
-        :returns: The instantiated device.
-        :rtype: ``pennylane.device``
-        """
-        self.dev = qml.device(**self.dev_kwargs)
-        return self.dev
+    def __call__(self, settings=[]):
+        self.fn(settings)
 
     def ansatz_circuit_fn(self):
-        layer_fns = [self.circuit_layer_fn(layer_nodes) for layer_nodes in self.network_layers]
+        layer_fns = [self.circuit_layer_fn(layer_nodes) for layer_nodes in self.layers]
 
-        def ansatz_circuit(settings):
+        def ansatz_circuit(settings=[]):
+            cc_wires = [None] * self.num_cc_wires
+
             start_id = 0
             for i, layer_fn in enumerate(layer_fns):
-                end_id = start_id + self.network_layers_num_settings[i]
+                end_id = start_id + self.layers_num_settings[i]
                 layer_settings = settings[start_id:end_id]
-                layer_fn(layer_settings)
+                layer_fn(layer_settings, cc_wires)
                 start_id = end_id
 
         return ansatz_circuit
+
+    @staticmethod
+    def circuit_layer_fn(layer_nodes):
+        """Constructs a quantum function for an ansatz layer of provided network nodes.
+
+        :param layer_nodes: A list of nodes in a network layer.
+        :type layer_nodes: list[:class:`qnetvo.NetworkNode`]
+
+        :returns: A quantum function evaluated as ``circuit_layer(settings)`` where ``settings``
+                  is an array constructed via the ``layer_settings`` function.
+        :rtype: function
+        """
+
+        def circuit_layer(settings, cc_wires):
+            start_id = 0
+            for node in layer_nodes:
+                end_id = start_id + node.num_settings
+                node_settings = settings[start_id:end_id]
+
+                node_cc_wires = [cc_wires[i] for i in node.cc_wires_in]
+
+                if isinstance(node, CCSenderNode):
+                    cc_out = node(node_settings, node_cc_wires)
+                    for i in range(len(cc_out)):
+                        cc_wires[node.cc_wires_out[i]] = cc_out[i]
+                else:
+                    node(node_settings, node_cc_wires)
+
+                start_id = end_id
+
+        return circuit_layer
 
     def get_network_parameter_partitions(self):
         """
@@ -235,7 +152,7 @@ class NetworkAnsatz:
         parameter_partitions = []
 
         start_id = 0
-        for i, layer in enumerate(self.network_layers):
+        for i, layer in enumerate(self.layers):
             parameter_partitions += [[]]
             for j, node in enumerate(layer):
 
@@ -248,7 +165,7 @@ class NetworkAnsatz:
         return parameter_partitions
 
     @staticmethod
-    def collect_wires(network_nodes):
+    def collect_wires(wires_lists, check_unique=True):
         """A helper method for the ``NetworkAnsatz`` class which collects and aggregates the
         wires from a set of collection of network nodes (``prepare_nodes`` or ``measure_nodes``).
 
@@ -257,17 +174,56 @@ class NetworkAnsatz:
 
         :raises ValueError: If the same wire is used in two different nodes in ``network_nodes``.
         """
-        ansatz_wires = list(map(lambda node: qml.wires.Wires(node.wires), network_nodes))
-        all_wires = qml.wires.Wires.all_wires(ansatz_wires)
-        unique_wires = qml.wires.Wires.unique_wires(ansatz_wires)
 
-        # two nodes cannot prepare a state on the same wire
-        if not all_wires.tolist() == unique_wires.tolist():
-            raise ValueError(
-                "One or more wires are not unique. Each node must contain unique wires."
-            )
+        wires_objs = list(map(qml.wires.Wires, wires_lists))
+        all_wires = qml.wires.Wires.all_wires(wires_objs)
+
+        if check_unique:
+            unique_wires = qml.wires.Wires.unique_wires(wires_objs)
+
+            # two nodes cannot prepare a state on the same wire
+            if not all_wires.tolist() == unique_wires.tolist():
+                raise ValueError(
+                    "One or more wires are not unique. Each node must contain unique wires."
+                )
 
         return all_wires
+
+    @staticmethod
+    def check_cc_causal_structure(cc_wires_in_layers, cc_wires_out_layers):
+        """Verifies that the classical communication is causal.
+
+        Note that ``cc_wires_out`` describes the classical communication senders while ``cc_wires_in`` describe
+        classical communication receivers.
+        All network ansatzes must have a causal structure where nodes output their classical communication in
+        layers that precede the nodes that use that classical communication.
+
+        :params cc_wires_in_layers: The classical communication input wires, ``cc_wires_in``, considered for each layer.
+        :type cc_wires_in_layers: list[qml.wires.Wires]
+
+        :params cc_wires_out_layers: The classical communication output wires, ``cc_wires_out``, considered for each layer.
+        :type cc_wires_out_layers: list[qml.wires.Wires]
+
+        :returns: ``True`` if the
+
+        :raises ValueError: If ``cc_wires_in`` are used by a layer preceding the classical values output onto ``cc_wires_out``.
+        """
+        num_layers = len(cc_wires_in_layers)
+        for i in range(num_layers):
+            measured_cc_wires = (
+                qml.wires.Wires.all_wires([measured_cc_wires, cc_wires_out_layers[i - 1]])
+                if (i - 1) >= 0
+                else qml.wires.Wires([])
+            )
+
+            if not measured_cc_wires.contains_wires(cc_wires_in_layers[i]):
+                raise ValueError(
+                    "The `cc_wires_in` of layer "
+                    + str(i)
+                    + " do not have corresponding `cc_wires_out` in a preceding layer."
+                )
+
+        return True
 
     def layer_settings(self, network_settings, layer_id, layer_inputs):
         """Constructs the list of settings for a circuit layer in the network ansatz.
@@ -311,13 +267,27 @@ class NetworkAnsatz:
         return qml.math.stack(settings)
 
     def expand_qnode_settings(self, qn_settings, network_inputs):
-        layers = [self.prepare_nodes, self.measure_nodes]
+        """Constructs network settings from qnode settings and the network inputs.
+
+        This implements the reverse mapping implemented in :meth:`qnetvo.NetworkAnsatz.qnode_settings`.
+        Since there are fewer qnode settings than network settings, empty elements in the returned
+        list are set to zero.
+
+        :param qn_settings: Settings to pass to the network qnode.
+        :type qn_settings: array[float]
+
+        :param network_inputs: The considered classical network inputs.
+        :type network_inputs: list[int]
+
+        :returns: The network settings
+        :rtype: array[float]
+        """
         expanded_settings = self.zero_network_settings()
 
         qn_start_id = 0
         for i, layer_inputs in enumerate(network_inputs):
             for j, node_input in enumerate(layer_inputs):
-                node = layers[i][j]
+                node = self.layers[i][j]
                 qn_stop_id = qn_start_id + node.num_settings
                 start_id, stop_id = self.parameter_partitions[i][j][node_input]
 
@@ -327,50 +297,28 @@ class NetworkAnsatz:
 
         return qml.math.stack(expanded_settings)
 
-    @staticmethod
-    def circuit_layer_fn(layer_nodes):
-        """Constructs a quantum function for an ansatz layer of provided network nodes.
-
-        :param layer_nodes: A list of nodes in a network layer.
-        :type layer_nodes: list[NetworkNode]
-
-        :returns: A quantum function evaluated as ``circuit_layer(settings)`` where ``settings``
-                  is an array constructed via the ``layer_settings`` function.
-        :rtype: function
-        """
-
-        def circuit_layer(settings):
-            start_id = 0
-            for node in layer_nodes:
-                end_id = start_id + node.num_settings
-                node_settings = settings[start_id:end_id]
-                node.ansatz_fn(node_settings, node.wires)
-                start_id = end_id
-
-        return circuit_layer
-
     def rand_network_settings(self, fixed_setting_ids=[], fixed_settings=[]):
         """Creates an array of randomized differentiable settings for the network ansatz.
         If fixed settings are specified, then they are marked as ``requires_grad=False`` and
         not differentatiated during optimzation.
 
         :param fixed_setting_ids: The ids of settings that are held constant during optimization.
-        Also requires `fixed_settings` to be provided.
+                                  Also requires `fixed_settings` to be provided.
         :type fixed_setting_ids: *optional* List[Int]
 
         :param fixed_settings: The constant values for fixed settings.
         :type fixed_settings: *optional* List[Float]
 
-        :returns: A 1D list of ``np.tensor`` scalar values having ``requires_grad=True``.
+        :returns: A 1D list of ``qnp.tensor`` scalar values having ``requires_grad=True``.
         :rtype: List[Float]
         """
         num_settings = self.parameter_partitions[-1][-1][-1][-1]
         rand_settings = [
-            np.array(2 * np.pi * np.random.rand() - np.pi) for _ in range(num_settings)
+            qnp.array(2 * qnp.pi * qnp.random.rand() - qnp.pi) for _ in range(num_settings)
         ]
         if len(fixed_setting_ids) > 0 and len(fixed_settings) > 0:
             for i, id in enumerate(fixed_setting_ids):
-                rand_settings[id] = np.array(fixed_settings[i], requires_grad=False)
+                rand_settings[id] = qnp.array(fixed_settings[i], requires_grad=False)
 
         return rand_settings
 
@@ -379,7 +327,7 @@ class NetworkAnsatz:
         tensor types.
 
         :param fixed_setting_ids: The ids of settings that are held constant during optimization.
-        Also requires `fixed_settings` to be provided.
+                                  Also requires `fixed_settings` to be provided.
         :type fixed_setting_ids: *optional* List[Int]
 
         :param fixed_settings: The constant values for fixed settings.
@@ -403,4 +351,4 @@ class NetworkAnsatz:
         :rtype: List[Float]
         """
         num_settings = self.parameter_partitions[-1][-1][-1][-1]
-        return [np.array(0, requires_grad=True) for _ in range(num_settings)]
+        return [qnp.array(0, requires_grad=True) for _ in range(num_settings)]

@@ -14,9 +14,7 @@ def magic_squares_game_cost_fn(network_ansatz, **qnode_kwargs):
     :rtype: Function
     """
     probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
-    static_prep_inputs = [
-        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
-    ]
+    static_prep_inputs = [[0] * len(layer_nodes) for layer_nodes in network_ansatz.layers[0:-1]]
 
     def cost(*network_settings):
         winning_probability = 0

@@ -52,9 +52,7 @@ def I_3322_bell_inequality_cost_fn(network_ansatz, **qnode_kwargs):
     I_3322_joint_probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
     I_3322_local_expval_qnode = local_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
-    static_prep_inputs = [
-        [0] * len(layer_nodes) for layer_nodes in network_ansatz.network_layers[0:-1]
-    ]
+    static_prep_inputs = [[0] * len(layer_nodes) for layer_nodes in network_ansatz.layers[0:-1]]
 
     def cost(*network_settings):
         score = 0

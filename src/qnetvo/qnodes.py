@@ -44,9 +44,9 @@ def local_parity_expval_qnode(network_ansatz, **qnode_kwargs):
               The qnode is called as ``qnode(settings)``.
     :rtype: ``qml.QNode``
     """
-    observables = local_parity_observables(network_ansatz.measure_nodes)
+    observables = local_parity_observables(network_ansatz.layers[-1])
 
-    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
     def circuit(settings):
         network_ansatz.fn(settings)
 
@@ -65,9 +65,9 @@ def global_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     :returns: A qnode the performs a global parity measurement and is called as ``qnode(settings)``.
     :rtype: ``qml.QNode``
     """
-    parity_obs = parity_observable(network_ansatz.measure_wires)
+    parity_obs = parity_observable(network_ansatz.layers_wires[-1])
 
-    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
     def circuit(settings):
         network_ansatz.fn(settings)
 
@@ -88,10 +88,10 @@ def joint_probs_qnode(network_ansatz, **qnode_kwargs):
     :rtype: ``pennylane.QNode``
     """
 
-    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
     def circuit(settings):
         network_ansatz.fn(settings)
 
-        return qml.probs(wires=network_ansatz.measure_wires)
+        return qml.probs(wires=network_ansatz.layers_wires[-1])
 
     return circuit
