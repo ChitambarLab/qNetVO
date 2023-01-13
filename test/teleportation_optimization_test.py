@@ -80,7 +80,7 @@ class TestTeleportationOptimization:
 
         # construct a qnode that outputs a density matrix
         def teleport_qnode_fn(ansatz):
-            @qml.qnode(ansatz.dev)
+            @qml.qnode(qml.device(**ansatz.dev_kwargs))
             def teleport(settings):
                 ansatz.fn(settings)
                 return qml.density_matrix(2)

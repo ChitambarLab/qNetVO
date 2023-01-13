@@ -107,11 +107,10 @@ def test_network_ansatz_init_attributes(ex_network_ansatz):
 
     # verify device
     assert ex_network_ansatz.dev_kwargs["name"] == "default.mixed"
-    assert ex_network_ansatz.dev.wires.tolist() == [0, 1, 2, 3]
-    assert ex_network_ansatz.dev.short_name == "default.mixed"
+    assert ex_network_ansatz.dev_kwargs["wires"].tolist() == [0, 1, 2, 3]
 
     # verify qnode construction and execution
-    @qml.qnode(ex_network_ansatz.dev)
+    @qml.qnode(qml.device(**ex_network_ansatz.dev_kwargs))
     def noisy_test_circuit(settings):
         ex_network_ansatz.fn(settings)
 
@@ -119,31 +118,6 @@ def test_network_ansatz_init_attributes(ex_network_ansatz):
 
     assert np.isclose(noisy_test_circuit([0, 0, 0, 0, 0]), 0.5)
     assert np.isclose(noisy_test_circuit([np.pi / 4, -np.pi / 3, 0, -np.pi / 4, np.pi / 3]), 0.5)
-
-
-def test_init_device_default(chsh_ansatz):
-    assert chsh_ansatz.dev.short_name == "default.qubit"
-
-
-def test_network_ansatz_set_device(chsh_ansatz):
-    assert chsh_ansatz.dev.short_name == "default.qubit"
-    assert chsh_ansatz.dev_kwargs["name"] == "default.qubit"
-
-    updated_dev = chsh_ansatz.set_device("default.mixed", shots=5)
-    assert updated_dev == chsh_ansatz.dev
-    assert chsh_ansatz.dev.short_name == "default.mixed"
-    assert chsh_ansatz.dev_kwargs["name"] == "default.mixed"
-    assert chsh_ansatz.dev.shots == 5
-    assert chsh_ansatz.dev_kwargs["shots"] == 5
-
-
-def test_network_ansatz_device_method(chsh_ansatz):
-    dev1 = chsh_ansatz.device()
-    dev2 = chsh_ansatz.device()
-
-    assert dev1 != dev2
-    assert dev1.short_name == dev2.short_name
-    assert dev1.shots == dev2.shots
 
 
 def test_partition_settings_slices():

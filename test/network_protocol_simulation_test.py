@@ -57,7 +57,7 @@ def teleportation_ansatz():
     ],
 )
 def test_teleportation(teleportation_ansatz, settings, match_vec):
-    @qml.qnode(teleportation_ansatz.dev)
+    @qml.qnode(qml.device(**teleportation_ansatz.dev_kwargs))
     def teleport(settings):
         teleportation_ansatz(settings)
         return qml.density_matrix(wires=[2])
@@ -85,7 +85,7 @@ def test_shared_randomness():
 
     ansatz = qnetvo.NetworkAnsatz(cc_sender_nodes, cc_receiver_nodes)
 
-    @qml.qnode(ansatz.dev)
+    @qml.qnode(qml.device(**ansatz.dev_kwargs))
     def circ():
         ansatz()
         return qml.density_matrix([1, 2])
@@ -114,7 +114,7 @@ def test_superdense_coding():
 
     sd_coding_ansatz = qnetvo.NetworkAnsatz(prep_nodes, proc_nodes, meas_nodes)
 
-    @qml.qnode(sd_coding_ansatz.dev)
+    @qml.qnode(qml.device(**sd_coding_ansatz.dev_kwargs))
     def superdense_coding(input):
         network_settings = [0, 0, 0, np.pi, np.pi, 0, 0, 0, np.pi, np.pi, np.pi, np.pi]
         qn_settings = sd_coding_ansatz.qnode_settings(network_settings, [[], [input], []])

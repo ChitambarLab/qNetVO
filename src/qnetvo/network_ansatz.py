@@ -43,9 +43,7 @@ class NetworkAnsatz:
     * **num_cc_wires** - The number of classical communication wires.
     * **dev_kwargs** - *mutable*, the keyword args to pass to the `pennylane.device`_ function.
                        If no ``dev_kwargs`` are provided, a ``"default.qubit"`` is constructed for
-                       noiseless networks and ``"default.mixed"`` device is constructed
-                       for noisy networks.
-    * **dev** (*qml.device*) - *mutable*, the most recently constructed device for the ansatz.
+                       noiseless networks.
     * **fn** (*function*) - A quantum function implementing the quantum network ansatz.
     * **parameter_partitions** (*List[List[List[Tuple]]]*) - A ragged array containing tuples that specify
                                how to partition a 1D array of network settings into the subset of settings
@@ -88,7 +86,6 @@ class NetworkAnsatz:
         default_dev_name = "default.qubit"
         self.dev_kwargs = dev_kwargs or {"name": default_dev_name}
         self.dev_kwargs["wires"] = self.network_wires
-        self.dev = self.device()
 
         # ansatz function attributes
         self.fn = self.ansatz_circuit_fn()
@@ -96,33 +93,6 @@ class NetworkAnsatz:
 
     def __call__(self, settings=[]):
         self.fn(settings)
-
-    def set_device(self, name, **kwargs):
-        """Configures a new PennyLane device for executing the network ansatz circuit.
-        For more details on parameters see `pennylane.device`_.
-        This method updates the values stored in ``self.dev_kwargs`` and ``self.dev``.
-
-        :returns: The instantiated device.
-        :rtype: ``pennylane.device``
-        """
-
-        dev_kwargs = kwargs.copy() if kwargs else {}
-        dev_kwargs["name"] = name
-        dev_kwargs["wires"] = self.network_wires
-
-        self.dev_kwargs = dev_kwargs
-        self.dev = qml.device(**self.dev_kwargs)
-        return self.dev
-
-    def device(self):
-        """Instantiates a new PennyLane device configured using the ``self.dev_kwargs`` parameters.
-        A distinct device is created each time this function runs.
-
-        :returns: The instantiated device.
-        :rtype: ``pennylane.device``
-        """
-        self.dev = qml.device(**self.dev_kwargs)
-        return self.dev
 
     def ansatz_circuit_fn(self):
         layer_fns = [self.circuit_layer_fn(layer_nodes) for layer_nodes in self.layers]

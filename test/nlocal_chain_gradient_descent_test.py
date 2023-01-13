@@ -47,13 +47,20 @@ class TestNLocalChainGradientDescent:
 
         parallel_grad = qnet.parallel_nlocal_chain_grad_fn(bilocal_chain_ansatz)
 
+        bilocal_chain_cost = qnet.nlocal_chain_22_cost_fn(bilocal_chain_ansatz)
+
+        np.random.seed(9)
+        init_settings = bilocal_chain_ansatz.rand_network_settings()
+
         opt_dict = qnet.gradient_descent(
-            *optimization_args,
+            # *optimization_args,
+            bilocal_chain_cost,
+            init_settings,
             num_steps=10,
             step_size=2,
             sample_width=10,
             grad_fn=parallel_grad,
-            verbose=False
+            verbose=False,
         )
 
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=1e-3)

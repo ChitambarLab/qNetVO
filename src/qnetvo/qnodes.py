@@ -46,7 +46,7 @@ def local_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     """
     observables = local_parity_observables(network_ansatz.layers[-1])
 
-    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
     def circuit(settings):
         network_ansatz.fn(settings)
 
@@ -67,7 +67,7 @@ def global_parity_expval_qnode(network_ansatz, **qnode_kwargs):
     """
     parity_obs = parity_observable(network_ansatz.layers_wires[-1])
 
-    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
     def circuit(settings):
         network_ansatz.fn(settings)
 
@@ -88,7 +88,7 @@ def joint_probs_qnode(network_ansatz, **qnode_kwargs):
     :rtype: ``pennylane.QNode``
     """
 
-    @qml.qnode(network_ansatz.device(), **qnode_kwargs)
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
     def circuit(settings):
         network_ansatz.fn(settings)
 
