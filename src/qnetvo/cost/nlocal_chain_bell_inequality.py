@@ -199,7 +199,6 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
     n = len(network_ansatz.layers[0])
 
     chain_qnodes = [global_parity_expval_qnode(network_ansatz, **qnode_kwargs) for i in range(4)]
-    qnode_grads = [qml.grad(qnode) for qnode in chain_qnodes]
 
     I22 = chain_I22_fn(network_ansatz, parallel=True, **qnode_kwargs)
     J22 = chain_J22_fn(network_ansatz, parallel=True, **qnode_kwargs)
