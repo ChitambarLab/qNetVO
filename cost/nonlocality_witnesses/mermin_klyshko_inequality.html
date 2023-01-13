@@ -2,12 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="n-Local Chain Inequality" href="nlocal_chain_inequality.html" /><link rel="prev" title="I-3322 Inequality" href="I_3322_inequality.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="n-Local Chain Inequality" href="nlocal_chain_inequality.html" /><link rel="prev" title="I-3322 Inequality" href="I_3322_inequality.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>Mermin-Klyshko Inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -37,6 +38,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +157,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +170,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -238,7 +244,7 @@
   </ol>
 </div>
         <article role="main">
-          <div class="section" id="mermin-klyshko-inequality">
+          <section id="mermin-klyshko-inequality">
 <h1>Mermin-Klyshko Inequality<a class="headerlink" href="#mermin-klyshko-inequality" title="Permalink to this heading">#</a></h1>
 <p>Consider a non-signaling scenario with a single source and <span class="math notranslate nohighlight">\(n\)</span> measurement
 devices.
@@ -268,17 +274,17 @@ separation between the quantum and classical bounds grows exponentialy with <spa
 <dd><p>Constructs an ansatz-specific cost function based upon the
 Mermin-Klyshko (MK) inequality.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The network ansatz for which to apply the MK inequality.</p></li>
 <li><p><strong>qnode_kwargs</strong> – Keyword arguments passed through to the qnode constructors.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A cost function, <code class="docutils literal notranslate"><span class="pre">cost(*network_settings)</span></code>, that evaluates <span class="math notranslate nohighlight">\(-I_{\text{MK}}\)</span>
 for the supplied network settings.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Function</p>
 </dd>
 </dl>
@@ -291,16 +297,16 @@ for the supplied network settings.</p>
 in the Mermin-Klyshko (MK) inequality.</p>
 <p>This function supports <a class="reference internal" href="#qnetvo.mermin_klyshko_cost_fn" title="qnetvo.mermin_klyshko_cost_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mermin_klyshko_cost_fn()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> (<em>Int</em>) – The number of measurement nodes in the scenario.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The first element of the returned tuple is a list of
 measurement inputs <span class="math notranslate nohighlight">\(y_j\in\{0,1\}\)</span> for the MK
 correlator terms. The second element of the returned tuple
 is a list of scalar multipliers for each correlator term.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple(List[Int], List[Int])</p>
 </dd>
 </dl>
@@ -311,13 +317,13 @@ is a list of scalar multipliers for each correlator term.</p>
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">mermin_klyshko_classical_bound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/mermin_klyshko_inequality.html#mermin_klyshko_classical_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.mermin_klyshko_classical_bound" title="Permalink to this definition">#</a></dt>
 <dd><p>The classical bound for the Mermin-Klyshko inequality is <span class="math notranslate nohighlight">\(2^{n-1}\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> (<em>Int</em>) – The number of measurement nodes.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The classical bound.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Float</p>
 </dd>
 </dl>
@@ -328,45 +334,51 @@ is a list of scalar multipliers for each correlator term.</p>
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">mermin_klyshko_quantum_bound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/mermin_klyshko_inequality.html#mermin_klyshko_quantum_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.mermin_klyshko_quantum_bound" title="Permalink to this definition">#</a></dt>
 <dd><p>The quantum bound for the Mermin-Klyshko inequality is <span class="math notranslate nohighlight">\(2^{3(n-1)/2}\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> (<em>Int</em>) – The number of measurement nodes.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The quantum bound.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Float</p>
 </dd>
 </dl>
 </dd></dl>
 
-<div class="section" id="references">
+<section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
-<dl class="citation">
-<dt class="label" id="mermin1990"><span class="brackets"><a class="fn-backref" href="#id1">Mermin1990</a></span></dt>
-<dd><p>Mermin, N. David. “Extreme quantum entanglement in a superposition of
+<div role="list" class="citation-list">
+<div class="citation" id="mermin1990" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">Mermin1990</a><span class="fn-bracket">]</span></span>
+<p>Mermin, N. David. “Extreme quantum entanglement in a superposition of
 macroscopically distinct states.” Physical Review Letters 65.15 (1990): 1838.</p>
-</dd>
-<dt class="label" id="ardehali1992"><span class="brackets"><a class="fn-backref" href="#id2">Ardehali1992</a></span></dt>
-<dd><p>Ardehali, Mohammad. “Bell inequalities with a magnitude of violation that grows
+</div>
+<div class="citation" id="ardehali1992" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">Ardehali1992</a><span class="fn-bracket">]</span></span>
+<p>Ardehali, Mohammad. “Bell inequalities with a magnitude of violation that grows
 exponentially with the number of particles.” Physical Review A 46.9 (1992): 5375.</p>
-</dd>
-<dt class="label" id="belinsky1993-1"><span class="brackets"><a class="fn-backref" href="#id3">Belinsky1993_1</a></span></dt>
-<dd><p>Belinsky, A. V., and D. N. Klyshko. “A modified N-particle Bell theorem, the
+</div>
+<div class="citation" id="belinsky1993-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">Belinsky1993_1</a><span class="fn-bracket">]</span></span>
+<p>Belinsky, A. V., and D. N. Klyshko. “A modified N-particle Bell theorem, the
 corresponding optical experiment and its classical model.” Physics Letters A 176.6 (1993):
 415-420.</p>
-</dd>
-<dt class="label" id="belinsky1993-2"><span class="brackets"><a class="fn-backref" href="#id4">Belinsky1993_2</a></span></dt>
-<dd><p>Belinski, A. V., and David Nikolaevich Klyshko. “Interference of light and
+</div>
+<div class="citation" id="belinsky1993-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">Belinsky1993_2</a><span class="fn-bracket">]</span></span>
+<p>Belinski, A. V., and David Nikolaevich Klyshko. “Interference of light and
 Bell’s theorem.” Physics-Uspekhi 36.8 (1993): 653.</p>
-</dd>
-<dt class="label" id="cabello2002"><span class="brackets">Cabello2002</span><span class="fn-backref">(<a href="#id5">1</a>,<a href="#id6">2</a>)</span></dt>
-<dd><p>Cabello, Adan. “Bell’s inequality for n spin-s particles.” Physical Review A
+</div>
+<div class="citation" id="cabello2002" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Cabello2002<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id5">1</a>,<a role="doc-backlink" href="#id6">2</a>)</span>
+<p>Cabello, Adan. “Bell’s inequality for n spin-s particles.” Physical Review A
 65.6 (2002): 062105.</p>
-</dd>
-</dl>
 </div>
 </div>
+</section>
+</section>
 
         </article>
       </div>
@@ -380,10 +392,10 @@ Bell’s theorem.” Physics-Uspekhi 36.8 (1993): 653.</p>
                 </div>
                 <div class="title">n-Local Chain Inequality</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="I_3322_inequality.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -436,9 +448,6 @@ Bell’s theorem.” Physics-Uspekhi 36.8 (1993): 653.</p>
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>

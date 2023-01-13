@@ -2,12 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="n-Local Star Inequality" href="nlocal_star_inequality.html" /><link rel="prev" title="Mermin-Klyshko Inequality" href="mermin_klyshko_inequality.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="n-Local Star Inequality" href="nlocal_star_inequality.html" /><link rel="prev" title="Mermin-Klyshko Inequality" href="mermin_klyshko_inequality.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>n-Local Chain Inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -37,6 +38,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +157,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +170,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -238,13 +244,15 @@
   </ol>
 </div>
         <article role="main">
-          <div class="section" id="n-local-chain-inequality">
+          <section id="n-local-chain-inequality">
 <h1>n-Local Chain Inequality<a class="headerlink" href="#n-local-chain-inequality" title="Permalink to this heading">#</a></h1>
 <p>The <span class="math notranslate nohighlight">\(n\)</span>-local chain network consists of <span class="math notranslate nohighlight">\(n\)</span> entanglement sources (static preparation node) and <span class="math notranslate nohighlight">\(n+1\)</span> measurement nodes linked as a chain by the entanglement sources.</p>
-<div class="figure align-default" id="id3">
+<figure class="align-default" id="id3">
 <img alt="../../_images/n-local_chain_general.png" src="../../_images/n-local_chain_general.png" />
-<p class="caption"><span class="caption-text"><span class="math notranslate nohighlight">\(n\)</span> <strong>-Local Chain Network.</strong></span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text"><span class="math notranslate nohighlight">\(n\)</span> <strong>-Local Chain Network.</strong></span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 <p>If the entanglement sources are compared directly to classical shared randomness, then polynomial
 Bell inequalities can be derivied that tightly bound the set of classical correlations
 <a class="reference internal" href="#branciard2012" id="id1"><span>[Branciard2012]</span></a>, <a class="reference internal" href="#mukherjee2015" id="id2"><span>[Mukherjee2015]</span></a>.
@@ -258,7 +266,7 @@ integrated into cost functions.</p>
 <dd><p>For the provided <code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code>, constructs the cost function for the
 <span class="math notranslate nohighlight">\(n\)</span>-local chain Bell inequality for binary inputs and outputs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The ansatz for the networks.</p></li>
 <li><p><strong>parallel</strong> (<em>optional</em> bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, remote qnode executions are made in parallel web requests.</p></li>
@@ -289,11 +297,11 @@ all measurement nodes in the network.</p>
 <p>The maximal score for the dichotomic <span class="math notranslate nohighlight">\(n\)</span> -local Bell inequality is known to be
 <span class="math notranslate nohighlight">\(\sqrt{2} \approx 1.414 213\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A cost function that can be evaluated as <code class="docutils literal notranslate"><span class="pre">cost(*network_settings)</span></code> where
 <code class="docutils literal notranslate"><span class="pre">network_settings</span></code> have the appropriate dimensions for the provided <code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code></p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Function</p>
 </dd>
 </dl>
@@ -304,20 +312,20 @@ all measurement nodes in the network.</p>
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">chain_I22_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_chain_bell_inequality.html#chain_I22_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.chain_I22_fn" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a function for evaluating the <span class="math notranslate nohighlight">\(I_{22}\)</span> quantity used in the <code class="docutils literal notranslate"><span class="pre">nlocal_chain_22_cost_fn</span></code> function.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The ansatz for the <span class="math notranslate nohighlight">\(n\)</span>-local chain network.</p></li>
 <li><p><strong>parallel</strong> (<em>optional</em> bool, default <code class="docutils literal notranslate"><span class="pre">False</span></code>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, remote qnode executions are made in parallel web requests.</p></li>
 <li><p><strong>qnode_kwargs</strong> – keyword args to be passed to constructed QNodes.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type</dt>
+<dt class="field-even">Type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>optional</em> dictionary</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">I22(*network_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(I_{22}\)</span> quantity.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>function</p>
 </dd>
 </dl>
@@ -328,20 +336,20 @@ all measurement nodes in the network.</p>
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">chain_J22_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/nlocal_chain_bell_inequality.html#chain_J22_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.chain_J22_fn" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a function for evaluating the <span class="math notranslate nohighlight">\(J_{22}\)</span> quantity used in the <code class="docutils literal notranslate"><span class="pre">nlocal_chain_22_cost_fn</span></code> function.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The ansatz for the <span class="math notranslate nohighlight">\(n\)</span>-local chain network.</p></li>
 <li><p><strong>parallel</strong> (<em>optional</em> bool, default <code class="docutils literal notranslate"><span class="pre">False</span></code>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, remote qnode executions are made in parallel web requests.</p></li>
 <li><p><strong>qnode_kwargs</strong> – keyword args to be passed to constructed QNodes.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type</dt>
+<dt class="field-even">Type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>optional</em> dictionary</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">J22(*network_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(J_{22}\)</span> quantity.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>function</p>
 </dd>
 </dl>
@@ -356,7 +364,7 @@ chain cost.</p>
 efficiency of remote qnode execution.
 The number of threads is restricted to four in order to be compatible with IBM’s API.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the <span class="math notranslate nohighlight">\(n\)</span>-local chain network.</p></li>
 <li><p><strong>natural_grad</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the natural gradient is evaluated by scaling the
@@ -364,29 +372,35 @@ gradient by the inverse of the metric tensor.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">nlocal_chain_grad(*network_settings)</span></code>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>function</p>
 </dd>
 </dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Parallel gradient computation is flaky on PennyLane v0.28+. Intermittent  failures may occur.</p>
+</div>
 </dd></dl>
 
-<div class="section" id="references">
+<section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
-<dl class="citation">
-<dt class="label" id="branciard2012"><span class="brackets"><a class="fn-backref" href="#id1">Branciard2012</a></span></dt>
-<dd><p>Branciard, Cyril, et al. “Bilocal versus nonbilocal correlations in
+<div role="list" class="citation-list">
+<div class="citation" id="branciard2012" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">Branciard2012</a><span class="fn-bracket">]</span></span>
+<p>Branciard, Cyril, et al. “Bilocal versus nonbilocal correlations in
 entanglement-swapping experiments.” Physical Review A 85.3 (2012): 032119.</p>
-</dd>
-<dt class="label" id="mukherjee2015"><span class="brackets"><a class="fn-backref" href="#id2">Mukherjee2015</a></span></dt>
-<dd><p>Mukherjee, Kaushiki, Biswajit Paul, and Debasis Sarkar. “Correlations in <span class="math notranslate nohighlight">\(n\)</span>
+</div>
+<div class="citation" id="mukherjee2015" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">Mukherjee2015</a><span class="fn-bracket">]</span></span>
+<p>Mukherjee, Kaushiki, Biswajit Paul, and Debasis Sarkar. “Correlations in <span class="math notranslate nohighlight">\(n\)</span>
 -local scenario.” Quantum Information Processing 14.6 (2015): 2025-2042.</p>
-</dd>
-</dl>
 </div>
 </div>
+</section>
+</section>
 
         </article>
       </div>
@@ -400,10 +414,10 @@ entanglement-swapping experiments.” Physical Review A 85.3 (2012): 032119.</p>
                 </div>
                 <div class="title">n-Local Star Inequality</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="mermin_klyshko_inequality.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -456,9 +470,6 @@ entanglement-swapping experiments.” Physical Review A 85.3 (2012): 032119.</p>
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>

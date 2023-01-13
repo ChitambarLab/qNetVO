@@ -2,12 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Utilities" href="utilities.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Utilities" href="utilities.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>Contributing - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="_static/css/qnetvo.css" />
     
@@ -37,6 +38,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +157,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +170,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -234,7 +240,7 @@
   </ol>
 </div>
         <article role="main">
-          <div class="section" id="contributing">
+          <section id="contributing">
 <h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading">#</a></h1>
 <p>We welcome outside contributions to qNetVO.
 For small changes, please fork the repository and make a pull request containing you change.
@@ -250,7 +256,7 @@ For large contributions, please contact the corresponding author at <script type
 <p>All contributed code must have passing tests, comprehensive documentation,
 and proper code formatting.
 Development instructions are found below.</p>
-<div class="section" id="development-environment">
+<section id="development-environment">
 <h2>Development Environment<a class="headerlink" href="#development-environment" title="Permalink to this heading">#</a></h2>
 <p>For convenience and reproducibility, contributors should use the <code class="docutils literal notranslate"><span class="pre">qnetvo-dev</span></code> conda environment.
 The <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/glossary.html#anaconda-glossary">Anaconda</a>
@@ -280,8 +286,8 @@ For more details on how to use <code class="docutils literal notranslate"><span 
 </div>
 <p>At this point, all packages for running tests, building docs, and running notebooks are installed.
 Changes to the local <code class="docutils literal notranslate"><span class="pre">./src/qnetvo</span></code> codebase will be reflected when <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">qnetvo</span></code> is called in Python code.</p>
-</div>
-<div class="section" id="running-tests">
+</section>
+<section id="running-tests">
 <h2>Running Tests<a class="headerlink" href="#running-tests" title="Permalink to this heading">#</a></h2>
 <p>Tests are found in the <code class="docutils literal notranslate"><span class="pre">./test</span></code> directory and run using <a class="reference external" href="https://docs.pytest.org/en/7.0.x/"><code class="docutils literal notranslate"><span class="pre">pytest</span></code></a>
 First, set up the <a class="reference internal" href="#development-environment">Development Environment</a>.
@@ -289,8 +295,8 @@ Then, from the root directory, run:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(qnetvo-dev) $ pytest
 </pre></div>
 </div>
-</div>
-<div class="section" id="running-demos">
+</section>
+<section id="running-demos">
 <h2>Running Demos<a class="headerlink" href="#running-demos" title="Permalink to this heading">#</a></h2>
 <p>Demos are found in the <cite>./demos</cite> directory and implemented in Jupyter notebooks.
 To run the demos locally, first set up the <a class="reference internal" href="#development-environment">Development Environment</a>, then run:</p>
@@ -298,8 +304,8 @@ To run the demos locally, first set up the <a class="reference internal" href="#
 </pre></div>
 </div>
 <p>A Jupyter notebook server will launch in your browser allowing you to run the notebooks.</p>
-</div>
-<div class="section" id="building-documentation">
+</section>
+<section id="building-documentation">
 <h2>Building Documentation<a class="headerlink" href="#building-documentation" title="Permalink to this heading">#</a></h2>
 <p>It is important to view the documentation before committing changes.
 To locally build and view the documentation, first set up the <a class="reference internal" href="#development-environment">Development Environment</a>.
@@ -319,8 +325,8 @@ Then, follow these steps.</p>
 <ol class="arabic simple" start="3">
 <li><p><strong>View Documentation:</strong> Copy and paste the returned IP address to your browser.</p></li>
 </ol>
-</div>
-<div class="section" id="formatting-code">
+</section>
+<section id="formatting-code">
 <h2>Formatting Code<a class="headerlink" href="#formatting-code" title="Permalink to this heading">#</a></h2>
 <p>All code in this project is autoformatted using <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a>.
 First, set up the <a class="reference internal" href="#development-environment">Development Environment</a>.
@@ -328,18 +334,18 @@ Then, from the root directory, run:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(qnetvo-dev) $ black -l 100 src test docs
 </pre></div>
 </div>
-</div>
-<div class="section" id="semantic-versioning">
+</section>
+<section id="semantic-versioning">
 <h2>Semantic Versioning<a class="headerlink" href="#semantic-versioning" title="Permalink to this heading">#</a></h2>
 <p>This project uses <a class="reference external" href="https://semver.org/">semantic versioning</a> to manage
 releases and maintain consistent software.</p>
-</div>
-<div class="section" id="packaging-and-releases">
+</section>
+<section id="packaging-and-releases">
 <h2>Packaging and Releases<a class="headerlink" href="#packaging-and-releases" title="Permalink to this heading">#</a></h2>
 <p>This project is packaged using PyPI, the <a class="reference external" href="https://pypi.org/">Python Package Index</a>.
 Please refer to <a class="reference external" href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">this tutorial</a> for details on releasing a new version.</p>
-</div>
-</div>
+</section>
+</section>
 
         </article>
       </div>
@@ -348,7 +354,7 @@ Please refer to <a class="reference external" href="https://packaging.python.org
         <div class="related-pages">
           
           <a class="prev-page" href="utilities.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -403,9 +409,6 @@ Please refer to <a class="reference external" href="https://packaging.python.org
     </aside>
   </div>
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/scripts/furo.js"></script>

@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>qnetvo.cost.mutual_info - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/qnetvo.css" />
     
@@ -37,6 +37,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +156,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +169,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -246,7 +251,7 @@
 
 
 <div class="viewcode-block" id="mutual_info_cost_fn"><a class="viewcode-back" href="../../../cost/entropic_quantities.html#qnetvo.mutual_info_cost_fn">[docs]</a><span class="k">def</span> <span class="nf">mutual_info_cost_fn</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="n">priors</span><span class="p">,</span> <span class="n">postmap</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs an ansatz-specific mutual information cost function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs an ansatz-specific mutual information cost function.</span>
 
 <span class="sd">    The mutual information quantifies the information shared by two distributions</span>
 <span class="sd">    :math:`X` and :math:`Y`.</span>
@@ -282,17 +287,17 @@
 <span class="sd">    :rtype: Function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">net_num_in</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">network_layers_total_num_in</span><span class="p">)</span>
-    <span class="n">num_inputs_list</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">network_layers_node_num_in</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">net_num_in</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">layers_total_num_in</span><span class="p">)</span>
+    <span class="n">num_inputs_list</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">layers_node_num_in</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
     <span class="n">node_input_ids</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">ragged_reshape</span><span class="p">(</span><span class="n">mixed_base_num</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">num_inputs_list</span><span class="p">),</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">network_layers_num_nodes</span><span class="p">)</span>
+        <span class="n">ragged_reshape</span><span class="p">(</span><span class="n">mixed_base_num</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">num_inputs_list</span><span class="p">),</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">layers_num_nodes</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">net_num_in</span><span class="p">)</span>
     <span class="p">]</span>
 
-    <span class="n">net_num_out</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">meas_node</span><span class="o">.</span><span class="n">num_out</span> <span class="k">for</span> <span class="n">meas_node</span> <span class="ow">in</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">])</span>
+    <span class="n">net_num_out</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">meas_node</span><span class="o">.</span><span class="n">num_out</span> <span class="k">for</span> <span class="n">meas_node</span> <span class="ow">in</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">postmap</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">postmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="nb">len</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">measure_wires</span><span class="p">))</span>
+        <span class="n">postmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="nb">len</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">layers_wires</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
 
     <span class="n">px_vec</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">priors</span><span class="p">)):</span>
@@ -322,7 +327,7 @@
 
 
 <div class="viewcode-block" id="shannon_entropy_cost_fn"><a class="viewcode-back" href="../../../cost/entropic_quantities.html#qnetvo.shannon_entropy_cost_fn">[docs]</a><span class="k">def</span> <span class="nf">shannon_entropy_cost_fn</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs an ansatz-specific Shannon entropy cost function</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs an ansatz-specific Shannon entropy cost function</span>
 
 <span class="sd">    The Shannon entropy characterizes the amount of randomness, or similarly, the amount of</span>
 <span class="sd">    information is present in a random variable. Formally, let :math:`X` be a discrete random</span>
@@ -345,7 +350,7 @@
 <span class="sd">              the ansatz-specific network settings.</span>
 <span class="sd">    :rtype: Function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">static_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_nodes</span> <span class="k">for</span> <span class="n">num_nodes</span> <span class="ow">in</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">network_layers_num_nodes</span><span class="p">]</span>
+    <span class="n">static_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_nodes</span> <span class="k">for</span> <span class="n">num_nodes</span> <span class="ow">in</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">layers_num_nodes</span><span class="p">]</span>
     <span class="n">probs_qnode</span> <span class="o">=</span> <span class="n">joint_probs_qnode</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
@@ -379,9 +384,6 @@
     </aside>
   </div>
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>

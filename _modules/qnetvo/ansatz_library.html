@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>qnetvo.ansatz_library - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -37,6 +37,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +156,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +169,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -246,7 +251,7 @@
 
 
 <div class="viewcode-block" id="max_entangled_state"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.max_entangled_state">[docs]</a><span class="k">def</span> <span class="nf">max_entangled_state</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Ansatz function for maximally entangled two-qubit state preparation.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ansatz function for maximally entangled two-qubit state preparation.</span>
 
 <span class="sd">    A general ``qml.Rot`` unitary is applied to one-side of a</span>
 <span class="sd">    Bell state creating a general parameterization of all maximally</span>
@@ -267,7 +272,7 @@
 
 
 <div class="viewcode-block" id="bell_state_copies"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.bell_state_copies">[docs]</a><span class="k">def</span> <span class="nf">bell_state_copies</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Initializes :math:`n` Bell states on :math:`2n` wires.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes :math:`n` Bell states on :math:`2n` wires.</span>
 <span class="sd">    The first :math:`n` wires represent Alice&#39;s half of the entangled</span>
 <span class="sd">    state while Bob&#39;s half consists of the remaining :math:`n` wires.</span>
 <span class="sd">    Entanglement is shared between Alice and Bob, however, the independent</span>
@@ -285,7 +290,7 @@
 
 
 <div class="viewcode-block" id="ghz_state"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.ghz_state">[docs]</a><span class="k">def</span> <span class="nf">ghz_state</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Initializes a GHZ state on the provided wires.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes a GHZ state on the provided wires.</span>
 
 <span class="sd">    :param settings: A placeholder parameter that is not used.</span>
 <span class="sd">    :type settings: list[empty]</span>
@@ -300,7 +305,7 @@
 
 
 <div class="viewcode-block" id="local_RY"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.local_RY">[docs]</a><span class="k">def</span> <span class="nf">local_RY</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Performs a rotation about :math:`y`-axis on each qubit</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs a rotation about :math:`y`-axis on each qubit</span>
 <span class="sd">    specified by ``wires``.</span>
 
 <span class="sd">    :param settings: A list of ``len(wires)`` real values.</span>
@@ -313,7 +318,7 @@
 
 
 <div class="viewcode-block" id="local_RXRY"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.local_RXRY">[docs]</a><span class="k">def</span> <span class="nf">local_RXRY</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Performs a rotation about the :math:`x` and :math:`y` axes on</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs a rotation about the :math:`x` and :math:`y` axes on</span>
 <span class="sd">    each qubit specified by ``wires``.</span>
 
 <span class="sd">    :param settings: A list of ``2*len(wires)`` real values.</span>
@@ -328,7 +333,7 @@
 
 
 <div class="viewcode-block" id="pure_amplitude_damping"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.pure_amplitude_damping">[docs]</a><span class="k">def</span> <span class="nf">pure_amplitude_damping</span><span class="p">(</span><span class="n">noise_params</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements a single qubit amplitude damping channel as a two-qubit gate.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements a single qubit amplitude damping channel as a two-qubit gate.</span>
 
 <span class="sd">    This allows amplitude damping noise to be applied on quantum hardware or on a</span>
 <span class="sd">    state-vector simulator such as ``&quot;default.qubit&quot;``.</span>
@@ -358,7 +363,7 @@
 
 
 <div class="viewcode-block" id="pure_phase_damping"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.pure_phase_damping">[docs]</a><span class="k">def</span> <span class="nf">pure_phase_damping</span><span class="p">(</span><span class="n">noise_params</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements a single qubit phase damping channel as a two-qubit gate.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements a single qubit phase damping channel as a two-qubit gate.</span>
 
 <span class="sd">    This allows phase damping noise to be applied on quantum hardware or on a</span>
 <span class="sd">    state-vector simulator such as ``&quot;default.qubit&quot;``.</span>
@@ -386,7 +391,7 @@
 
 
 <div class="viewcode-block" id="two_qubit_depolarizing"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.two_qubit_depolarizing">[docs]</a><span class="k">class</span> <span class="nc">two_qubit_depolarizing</span><span class="p">(</span><span class="n">Channel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Applies a two-qubit depolarizing channel using Kraus operators.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies a two-qubit depolarizing channel using Kraus operators.</span>
 
 <span class="sd">    The channel is called as a quantum function ``two_qubit_depolarizing(gamma, wires)``</span>
 
@@ -412,7 +417,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">compute_kraus_matrices</span><span class="p">(</span><span class="n">gamma</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Kraus matrices representing the ``two_qubit_depolarizing`` channel.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Kraus matrices representing the ``two_qubit_depolarizing`` channel.</span>
 
 <span class="sd">        :param gamma: The amount of depolarizing noise in the channel.</span>
 <span class="sd">        :type gamma: Float</span>
@@ -443,7 +448,7 @@
 
 
 <div class="viewcode-block" id="colored_noise"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.colored_noise">[docs]</a><span class="k">class</span> <span class="nc">colored_noise</span><span class="p">(</span><span class="n">Channel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Applies a two-qubit colored noise channel using Kraus operators.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies a two-qubit colored noise channel using Kraus operators.</span>
 
 <span class="sd">    The channel is called as a quantum function ``colored_noise(gamma, wires)``.</span>
 
@@ -469,7 +474,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">compute_kraus_matrices</span><span class="p">(</span><span class="n">gamma</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Kraus matrices representing the ``colored_noise`` channel.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Kraus matrices representing the ``colored_noise`` channel.</span>
 
 <span class="sd">        :param gamma: The amount of colored noise in the channel.</span>
 <span class="sd">        :type gamma: Float</span>
@@ -523,9 +528,6 @@
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>

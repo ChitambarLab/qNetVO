@@ -2,12 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Mermin-Klyshko Inequality" href="mermin_klyshko_inequality.html" /><link rel="prev" title="CHSH Inequality" href="chsh_inequality.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Mermin-Klyshko Inequality" href="mermin_klyshko_inequality.html" /><link rel="prev" title="CHSH Inequality" href="chsh_inequality.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>I-3322 Inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -37,6 +38,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +157,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +170,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -238,7 +244,7 @@
   </ol>
 </div>
         <article role="main">
-          <div class="section" id="i-3322-inequality">
+          <section id="i-3322-inequality">
 <h1>I-3322 Inequality<a class="headerlink" href="#i-3322-inequality" title="Permalink to this heading">#</a></h1>
 <p>Consider the bipartite non-signaling scenario where Alice and Bob each have three classical
 inputs and two classical outputs.
@@ -281,14 +287,14 @@ To reduce the joint probabilities <span class="math notranslate nohighlight">\(P
 = \sum_{\vec{a}\in \{Even\}} \sum_{\vec{b}\in\{Even\}} P(\vec{a},\vec{b}|x,y).\]</div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_qubits</strong> (<em>int</em>) – The number of wires measured to obtained the joint probabilites.</p></li>
 <li><p><strong>probs_vec</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – A probability vector obtained by measuring all wires in the
 computational basis.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The dichotomic probability <span class="math notranslate nohighlight">\(P(00|xy)\)</span>.</p>
 </dd>
 </dl>
@@ -299,10 +305,10 @@ computational basis.</p></li>
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">I_3322_bell_inequality_cost_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/qnetvo/cost/I_3322_bell_inequality.html#I_3322_bell_inequality_cost_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.I_3322_bell_inequality_cost_fn" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a cost function that maximizes the score of the <span class="math notranslate nohighlight">\(I_{3322}\)</span> Bell inequality.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(*network_settings)</span></code> where
 the <code class="docutils literal notranslate"><span class="pre">network_settings</span></code> are obtained from the provided
 <code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
@@ -310,26 +316,29 @@ the <code class="docutils literal notranslate"><span class="pre">network_setting
 </dl>
 </dd></dl>
 
-<div class="section" id="references">
+<section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
-<dl class="citation">
-<dt class="label" id="pitowsky2001"><span class="brackets"><a class="fn-backref" href="#id1">Pitowsky2001</a></span></dt>
-<dd><p>Pitowsky, Itamar, and Karl Svozil. “Optimal tests of quantum nonlocality.”
+<div role="list" class="citation-list">
+<div class="citation" id="pitowsky2001" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">Pitowsky2001</a><span class="fn-bracket">]</span></span>
+<p>Pitowsky, Itamar, and Karl Svozil. “Optimal tests of quantum nonlocality.”
 Physical Review A 64.1 (2001): 014102.</p>
-</dd>
-<dt class="label" id="collins2004"><span class="brackets"><a class="fn-backref" href="#id2">Collins2004</a></span></dt>
-<dd><p>Collins, Daniel, and Nicolas Gisin. “A relevant two qubit Bell inequality
+</div>
+<div class="citation" id="collins2004" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">Collins2004</a><span class="fn-bracket">]</span></span>
+<p>Collins, Daniel, and Nicolas Gisin. “A relevant two qubit Bell inequality
 inequivalent to the CHSH inequality.” Journal of Physics A: Mathematical and General 37.5
 (2004): 1775.</p>
-</dd>
-<dt class="label" id="pal2010"><span class="brackets"><a class="fn-backref" href="#id3">Pal2010</a></span></dt>
-<dd><p>Pál, Károly F., and Tamás Vértesi. “Maximal violation of a bipartite three-setting,
+</div>
+<div class="citation" id="pal2010" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">Pal2010</a><span class="fn-bracket">]</span></span>
+<p>Pál, Károly F., and Tamás Vértesi. “Maximal violation of a bipartite three-setting,
 two-outcome Bell inequality using infinite-dimensional quantum systems.” Physical Review A
 82.2 (2010): 022116.</p>
-</dd>
-</dl>
 </div>
 </div>
+</section>
+</section>
 
         </article>
       </div>
@@ -343,10 +352,10 @@ two-outcome Bell inequality using infinite-dimensional quantum systems.” Physi
                 </div>
                 <div class="title">Mermin-Klyshko Inequality</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="chsh_inequality.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -397,9 +406,6 @@ two-outcome Bell inequality using infinite-dimensional quantum systems.” Physi
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>

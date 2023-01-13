@@ -2,12 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Network Ansatzes" href="network_ansatzes.html" /><link rel="prev" title="Quantum Networks" href="index.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Network Ansatzes" href="network_ansatzes.html" /><link rel="prev" title="Quantum Networks" href="index.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>Network Nodes - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/qnetvo.css" />
     
@@ -37,6 +38,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +157,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +170,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -236,115 +242,276 @@
   </ol>
 </div>
         <article role="main">
-          <div class="section" id="network-nodes">
+          <section id="network-nodes">
 <h1>Network Nodes<a class="headerlink" href="#network-nodes" title="Permalink to this heading">#</a></h1>
 <p>A quantum network is constructed from a collection of quantum devices serving
 as nodes in the network.
-A network node performs a quantum operation on its local set of qubits.
-The applied operation can be conditioned upon a classical input.</p>
+Each network node operates on its local set of qubits.
+Each node’s operation can be conditioned upon both classical inputs and
+the measurement results of other nodes in the network.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="qnetvo.NetworkNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">NetworkNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_wires_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_wires_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_nodes.html#NetworkNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NetworkNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A quantum network node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_in</strong> (<em>int</em>) – The number of discrete classical inputs that the node accepts.</p></li>
+<li><p><strong>num_out</strong> (<em>int</em>) – The number of classical outputs for the node.</p></li>
+<li><p><strong>wires</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The wires on which the node operates.</p></li>
+<li><p><strong>cc_wires_in</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The classical communication wires input to the node.</p></li>
+<li><p><strong>cc_wires_out</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The classical communication wires to output measurement results on.</p></li>
+<li><p><strong>ansatz_fn</strong> (<em>function</em>) – A <a class="reference external" href="https://docs.pennylane.ai/en/stable/introduction/circuits.html">PennyLane quantum circuit function</a>
+called either as <code class="docutils literal notranslate"><span class="pre">circuit(settings,</span> <span class="pre">wires)</span></code>, or as <code class="docutils literal notranslate"><span class="pre">circuit(settings,</span> <span class="pre">wires,</span> <span class="pre">cc_wires)</span></code> where
+<code class="docutils literal notranslate"><span class="pre">settings</span></code> is an <em>array[float]</em> of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code> and <code class="docutils literal notranslate"><span class="pre">cc_wires</span></code> contains the measurement results
+received from upstream nodes.</p></li>
+<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings parameterizing the <code class="docutils literal notranslate"><span class="pre">ansatz_fn</span></code> circuit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the <code class="docutils literal notranslate"><span class="pre">NetworkNode</span></code> class.</p>
+</dd>
+</dl>
+<p><strong>Calling a Network Node’s Ansatz Function:</strong></p>
+<p>Given an instantiated network node, <code class="docutils literal notranslate"><span class="pre">node</span> <span class="pre">=</span> <span class="pre">NetworkNode(*args)</span></code>, its ansatz quantum circuit functtion
+can be called as <code class="docutils literal notranslate"><span class="pre">node(settings,</span> <span class="pre">cc_wires)</span></code> or, if <code class="docutils literal notranslate"><span class="pre">node.cc_wires_in==[]</span></code>, the node can be called
+as  <code class="docutils literal notranslate"><span class="pre">node(settings)</span></code> provided that <code class="docutils literal notranslate"><span class="pre">cc_wires=[]</span></code>.</p>
+<p><strong>Attributes:</strong></p>
+<p>All inputs are stored as class attributes under the same name, <em>e.g.</em>, the <code class="docutils literal notranslate"><span class="pre">num_in</span></code> argument
+is stored as <code class="docutils literal notranslate"><span class="pre">node.num_in</span></code>.</p>
+</dd></dl>
+
 <p>Network nodes are categorized by their function:</p>
 <ul class="simple">
-<li><p><strong>Prepare Node:</strong> Initializes a quantum state on the local wires.</p></li>
-<li><p><strong>Processing Node:</strong> Applies a quantum operation on its local wires.</p></li>
-<li><p><strong>Noise Node:</strong> Applies a static “noisy” operation to the local wires.</p></li>
-<li><p><strong>Measure Node:</strong> Performs a measurement operation on the local wires and outputs a classical value.</p></li>
+<li><p><strong>Prepare Node:</strong> Initializes a quantum state on the local qubits.</p></li>
+<li><p><strong>Processing Node:</strong> Applies an operation to its local qubits.</p></li>
+<li><p><strong>Noise Node:</strong> Applies noise to the local qubits.</p></li>
+<li><p><strong>Measure Node:</strong> Measures local qubits and outputs a classical value.</p></li>
+<li><p><strong>CC Sender Node:</strong> Measures local qubits and sends the result to classical communication (CC) receiver nodes.</p></li>
+<li><p><strong>CC Receiver Node:</strong> Applies an operation to its local qubits conditioned upon receieved classical data.</p></li>
 </ul>
-<div class="section" id="prepare-nodes">
+<section id="prepare-nodes">
 <h2>Prepare Nodes<a class="headerlink" href="#prepare-nodes" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="qnetvo.PrepareNode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">PrepareNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantum_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#PrepareNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.PrepareNode" title="Permalink to this definition">#</a></dt>
-<dd><p>A class that configures each preparation node in the quantum network.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">PrepareNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_nodes.html#PrepareNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.PrepareNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A network node that initializes a state on its local qubit wires where the
+preparation can be conditioned on a classical input or upstream measurement results.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_in</strong> (<em>int</em>) – The number of classical inputs for the node.</p></li>
-<li><p><strong>wires</strong> (<em>array</em><em>[</em><em>int</em><em>]</em>) – A list of wires on which the node operates.</p></li>
-<li><p><strong>quantum_fn</strong> (<em>function</em>) – A PennyLane quantum function which accepts as input the
-positional arguments <code class="docutils literal notranslate"><span class="pre">(settings,</span> <span class="pre">wires)</span></code>, where settings is an <em>array[float]</em>
-of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p></li>
-<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings that the quantum function accepts.</p></li>
+<li><p><strong>num_in</strong> (<em>int</em>) – The number of discrete classical inputs that the node accepts.</p></li>
+<li><p><strong>wires</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The wires on which the node operates.</p></li>
+<li><p><strong>ansatz_fn</strong> (<em>function</em>) – <p>A <a class="reference external" href="https://docs.pennylane.ai/en/stable/introduction/circuits.html">PennyLane quantum circuit function</a>
+that takes the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">prepare_ansatz</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+    <span class="c1"># initalize quantum state from |0...0&gt;</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">ArbitraryStatePreparation</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">settings</span></code> is an <em>array[float]</em> of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p>
+</p></li>
+<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings parameterizing the <code class="docutils literal notranslate"><span class="pre">ansatz_fn</span></code> circuit.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">PrepareNode</span></code> class.</p>
+</dl>
+<p>All attributes are inherited from the <a class="reference internal" href="#qnetvo.NetworkNode" title="qnetvo.NetworkNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.NetworkNode</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">PrepareNode</span></code> class.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="processing-nodes">
+</section>
+<section id="processing-nodes">
 <h2>Processing Nodes<a class="headerlink" href="#processing-nodes" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="qnetvo.ProcessingNode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">ProcessingNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantum_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#ProcessingNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.ProcessingNode" title="Permalink to this definition">#</a></dt>
-<dd><p>A class that configures each processing node in the quantum network.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">ProcessingNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_nodes.html#ProcessingNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.ProcessingNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A network node that operates upon its local qubit wires where the operation can
+be conditioned upon a classical input or upstream measurement results.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_in</strong> (<em>int</em>) – The number of classical inputs for the node.</p></li>
-<li><p><strong>wires</strong> (<em>array</em><em>[</em><em>int</em><em>]</em>) – A list of wires on which the node operates.</p></li>
-<li><p><strong>quantum_fn</strong> (<em>function</em>) – A PennyLane quantum function which accepts as input the
-positional arguments <code class="docutils literal notranslate"><span class="pre">(settings,</span> <span class="pre">wires)</span></code> where settings is an <em>array[float]</em>
-of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p></li>
-<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings that the quantum function accepts.</p></li>
+<li><p><strong>num_in</strong> (<em>int</em>) – The number of discrete classical inputs that the node accepts.</p></li>
+<li><p><strong>wires</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The wires on which the node operates.</p></li>
+<li><p><strong>ansatz_fn</strong> (<em>function</em>) – <p>A <a class="reference external" href="https://docs.pennylane.ai/en/stable/introduction/circuits.html">PennyLane quantum circuit function</a>
+that takes the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">processing_ansatz</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+    <span class="c1"># apply processing operation</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">ArbitraryUnitary</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">settings</span></code> is an <em>array[float]</em> of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p>
+</p></li>
+<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings parameterizing the <code class="docutils literal notranslate"><span class="pre">ansatz_fn</span></code> circuit.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">ProcessingNode</span></code> class.</p>
+</dl>
+<p>All attributes are inherited from the <a class="reference internal" href="#qnetvo.NetworkNode" title="qnetvo.NetworkNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.NetworkNode</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">ProcessingNode</span></code> class.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="noise-nodes">
-<h2>Noise Nodes<a class="headerlink" href="#noise-nodes" title="Permalink to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="qnetvo.NoiseNode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">NoiseNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wires</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantum_fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#NoiseNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NoiseNode" title="Permalink to this definition">#</a></dt>
-<dd><p>A class that configures each noise node in the quantum network.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>wires</strong> (<em>array</em><em>[</em><em>int</em><em>]</em>) – A list of wires on which the node operates.</p></li>
-<li><p><strong>quantum_fn</strong> (<em>function</em>) – A PennyLane quantum function which accepts as input the
-positional arguments <code class="docutils literal notranslate"><span class="pre">(settings,</span> <span class="pre">wires)</span></code> where settings is an <em>array[float]</em>
-of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">NoiseNode</span></code> class.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="measure-nodes">
+</section>
+<section id="measure-nodes">
 <h2>Measure Nodes<a class="headerlink" href="#measure-nodes" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="qnetvo.MeasureNode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">MeasureNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantum_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_ansatz.html#MeasureNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.MeasureNode" title="Permalink to this definition">#</a></dt>
-<dd><p>A class that configures each measurement node in the quantum network.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">MeasureNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_nodes.html#MeasureNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.MeasureNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A network node that measures its local qubit wires where the measurement can be
+conditioned on a classical input or upstream measurement results.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_in</strong> (<em>int</em>) – The number of classical inputs for the node.</p></li>
+<li><p><strong>num_in</strong> (<em>int</em>) – The number of discrete classical inputs that the node accepts.</p></li>
 <li><p><strong>num_out</strong> (<em>int</em>) – The number of classical outputs for the node.</p></li>
-<li><p><strong>wires</strong> (<em>array</em><em>[</em><em>int</em><em>]</em>) – A list of wires on which the node operates.</p></li>
-<li><p><strong>quantum_fn</strong> (<em>function</em>) – A PennyLane quantum function that accepts as input the
-positional arguments <code class="docutils literal notranslate"><span class="pre">(settings,</span> <span class="pre">wires)</span></code> where settings is an <em>array[float]</em>
-of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.</p></li>
-<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings that the quantum function accepts.</p></li>
+<li><p><strong>wires</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The wires on which the node operates.</p></li>
+<li><p><strong>ansatz_fn</strong> (<em>function</em>) – <p>A <a class="reference external" href="https://docs.pennylane.ai/en/stable/introduction/circuits.html">PennyLane quantum circuit function</a>
+that takes the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">measure_ansatz</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+    <span class="c1"># rotate measurement basis</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">Rot</span><span class="p">(</span><span class="o">*</span><span class="n">settings</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">settings</span></code> is an <em>array[float]</em> of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.
+Note that the measurement ansatz does not apply a measurement operation.
+Measurement operations are specified later when <a class="reference internal" href="network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.NetworkAnsatz</span></code></a>
+class is used to construct qnodes and cost functions.</p>
+</p></li>
+<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings parameterizing the <code class="docutils literal notranslate"><span class="pre">ansatz_fn</span></code> circuit.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">MeasureNode</span></code> class.</p>
+</dl>
+<p>All attributes are inherited from the <a class="reference internal" href="#qnetvo.NetworkNode" title="qnetvo.NetworkNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.NetworkNode</span></code></a> class.
+In addition, the number of classical outputs are specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">MeasureNode</span></code> class.</p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
+<section id="classical-communication-nodes">
+<h2>Classical Communication Nodes<a class="headerlink" href="#classical-communication-nodes" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="qnetvo.CCSenderNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">CCSenderNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_wires_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_nodes.html#CCSenderNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.CCSenderNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A network node that measures one or more of its local qubits and sends the measurement
+result(s) to one or more downstream <a class="reference internal" href="#qnetvo.CCReceiverNode" title="qnetvo.CCReceiverNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.CCReceiverNode</span></code></a> instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_in</strong> (<em>int</em>) – The number of discrete classical inputs that the node accepts.</p></li>
+<li><p><strong>wires</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The wires on which the node operates.</p></li>
+<li><p><strong>cc_wires_out</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The classical communication wires to output measurement results on.</p></li>
+<li><p><strong>ansatz_fn</strong> (<em>function</em>) – <p>A <a class="reference external" href="https://docs.pennylane.ai/en/stable/introduction/circuits.html">PennyLane quantum circuit function</a>
+that takes the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cc_sender_ansatz</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+    <span class="c1"># apply quantum circuit operations</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">Rot</span><span class="p">(</span><span class="o">*</span><span class="n">settings</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># measure qubit to obtain classical communication bit</span>
+    <span class="n">cc_bit_out</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># output list of measurement results</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">cc_bit_out</span><span class="p">]</span>
+</pre></div>
 </div>
+<p>where <code class="docutils literal notranslate"><span class="pre">settings</span></code> is an <em>array[float]</em> of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code>.
+Note that for each wire specified in <code class="docutils literal notranslate"><span class="pre">cc_wires_out</span></code>, there should be a corresponding
+<code class="docutils literal notranslate"><span class="pre">cc_bit_out</span></code> result obtained using <a class="reference external" href="https://docs.pennylane.ai/en/stable/code/api/pennylane.measure.html">qml.measure</a>.</p>
+</p></li>
+<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings parameterizing the <code class="docutils literal notranslate"><span class="pre">ansatz_fn</span></code> circuit.</p></li>
+</ul>
+</dd>
+</dl>
+<p>All attributes are inherited from the <a class="reference internal" href="#qnetvo.NetworkNode" title="qnetvo.NetworkNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.NetworkNode</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">CCSenderNode</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qnetvo.CCReceiverNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">CCReceiverNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_wires_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_nodes.html#CCReceiverNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.CCReceiverNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A network node that receives classical communication from an upstream <a class="reference internal" href="#qnetvo.CCSenderNode" title="qnetvo.CCSenderNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.CCSenderNode</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_in</strong> (<em>int</em>) – The number of discrete classical inputs that the node accepts.</p></li>
+<li><p><strong>wires</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The wires on which the node operates.</p></li>
+<li><p><strong>cc_wires_in</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The classical communication wires input to the node.</p></li>
+<li><p><strong>ansatz_fn</strong> (<em>function</em>) – <p>A <a class="reference external" href="https://docs.pennylane.ai/en/stable/introduction/circuits.html">PennyLane quantum circuit function</a>
+that takes the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cc_receive_ansatz</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="n">cc_wires</span><span class="p">):</span>
+    <span class="c1"># apply quantum operations conditioned on classical communication</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">cc_wires</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qml</span><span class="o">.</span><span class="n">Rot</span><span class="p">)(</span><span class="o">*</span><span class="n">settings</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">cc_wires</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qml</span><span class="o">.</span><span class="n">Rot</span><span class="p">)(</span><span class="o">*</span><span class="n">settings</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
 </div>
+<p>where <code class="docutils literal notranslate"><span class="pre">settings</span></code> is an <em>array[float]</em> of length <code class="docutils literal notranslate"><span class="pre">num_settings</span></code> and <code class="docutils literal notranslate"><span class="pre">cc_wires</span></code> contains
+the measurement results received from upstream nodes.</p>
+</p></li>
+<li><p><strong>num_settings</strong> (<em>int</em>) – The number of settings parameterizing the <code class="docutils literal notranslate"><span class="pre">ansatz_fn</span></code> circuit.</p></li>
+</ul>
+</dd>
+</dl>
+<p>All attributes are inherited from the <a class="reference internal" href="#qnetvo.NetworkNode" title="qnetvo.NetworkNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.NetworkNode</span></code></a> class.</p>
+<p>Note that the classical inputs specified by <code class="docutils literal notranslate"><span class="pre">num_in</span></code> are distinct from the classical
+communication inputs passed through <code class="docutils literal notranslate"><span class="pre">cc_wires</span></code>.
+That is, the classical inputs <code class="docutils literal notranslate"><span class="pre">num_in</span></code> are known before the network simulation is run
+whereas the classical communication in <code class="docutils literal notranslate"><span class="pre">cc_wires</span></code> are determined during the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">CCReceiverNode</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="noise-nodes">
+<h2>Noise Nodes<a class="headerlink" href="#noise-nodes" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="qnetvo.NoiseNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">NoiseNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/network_nodes.html#NoiseNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.NoiseNode" title="Permalink to this definition">#</a></dt>
+<dd><p>A network node that applies noise to its local qubit wires.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wires</strong> (<em>list</em><em>[</em><em>int</em>) – The wires on which the node operates.</p></li>
+<li><p><strong>ansatz_fn</strong> (<em>function</em>) – <p>A <cite>PennyLane quantum circuit function &lt;https://docs.pennylane.ai/en/stable/introduction/circuits.html&gt;</cite>
+that takes the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">noise_ansatz</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+    <span class="c1"># apply noise operation</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">Depolarizing</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">AmplitudeDamping</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">settings=[]</span></code> is unused because noise is considered to be static.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p>We model noise to be independent from classical inputs and upstream measurement results.
+Therefore, only the <code class="docutils literal notranslate"><span class="pre">wires</span></code> and <code class="docutils literal notranslate"><span class="pre">ansatz_fn</span></code> attributes can be set.
+All attributes are inherited from the <a class="reference internal" href="#qnetvo.NetworkNode" title="qnetvo.NetworkNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">qnetvo.NetworkNode</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated <code class="docutils literal notranslate"><span class="pre">NoiseNode</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
 
         </article>
       </div>
@@ -358,10 +525,10 @@ of length <code class="docutils literal notranslate"><span class="pre">num_setti
                 </div>
                 <div class="title">Network Ansatzes</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="index.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -397,6 +564,7 @@ of length <code class="docutils literal notranslate"><span class="pre">num_setti
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Network Nodes</a><ul>
+<li><a class="reference internal" href="#qnetvo.NetworkNode"><code class="docutils literal notranslate"><span class="pre">NetworkNode</span></code></a></li>
 <li><a class="reference internal" href="#prepare-nodes">Prepare Nodes</a><ul>
 <li><a class="reference internal" href="#qnetvo.PrepareNode"><code class="docutils literal notranslate"><span class="pre">PrepareNode</span></code></a></li>
 </ul>
@@ -405,12 +573,17 @@ of length <code class="docutils literal notranslate"><span class="pre">num_setti
 <li><a class="reference internal" href="#qnetvo.ProcessingNode"><code class="docutils literal notranslate"><span class="pre">ProcessingNode</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#noise-nodes">Noise Nodes</a><ul>
-<li><a class="reference internal" href="#qnetvo.NoiseNode"><code class="docutils literal notranslate"><span class="pre">NoiseNode</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#measure-nodes">Measure Nodes</a><ul>
 <li><a class="reference internal" href="#qnetvo.MeasureNode"><code class="docutils literal notranslate"><span class="pre">MeasureNode</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#classical-communication-nodes">Classical Communication Nodes</a><ul>
+<li><a class="reference internal" href="#qnetvo.CCSenderNode"><code class="docutils literal notranslate"><span class="pre">CCSenderNode</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.CCReceiverNode"><code class="docutils literal notranslate"><span class="pre">CCReceiverNode</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#noise-nodes">Noise Nodes</a><ul>
+<li><a class="reference internal" href="#qnetvo.NoiseNode"><code class="docutils literal notranslate"><span class="pre">NoiseNode</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -425,9 +598,6 @@ of length <code class="docutils literal notranslate"><span class="pre">num_setti
     </aside>
   </div>
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>

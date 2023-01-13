@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>qnetvo.postprocessing - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -37,6 +37,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +156,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +169,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -241,7 +246,7 @@
 
 
 <div class="viewcode-block" id="parity_vector"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.parity_vector">[docs]</a><span class="k">def</span> <span class="nf">parity_vector</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs a vector with elements :math:`\\pm 1` describing the parity of</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a vector with elements :math:`\\pm 1` describing the parity of</span>
 <span class="sd">    an :math:`n`-bit string measured from :math:`n`-qubits.</span>
 <span class="sd">    The (+) and (-) elements indicate even and odd parity respectively and are placed in</span>
 <span class="sd">    the index corresponding to the bit string&#39;s value.</span>
@@ -262,7 +267,7 @@
 
 
 <div class="viewcode-block" id="even_parity_ids"><a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.even_parity_ids">[docs]</a><span class="k">def</span> <span class="nf">even_parity_ids</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs the list ids corresponding to even parity bit strings with respect</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs the list ids corresponding to even parity bit strings with respect</span>
 <span class="sd">    to the vector returned by ``parity_vector``.</span>
 
 <span class="sd">    :param n_qubits: The number of qubits for which to consider the parity vector.</span>
@@ -294,9 +299,6 @@
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>

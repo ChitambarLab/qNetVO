@@ -2,12 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="The Magic Squares Game" href="magic_squares_game.html" /><link rel="prev" title="Linear Cost Functions" href="linear_inequalities.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="The Magic Squares Game" href="magic_squares_game.html" /><link rel="prev" title="Linear Cost Functions" href="linear_inequalities.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>Entropic Quantities - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/qnetvo.css" />
     
@@ -37,6 +38,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +157,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +170,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -236,7 +242,7 @@
   </ol>
 </div>
         <article role="main">
-          <div class="section" id="entropic-quantities">
+          <section id="entropic-quantities">
 <h1>Entropic Quantities<a class="headerlink" href="#entropic-quantities" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.shannon_entropy_cost_fn">
@@ -252,17 +258,17 @@ variable, then the Shannon entropy is defined by the expression:</p>
 <p>In the case of a quantum network, the Shannon entropy is defined on the measurement outcome
 of the network ansatz.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz circuit on which the Shannon entropy is evalutated.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>dictionary</em>) – Keyword arguments passed to the execute qnodes.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A cost function <code class="docutils literal notranslate"><span class="pre">shannon_entropy(*network_settings)</span></code> parameterized by
 the ansatz-specific network settings.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Function</p>
 </dd>
 </dl>
@@ -286,7 +292,7 @@ a sender and receiver.
 In a quantum prepare and measure network, we evaluate the mutual information between
 the collections of preparation and measurement nodes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz circuit on which the mutual information is evaluated.</p></li>
 <li><p><strong>priors</strong> (<em>list</em><em>[</em><em>np.array</em><em>]</em>) – A list of prior distributions for the inputs of each preparation node.</p></li>
@@ -295,17 +301,17 @@ quantum device into the measurement node outputs.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>dictionary</em>) – Keyword arguments passed to the execute qnodes.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A cost function <code class="docutils literal notranslate"><span class="pre">mutual_info_cost(*network_settings)</span></code> parameterized by
 the ansatz-specific scenario settings.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Function</p>
 </dd>
 </dl>
 </dd></dl>
 
-<div class="section" id="helper-functions">
+<section id="helper-functions">
 <h2>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.behavior_fn">
@@ -330,7 +336,7 @@ The number of outputs <span class="math notranslate nohighlight">\(y\)</span> is
 </div>
 <p>In the above expression, <span class="math notranslate nohighlight">\(z\)</span> is a new output drawn from a new alphabet.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A class describing the particular quantum network.</p></li>
 <li><p><strong>postmap</strong> (<em>optional</em> np.ndarray) – A post-processing map applied to the bitstrings output from the
@@ -338,11 +344,11 @@ quantum circuit. The <code class="docutils literal notranslate"><span class="pre
 each column sums to one and contains only positive values.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A function <code class="docutils literal notranslate"><span class="pre">P_Net(network_settings)</span></code> that evaluates the
 behavior matrix for a given set of settings.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>function</p>
 </dd>
 </dl>
@@ -358,20 +364,20 @@ distribution <code class="docutils literal notranslate"><span class="pre">probs<
 \[H(X) = -\sum_{x\in X}P(x)\log_2(P(x))\]</div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>probs</strong> (<em>np.array</em>) – A normalized probability vector.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The Shannon entropy.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
         </article>
       </div>
@@ -385,10 +391,10 @@ distribution <code class="docutils literal notranslate"><span class="pre">probs<
                 </div>
                 <div class="title">The Magic Squares Game</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="linear_inequalities.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -443,9 +449,6 @@ distribution <code class="docutils literal notranslate"><span class="pre">probs<
     </aside>
   </div>
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>

@@ -2,12 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="I-3322 Inequality" href="I_3322_inequality.html" /><link rel="prev" title="Nonlocality Witnesses" href="index.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="I-3322 Inequality" href="I_3322_inequality.html" /><link rel="prev" title="Nonlocality Witnesses" href="index.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>CHSH Inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -37,6 +38,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +157,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +170,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -238,14 +244,16 @@
   </ol>
 </div>
         <article role="main">
-          <div class="section" id="chsh-inequality">
+          <section id="chsh-inequality">
 <h1>CHSH Inequality<a class="headerlink" href="#chsh-inequality" title="Permalink to this heading">#</a></h1>
 <p>The CHSH scenario consists of two nonsignaling devices which share randomness in the
 classical case and entanglement in the quantum case.</p>
-<div class="figure align-default" id="id3">
+<figure class="align-default" id="id3">
 <a class="reference internal image-reference" href="../../_images/bipartite_non-signaling.png"><img alt="../../_images/bipartite_non-signaling.png" src="../../_images/bipartite_non-signaling.png" style="width: 316.2px; height: 250.79999999999998px;" /></a>
-<p class="caption"><span class="caption-text"><strong>Bipartite Non-Signaling Scenario.</strong></span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text"><strong>Bipartite Non-Signaling Scenario.</strong></span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 <p>The set of classical behaviors is bound by the CHSH inequality <a class="reference internal" href="#clauser1969" id="id1"><span>[Clauser1969]</span></a></p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
@@ -267,14 +275,14 @@ This inequality is defined as</p>
 <p>where <span class="math notranslate nohighlight">\(\langle A_x B_y \rangle = \sum_{a,b\in\{-1,1\}} a\cdot b P(a,b|x,y)\)</span> is
 the two-body correlator between dichotomic observables <span class="math notranslate nohighlight">\(A_x\)</span> and <span class="math notranslate nohighlight">\(B_y\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p></li>
 <li><p><strong>parallel</strong> (<em>optional</em> bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, remote qnode executions are made in parallel web requests.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – Keyword arguments used only for <code class="docutils literal notranslate"><span class="pre">pennylane.qnode</span></code> construction.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A cost function evaluated as <code class="docutils literal notranslate"><span class="pre">cost(*network_settings)</span></code> where
 the <code class="docutils literal notranslate"><span class="pre">network_settings</span></code> are obtained from the provided
 <code class="docutils literal notranslate"><span class="pre">network_ansatz</span></code> class.</p>
@@ -305,36 +313,42 @@ The natural gradient of the <span class="math notranslate nohighlight">\(-I_{CHS
 <p>where <span class="math notranslate nohighlight">\(\langle A_x B_y \rangle(\vec{\theta}_{x,y})\)</span> is the expectation value of observables
 <span class="math notranslate nohighlight">\(A_x\)</span> and <span class="math notranslate nohighlight">\(B_y\)</span> parameterized by the settings <span class="math notranslate nohighlight">\(\vec{\theta}_{x,y}\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the network for which the CHSH inequality considered.</p></li>
 <li><p><strong>natural_grad</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the natural gradient is evaluated. Default <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">grad_fn(*network_settings)</span></code>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>function</p>
 </dd>
 </dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Parallel gradient computation is flaky on PennyLane v0.28+. Intermittent  failures may occur.</p>
+</div>
 </dd></dl>
 
-<div class="section" id="references">
+<section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
-<dl class="citation">
-<dt class="label" id="clauser1969"><span class="brackets"><a class="fn-backref" href="#id1">Clauser1969</a></span></dt>
-<dd><p>Clauser, John F., et al. “Proposed experiment to test local hidden-variable theories.”
+<div role="list" class="citation-list">
+<div class="citation" id="clauser1969" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">Clauser1969</a><span class="fn-bracket">]</span></span>
+<p>Clauser, John F., et al. “Proposed experiment to test local hidden-variable theories.”
 Physical review letters 23.15 (1969): 880.</p>
-</dd>
-<dt class="label" id="cirelson1980"><span class="brackets"><a class="fn-backref" href="#id2">Cirelson1980</a></span></dt>
-<dd><p>Cirel’son, Boris S. “Quantum generalizations of Bell’s inequality.”
+</div>
+<div class="citation" id="cirelson1980" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">Cirelson1980</a><span class="fn-bracket">]</span></span>
+<p>Cirel’son, Boris S. “Quantum generalizations of Bell’s inequality.”
 Letters in Mathematical Physics 4.2 (1980): 93-100.</p>
-</dd>
-</dl>
 </div>
 </div>
+</section>
+</section>
 
         </article>
       </div>
@@ -348,10 +362,10 @@ Letters in Mathematical Physics 4.2 (1980): 93-100.</p>
                 </div>
                 <div class="title">I-3322 Inequality</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="index.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -402,9 +416,6 @@ Letters in Mathematical Physics 4.2 (1980): 93-100.</p>
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>

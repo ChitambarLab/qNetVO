@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>qnetvo.cost.nlocal_chain_bell_inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/qnetvo.css" />
     
@@ -37,6 +37,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +156,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +169,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -244,7 +249,7 @@
 
 
 <div class="viewcode-block" id="chain_I22_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.chain_I22_fn">[docs]</a><span class="k">def</span> <span class="nf">chain_I22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a function for evaluating the :math:`I_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.</span>
 
 <span class="sd">    :param network_ansatz: The ansatz for the :math:`n`-local chain network.</span>
 <span class="sd">    :type network_ansatz: qnet.NetworkAnsatz</span>
@@ -270,11 +275,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">chain_qnode</span> <span class="o">=</span> <span class="n">global_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
-    <span class="n">num_interior_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span>
+    <span class="n">num_interior_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">2</span>
 
-    <span class="n">static_prep_inputs</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer_nodes</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">network_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="p">]</span>
+    <span class="n">static_prep_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer_nodes</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">I22_xy_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x_a</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_interior_nodes</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x_b</span><span class="p">]</span> <span class="k">for</span> <span class="n">x_a</span><span class="p">,</span> <span class="n">x_b</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
@@ -300,7 +303,7 @@
 
 
 <div class="viewcode-block" id="chain_J22_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.chain_J22_fn">[docs]</a><span class="k">def</span> <span class="nf">chain_J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a function for evaluating the :math:`J_{22}` quantity used in the ``nlocal_chain_22_cost_fn`` function.</span>
 
 <span class="sd">    :param network_ansatz: The ansatz for the :math:`n`-local chain network.</span>
 <span class="sd">    :type network_ansatz: qnet.NetworkAnsatz</span>
@@ -326,10 +329,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">chain_qnode</span> <span class="o">=</span> <span class="n">global_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
-    <span class="n">num_interior_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span>
-    <span class="n">static_prep_inputs</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer_nodes</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">network_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="p">]</span>
+    <span class="n">num_interior_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">2</span>
+    <span class="n">static_prep_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer_nodes</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="n">J22_xy_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x_a</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_interior_nodes</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x_b</span><span class="p">]</span> <span class="k">for</span> <span class="n">x_a</span><span class="p">,</span> <span class="n">x_b</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
 
@@ -356,7 +357,7 @@
 
 
 <div class="viewcode-block" id="nlocal_chain_22_cost_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.nlocal_chain_22_cost_fn">[docs]</a><span class="k">def</span> <span class="nf">nlocal_chain_22_cost_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;For the provided ``network_ansatz``, constructs the cost function for the</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For the provided ``network_ansatz``, constructs the cost function for the</span>
 <span class="sd">    :math:`n`-local chain Bell inequality for binary inputs and outputs.</span>
 
 <span class="sd">    :param network_ansatz: The ansatz for the networks. </span>
@@ -411,7 +412,7 @@
 
 
 <div class="viewcode-block" id="parallel_nlocal_chain_grad_fn"><a class="viewcode-back" href="../../../cost/nonlocality_witnesses/nlocal_chain_inequality.html#qnetvo.parallel_nlocal_chain_grad_fn">[docs]</a><span class="k">def</span> <span class="nf">parallel_nlocal_chain_grad_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">natural_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs a parallelizeable gradient function ``grad_fn`` for the :math:`n`-local</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a parallelizeable gradient function ``grad_fn`` for the :math:`n`-local</span>
 <span class="sd">    chain cost.</span>
 
 <span class="sd">    The parallelization is achieved through multithreading and intended to improve the</span>
@@ -430,15 +431,18 @@
 
 <span class="sd">    :returns: A parallelized (multithreaded) gradient function ``nlocal_chain_grad(*network_settings)``.</span>
 <span class="sd">    :rtype: function</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        Parallel gradient computation is flaky on PennyLane v0.28+. Intermittent  failures may occur.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="kn">from</span> <span class="nn">..lazy_dask_import</span> <span class="kn">import</span> <span class="n">dask</span>
 
     <span class="n">xy_vals</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">prepare_nodes</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="n">chain_qnodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">global_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
-    <span class="n">qnode_grads</span> <span class="o">=</span> <span class="p">[</span><span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">qnode</span><span class="p">)</span> <span class="k">for</span> <span class="n">qnode</span> <span class="ow">in</span> <span class="n">chain_qnodes</span><span class="p">]</span>
 
     <span class="n">I22</span> <span class="o">=</span> <span class="n">chain_I22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
     <span class="n">J22</span> <span class="o">=</span> <span class="n">chain_J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
@@ -446,9 +450,7 @@
     <span class="n">I22_xy_meas_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
     <span class="n">J22_xy_meas_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
 
-    <span class="n">static_prep_inputs</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer_nodes</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">network_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="p">]</span>
+    <span class="n">static_prep_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer_nodes</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="k">def</span> <span class="nf">_grad_fn</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">qnode</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">qnode</span><span class="p">)(</span><span class="n">settings</span><span class="p">)</span>
@@ -534,9 +536,6 @@
     </aside>
   </div>
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>

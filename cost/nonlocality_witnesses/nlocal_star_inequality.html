@@ -2,12 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Optimization" href="../../optimization.html" /><link rel="prev" title="n-Local Chain Inequality" href="nlocal_chain_inequality.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Optimization" href="../../optimization.html" /><link rel="prev" title="n-Local Chain Inequality" href="nlocal_chain_inequality.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
         <title>n-Local Star Inequality - qNetVO</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/qnetvo.css" />
     
@@ -37,6 +38,11 @@
 </style></head>
   <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -151,7 +157,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../_static/qnetvo_logo.png" alt="Logo"/>
@@ -164,7 +170,7 @@
     <i class="fa fa-github" style="margin-right: 5px; font-size: 18px"></i>GitHub
   </a>
 </div><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -238,7 +244,7 @@
   </ol>
 </div>
         <article role="main">
-          <div class="section" id="n-local-star-inequality">
+          <section id="n-local-star-inequality">
 <h1>n-Local Star Inequality<a class="headerlink" href="#n-local-star-inequality" title="Permalink to this heading">#</a></h1>
 <p>The <span class="math notranslate nohighlight">\(n\)</span>-local star network consists of <span class="math notranslate nohighlight">\(n\)</span> entanglement sources (static preparation nodes) and <span class="math notranslate nohighlight">\(n+1\)</span> measurement nodes where one central node holds one qubit from each source and the remaining <span class="math notranslate nohighlight">\(n\)</span> nodes are connected to the central node through a single source.
 The network forms an <span class="math notranslate nohighlight">\(n\)</span> point star.
@@ -263,7 +269,7 @@ functions constructed by the <a class="reference internal" href="#qnetvo.star_I2
 The classical bound is found to be 1, but quantum systems can score as high as
 <span class="math notranslate nohighlight">\(\sqrt{2}\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The <span class="math notranslate nohighlight">\(n\)</span>-local star network ansatz.</p></li>
 <li><p><strong>parallel</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> qnodes will be evaluated in separate threads. This is
@@ -273,11 +279,11 @@ Default value: <code class="docutils literal notranslate"><span class="pre">Fals
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dictionary) – keyword args passed through to the QNode constructor.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">nlocal_star_22_cost(*network_settings)</span></code> that evaluates
 the cost as <span class="math notranslate nohighlight">\(-|I_{22,n}|^{1/n} - |J_{22,n}|^{1/n}\)</span>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>function</p>
 </dd>
 </dl>
@@ -296,7 +302,7 @@ evaluates the <span class="math notranslate nohighlight">\(I_{22,n}\)</span> qua
 <p>where <span class="math notranslate nohighlight">\(x_i\in\{0,1\}\)</span> and <span class="math notranslate nohighlight">\(A_{x_i}\)</span> and <span class="math notranslate nohighlight">\(B_{x_{n+1}}\)</span>
 are dichotomic observables.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The <span class="math notranslate nohighlight">\(n\)</span>-local star network ansatz.</p></li>
 <li><p><strong>parallel</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> qnodes will be evaluated in separate threads. This is
@@ -306,10 +312,10 @@ Default value: <code class="docutils literal notranslate"><span class="pre">Fals
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dictionary) – keyword args passed through to the QNode constructor.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">I22(*network_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(I_{22,n}\)</span> quantity.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>function</p>
 </dd>
 </dl>
@@ -328,7 +334,7 @@ evaluates the <span class="math notranslate nohighlight">\(J_{22,n}\)</span> qua
 <p>where <span class="math notranslate nohighlight">\(x_i\in\{0,1\}\)</span> and <span class="math notranslate nohighlight">\(A_{x_i}\)</span> and <span class="math notranslate nohighlight">\(B_{x_{n+1}}\)</span> are
 dichotomic observables.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<em>qnet.NetworkAnsatz</em>) – The <span class="math notranslate nohighlight">\(n\)</span>-local star network ansatz.</p></li>
 <li><p><strong>parallel</strong> (<em>optional</em> Bool) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> qnodes will be evaluated in separate threads. This is
@@ -338,11 +344,11 @@ Default value: <code class="docutils literal notranslate"><span class="pre">Fals
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dictionary) – keyword args passed through to the QNode constructor.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A function callable as <code class="docutils literal notranslate"><span class="pre">J22(*network_settings)</span></code> that evaluates the <span class="math notranslate nohighlight">\(J_{22,n}\)</span>
 quantity for the given <code class="docutils literal notranslate"><span class="pre">network_settings</span></code>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>function</p>
 </dd>
 </dl>
@@ -363,7 +369,7 @@ star cost function.</p>
 <p>The parallelization is achieved through multithreading and intended to improve the
 efficiency of remote qnode execution.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – The ansatz describing the <span class="math notranslate nohighlight">\(n\)</span>-local chain network.</p></li>
 <li><p><strong>nthreads</strong> (<em>Int</em>) – Specifies the number of threads used when <code class="docutils literal notranslate"><span class="pre">parallel=True</span></code>.</p></li>
@@ -372,25 +378,30 @@ gradient by the inverse of the metric tensor.</p></li>
 <li><p><strong>qnode_kwargs</strong> (<em>optional</em> dict) – A keyword argument passthrough to qnode construction.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A parallelized (multithreaded) gradient function <code class="docutils literal notranslate"><span class="pre">nlocal_star_grad(network_settings)</span></code>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Function</p>
 </dd>
 </dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Parallel gradient computation is flaky on PennyLane v0.28+. Intermittent  failures may occur.</p>
+</div>
 </dd></dl>
 
-<div class="section" id="references">
+<section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
-<dl class="citation">
-<dt class="label" id="tavakoli2014"><span class="brackets"><a class="fn-backref" href="#id1">Tavakoli2014</a></span></dt>
-<dd><p>Tavakoli, Armin, et al. “Nonlocal correlations in the star-network
+<div role="list" class="citation-list">
+<div class="citation" id="tavakoli2014" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">Tavakoli2014</a><span class="fn-bracket">]</span></span>
+<p>Tavakoli, Armin, et al. “Nonlocal correlations in the star-network
 configuration.” Physical Review A 90.6 (2014): 062109.</p>
-</dd>
-</dl>
 </div>
 </div>
+</section>
+</section>
 
         </article>
       </div>
@@ -404,10 +415,10 @@ configuration.” Physical Review A 90.6 (2014): 062109.</p>
                 </div>
                 <div class="title">Optimization</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="nlocal_chain_inequality.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg style="width:4em;"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -460,9 +471,6 @@ configuration.” Physical Review A 90.6 (2014): 062109.</p>
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
