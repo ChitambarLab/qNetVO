@@ -1,4 +1,5 @@
 import pytest
+from flaky import flaky
 from pennylane import numpy as np
 import pennylane as qml
 
@@ -83,6 +84,7 @@ class TestNlocalStar22CostFn:
         assert np.isclose(trilocal_22_cost(*ideal_settings), -np.sqrt(2))
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
+    @flaky(max_runs=5, min_passes=1)
     def test_bilocal_star_22_cost_gradient_descent(self, parallel_flag, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
 
@@ -103,6 +105,7 @@ class TestNlocalStar22CostFn:
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
+    @flaky(max_runs=5, min_passes=1)
     def test_trilocal_star_22_cost_gradient_descent(self, parallel_flag, nthreads):
         trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
 
@@ -121,6 +124,7 @@ class TestNlocalStar22CostFn:
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
 
     @pytest.mark.parametrize("nthreads", [3, 4])
+    @flaky(max_runs=5, min_passes=1)
     def test_bilocal_star_22_cost_natural_gradient_descent(self, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
 

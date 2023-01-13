@@ -4,3 +4,4 @@ pennylane-qiskit==0.20
 tensorflow>=2.0,<3.0
 dask[delayed]==2022.5
 tensornetwork>=0.3,<0.4
+flaky==3.7

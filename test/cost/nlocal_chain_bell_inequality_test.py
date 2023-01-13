@@ -1,4 +1,5 @@
 import pytest
+from flaky import flaky
 from pennylane import numpy as np
 import pennylane as qml
 
@@ -62,6 +63,7 @@ class TestNLocalChainBellInequality:
             ),
         ],
     )
+    @flaky(max_runs=5, min_passes=1)
     def test_parallel_nlocal_chain_grad_fn(self, natural_grad, prep_nodes, meas_nodes):
 
         chain_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)

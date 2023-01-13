@@ -187,6 +187,10 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
 
     :returns: A parallelized (multithreaded) gradient function ``nlocal_chain_grad(*network_settings)``.
     :rtype: function
+
+    .. warning::
+        Parallel gradient computation is flaky on PennyLane v0.28+. Intermittent  failures may occur.
+
     """
 
     from ..lazy_dask_import import dask
