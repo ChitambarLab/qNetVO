@@ -93,6 +93,59 @@ class TestStatePreparationAnsatzes:
         settings = ([],)
         assert np.allclose(state_vec(*settings, wires=wires), state_vec_match)
 
+    @pytest.mark.parametrize(
+        "settings, wires, wires_out, density_mat_match",
+        [
+            (([np.pi / 2],), [0, 1], [0], np.array([[1, 0], [0, 1]]) / 2),
+            (
+                ([np.pi / 4],),
+                [0, 1],
+                [0],
+                np.array([[np.cos(np.pi / 8) ** 2, 0], [0, np.sin(np.pi / 8) ** 2]]),
+            ),
+            (
+                ([np.pi / 2],),
+                [0, 1, 2],
+                [0, 1],
+                np.array([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 1]]) / 2,
+            ),
+            (
+                ([np.pi / 4],),
+                [0, 1, 2],
+                [0, 1],
+                np.array(
+                    [
+                        [np.cos(np.pi / 8) ** 2, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, np.sin(np.pi / 8) ** 2],
+                    ]
+                ),
+            ),
+            (
+                ([np.pi / 2],),
+                [0, 1, 2, 3],
+                [0, 1, 2],
+                np.array(
+                    [
+                        [1, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 1],
+                    ]
+                )
+                / 2,
+            ),
+        ],
+    )
+    def test_nonmax_entangled_state(self, settings, wires, wires_out, density_mat_match):
+        density_mat = qnetvo.density_mat_fn(qnetvo.nonmax_entangled_state, len(wires))
+        assert np.allclose(density_mat(wires_out, *settings, wires=wires), density_mat_match)
+
 
 class TestBroadcastUnitaries:
     @pytest.mark.parametrize(

@@ -133,6 +133,25 @@ def graph_state_fn(edges):
     return graph_state
 
 
+def shared_coin_flip_state(settings, wires):
+    """Initializes a state that mirrors a biased coin flip shared amongst the qubits
+    on ``wires[0:-1]`` where ``wires[-1]`` is an ansatz used to generate shared randomness.
+
+    The shared coin flip is represented by the density matrix.
+
+    .. math::
+
+        \\rho_\\theta = \\cos^2(\\frac{\\theta}{2})|0\\dots 0\\rangle\\langle 0 \\dots 0| + \\sin^2(\\frac{\\theta}{2})|1\\dots 1 \\rangle \\langle 1 \\dots 1|
+
+    :param settings: A list of 1 real value.
+    :type settings: list[float]
+
+    :param wires: The wires used to prepare the shaared coin flip state. Note that the last wire is used as an ancilla.
+    :type wires: qml.Wires
+    """
+    nonmax_entangled_state(settings, wires)
+
+
 def local_RY(settings, wires):
     """Performs a rotation about :math:`y`-axis on each qubit
     specified by ``wires``.

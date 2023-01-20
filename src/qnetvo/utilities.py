@@ -48,12 +48,6 @@ def state_vec_fn(circuit, num_wires):
     :param num_wires: The number of wires to evaluate ``circuit`` on.
     :type num_wires: Int
 
-    :param circ_args: Passthrough arguments for ``circuit``.
-    :type circ_args: Positional Arguments
-
-    :param circ_kwargs: Passthrough keyword arguments for ``circuit``.
-    :type circ_kwargs: Keyword Arguments
-
     :returns: A vector representing the pure quantum state output from ``circuit(*circ_args, **circ_kwargs)``
               when the computational ``basis_state`` is provided as input.
     :rtype: np.array
@@ -69,6 +63,33 @@ def state_vec_fn(circuit, num_wires):
         return qml.state()
 
     return state_vec
+
+
+def density_mat_fn(circuit, num_wires):
+    """Constructs a function that returns the density matrix of the specified ``circuit``.
+
+    :param circuit: A quantum function.
+    :type circuit: Function
+
+    :param num_wires: The number of wires to evaluate ``circuit`` on.
+    :type num_wires: Int
+
+    :returns: A function ``density_mat(wires_out, *circ_args, basis_state=[0,...,0], **circ_kwargs)``  that returns
+              the density matrix representing the quantum state on ``wires_out`` for the initialized ``basis_state`` where
+              the quantum circuit is called as ``circuit(*circ_args, **circ_kwargs)``.
+    :rtype: np.array
+    """
+    dev_wires = range(num_wires)
+    dev = qml.device("default.qubit", wires=dev_wires)
+    zero_state = np.array([0] * len(dev_wires))
+
+    @qml.qnode(dev)
+    def density_mat(wires_out, *circ_args, basis_state=zero_state, **circ_kwargs):
+        qml.BasisState(basis_state, wires=dev_wires)
+        circuit(*circ_args, **circ_kwargs)
+        return qml.density_matrix(wires=wires_out)
+
+    return density_mat
 
 
 def write_optimization_json(opt_dict, filename):

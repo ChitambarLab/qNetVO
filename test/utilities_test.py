@@ -55,7 +55,7 @@ class TestUtilities:
             ),
         ],
     )
-    def test_state_fn(
+    def test_state_vec_fn(
         self, circuit, num_wires, circ_args, circ_kwargs, basis_state, state_vec_match
     ):
         state_vec = qnetvo.state_vec_fn(circuit, num_wires)
@@ -63,6 +63,72 @@ class TestUtilities:
         assert np.allclose(
             state_vec(*circ_args, basis_state=basis_state, **circ_kwargs),
             state_vec_match,
+        )
+
+    @pytest.mark.parametrize(
+        "circuit, num_wires, wires_out, circ_args, circ_kwargs, basis_state, density_mat_match",
+        [
+            (
+                qml.Hadamard,
+                1,
+                [0],
+                (),
+                {"wires": [0]},
+                np.array([0]),
+                np.array([[1, 1], [1, 1]]) / 2,
+            ),
+            (
+                qml.Hadamard,
+                1,
+                [0],
+                (),
+                {"wires": [0]},
+                np.array([1]),
+                np.array([[1, -1], [-1, 1]]) / 2,
+            ),
+            (
+                qml.Hadamard,
+                2,
+                [0],
+                (),
+                {"wires": [0]},
+                np.array([0, 0]),
+                np.array([[1, 1], [1, 1]]) / 2,
+            ),
+            (
+                qml.RY,
+                1,
+                [0],
+                (np.pi / 2,),
+                {"wires": [0]},
+                np.array([1]),
+                np.array(
+                    [
+                        [1, -1],
+                        [-1, 1],
+                    ]
+                )
+                / 2,
+            ),
+            (
+                qnetvo.ghz_state,
+                2,
+                [0],
+                ([],),
+                {"wires": [0, 1]},
+                np.array([0, 0]),
+                np.array([[0.5, 0], [0, 0.5]]),
+            ),
+        ],
+    )
+    def test_density_mat_fn(
+        self, circuit, num_wires, wires_out, circ_args, circ_kwargs, basis_state, density_mat_match
+    ):
+        density_mat = qnetvo.density_mat_fn(circuit, num_wires)
+
+        assert np.allclose(
+            density_mat(wires_out, *circ_args, basis_state=basis_state, **circ_kwargs),
+            density_mat_match,
         )
 
 

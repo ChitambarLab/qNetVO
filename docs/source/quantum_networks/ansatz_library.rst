@@ -21,6 +21,8 @@ State Preparations
 
 .. autofunction:: W_state
 
+.. autofunction:: shared_coin_flip_state
+
 
 Unitary Layers
 --------------
