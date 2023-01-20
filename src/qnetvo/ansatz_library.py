@@ -27,6 +27,25 @@ def max_entangled_state(settings, wires):
     qml.Rot(*settings, wires=wires[0])
 
 
+def nonmax_entangled_state(settings, wires):
+    """Initializes a nonmaximally entangled GHZ-like state that with a biased outcome.
+    The state takes the form
+
+    .. math::
+
+        |\\psi_\\theta\\rangle = \\cos(\\frac{\\theta}{2})|0\\dots 0\\rangle + \\sin(\\frac{\\theta}{2})|1 \\dots 1\\rangle
+
+    :param settings: A list of length 1 containing paraameter :math:`\\theta`
+    :type settings: list[float]
+
+    :param wires: A list of wires to prepare the nonmaximally entangled GHZ-like state.
+    :type wires: list[int] or qml.Wires
+    """
+    qml.RY(settings[0], wires=wires[0])
+    for i in range(1, len(wires)):
+        qml.CNOT(wires=[wires[0], wires[i]])
+
+
 def bell_state_copies(settings, wires):
     """Initializes :math:`n` Bell states on :math:`2n` wires.
     The first :math:`n` wires represent Alice's half of the entangled

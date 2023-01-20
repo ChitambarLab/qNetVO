@@ -15,6 +15,8 @@ State Preparations
 
 .. autofunction:: max_entangled_state
 
+.. autofunction:: nonmax_entangled_state
+
 .. autofunction:: graph_state_fn
 
 .. autofunction:: W_state

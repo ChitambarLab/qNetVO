@@ -33,6 +33,23 @@ class TestStatePreparationAnsatzes:
         assert np.allclose(state_vec(*settings, wires=wires), state_vec_match)
 
     @pytest.mark.parametrize(
+        "settings, wires, state_vec_match",
+        [
+            (([np.pi / 2],), [0, 1], np.array([1, 0, 0, 1]) / np.sqrt(2)),
+            (([np.pi / 4],), [0, 1], np.array([np.cos(np.pi / 8), 0, 0, np.sin(np.pi / 8)])),
+            (([np.pi / 2],), [0, 1, 2], np.array([1, 0, 0, 0, 0, 0, 0, 1]) / np.sqrt(2)),
+            (
+                ([np.pi / 4],),
+                [0, 1, 2],
+                np.array([np.cos(np.pi / 8), 0, 0, 0, 0, 0, 0, np.sin(np.pi / 8)]),
+            ),
+        ],
+    )
+    def test_nonmax_entangled_state(self, settings, wires, state_vec_match):
+        state_vec = qnetvo.state_vec_fn(qnetvo.nonmax_entangled_state, len(wires))
+        assert np.allclose(state_vec(*settings, wires=wires), state_vec_match)
+
+    @pytest.mark.parametrize(
         "wires, state_vec_match",
         [
             ([0, 1], np.array([1, 0, 0, 1]) / np.sqrt(2)),
