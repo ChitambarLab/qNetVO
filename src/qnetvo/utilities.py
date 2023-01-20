@@ -1,5 +1,6 @@
 import pennylane as qml
-import pennylane.numpy as np
+import pennylane.numpy as qnp
+import numpy as np
 from pennylane import math
 import itertools
 import copy
@@ -25,18 +26,70 @@ def unitary_matrix(circuit, num_wires, *circ_args, **circ_kwargs):
     :returns: A unitary matrix representing the provided ``circuit``.
     :rtype: Numpy Array
     """
-    dev = qml.device("default.qubit", wires=range(num_wires))
-
-    @qml.qnode(dev)
-    def unitary_z(basis_state):
-        qml.BasisState(basis_state, wires=range(num_wires))
-        circuit(*circ_args, **circ_kwargs)
-        return qml.state()
+    state_vec = state_vec_fn(circuit, num_wires)
 
     bitstrings = [np.array(bitstring) for bitstring in itertools.product([0, 1], repeat=num_wires)]
 
-    u = [unitary_z(bitstring).numpy() for bitstring in bitstrings]
-    return np.array(u).T
+    unitary = [
+        state_vec(*circ_args, basis_state=bitstring, **circ_kwargs).numpy()
+        for bitstring in bitstrings
+    ]
+    return np.array(unitary).T
+
+
+def state_vec_fn(circuit, num_wires):
+    """Constructs a function ``state_vec(*circ_args, basis_state=[0,...,0], **circ_kwargs)``
+    that returns the state vector representation of the output of ``circuit`` where the input
+    to the circuit is specified in the computational basis by ``basis_state``.
+
+    :param circuit: A quantum function.
+    :type circuit: Function
+
+    :param num_wires: The number of wires to evaluate ``circuit`` on.
+    :type num_wires: Int
+
+    :returns: A vector representing the pure quantum state output from ``circuit(*circ_args, **circ_kwargs)``
+              when the computational ``basis_state`` is provided as input.
+    :rtype: np.array
+    """
+    dev_wires = range(num_wires)
+    dev = qml.device("default.qubit", wires=dev_wires)
+    zero_state = np.array([0] * len(dev_wires))
+
+    @qml.qnode(dev)
+    def state_vec(*circ_args, basis_state=zero_state, **circ_kwargs):
+        qml.BasisState(basis_state, wires=dev_wires)
+        circuit(*circ_args, **circ_kwargs)
+        return qml.state()
+
+    return state_vec
+
+
+def density_mat_fn(circuit, num_wires):
+    """Constructs a function that returns the density matrix of the specified ``circuit``.
+
+    :param circuit: A quantum function.
+    :type circuit: Function
+
+    :param num_wires: The number of wires to evaluate ``circuit`` on.
+    :type num_wires: Int
+
+    :returns: A function ``density_mat(wires_out, *circ_args, basis_state=[0,...,0], **circ_kwargs)``  that returns
+              the density matrix representing the quantum state on ``wires_out`` for the initialized ``basis_state`` where
+              the quantum circuit is called as ``circuit(*circ_args, **circ_kwargs)``.
+    :rtype: np.array
+    """
+    dev_wires = range(num_wires)
+    dev = qml.device("default.qubit", wires=dev_wires)
+    zero_state = np.array([0] * len(dev_wires))
+
+    @qml.qnode(dev)
+    def density_mat(wires_out, *circ_args, basis_state=zero_state, **circ_kwargs):
+        qml.BasisState(basis_state, wires=dev_wires)
+        circuit(*circ_args, **circ_kwargs)
+        return qml.density_matrix(wires=wires_out)
+
+    return density_mat
 
 
 def write_optimization_json(opt_dict, filename):
@@ -109,8 +162,8 @@ def settings_to_np(list_network_settings):
     :returns: The same nested array elements and structure using numpy arrays.
     """
 
-    np_prep_settings = [np.array(node_settings) for node_settings in list_network_settings[0]]
-    np_meas_settings = [np.array(node_settings) for node_settings in list_network_settings[1]]
+    np_prep_settings = [qnp.array(node_settings) for node_settings in list_network_settings[0]]
+    np_meas_settings = [qnp.array(node_settings) for node_settings in list_network_settings[1]]
 
     return [np_prep_settings, np_meas_settings]
 

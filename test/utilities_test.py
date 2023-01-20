@@ -1,25 +1,25 @@
 import pytest
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 import os
 import json
 
-import qnetvo as qnet
+import qnetvo
 
 
 class TestUtilities:
-    def test_unitary_Matrix(self):
+    def test_unitary_matrix(self):
         def circ_pauli_y(wires):
             qml.PauliY(wires=wires)
 
-        U = qnet.unitary_matrix(circ_pauli_y, 1, wires=[0])
+        U = qnetvo.unitary_matrix(circ_pauli_y, 1, wires=[0])
         assert np.allclose(U, qml.PauliY.compute_matrix())
 
         def circ_rot_y(settings, wires):
             qml.RY(settings, wires=wires)
 
         theta = np.pi / 4
-        U = qnet.unitary_matrix(circ_rot_y, 1, theta, wires=[0])
+        U = qnetvo.unitary_matrix(circ_rot_y, 1, theta, wires=[0])
         U_match = np.array(
             [[np.cos(theta / 2), -np.sin(theta / 2)], [np.sin(theta / 2), np.cos(theta / 2)]]
         )
@@ -29,8 +29,107 @@ class TestUtilities:
         def circ_cnot():
             qml.CNOT(wires=[0, 1])
 
-        U = qnet.unitary_matrix(circ_cnot, 2)
+        U = qnetvo.unitary_matrix(circ_cnot, 2)
         assert np.allclose(U, np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]))
+
+    @pytest.mark.parametrize(
+        "circuit, num_wires, circ_args, circ_kwargs, basis_state, state_vec_match",
+        [
+            (qml.Hadamard, 1, (), {"wires": [0]}, np.array([0]), np.array([1, 1]) / np.sqrt(2)),
+            (qml.Hadamard, 1, (), {"wires": [0]}, np.array([1]), np.array([1, -1]) / np.sqrt(2)),
+            (
+                qml.Hadamard,
+                2,
+                (),
+                {"wires": [1]},
+                np.array([0, 0]),
+                np.array([1, 1, 0, 0]) / np.sqrt(2),
+            ),
+            (
+                qml.RY,
+                1,
+                (np.pi / 2,),
+                {"wires": [0]},
+                np.array([1]),
+                np.array([-1, 1]) / np.sqrt(2),
+            ),
+        ],
+    )
+    def test_state_vec_fn(
+        self, circuit, num_wires, circ_args, circ_kwargs, basis_state, state_vec_match
+    ):
+        state_vec = qnetvo.state_vec_fn(circuit, num_wires)
+
+        assert np.allclose(
+            state_vec(*circ_args, basis_state=basis_state, **circ_kwargs),
+            state_vec_match,
+        )
+
+    @pytest.mark.parametrize(
+        "circuit, num_wires, wires_out, circ_args, circ_kwargs, basis_state, density_mat_match",
+        [
+            (
+                qml.Hadamard,
+                1,
+                [0],
+                (),
+                {"wires": [0]},
+                np.array([0]),
+                np.array([[1, 1], [1, 1]]) / 2,
+            ),
+            (
+                qml.Hadamard,
+                1,
+                [0],
+                (),
+                {"wires": [0]},
+                np.array([1]),
+                np.array([[1, -1], [-1, 1]]) / 2,
+            ),
+            (
+                qml.Hadamard,
+                2,
+                [0],
+                (),
+                {"wires": [0]},
+                np.array([0, 0]),
+                np.array([[1, 1], [1, 1]]) / 2,
+            ),
+            (
+                qml.RY,
+                1,
+                [0],
+                (np.pi / 2,),
+                {"wires": [0]},
+                np.array([1]),
+                np.array(
+                    [
+                        [1, -1],
+                        [-1, 1],
+                    ]
+                )
+                / 2,
+            ),
+            (
+                qnetvo.ghz_state,
+                2,
+                [0],
+                ([],),
+                {"wires": [0, 1]},
+                np.array([0, 0]),
+                np.array([[0.5, 0], [0, 0.5]]),
+            ),
+        ],
+    )
+    def test_density_mat_fn(
+        self, circuit, num_wires, wires_out, circ_args, circ_kwargs, basis_state, density_mat_match
+    ):
+        density_mat = qnetvo.density_mat_fn(circuit, num_wires)
+
+        assert np.allclose(
+            density_mat(wires_out, *circ_args, basis_state=basis_state, **circ_kwargs),
+            density_mat_match,
+        )
 
 
 class TestOptimzationFileIO:
@@ -98,7 +197,7 @@ class TestOptimzationFileIO:
 
         filename = self.filename()
 
-        qnet.write_optimization_json(opt_dict, filename)
+        qnetvo.write_optimization_json(opt_dict, filename)
 
         assert os.path.exists(filename + ".json")
 
@@ -124,7 +223,7 @@ class TestOptimzationFileIO:
 
         filename = self.filename()
 
-        qnet.write_optimization_json(opt_dict, filename)
+        qnetvo.write_optimization_json(opt_dict, filename)
 
         assert os.path.exists(filename + ".json")
 
@@ -140,11 +239,11 @@ class TestOptimzationFileIO:
 
         filename = self.filename()
 
-        qnet.write_optimization_json(opt_dict, filename)
+        qnetvo.write_optimization_json(opt_dict, filename)
 
         assert os.path.exists(filename + ".json")
 
-        opt_json = qnet.read_optimization_json(filename + ".json")
+        opt_json = qnetvo.read_optimization_json(filename + ".json")
 
         assert opt_json["datetime"] == "2021-05-22T11:11:11Z"
         assert opt_json["opt_score"] == 12
@@ -183,7 +282,7 @@ class TestOptimzationFileIO:
 
         settings = [prep_settings, meas_settings]
 
-        np_settings = qnet.settings_to_np(settings)
+        np_settings = qnetvo.settings_to_np(settings)
 
         assert isinstance(np_settings, list)
         assert isinstance(np_settings[0], list)
@@ -210,7 +309,7 @@ class TestOptimzationFileIO:
             [np.array(meas_set) for meas_set in meas_settings],
         ]
 
-        settings = qnet.settings_to_list(np_settings)
+        settings = qnetvo.settings_to_list(np_settings)
 
         assert isinstance(settings, list)
         assert isinstance(settings[0], list)
@@ -228,10 +327,10 @@ class TestOptimzationFileIO:
 
     def test_mixed_base_num(self):
 
-        assert np.all(qnet.mixed_base_num(0, [2, 2]) == [0, 0])
-        assert np.all(qnet.mixed_base_num(2, [2, 2]) == [1, 0])
-        assert np.all(qnet.mixed_base_num(9, [2, 3, 4]) == [0, 2, 1])
-        assert np.all(qnet.mixed_base_num(119, [5, 4, 3, 2, 1]) == [4, 3, 2, 1, 0])
+        assert np.all(qnetvo.mixed_base_num(0, [2, 2]) == [0, 0])
+        assert np.all(qnetvo.mixed_base_num(2, [2, 2]) == [1, 0])
+        assert np.all(qnetvo.mixed_base_num(9, [2, 3, 4]) == [0, 2, 1])
+        assert np.all(qnetvo.mixed_base_num(119, [5, 4, 3, 2, 1]) == [4, 3, 2, 1, 0])
 
     @pytest.mark.parametrize(
         "input, list_dims, match",
@@ -241,7 +340,7 @@ class TestOptimzationFileIO:
         ],
     )
     def test_ragged_reshape(self, input, list_dims, match):
-        assert qnet.ragged_reshape(input, list_dims) == match
+        assert qnetvo.ragged_reshape(input, list_dims) == match
 
     @pytest.mark.parametrize(
         "input, list_dims",
@@ -255,4 +354,4 @@ class TestOptimzationFileIO:
             ValueError,
             match=r"`len\(input_list\)` must match the sum of `list_dims`\.",
         ):
-            qnet.ragged_reshape(input, list_dims)
+            qnetvo.ragged_reshape(input, list_dims)

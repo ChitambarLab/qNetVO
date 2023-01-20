@@ -1,6 +1,6 @@
 import pennylane as qml
 from pennylane.operation import Channel
-from pennylane import numpy as np
+import numpy as np
 import math
 
 eps = 1e-7  # constant
@@ -25,6 +25,25 @@ def max_entangled_state(settings, wires):
 
     # perform general rotation on first qubit
     qml.Rot(*settings, wires=wires[0])
+
+
+def nonmax_entangled_state(settings, wires):
+    """Initializes a nonmaximally entangled GHZ-like state that has a bias between its two outcomes.
+    The state takes the form
+
+    .. math::
+
+        |\\psi_\\theta\\rangle = \\cos(\\frac{\\theta}{2})|0\\dots 0\\rangle + \\sin(\\frac{\\theta}{2})|1 \\dots 1\\rangle
+
+    :param settings: A list of length 1 containing paraameter :math:`\\theta`
+    :type settings: list[float]
+
+    :param wires: A list of wires to prepare the nonmaximally entangled GHZ-like state.
+    :type wires: list[int] or qml.Wires
+    """
+    qml.RY(settings[0], wires=wires[0])
+    for i in range(1, len(wires)):
+        qml.CNOT(wires=[wires[0], wires[i]])
 
 
 def bell_state_copies(settings, wires):
@@ -60,6 +79,79 @@ def ghz_state(settings, wires):
         qml.CNOT(wires=[wires[0], wires[i]])
 
 
+def W_state(settings, wires):
+    """Initializes the three-qubit :math:`W`-state on the specified wires.
+
+    .. math::
+
+        |\\psi^W\\rangle = \\frac{1}{\\sqrt{3}}(|100\\rangle + |010\\rangle + |001 \\rangle)
+
+    :param settings: A placeholder parameter that is not used.
+    :type settings: list[empty]
+
+    :param wires: The wires on which the :math:`W`-state is prepared.
+    :type wires: qml.Wires
+    """
+    phi = 2 * np.arccos(1 / np.sqrt(3))
+    qml.RY(phi, wires=wires[0])
+    qml.CRY(np.pi / 2, wires=wires[0:2])
+
+    qml.CNOT(wires=wires[1:3])
+    qml.CNOT(wires=wires[0:2])
+    qml.PauliX(wires=wires[0])
+
+
+def graph_state_fn(edges):
+    """Constructs a quantum function that prepares a graph state
+    where each qubit wire is a vertex and the ``edge`` are tuple pairs
+    of interacting wires. A graph state takes the form
+
+    .. math::
+
+        |\\psi^G \\rangle = \\prod_{(a,b) \\in Edges} CZ^{(a,b)} |+\\rangle^{\\otimes N}
+
+    where :math:`N` is the number of qubits, :math:`|+\\rangle = \\frac{1}{\\sqrt{2}}(|0\\rangle + |1\\rangle)`, :math:`(a,b)` is a pair of wires defining
+    an edge, and :math:`CZ^{(a,b)}` is a controlled-phase operation operating upon the qubit
+    pair :math:`(a,b)`. For more details, see the :meth:`qml.CZ` function in the `PennyLane docs <https://docs.pennylane.ai/en/stable/>`_.
+
+    :param edges: A list of qubit pair tuples defining the wires to which controlled-phase
+                  operations are applied.
+    :type settings: list[tuple[int]]
+
+    :returns: A quantum circuit `graph_state(settings, wires)` that prepares the specified
+              graph state. Note that ``wires`` must contain all qubits specified in ``edges``.
+    :rtype: Function
+    """
+
+    def graph_state(settings, wires):
+        for wire in wires:
+            qml.Hadamard(wire)
+
+        for edge in edges:
+            qml.CZ(wires=[wires[edge[0]], wires[edge[1]]])
+
+    return graph_state
+
+
+def shared_coin_flip_state(settings, wires):
+    """Initializes a state that mirrors a biased coin flip shared amongst the qubits
+    on ``wires[0:-1]`` where ``wires[-1]`` is an ansatz used to generate shared randomness.
+
+    The shared coin flip is represented by the density matrix.
+
+    .. math::
+
+        \\rho_\\theta = \\cos^2(\\frac{\\theta}{2})|0\\dots 0\\rangle\\langle 0 \\dots 0| + \\sin^2(\\frac{\\theta}{2})|1\\dots 1 \\rangle \\langle 1 \\dots 1|
+
+    :param settings: A list of 1 real value.
+    :type settings: list[float]
+
+    :param wires: The wires used to prepare the shaared coin flip state. Note that the last wire is used as an ancilla.
+    :type wires: qml.Wires
+    """
+    nonmax_entangled_state(settings, wires)
+
+
 def local_RY(settings, wires):
     """Performs a rotation about :math:`y`-axis on each qubit
     specified by ``wires``.
@@ -71,6 +163,22 @@ def local_RY(settings, wires):
     :type wires: qml.Wires
     """
     qml.broadcast(qml.RY, wires, "single", settings)
+
+
+def local_Rot(settings, wires):
+    """Performs an arbitrary qubit unitary as defined by :meth:`qml.Rot`
+    on each qubit specified by ``wires``.
+    For more details on :meth:`qml.Rot` please refer to the
+    `PennyLane docs <https://docs.pennylane.ai/en/stable/>`_.
+
+    :param settings: A list of ``3 * len(wires)`` real values.
+    :type settings: list[float]
+
+    :param wires: The wires to which the qubit unitaries are applied.
+    :type wires: qml.Wires
+    """
+    for i in range(len(wires)):
+        qml.Rot(*settings[3 * i : 3 * i + 3], wires=wires[i])
 
 
 def local_RXRY(settings, wires):

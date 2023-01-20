@@ -1,102 +1,217 @@
 import pytest
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
-import qnetvo as qnet
+import qnetvo
 
 
 class TestStatePreparationAnsatzes:
     @pytest.mark.parametrize(
-        "settings,match",
+        "settings, state_vec_match",
         [
-            ([0, 0, 0], [1 / np.sqrt(2), 0, 0, 1 / np.sqrt(2)]),
-            ([0, np.pi, 0], [0, -1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
-            ([np.pi, np.pi, 0], [0, -1j / np.sqrt(2), -1j / np.sqrt(2), 0]),
-            ([0, np.pi / 2, np.pi], [-0.5j, 0.5j, 0.5j, 0.5j]),
-            ([np.pi, 0, 0], [-1j / np.sqrt(2), 0, 0, 1j / np.sqrt(2)]),
+            (([0, 0, 0],), [1 / np.sqrt(2), 0, 0, 1 / np.sqrt(2)]),
+            (([0, np.pi, 0],), [0, -1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
+            (([np.pi, np.pi, 0],), [0, -1j / np.sqrt(2), -1j / np.sqrt(2), 0]),
+            (([0, np.pi / 2, np.pi],), [-0.5j, 0.5j, 0.5j, 0.5j]),
+            (([np.pi, 0, 0],), [-1j / np.sqrt(2), 0, 0, 1j / np.sqrt(2)]),
         ],
     )
-    def test_max_entangled_state(self, settings, match):
-        @qml.qnode(qml.device("default.qubit", wires=[0, 1]))
-        def test_circ(settings):
-            qnet.max_entangled_state(settings, wires=[0, 1])
+    def test_max_entangled_state(self, settings, state_vec_match):
+        state_vec = qnetvo.state_vec_fn(qnetvo.max_entangled_state, 2)
+        assert np.allclose(state_vec(*settings, wires=[0, 1]), state_vec_match)
 
-            return qml.state()
+    @pytest.mark.parametrize(
+        "wires, state_vec_match",
+        [
+            ([0, 1], np.array([1, 0, 0, 1]) / np.sqrt(2)),
+            ([0, 1, 2, 3], np.array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]) / 2),
+        ],
+    )
+    def test_bell_state_copies(self, wires, state_vec_match):
+        state_vec = qnetvo.state_vec_fn(qnetvo.bell_state_copies, len(wires))
+        settings = ([],)
+        assert np.allclose(state_vec(*settings, wires=wires), state_vec_match)
 
-        assert np.allclose(test_circ(settings), match)
+    @pytest.mark.parametrize(
+        "settings, wires, state_vec_match",
+        [
+            (([np.pi / 2],), [0, 1], np.array([1, 0, 0, 1]) / np.sqrt(2)),
+            (([np.pi / 4],), [0, 1], np.array([np.cos(np.pi / 8), 0, 0, np.sin(np.pi / 8)])),
+            (([np.pi / 2],), [0, 1, 2], np.array([1, 0, 0, 0, 0, 0, 0, 1]) / np.sqrt(2)),
+            (
+                ([np.pi / 4],),
+                [0, 1, 2],
+                np.array([np.cos(np.pi / 8), 0, 0, 0, 0, 0, 0, np.sin(np.pi / 8)]),
+            ),
+        ],
+    )
+    def test_nonmax_entangled_state(self, settings, wires, state_vec_match):
+        state_vec = qnetvo.state_vec_fn(qnetvo.nonmax_entangled_state, len(wires))
+        assert np.allclose(state_vec(*settings, wires=wires), state_vec_match)
 
-    def test_bell_state_copies(self):
-        U = qnet.unitary_matrix(qnet.bell_state_copies, 2, np.array([]), [0, 1])
+    @pytest.mark.parametrize(
+        "wires, state_vec_match",
+        [
+            ([0, 1], np.array([1, 0, 0, 1]) / np.sqrt(2)),
+            ([0, 1, 2], np.array([1, 0, 0, 0, 0, 0, 0, 1]) / np.sqrt(2)),
+        ],
+    )
+    def test_ghz_state(self, wires, state_vec_match):
+        state_vec = qnetvo.state_vec_fn(qnetvo.ghz_state, len(wires))
+        settings = ([],)
+        assert np.allclose(state_vec(*settings, wires=wires), state_vec_match)
+
+    def test_W_state(self):
+        state_vec = qnetvo.state_vec_fn(qnetvo.W_state, 3)
+        settings = ([],)
         assert np.allclose(
-            U, np.array([[1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 0, -1], [0, 1, -1, 0]]).T / np.sqrt(2)
+            state_vec(*settings, wires=[0, 1, 2]), np.array([0, 1, 1, 0, 1, 0, 0, 0]) / np.sqrt(3)
         )
 
-        U = qnet.unitary_matrix(qnet.bell_state_copies, 4, np.array([]), [0, 1, 2, 3])
-        assert np.allclose(U[:, 0], np.array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]) / 2)
-
-    def test_ghz_state(self):
-        U = qnet.unitary_matrix(qnet.ghz_state, 2, [], [0, 1])
-        assert np.allclose(
-            U, np.array([[1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 0, -1], [0, 1, -1, 0]]).T / np.sqrt(2)
-        )
-
-        U = qnet.unitary_matrix(qnet.ghz_state, 3, [], [0, 1, 2])
-        assert np.allclose(
-            U,
-            np.array(
+    @pytest.mark.parametrize(
+        "wires, edges, state_vec_match",
+        [
+            (
+                [0, 1],
                 [
-                    [1, 0, 0, 0, 0, 0, 0, 1],
-                    [0, 1, 0, 0, 0, 0, 1, 0],
-                    [0, 0, 1, 0, 0, 1, 0, 0],
-                    [0, 0, 0, 1, 1, 0, 0, 0],
-                    [1, 0, 0, 0, 0, 0, 0, -1],
-                    [0, 1, 0, 0, 0, 0, -1, 0],
-                    [0, 0, 1, 0, 0, -1, 0, 0],
-                    [0, 0, 0, 1, -1, 0, 0, 0],
-                ]
-            ).T
-            / np.sqrt(2),
-        )
+                    (0, 1),
+                ],
+                np.array([1, 1, 1, -1]) / 2,
+            ),
+            (
+                [0, 1, 2],
+                [
+                    (0, 1),
+                ],
+                np.array([1, 1, 1, 1, 1, 1, -1, -1]) / (2 * np.sqrt(2)),
+            ),
+            ([0, 1, 2], [(0, 1), (0, 2)], np.array([1, 1, 1, 1, 1, -1, -1, 1]) / (2 * np.sqrt(2))),
+        ],
+    )
+    def test_graph_state_fn(self, wires, edges, state_vec_match):
+        state_vec = qnetvo.state_vec_fn(qnetvo.graph_state_fn(edges), len(wires))
+        settings = ([],)
+        assert np.allclose(state_vec(*settings, wires=wires), state_vec_match)
 
-    def test_local_RY(self):
-        U = qnet.unitary_matrix(qnet.local_RY, 2, np.array([np.pi / 2, 0]), [0, 1])
-        assert np.allclose(
-            U, np.array([[1, 0, 1, 0], [0, 1, 0, 1], [-1, 0, 1, 0], [0, -1, 0, 1]]).T / np.sqrt(2)
-        )
+    @pytest.mark.parametrize(
+        "settings, wires, wires_out, density_mat_match",
+        [
+            (([np.pi / 2],), [0, 1], [0], np.array([[1, 0], [0, 1]]) / 2),
+            (
+                ([np.pi / 4],),
+                [0, 1],
+                [0],
+                np.array([[np.cos(np.pi / 8) ** 2, 0], [0, np.sin(np.pi / 8) ** 2]]),
+            ),
+            (
+                ([np.pi / 2],),
+                [0, 1, 2],
+                [0, 1],
+                np.array([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 1]]) / 2,
+            ),
+            (
+                ([np.pi / 4],),
+                [0, 1, 2],
+                [0, 1],
+                np.array(
+                    [
+                        [np.cos(np.pi / 8) ** 2, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, np.sin(np.pi / 8) ** 2],
+                    ]
+                ),
+            ),
+            (
+                ([np.pi / 2],),
+                [0, 1, 2, 3],
+                [0, 1, 2],
+                np.array(
+                    [
+                        [1, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 1],
+                    ]
+                )
+                / 2,
+            ),
+        ],
+    )
+    def test_nonmax_entangled_state(self, settings, wires, wires_out, density_mat_match):
+        density_mat = qnetvo.density_mat_fn(qnetvo.nonmax_entangled_state, len(wires))
+        assert np.allclose(density_mat(wires_out, *settings, wires=wires), density_mat_match)
 
-        U = qnet.unitary_matrix(qnet.local_RY, 2, np.array([0, np.pi / 2]), [0, 1])
-        assert np.allclose(
-            U, np.array([[1, 1, 0, 0], [-1, 1, 0, 0], [0, 0, 1, 1], [0, 0, -1, 1]]).T / np.sqrt(2)
-        )
 
-        U = qnet.unitary_matrix(qnet.local_RY, 2, np.array([np.pi / 2, np.pi / 2]), [0, 1])
-        assert np.allclose(
-            U, np.array([[1, 1, 1, 1], [-1, 1, -1, 1], [-1, -1, 1, 1], [1, -1, -1, 1]]).T / 2
-        )
+class TestBroadcastUnitaries:
+    @pytest.mark.parametrize(
+        "settings, wires, unitary_match",
+        [
+            (
+                (np.array([np.pi / 2, 0]),),
+                [0, 1],
+                np.array([[1, 0, 1, 0], [0, 1, 0, 1], [-1, 0, 1, 0], [0, -1, 0, 1]]).T / np.sqrt(2),
+            ),
+            (
+                ([0, np.pi / 2],),
+                [0, 1],
+                np.array([[1, 1, 0, 0], [-1, 1, 0, 0], [0, 0, 1, 1], [0, 0, -1, 1]]).T / np.sqrt(2),
+            ),
+            (
+                ([np.pi / 2, np.pi / 2],),
+                [0, 1],
+                np.array([[1, 1, 1, 1], [-1, 1, -1, 1], [-1, -1, 1, 1], [1, -1, -1, 1]]).T / 2,
+            ),
+        ],
+    )
+    def test_local_RY(self, settings, wires, unitary_match):
+        unitary = qnetvo.unitary_matrix(qnetvo.local_RY, len(wires), *settings, wires=wires)
+        assert np.allclose(unitary, unitary_match)
 
-    def test_local_RXRY(self):
-        # single qubit cases
-        U = qnet.unitary_matrix(qnet.local_RXRY, 1, np.array([np.pi / 2, 0]), [0])
-        assert np.allclose(U, np.array([[1, -1j], [-1j, 1]]) / np.sqrt(2))
+    @pytest.mark.parametrize(
+        "settings, wires, unitary_match",
+        [
+            (([0, 0, 0, 0, 0, 0],), [0, 1], np.eye(4)),
+            (
+                ([0, np.pi / 2, 0, 0, 0, 0],),
+                [0, 1],
+                np.array([[1, 0, -1, 0], [0, 1, 0, -1], [1, 0, 1, 0], [0, 1, 0, 1]]) / np.sqrt(2),
+            ),
+            (([0, -np.pi / 2, np.pi],), [0], np.array([[-1j, -1j], [-1j, 1j]]) / np.sqrt(2)),
+        ],
+    )
+    def test_local_Rot(self, settings, wires, unitary_match):
+        unitary = qnetvo.unitary_matrix(qnetvo.local_Rot, len(wires), *settings, wires=wires)
+        assert np.allclose(unitary, unitary_match)
 
-        U = qnet.unitary_matrix(qnet.local_RXRY, 1, [0, np.pi / 2], [0])
-        assert np.allclose(U, np.array([[1, -1], [1, 1]]) / np.sqrt(2))
-
-        U = qnet.unitary_matrix(qnet.local_RXRY, 1, [np.pi / 2, np.pi / 2], [0])
-        assert np.allclose(U, np.array([[1 + 1j, -1 - 1j], [1 - 1j, 1 - 1j]]) / 2)
-
-        # two-qubit cases
-        U = qnet.unitary_matrix(qnet.local_RXRY, 2, [np.pi / 2, 0, np.pi / 2, 0], [0, 1])
-        assert np.allclose(
-            U,
-            np.array([[1, -1j, -1j, -1], [-1j, 1, -1, -1j], [-1j, -1, 1, -1j], [-1, -1j, -1j, 1]]).T
-            / 2,
-        )
-
-        U = qnet.unitary_matrix(qnet.local_RXRY, 2, [0, np.pi / 2, 0, np.pi / 2], [0, 1])
-        assert np.allclose(
-            U, np.array([[1, 1, 1, 1], [-1, 1, -1, 1], [-1, -1, 1, 1], [1, -1, -1, 1]]).T / 2
-        )
+    @pytest.mark.parametrize(
+        "settings, wires, unitary_match",
+        [
+            (([np.pi / 2, 0],), [0], np.array([[1, -1j], [-1j, 1]]) / np.sqrt(2)),
+            (([0, np.pi / 2],), [0], np.array([[1, -1], [1, 1]]) / np.sqrt(2)),
+            (([np.pi / 2, np.pi / 2],), [0], np.array([[1 + 1j, -1 - 1j], [1 - 1j, 1 - 1j]]) / 2),
+            (
+                ([np.pi / 2, 0, np.pi / 2, 0],),
+                [0, 1],
+                np.array(
+                    [[1, -1j, -1j, -1], [-1j, 1, -1, -1j], [-1j, -1, 1, -1j], [-1, -1j, -1j, 1]]
+                ).T
+                / 2,
+            ),
+            (
+                ([0, np.pi / 2, 0, np.pi / 2],),
+                [0, 1],
+                np.array([[1, 1, 1, 1], [-1, 1, -1, 1], [-1, -1, 1, 1], [1, -1, -1, 1]]).T / 2,
+            ),
+        ],
+    )
+    def test_local_RXRY(self, settings, wires, unitary_match):
+        unitary = qnetvo.unitary_matrix(qnetvo.local_RXRY, len(wires), *settings, wires=wires)
+        assert np.allclose(unitary, unitary_match)
 
 
 class TestNoiseAnsazes:
@@ -120,7 +235,7 @@ class TestNoiseAnsazes:
         @qml.qnode(dev)
         def test_state(noise_param):
             state_prep_fn()
-            qnet.pure_amplitude_damping([noise_param], wires=[0, 1])
+            qnetvo.pure_amplitude_damping([noise_param], wires=[0, 1])
 
             return qml.state()
 
@@ -150,7 +265,7 @@ class TestNoiseAnsazes:
             @qml.qnode(dev)
             def test_expval(noise_param):
                 state_prep_fn()
-                qnet.pure_amplitude_damping([noise_param], wires=[0, 1])
+                qnetvo.pure_amplitude_damping([noise_param], wires=[0, 1])
 
                 return qml.expval(obs(wires=[0]))
 
@@ -183,7 +298,7 @@ class TestNoiseAnsazes:
         @qml.qnode(dev)
         def test_state(noise_param):
             state_prep_fn()
-            qnet.pure_phase_damping([noise_param], wires=[0, 1])
+            qnetvo.pure_phase_damping([noise_param], wires=[0, 1])
 
             return qml.state()
 
@@ -213,7 +328,7 @@ class TestNoiseAnsazes:
             @qml.qnode(dev)
             def test_expval(noise_param):
                 state_prep_fn()
-                qnet.pure_phase_damping([noise_param], wires=[0, 1])
+                qnetvo.pure_phase_damping([noise_param], wires=[0, 1])
 
                 return qml.expval(obs(wires=[0]))
 
@@ -238,7 +353,7 @@ class TestNoiseAnsazes:
             qml.Hadamard(wires=[0])
             qml.CNOT(wires=[0, 1])
 
-            qnet.two_qubit_depolarizing(gamma, wires=[0, 1])
+            qnetvo.two_qubit_depolarizing(gamma, wires=[0, 1])
 
             return qml.state()
 
@@ -266,7 +381,7 @@ class TestNoiseAnsazes:
             qml.Hadamard(wires=[0])
             qml.CNOT(wires=[0, 1])
 
-            qnet.colored_noise(gamma, wires=[0, 1])
+            qnetvo.colored_noise(gamma, wires=[0, 1])
 
             return qml.state()
 
