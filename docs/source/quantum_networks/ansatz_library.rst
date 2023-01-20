@@ -15,6 +15,10 @@ State Preparations
 
 .. autofunction:: max_entangled_state
 
+.. autofunction:: graph_state_fn
+
+.. autofunction:: W_state
+
 
 Unitary Layers
 --------------
@@ -22,6 +26,8 @@ Unitary Layers
 .. autofunction:: local_RY
 
 .. autofunction:: local_RXRY
+
+.. autofunction:: local_Rot
 
 
 Noise Models

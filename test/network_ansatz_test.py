@@ -4,7 +4,7 @@ from pennylane import numpy as np
 
 import tensorflow as tf
 
-import qnetvo as qnetvo
+import qnetvo
 
 
 @pytest.fixture
