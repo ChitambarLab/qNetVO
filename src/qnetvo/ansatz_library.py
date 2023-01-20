@@ -28,7 +28,7 @@ def max_entangled_state(settings, wires):
 
 
 def nonmax_entangled_state(settings, wires):
-    """Initializes a nonmaximally entangled GHZ-like state that with a biased outcome.
+    """Initializes a nonmaximally entangled GHZ-like state that has a bias between its two outcomes.
     The state takes the form
 
     .. math::
