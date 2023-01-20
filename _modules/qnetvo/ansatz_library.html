@@ -244,7 +244,7 @@
           <h1>Source code for qnetvo.ansatz_library</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pennylane</span> <span class="k">as</span> <span class="nn">qml</span>
 <span class="kn">from</span> <span class="nn">pennylane.operation</span> <span class="kn">import</span> <span class="n">Channel</span>
-<span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
 
 <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-7</span>  <span class="c1"># constant</span>
@@ -269,6 +269,25 @@
 
     <span class="c1"># perform general rotation on first qubit</span>
     <span class="n">qml</span><span class="o">.</span><span class="n">Rot</span><span class="p">(</span><span class="o">*</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="nonmax_entangled_state"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.nonmax_entangled_state">[docs]</a><span class="k">def</span> <span class="nf">nonmax_entangled_state</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes a nonmaximally entangled GHZ-like state that has a bias between its two outcomes.</span>
+<span class="sd">    The state takes the form</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        |\\psi_\\theta\\rangle = \\cos(\\frac{\\theta}{2})|0\\dots 0\\rangle + \\sin(\\frac{\\theta}{2})|1 \\dots 1\\rangle</span>
+
+<span class="sd">    :param settings: A list of length 1 containing paraameter :math:`\\theta`</span>
+<span class="sd">    :type settings: list[float]</span>
+
+<span class="sd">    :param wires: A list of wires to prepare the nonmaximally entangled GHZ-like state.</span>
+<span class="sd">    :type wires: list[int] or qml.Wires</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">RY</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">wires</span><span class="p">)):</span>
+        <span class="n">qml</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="p">[</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wires</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span></div>
 
 
 <div class="viewcode-block" id="bell_state_copies"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.bell_state_copies">[docs]</a><span class="k">def</span> <span class="nf">bell_state_copies</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
@@ -304,6 +323,79 @@
         <span class="n">qml</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="p">[</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wires</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span></div>
 
 
+<div class="viewcode-block" id="W_state"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.W_state">[docs]</a><span class="k">def</span> <span class="nf">W_state</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes the three-qubit :math:`W`-state on the specified wires.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        |\\psi^W\\rangle = \\frac{1}{\\sqrt{3}}(|100\\rangle + |010\\rangle + |001 \\rangle)</span>
+
+<span class="sd">    :param settings: A placeholder parameter that is not used.</span>
+<span class="sd">    :type settings: list[empty]</span>
+
+<span class="sd">    :param wires: The wires on which the :math:`W`-state is prepared.</span>
+<span class="sd">    :type wires: qml.Wires</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">RY</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">CRY</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">qml</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">PauliX</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="graph_state_fn"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.graph_state_fn">[docs]</a><span class="k">def</span> <span class="nf">graph_state_fn</span><span class="p">(</span><span class="n">edges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a quantum function that prepares a graph state</span>
+<span class="sd">    where each qubit wire is a vertex and the ``edge`` are tuple pairs</span>
+<span class="sd">    of interacting wires. A graph state takes the form</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        |\\psi^G \\rangle = \\prod_{(a,b) \\in Edges} CZ^{(a,b)} |+\\rangle^{\\otimes N}</span>
+
+<span class="sd">    where :math:`N` is the number of qubits, :math:`|+\\rangle = \\frac{1}{\\sqrt{2}}(|0\\rangle + |1\\rangle)`, :math:`(a,b)` is a pair of wires defining</span>
+<span class="sd">    an edge, and :math:`CZ^{(a,b)}` is a controlled-phase operation operating upon the qubit</span>
+<span class="sd">    pair :math:`(a,b)`. For more details, see the :meth:`qml.CZ` function in the `PennyLane docs &lt;https://docs.pennylane.ai/en/stable/&gt;`_.</span>
+
+<span class="sd">    :param edges: A list of qubit pair tuples defining the wires to which controlled-phase</span>
+<span class="sd">                  operations are applied.</span>
+<span class="sd">    :type settings: list[tuple[int]]</span>
+
+<span class="sd">    :returns: A quantum circuit `graph_state(settings, wires)` that prepares the specified</span>
+<span class="sd">              graph state. Note that ``wires`` must contain all qubits specified in ``edges``.</span>
+<span class="sd">    :rtype: Function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">graph_state</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">wire</span> <span class="ow">in</span> <span class="n">wires</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">Hadamard</span><span class="p">(</span><span class="n">wire</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">CZ</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="p">[</span><span class="n">wires</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">wires</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+
+    <span class="k">return</span> <span class="n">graph_state</span></div>
+
+
+<div class="viewcode-block" id="shared_coin_flip_state"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.shared_coin_flip_state">[docs]</a><span class="k">def</span> <span class="nf">shared_coin_flip_state</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes a state that mirrors a biased coin flip shared amongst the qubits</span>
+<span class="sd">    on ``wires[0:-1]`` where ``wires[-1]`` is an ansatz used to generate shared randomness.</span>
+
+<span class="sd">    The shared coin flip is represented by the density matrix.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \\rho_\\theta = \\cos^2(\\frac{\\theta}{2})|0\\dots 0\\rangle\\langle 0 \\dots 0| + \\sin^2(\\frac{\\theta}{2})|1\\dots 1 \\rangle \\langle 1 \\dots 1|</span>
+
+<span class="sd">    :param settings: A list of 1 real value.</span>
+<span class="sd">    :type settings: list[float]</span>
+
+<span class="sd">    :param wires: The wires used to prepare the shaared coin flip state. Note that the last wire is used as an ancilla.</span>
+<span class="sd">    :type wires: qml.Wires</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nonmax_entangled_state</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="local_RY"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.local_RY">[docs]</a><span class="k">def</span> <span class="nf">local_RY</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs a rotation about :math:`y`-axis on each qubit</span>
 <span class="sd">    specified by ``wires``.</span>
@@ -315,6 +407,22 @@
 <span class="sd">    :type wires: qml.Wires</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">qml</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="n">qml</span><span class="o">.</span><span class="n">RY</span><span class="p">,</span> <span class="n">wires</span><span class="p">,</span> <span class="s2">&quot;single&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="local_Rot"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.local_Rot">[docs]</a><span class="k">def</span> <span class="nf">local_Rot</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs an arbitrary qubit unitary as defined by :meth:`qml.Rot`</span>
+<span class="sd">    on each qubit specified by ``wires``.</span>
+<span class="sd">    For more details on :meth:`qml.Rot` please refer to the</span>
+<span class="sd">    `PennyLane docs &lt;https://docs.pennylane.ai/en/stable/&gt;`_.</span>
+
+<span class="sd">    :param settings: A list of ``3 * len(wires)`` real values.</span>
+<span class="sd">    :type settings: list[float]</span>
+
+<span class="sd">    :param wires: The wires to which the qubit unitaries are applied.</span>
+<span class="sd">    :type wires: qml.Wires</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wires</span><span class="p">)):</span>
+        <span class="n">qml</span><span class="o">.</span><span class="n">Rot</span><span class="p">(</span><span class="o">*</span><span class="n">settings</span><span class="p">[</span><span class="mi">3</span> <span class="o">*</span> <span class="n">i</span> <span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="local_RXRY"><a class="viewcode-back" href="../../quantum_networks/ansatz_library.html#qnetvo.local_RXRY">[docs]</a><span class="k">def</span> <span class="nf">local_RXRY</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>

@@ -243,7 +243,8 @@
         <article role="main">
           <h1>Source code for qnetvo.utilities</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pennylane</span> <span class="k">as</span> <span class="nn">qml</span>
-<span class="kn">import</span> <span class="nn">pennylane.numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pennylane.numpy</span> <span class="k">as</span> <span class="nn">qnp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">math</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">copy</span>
@@ -269,18 +270,70 @@
 <span class="sd">    :returns: A unitary matrix representing the provided ``circuit``.</span>
 <span class="sd">    :rtype: Numpy Array</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;default.qubit&quot;</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">num_wires</span><span class="p">))</span>
-
-    <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">unitary_z</span><span class="p">(</span><span class="n">basis_state</span><span class="p">):</span>
-        <span class="n">qml</span><span class="o">.</span><span class="n">BasisState</span><span class="p">(</span><span class="n">basis_state</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">num_wires</span><span class="p">))</span>
-        <span class="n">circuit</span><span class="p">(</span><span class="o">*</span><span class="n">circ_args</span><span class="p">,</span> <span class="o">**</span><span class="n">circ_kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+    <span class="n">state_vec</span> <span class="o">=</span> <span class="n">state_vec_fn</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">num_wires</span><span class="p">)</span>
 
     <span class="n">bitstrings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span> <span class="k">for</span> <span class="n">bitstring</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="n">num_wires</span><span class="p">)]</span>
 
-    <span class="n">u</span> <span class="o">=</span> <span class="p">[</span><span class="n">unitary_z</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="k">for</span> <span class="n">bitstring</span> <span class="ow">in</span> <span class="n">bitstrings</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">T</span></div>
+    <span class="n">unitary</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">state_vec</span><span class="p">(</span><span class="o">*</span><span class="n">circ_args</span><span class="p">,</span> <span class="n">basis_state</span><span class="o">=</span><span class="n">bitstring</span><span class="p">,</span> <span class="o">**</span><span class="n">circ_kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">bitstring</span> <span class="ow">in</span> <span class="n">bitstrings</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unitary</span><span class="p">)</span><span class="o">.</span><span class="n">T</span></div>
+
+
+<div class="viewcode-block" id="state_vec_fn"><a class="viewcode-back" href="../../utilities.html#qnetvo.state_vec_fn">[docs]</a><span class="k">def</span> <span class="nf">state_vec_fn</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">num_wires</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a function ``state_vec(*circ_args, basis_state=[0,...,0], **circ_kwargs)``</span>
+<span class="sd">    that returns the state vector representation of the output of ``circuit`` where the input</span>
+<span class="sd">    to the circuit is specified in the computational basis by ``basis_state``.</span>
+
+<span class="sd">    :param circuit: A quantum function.</span>
+<span class="sd">    :type circuit: Function</span>
+
+<span class="sd">    :param num_wires: The number of wires to evaluate ``circuit`` on.</span>
+<span class="sd">    :type num_wires: Int</span>
+
+<span class="sd">    :returns: A vector representing the pure quantum state output from ``circuit(*circ_args, **circ_kwargs)``</span>
+<span class="sd">              when the computational ``basis_state`` is provided as input.</span>
+<span class="sd">    :rtype: np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dev_wires</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_wires</span><span class="p">)</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;default.qubit&quot;</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">dev_wires</span><span class="p">)</span>
+    <span class="n">zero_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dev_wires</span><span class="p">))</span>
+
+    <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">state_vec</span><span class="p">(</span><span class="o">*</span><span class="n">circ_args</span><span class="p">,</span> <span class="n">basis_state</span><span class="o">=</span><span class="n">zero_state</span><span class="p">,</span> <span class="o">**</span><span class="n">circ_kwargs</span><span class="p">):</span>
+        <span class="n">qml</span><span class="o">.</span><span class="n">BasisState</span><span class="p">(</span><span class="n">basis_state</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">dev_wires</span><span class="p">)</span>
+        <span class="n">circuit</span><span class="p">(</span><span class="o">*</span><span class="n">circ_args</span><span class="p">,</span> <span class="o">**</span><span class="n">circ_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">state_vec</span></div>
+
+
+<div class="viewcode-block" id="density_mat_fn"><a class="viewcode-back" href="../../utilities.html#qnetvo.density_mat_fn">[docs]</a><span class="k">def</span> <span class="nf">density_mat_fn</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">num_wires</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a function that returns the density matrix of the specified ``circuit``.</span>
+
+<span class="sd">    :param circuit: A quantum function.</span>
+<span class="sd">    :type circuit: Function</span>
+
+<span class="sd">    :param num_wires: The number of wires to evaluate ``circuit`` on.</span>
+<span class="sd">    :type num_wires: Int</span>
+
+<span class="sd">    :returns: A function ``density_mat(wires_out, *circ_args, basis_state=[0,...,0], **circ_kwargs)``  that returns</span>
+<span class="sd">              the density matrix representing the quantum state on ``wires_out`` for the initialized ``basis_state`` where</span>
+<span class="sd">              the quantum circuit is called as ``circuit(*circ_args, **circ_kwargs)``.</span>
+<span class="sd">    :rtype: np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dev_wires</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_wires</span><span class="p">)</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;default.qubit&quot;</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">dev_wires</span><span class="p">)</span>
+    <span class="n">zero_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dev_wires</span><span class="p">))</span>
+
+    <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">density_mat</span><span class="p">(</span><span class="n">wires_out</span><span class="p">,</span> <span class="o">*</span><span class="n">circ_args</span><span class="p">,</span> <span class="n">basis_state</span><span class="o">=</span><span class="n">zero_state</span><span class="p">,</span> <span class="o">**</span><span class="n">circ_kwargs</span><span class="p">):</span>
+        <span class="n">qml</span><span class="o">.</span><span class="n">BasisState</span><span class="p">(</span><span class="n">basis_state</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">dev_wires</span><span class="p">)</span>
+        <span class="n">circuit</span><span class="p">(</span><span class="o">*</span><span class="n">circ_args</span><span class="p">,</span> <span class="o">**</span><span class="n">circ_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">density_matrix</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="n">wires_out</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">density_mat</span></div>
 
 
 <div class="viewcode-block" id="write_optimization_json"><a class="viewcode-back" href="../../utilities.html#qnetvo.write_optimization_json">[docs]</a><span class="k">def</span> <span class="nf">write_optimization_json</span><span class="p">(</span><span class="n">opt_dict</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
@@ -353,8 +406,8 @@
 <span class="sd">    :returns: The same nested array elements and structure using numpy arrays.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">np_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_network_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">np_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_network_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">np_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">qnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_network_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">np_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">qnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_network_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="k">return</span> <span class="p">[</span><span class="n">np_prep_settings</span><span class="p">,</span> <span class="n">np_meas_settings</span><span class="p">]</span></div>
 

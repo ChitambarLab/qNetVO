@@ -245,6 +245,51 @@
 <section id="circuit-tomography">
 <h2>Circuit Tomography<a class="headerlink" href="#circuit-tomography" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.state_vec_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">state_vec_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qnetvo/utilities.html#state_vec_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.state_vec_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a function <code class="docutils literal notranslate"><span class="pre">state_vec(*circ_args,</span> <span class="pre">basis_state=[0,...,0],</span> <span class="pre">**circ_kwargs)</span></code>
+that returns the state vector representation of the output of <code class="docutils literal notranslate"><span class="pre">circuit</span></code> where the input
+to the circuit is specified in the computational basis by <code class="docutils literal notranslate"><span class="pre">basis_state</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>circuit</strong> (<em>Function</em>) – A quantum function.</p></li>
+<li><p><strong>num_wires</strong> (<em>Int</em>) – The number of wires to evaluate <code class="docutils literal notranslate"><span class="pre">circuit</span></code> on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector representing the pure quantum state output from <code class="docutils literal notranslate"><span class="pre">circuit(*circ_args,</span> <span class="pre">**circ_kwargs)</span></code>
+when the computational <code class="docutils literal notranslate"><span class="pre">basis_state</span></code> is provided as input.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.density_mat_fn">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">density_mat_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_wires</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qnetvo/utilities.html#density_mat_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.density_mat_fn" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a function that returns the density matrix of the specified <code class="docutils literal notranslate"><span class="pre">circuit</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>circuit</strong> (<em>Function</em>) – A quantum function.</p></li>
+<li><p><strong>num_wires</strong> (<em>Int</em>) – The number of wires to evaluate <code class="docutils literal notranslate"><span class="pre">circuit</span></code> on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function <code class="docutils literal notranslate"><span class="pre">density_mat(wires_out,</span> <span class="pre">*circ_args,</span> <span class="pre">basis_state=[0,...,0],</span> <span class="pre">**circ_kwargs)</span></code>  that returns
+the density matrix representing the quantum state on <code class="docutils literal notranslate"><span class="pre">wires_out</span></code> for the initialized <code class="docutils literal notranslate"><span class="pre">basis_state</span></code> where
+the quantum circuit is called as <code class="docutils literal notranslate"><span class="pre">circuit(*circ_args,</span> <span class="pre">**circ_kwargs)</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="qnetvo.unitary_matrix">
 <span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">unitary_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_wires</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">circ_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">circ_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qnetvo/utilities.html#unitary_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.unitary_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs the unitary matrix representation of a quantum
@@ -414,6 +459,8 @@ digit in the mixed base number</p></li>
             <ul>
 <li><a class="reference internal" href="#">Utilities</a><ul>
 <li><a class="reference internal" href="#circuit-tomography">Circuit Tomography</a><ul>
+<li><a class="reference internal" href="#qnetvo.state_vec_fn"><code class="docutils literal notranslate"><span class="pre">state_vec_fn()</span></code></a></li>
+<li><a class="reference internal" href="#qnetvo.density_mat_fn"><code class="docutils literal notranslate"><span class="pre">density_mat_fn()</span></code></a></li>
 <li><a class="reference internal" href="#qnetvo.unitary_matrix"><code class="docutils literal notranslate"><span class="pre">unitary_matrix()</span></code></a></li>
 </ul>
 </li>

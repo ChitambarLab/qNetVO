@@ -6,6 +6,10 @@ Utilities
 Circuit Tomography
 ------------------
 
+.. autofunction:: state_vec_fn
+
+.. autofunction:: density_mat_fn
+
 .. autofunction:: unitary_matrix
 
 File I/O
