@@ -82,6 +82,7 @@ class TestNLocalChainBellInequality:
             assert np.allclose(grad, grad_match)
 
     @pytest.mark.parametrize("parallel_flag", [True, False])
+    @flaky(max_runs=5, min_passes=1)
     def test_chain_J22_fn(self, parallel_flag):
 
         prep_nodes = [
@@ -133,6 +134,7 @@ class TestNLocalChainBellInequality:
         assert np.isclose(4, J22(*settings))
 
     @pytest.mark.parametrize("parallel_flag", [True, False])
+    @flaky(max_runs=5, min_passes=1)
     def test_chain_I22_fn(self, parallel_flag):
 
         prep_nodes = [

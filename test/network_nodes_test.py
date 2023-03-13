@@ -132,7 +132,10 @@ def test_prepare_node():
     assert len(tape) == 1
     assert tape.wires.tolist() == [2, 3]
     assert tape.num_params == 1
-    assert tape.get_parameters() == [[0, 0.1, 0.2, 0.3, 0.4, 0.5]]
+
+    tape_parameters = tape.get_parameters()
+    assert len(tape_parameters) == 1
+    assert all(tape_parameters[0] == [0, 0.1, 0.2, 0.3, 0.4, 0.5])
 
 
 def test_measure_node():
