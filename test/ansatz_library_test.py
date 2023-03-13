@@ -277,7 +277,6 @@ class TestNoiseAnsazes:
                 return qml.expval(obs(wires=[0]))
 
             for noise_param in np.arange(0, 1.001, 1 / 10):
-
                 assert np.isclose(test_expval(noise_param), match_expval(noise_param), atol=1e-7)
 
     @pytest.mark.parametrize(
@@ -340,12 +339,10 @@ class TestNoiseAnsazes:
                 return qml.expval(obs(wires=[0]))
 
             for noise_param in np.arange(0, 1.001, 1 / 10):
-
                 assert np.isclose(test_expval(noise_param), match_expval(noise_param), atol=1e-7)
 
     @pytest.mark.parametrize("gamma", np.arange(-0.1, 1.11, 0.1))
     def test_two_qubit_depolarizing(self, gamma):
-
         dev = qml.device("default.mixed", wires=[0, 1])
 
         @qml.qnode(dev)
@@ -373,7 +370,6 @@ class TestNoiseAnsazes:
 
     @pytest.mark.parametrize("gamma", np.arange(-0.1, 1.11, 0.1))
     def test_colored_noise(self, gamma):
-
         dev = qml.device("default.mixed", wires=[0, 1])
 
         @qml.qnode(dev)

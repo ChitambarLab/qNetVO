@@ -30,7 +30,6 @@ class TestMutualInfoCostFn:
         ],
     )
     def test_mutual_info_cost_qubit_33(self, network_settings, priors, postmap, match):
-
         ansatz = qnet.NetworkAnsatz(
             [qnet.PrepareNode(3, [0], qnet.local_RY, 1)],
             [qnet.MeasureNode(1, 3, [0], qnet.local_RY, 1)],
@@ -41,7 +40,6 @@ class TestMutualInfoCostFn:
         assert np.isclose(mutual_info(*network_settings), match)
 
     def test_mutual_info_2_senders(self):
-
         ansatz = qnet.NetworkAnsatz(
             [
                 qnet.PrepareNode(2, [0], qnet.local_RY, 1),
@@ -62,7 +60,6 @@ class TestMutualInfoOptimimzation:
         "priors,match", [([np.ones(3) / 3], 0.9182), ([np.array([0.5, 0.5, 0])], 1)]
     )
     def test_mutual_info_opt_qubit_33(self, priors, match):
-
         ansatz = qnet.NetworkAnsatz(
             [qnet.PrepareNode(3, [0], qnet.local_RY, 1)],
             [qnet.MeasureNode(1, 3, [0], qnet.local_RY, 1)],

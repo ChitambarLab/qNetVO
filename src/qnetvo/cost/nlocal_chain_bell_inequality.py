@@ -37,7 +37,6 @@ def chain_I22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     I22_xy_inputs = [[x_a] + [0 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
     def I22(*network_settings):
-
         I22_xy_settings = [
             network_ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             for meas_inputs in I22_xy_inputs
@@ -91,7 +90,6 @@ def chain_J22_fn(network_ansatz, parallel=False, **qnode_kwargs):
     J22_xy_inputs = [[x_a] + [1 for i in range(num_interior_nodes)] + [x_b] for x_a, x_b in xy_vals]
 
     def J22(*network_settings):
-
         J22_xy_settings = [
             network_ansatz.qnode_settings(network_settings, static_prep_inputs + [meas_inputs])
             for meas_inputs in J22_xy_inputs
@@ -158,7 +156,6 @@ def nlocal_chain_22_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
     J22 = chain_J22_fn(network_ansatz, parallel=parallel, **qnode_kwargs)
 
     def cost(*network_settings):
-
         I22_score = I22(*network_settings)
         J22_score = J22(*network_settings)
 
@@ -218,7 +215,6 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
     grad_fn = _nat_grad_fn if natural_grad else _grad_fn
 
     def nlocal_chain_grad_fn(*network_settings):
-
         I22_score = I22(*network_settings)
         J22_score = J22(*network_settings)
 
@@ -249,7 +245,6 @@ def parallel_nlocal_chain_grad_fn(network_ansatz, natural_grad=False, **qnode_kw
         J22_scalar = -(1 / 4) * math.sign(J22_score) / math.sqrt(math.abs(J22_score))
 
         for i in range(4):
-
             x = I22_xy_meas_inputs[i][0]
             y = I22_xy_meas_inputs[i][-1]
             J22_sign = (-1) ** (x + y)

@@ -40,7 +40,6 @@ def chsh_inequality_cost_fn(network_ansatz, parallel=False, **qnode_kwargs):
         chsh_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     def chsh_cost(*network_settings):
-
         xy_settings = [
             network_ansatz.qnode_settings(network_settings, network_input)
             for network_input in network_inputs

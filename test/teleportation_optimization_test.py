@@ -106,7 +106,6 @@ class TestTeleportationOptimization:
         return cost
 
     def test_teleportation_optimization(self):
-
         # setting up optimization
         training_states = [
             np.array([1, 0]),

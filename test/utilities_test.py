@@ -192,7 +192,6 @@ class TestOptimzationFileIO:
         assert not (os.path.exists(filepath))
 
     def test_write_optimization_json(self, file_io_cleanup):
-
         opt_dict = self.construct_opt_dict()
 
         filename = self.filename()
@@ -234,7 +233,6 @@ class TestOptimzationFileIO:
         assert opt_json["scores"] == [0, 6, 12]
 
     def test_read_optimization_json(self, file_io_cleanup):
-
         opt_dict = self.construct_opt_dict()
 
         filename = self.filename()
@@ -279,7 +277,6 @@ class TestOptimzationFileIO:
         [([[[]]], [[[]]]), ([[[1, 0]], [[2], [3]]], [[[4, 5], [6, 7]], [[]]])],
     )
     def test_settings_to_np(self, prep_settings, meas_settings):
-
         settings = [prep_settings, meas_settings]
 
         np_settings = qnetvo.settings_to_np(settings)
@@ -303,7 +300,6 @@ class TestOptimzationFileIO:
         [([[[]]], [[[]]]), ([[[1, 0]], [[2], [3]]], [[[4, 5], [6, 7]], [[]]])],
     )
     def test_settings_to_list(self, prep_settings, meas_settings):
-
         np_settings = [
             [np.array(prep_set) for prep_set in prep_settings],
             [np.array(meas_set) for meas_set in meas_settings],
@@ -326,7 +322,6 @@ class TestOptimzationFileIO:
         )
 
     def test_mixed_base_num(self):
-
         assert np.all(qnetvo.mixed_base_num(0, [2, 2]) == [0, 0])
         assert np.all(qnetvo.mixed_base_num(2, [2, 2]) == [1, 0])
         assert np.all(qnetvo.mixed_base_num(9, [2, 3, 4]) == [0, 2, 1])

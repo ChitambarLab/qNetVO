@@ -7,7 +7,6 @@ import qnetvo as qnet
 
 class TestCostMagicSquaresGame:
     def test_magic_squares_game_cost_fn(self):
-
         prep_nodes = [qnet.PrepareNode(1, range(4), qnet.bell_state_copies, 0)]
         meas_nodes = [
             qnet.MeasureNode(3, 4, [0, 1], qml.templates.subroutines.ArbitraryUnitary, 15),

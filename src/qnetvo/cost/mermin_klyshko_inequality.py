@@ -79,13 +79,11 @@ def mermin_klyshko_cost_fn(ansatz, **qnode_kwargs):
     static_prep_inputs = [[0] * len(layer_nodes) for layer_nodes in ansatz.layers[0:-1]]
 
     def cost(*network_settings):
-
         score = 0
 
         num_correlators = len(meas_inputs_list)
 
         for i in range(num_correlators):
-
             meas_inputs = meas_inputs_list[i]
             scalar = scalars_list[i]
 

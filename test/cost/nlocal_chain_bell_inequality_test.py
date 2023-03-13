@@ -65,7 +65,6 @@ class TestNLocalChainBellInequality:
     )
     @flaky(max_runs=5, min_passes=1)
     def test_parallel_nlocal_chain_grad_fn(self, natural_grad, prep_nodes, meas_nodes):
-
         chain_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
         np.random.seed(45)
@@ -84,7 +83,6 @@ class TestNLocalChainBellInequality:
     @pytest.mark.parametrize("parallel_flag", [True, False])
     @flaky(max_runs=5, min_passes=1)
     def test_chain_J22_fn(self, parallel_flag):
-
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.local_RY, 2),
             qnet.PrepareNode(1, [2, 3], qnet.local_RY, 2),
@@ -136,7 +134,6 @@ class TestNLocalChainBellInequality:
     @pytest.mark.parametrize("parallel_flag", [True, False])
     @flaky(max_runs=5, min_passes=1)
     def test_chain_I22_fn(self, parallel_flag):
-
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.local_RY, 2),
             qnet.PrepareNode(1, [2, 3], qnet.local_RY, 2),

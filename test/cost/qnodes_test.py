@@ -22,7 +22,6 @@ class TestObservables:
         assert qubit3_obs.wires == qml.wires.Wires([0, 1, 2])
 
     def test_local_parity_observables(self):
-
         measure_nodes = [
             qnet.MeasureNode(2, 2, range(3 * i, 3 * i + 3), lambda settings, wires: None, 3)
             for i in range(3)
@@ -60,7 +59,6 @@ class TestQNodes:
         assert np.all(qnode([np.pi, np.pi, np.pi, 0]) == [1, -1])
 
     def test_global_parity_expval_qnode(self):
-
         prep_nodes = [
             qnet.PrepareNode(
                 1, [0, 1, 2, 3], lambda settings, wires: qml.BasisState(settings, wires=wires), 4

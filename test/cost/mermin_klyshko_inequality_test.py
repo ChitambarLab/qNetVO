@@ -37,7 +37,6 @@ class TestMerminKlyshkoInequality:
         ],
     )
     def test_mermin_klyshko_inputs_scalars(self, n, match_inputs, match_scalars):
-
         meas_inputs_list, scalars_list = qnet.mermin_klyshko_inputs_scalars(n)
 
         assert scalars_list == match_scalars
@@ -55,7 +54,6 @@ class TestMerminKlyshkoInequality:
         assert len(scalars_list) == num_terms
 
     def test_mermin_klyshko_inequality_fn_CHSH_scenario(self):
-
         prep_nodes = [qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0)]
 
         meas_nodes = [

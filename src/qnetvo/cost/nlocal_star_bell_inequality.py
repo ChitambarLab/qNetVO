@@ -53,7 +53,6 @@ def star_I22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
         star_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     def I22(*network_settings):
-
         I22_x_settings = [
             network_ansatz.qnode_settings(network_settings, network_inputs)
             for network_inputs in network_input_x_vals
@@ -132,7 +131,6 @@ def star_J22_fn(network_ansatz, parallel=False, nthreads=4, **qnode_kwargs):
         star_qnode = global_parity_expval_qnode(network_ansatz, **qnode_kwargs)
 
     def J22(*network_settings):
-
         J22_x_settings = [
             network_ansatz.qnode_settings(network_settings, network_inputs)
             for network_inputs in network_input_x_vals
@@ -207,7 +205,6 @@ def nlocal_star_22_cost_fn(network_ansatz, parallel=False, nthreads=4, **qnode_k
     J22 = star_J22_fn(network_ansatz, parallel=parallel, nthreads=nthreads, **qnode_kwargs)
 
     def cost(*network_settings):
-
         I22_score = I22(*network_settings)
         J22_score = J22(*network_settings)
 
@@ -280,7 +277,6 @@ def parallel_nlocal_star_grad_fn(network_ansatz, nthreads=4, natural_grad=False,
     _grad = _ng if natural_grad else _g
 
     def nlocal_star_grad(*network_settings):
-
         I22_score = I22(*network_settings)
         J22_score = J22(*network_settings)
 
