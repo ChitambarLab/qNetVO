@@ -108,9 +108,9 @@ def write_optimization_json(opt_dict, filename):
 
     opt_dict_json["opt_score"] = float(opt_dict_json["opt_score"])
     opt_dict_json["scores"] = [float(score) for score in opt_dict_json["scores"]]
-    opt_dict_json["opt_settings"] = settings_to_list(opt_dict_json["opt_settings"])
+    opt_dict_json["opt_settings"] = [float(setting) for setting in opt_dict_json["opt_settings"]]
     opt_dict_json["settings_history"] = [
-        settings_to_list(settings) for settings in opt_dict_json["settings_history"]
+        [float(setting) for setting in settings] for settings in opt_dict_json["settings_history"]
     ]
 
     with open(filename + ".json", "w") as file:
@@ -130,42 +130,7 @@ def read_optimization_json(filepath):
     with open(filepath) as file:
         opt_dict = json.load(file)
 
-    opt_dict["opt_settings"] = settings_to_np(opt_dict["opt_settings"])
-    opt_dict["settings_history"] = [
-        settings_to_np(settings) for settings in opt_dict["settings_history"]
-    ]
-
     return opt_dict
-
-
-def settings_to_list(np_network_settings):
-    """Converts the numpy array in scenario settings to lists.
-    This function is intended for printing purposes.
-
-    :param np_network_settings: The scenario settings structure for a `NetworkAnsatz`.
-
-    :returns: The same nested array elements and structure using lists.
-    """
-
-    list_prep_settings = [node_settings.tolist() for node_settings in np_network_settings[0]]
-    list_meas_settings = [node_settings.tolist() for node_settings in np_network_settings[1]]
-
-    return [list_prep_settings, list_meas_settings]
-
-
-def settings_to_np(list_network_settings):
-    """Converts the nested list elements in the scenario settings to numpy arrays.
-    This function is intended for printing purposes.
-
-    :param list_network_settings: The scenario settings structure for a `NetworkAnsatz`.
-
-    :returns: The same nested array elements and structure using numpy arrays.
-    """
-
-    np_prep_settings = [qnp.array(node_settings) for node_settings in list_network_settings[0]]
-    np_meas_settings = [qnp.array(node_settings) for node_settings in list_network_settings[1]]
-
-    return [np_prep_settings, np_meas_settings]
 
 
 def mixed_base_num(n, base_digits):

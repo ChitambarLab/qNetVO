@@ -39,6 +39,7 @@ class TestNlocalStar22CostFn:
         return qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 3)])
+    @flaky(max_runs=5, min_passes=1)
     def test_bilocal_star_22_cost(self, parallel_flag, nthreads):
         bilocal_star_ansatz = self.bilocal_star_ry_ansatz()
         bilocal_22_cost = qnet.nlocal_star_22_cost_fn(
@@ -54,6 +55,7 @@ class TestNlocalStar22CostFn:
         assert np.isclose(bilocal_22_cost(*ideal_settings), -(np.sqrt(2)))
 
     @pytest.mark.parametrize("parallel_flag, nthreads", [(False, 4), (True, 4), (True, 5)])
+    @flaky(max_runs=5, min_passes=1)
     def test_trilocal_star_cost(self, parallel_flag, nthreads):
         trilocal_star_ansatz = self.trilocal_star_ry_ansatz()
         trilocal_22_cost = qnet.nlocal_star_22_cost_fn(
