@@ -66,7 +66,7 @@ def mutual_info_cost_fn(ansatz, priors, postmap=np.array([]), **qnode_kwargs):
     def cost(*network_settings):
         Hxy = 0
         py_vec = np.zeros(net_num_out)
-        for (i, input_id_set) in enumerate(node_input_ids):
+        for i, input_id_set in enumerate(node_input_ids):
             settings = ansatz.qnode_settings(network_settings, input_id_set)
             p_net = postmap @ probs_qnode(settings)
 

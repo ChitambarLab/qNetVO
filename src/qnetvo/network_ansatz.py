@@ -155,7 +155,6 @@ class NetworkAnsatz:
         for i, layer in enumerate(self.layers):
             parameter_partitions += [[]]
             for j, node in enumerate(layer):
-
                 parameter_partitions[i] += [[]]
                 for _ in range(node.num_in):
                     stop_id = start_id + node.num_settings

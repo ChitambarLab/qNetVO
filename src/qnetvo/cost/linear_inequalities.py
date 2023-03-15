@@ -77,7 +77,7 @@ def linear_probs_cost_fn(network_ansatz, game, postmap=np.array([]), qnode_kwarg
 
     def cost(*network_settings):
         score = 0
-        for (i, input_id_set) in enumerate(node_input_ids):
+        for i, input_id_set in enumerate(node_input_ids):
             settings = network_ansatz.qnode_settings(network_settings, input_id_set)
 
             raw_probs = probs_qnode(settings)

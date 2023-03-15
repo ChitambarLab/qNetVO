@@ -28,7 +28,6 @@ class TestNLocalChainGradientDescent:
 
     @pytest.fixture
     def optimization_args(self, bilocal_chain_ansatz):
-
         bilocal_chain_cost = qnet.nlocal_chain_22_cost_fn(bilocal_chain_ansatz)
 
         np.random.seed(9)
@@ -37,7 +36,6 @@ class TestNLocalChainGradientDescent:
         return bilocal_chain_cost, init_settings
 
     def test_bilocal_chain_gradient_descent(self, optimization_args):
-
         opt_dict = qnet.gradient_descent(
             *optimization_args, num_steps=10, step_size=2, sample_width=10, verbose=False
         )
@@ -46,7 +44,6 @@ class TestNLocalChainGradientDescent:
 
     @flaky(max_runs=5, min_passes=1)
     def test_bilocal_chain_parallel_gradient_descent(self, bilocal_chain_ansatz, optimization_args):
-
         parallel_grad = qnet.parallel_nlocal_chain_grad_fn(bilocal_chain_ansatz)
 
         opt_dict = qnet.gradient_descent(
@@ -62,7 +59,6 @@ class TestNLocalChainGradientDescent:
 
     @flaky(max_runs=5, min_passes=1)
     def test_bilocal_chain_natural_gradient_descent(self):
-
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0),
             qnet.PrepareNode(1, [2, 3], qnet.ghz_state, 0),

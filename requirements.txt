@@ -1,4 +1,4 @@
-pennylane==0.28
+pennylane~=0.29
 qiskit==0.34
 pennylane-qiskit==0.20
 tensorflow>=2.0,<3.0

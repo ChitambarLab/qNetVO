@@ -1,6 +1,7 @@
 import pytest
 import pennylane as qml
 import numpy as np
+from pennylane import numpy as qnp
 import os
 import json
 
@@ -138,22 +139,16 @@ class TestOptimzationFileIO:
         opt_dict = {
             "datetime": "2021-05-22T11:11:11Z",
             "opt_score": 12,
-            "opt_settings": [[np.array([[]])], [np.array([[0, 1], [2, 3]]), np.array([[4], [5]])]],
+            "opt_settings": [0, 1, 2, 3, 4, 5],
             "scores": [0, 6, 12],
             "samples": [0, 2, 4],
             "step_times": [0.1, 0.01, 0.2],
             "settings_history": [
-                [[np.array([[]])], [np.array([[0, 0], [0, 0]]), np.array([[0], [0]])]],
-                [
-                    [np.array([[]])],
-                    [np.array([[0, 0.001], [0.002, 0.003]]), np.array([[0.004], [0.005]])],
-                ],
-                [
-                    [np.array([[]])],
-                    [np.array([[0, 0.01], [0.02, 0.03]]), np.array([[0.04], [0.05]])],
-                ],
-                [[np.array([[]])], [np.array([[0, 0.1], [0.2, 0.3]]), np.array([[0.4], [0.5]])]],
-                [[np.array([[]])], [np.array([[0, 1], [2, 3]]), np.array([[4], [5]])]],
+                [0, 0, 0, 0, 0, 0],
+                [0, 0.001, 0.002, 0.003, 0.004, 0.005],
+                [0, 0.01, 0.02, 0.03, 0.04, 0.05],
+                [0, 0.1, 0.2, 0.3, 0.4, 0.5],
+                [0, 1, 2, 3, 4, 5],
             ],
         }
 
@@ -163,11 +158,11 @@ class TestOptimzationFileIO:
         opt_dict = {
             "datetime": "2021-05-22T11:11:11Z",
             "opt_score": np.array(12),
-            "opt_settings": [[np.array([[]])], [np.array([[]])]],
+            "opt_settings": qnp.array([]),
             "scores": [np.array(0), np.array(6), np.array(12)],
             "samples": [0, 2, 4],
             "step_times": [0.1, 0.01, 0.2],
-            "settings_history": [[[np.array([[]])], [np.array([[]])]]],
+            "settings_history": [qnp.array([]), qnp.array([])],
         }
 
         return opt_dict
@@ -192,7 +187,6 @@ class TestOptimzationFileIO:
         assert not (os.path.exists(filepath))
 
     def test_write_optimization_json(self, file_io_cleanup):
-
         opt_dict = self.construct_opt_dict()
 
         filename = self.filename()
@@ -206,16 +200,16 @@ class TestOptimzationFileIO:
 
         assert opt_json["datetime"] == "2021-05-22T11:11:11Z"
         assert opt_json["opt_score"] == 12
-        assert opt_json["opt_settings"] == [[[[]]], [[[0, 1], [2, 3]], [[4], [5]]]]
+        assert opt_json["opt_settings"] == [0, 1, 2, 3, 4, 5]
         assert opt_json["scores"] == [0, 6, 12]
         assert opt_json["samples"] == [0, 2, 4]
         assert opt_json["step_times"] == [0.1, 0.01, 0.2]
         assert opt_json["settings_history"] == [
-            [[[[]]], [[[0, 0], [0, 0]], [[0], [0]]]],
-            [[[[]]], [[[0, 0.001], [0.002, 0.003]], [[0.004], [0.005]]]],
-            [[[[]]], [[[0, 0.01], [0.02, 0.03]], [[0.04], [0.05]]]],
-            [[[[]]], [[[0, 0.1], [0.2, 0.3]], [[0.4], [0.5]]]],
-            [[[[]]], [[[0, 1], [2, 3]], [[4], [5]]]],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0.001, 0.002, 0.003, 0.004, 0.005],
+            [0, 0.01, 0.02, 0.03, 0.04, 0.05],
+            [0, 0.1, 0.2, 0.3, 0.4, 0.5],
+            [0, 1, 2, 3, 4, 5],
         ]
 
     def test_write_optimization_json_sanitization(self, file_io_cleanup):
@@ -233,8 +227,33 @@ class TestOptimzationFileIO:
         assert opt_json["opt_score"] == 12
         assert opt_json["scores"] == [0, 6, 12]
 
-    def test_read_optimization_json(self, file_io_cleanup):
+    def test_file_io_integration(self, file_io_cleanup):
+        chsh_ansatz = qnetvo.NetworkAnsatz(
+            [qnetvo.PrepareNode(wires=[0, 1], ansatz_fn=qnetvo.ghz_state)],
+            [
+                qnetvo.MeasureNode(
+                    num_in=2, num_out=2, wires=[0], ansatz_fn=qnetvo.local_RY, num_settings=1
+                ),
+                qnetvo.MeasureNode(
+                    num_in=2, num_out=2, wires=[1], ansatz_fn=qnetvo.local_RY, num_settings=1
+                ),
+            ],
+        )
 
+        init_settings = chsh_ansatz.rand_network_settings()
+        chsh_cost = qnetvo.chsh_inequality_cost_fn(chsh_ansatz)
+        opt_dict = qnetvo.gradient_descent(
+            chsh_cost, init_settings, num_steps=3, sample_width=1, verbose=False
+        )
+
+        qnetvo.write_optimization_json(opt_dict, self.filename())
+        opt_json = qnetvo.read_optimization_json(self.filename() + ".json")
+
+        assert opt_dict["opt_settings"] == opt_json["opt_settings"]
+        assert opt_dict["settings_history"] == opt_json["settings_history"]
+        assert opt_dict["opt_score"] == opt_json["opt_score"]
+
+    def test_read_optimization_json(self, file_io_cleanup):
         opt_dict = self.construct_opt_dict()
 
         filename = self.filename()
@@ -248,15 +267,9 @@ class TestOptimzationFileIO:
         assert opt_json["datetime"] == "2021-05-22T11:11:11Z"
         assert opt_json["opt_score"] == 12
 
-        assert len(opt_json["opt_settings"][0]) == 1
-        assert len(opt_json["opt_settings"][1]) == 2
+        assert len(opt_json["opt_settings"]) == 6
 
-        assert isinstance(opt_json["opt_settings"][0][0], np.ndarray)
-        assert np.allclose(opt_json["opt_settings"][0][0], np.array([[]]))
-
-        for i in range(2):
-            assert isinstance(opt_json["opt_settings"][1][i], np.ndarray)
-            assert np.allclose(opt_json["opt_settings"][1][i], opt_dict["opt_settings"][1][i])
+        assert np.allclose(opt_json["opt_settings"], [0, 1, 2, 3, 4, 5])
 
         assert opt_json["scores"] == [0, 6, 12]
         assert opt_json["samples"] == [0, 2, 4]
@@ -265,68 +278,9 @@ class TestOptimzationFileIO:
         assert len(opt_json["settings_history"]) == 5
 
         for i in range(5):
-            assert isinstance(opt_json["settings_history"][i][0][0], np.ndarray)
-            assert np.allclose(opt_json["settings_history"][i][0][0], np.array([[]]))
-
-            for j in range(2):
-                assert isinstance(opt_json["settings_history"][i][1][j], np.ndarray)
-                assert np.allclose(
-                    opt_json["settings_history"][i][1][j], opt_dict["settings_history"][i][1][j]
-                )
-
-    @pytest.mark.parametrize(
-        "prep_settings,meas_settings",
-        [([[[]]], [[[]]]), ([[[1, 0]], [[2], [3]]], [[[4, 5], [6, 7]], [[]]])],
-    )
-    def test_settings_to_np(self, prep_settings, meas_settings):
-
-        settings = [prep_settings, meas_settings]
-
-        np_settings = qnetvo.settings_to_np(settings)
-
-        assert isinstance(np_settings, list)
-        assert isinstance(np_settings[0], list)
-        assert isinstance(np_settings[1], list)
-
-        assert all([isinstance(prep_set, np.ndarray) for prep_set in np_settings[0]])
-        assert all([isinstance(meas_set, np.ndarray) for meas_set in np_settings[1]])
-
-        assert all(
-            [np.allclose(settings[0][i], np_settings[0][i]) for i in range(len(prep_settings))]
-        )
-        assert all(
-            [np.allclose(settings[1][i], np_settings[1][i]) for i in range(len(meas_settings))]
-        )
-
-    @pytest.mark.parametrize(
-        "prep_settings,meas_settings",
-        [([[[]]], [[[]]]), ([[[1, 0]], [[2], [3]]], [[[4, 5], [6, 7]], [[]]])],
-    )
-    def test_settings_to_list(self, prep_settings, meas_settings):
-
-        np_settings = [
-            [np.array(prep_set) for prep_set in prep_settings],
-            [np.array(meas_set) for meas_set in meas_settings],
-        ]
-
-        settings = qnetvo.settings_to_list(np_settings)
-
-        assert isinstance(settings, list)
-        assert isinstance(settings[0], list)
-        assert isinstance(settings[1], list)
-
-        assert all([isinstance(prep_set, list) for prep_set in settings[0]])
-        assert all([isinstance(meas_set, list) for meas_set in settings[1]])
-
-        assert all(
-            [np.allclose(settings[0][i], np_settings[0][i]) for i in range(len(prep_settings))]
-        )
-        assert all(
-            [np.allclose(settings[1][i], np_settings[1][i]) for i in range(len(meas_settings))]
-        )
+            assert opt_dict["settings_history"][i] == opt_json["settings_history"][i]
 
     def test_mixed_base_num(self):
-
         assert np.all(qnetvo.mixed_base_num(0, [2, 2]) == [0, 0])
         assert np.all(qnetvo.mixed_base_num(2, [2, 2]) == [1, 0])
         assert np.all(qnetvo.mixed_base_num(9, [2, 3, 4]) == [0, 2, 1])

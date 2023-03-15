@@ -62,7 +62,7 @@ def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
 
     def behavior(network_settings):
         raw_behavior = np.zeros((raw_net_num_out, net_num_in))
-        for (i, input_id_set) in enumerate(node_input_ids):
+        for i, input_id_set in enumerate(node_input_ids):
             settings = network_ansatz.qnode_settings(
                 network_settings,
                 [input_id_set[0 : len(num_in_prep_nodes)], input_id_set[len(num_in_prep_nodes) :]],

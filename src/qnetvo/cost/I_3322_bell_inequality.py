@@ -56,7 +56,7 @@ def I_3322_bell_inequality_cost_fn(network_ansatz, **qnode_kwargs):
 
     def cost(*network_settings):
         score = 0
-        for (x, y, mult) in [
+        for x, y, mult in [
             (0, 0, 1),
             (0, 1, 1),
             (0, 2, 1),

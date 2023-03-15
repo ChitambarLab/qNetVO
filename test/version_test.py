@@ -4,7 +4,6 @@ import qnetvo
 
 
 def test_version():
-
     version_str = qnetvo.__version__
 
     assert isinstance(version_str, str)
