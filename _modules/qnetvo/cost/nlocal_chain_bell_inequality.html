@@ -281,7 +281,6 @@
     <span class="n">I22_xy_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x_a</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_interior_nodes</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x_b</span><span class="p">]</span> <span class="k">for</span> <span class="n">x_a</span><span class="p">,</span> <span class="n">x_b</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">I22_xy_settings</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="n">static_prep_inputs</span> <span class="o">+</span> <span class="p">[</span><span class="n">meas_inputs</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">meas_inputs</span> <span class="ow">in</span> <span class="n">I22_xy_inputs</span>
@@ -335,7 +334,6 @@
     <span class="n">J22_xy_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x_a</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_interior_nodes</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x_b</span><span class="p">]</span> <span class="k">for</span> <span class="n">x_a</span><span class="p">,</span> <span class="n">x_b</span> <span class="ow">in</span> <span class="n">xy_vals</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">J22_xy_settings</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="n">static_prep_inputs</span> <span class="o">+</span> <span class="p">[</span><span class="n">meas_inputs</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">meas_inputs</span> <span class="ow">in</span> <span class="n">J22_xy_inputs</span>
@@ -402,7 +400,6 @@
     <span class="n">J22</span> <span class="o">=</span> <span class="n">chain_J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">I22_score</span> <span class="o">=</span> <span class="n">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
         <span class="n">J22_score</span> <span class="o">=</span> <span class="n">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
 
@@ -462,7 +459,6 @@
     <span class="n">grad_fn</span> <span class="o">=</span> <span class="n">_nat_grad_fn</span> <span class="k">if</span> <span class="n">natural_grad</span> <span class="k">else</span> <span class="n">_grad_fn</span>
 
     <span class="k">def</span> <span class="nf">nlocal_chain_grad_fn</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">I22_score</span> <span class="o">=</span> <span class="n">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
         <span class="n">J22_score</span> <span class="o">=</span> <span class="n">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
 
@@ -493,7 +489,6 @@
         <span class="n">J22_scalar</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">J22_score</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">J22_score</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-
             <span class="n">x</span> <span class="o">=</span> <span class="n">I22_xy_meas_inputs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">I22_xy_meas_inputs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">J22_sign</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>

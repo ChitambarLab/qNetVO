@@ -297,7 +297,6 @@
         <span class="n">star_qnode</span> <span class="o">=</span> <span class="n">global_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">I22_x_settings</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="n">network_inputs</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">network_inputs</span> <span class="ow">in</span> <span class="n">network_input_x_vals</span>
@@ -376,7 +375,6 @@
         <span class="n">star_qnode</span> <span class="o">=</span> <span class="n">global_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">J22_x_settings</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="n">network_inputs</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">network_inputs</span> <span class="ow">in</span> <span class="n">network_input_x_vals</span>
@@ -451,7 +449,6 @@
     <span class="n">J22</span> <span class="o">=</span> <span class="n">star_J22_fn</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span> <span class="n">nthreads</span><span class="o">=</span><span class="n">nthreads</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">I22_score</span> <span class="o">=</span> <span class="n">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
         <span class="n">J22_score</span> <span class="o">=</span> <span class="n">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
 
@@ -524,7 +521,6 @@
     <span class="n">_grad</span> <span class="o">=</span> <span class="n">_ng</span> <span class="k">if</span> <span class="n">natural_grad</span> <span class="k">else</span> <span class="n">_g</span>
 
     <span class="k">def</span> <span class="nf">nlocal_star_grad</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">I22_score</span> <span class="o">=</span> <span class="n">I22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
         <span class="n">J22_score</span> <span class="o">=</span> <span class="n">J22</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">)</span>
 

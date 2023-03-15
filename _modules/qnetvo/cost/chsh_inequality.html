@@ -284,7 +284,6 @@
         <span class="n">chsh_qnode</span> <span class="o">=</span> <span class="n">global_parity_expval_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">chsh_cost</span><span class="p">(</span><span class="o">*</span><span class="n">network_settings</span><span class="p">):</span>
-
         <span class="n">xy_settings</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="n">network_input</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">network_input</span> <span class="ow">in</span> <span class="n">network_inputs</span>

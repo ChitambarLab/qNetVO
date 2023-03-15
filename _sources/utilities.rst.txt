@@ -22,8 +22,4 @@ File I/O
 Data Conversions
 ----------------
 
-.. autofunction:: settings_to_list
-
-.. autofunction:: settings_to_np
-
 .. autofunction:: mixed_base_num

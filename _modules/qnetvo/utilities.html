@@ -352,9 +352,9 @@
 
     <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_score&quot;</span><span class="p">])</span>
     <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]]</span>
-    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings_to_list</span><span class="p">(</span><span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">])</span>
+    <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">setting</span><span class="p">)</span> <span class="k">for</span> <span class="n">setting</span> <span class="ow">in</span> <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">]]</span>
     <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">settings_to_list</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span>
+        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">setting</span><span class="p">)</span> <span class="k">for</span> <span class="n">setting</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">]</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">opt_dict_json</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span>
     <span class="p">]</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -374,42 +374,7 @@
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">opt_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
-    <span class="n">opt_dict</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings_to_np</span><span class="p">(</span><span class="n">opt_dict</span><span class="p">[</span><span class="s2">&quot;opt_settings&quot;</span><span class="p">])</span>
-    <span class="n">opt_dict</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">settings_to_np</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">opt_dict</span><span class="p">[</span><span class="s2">&quot;settings_history&quot;</span><span class="p">]</span>
-    <span class="p">]</span>
-
     <span class="k">return</span> <span class="n">opt_dict</span></div>
-
-
-<div class="viewcode-block" id="settings_to_list"><a class="viewcode-back" href="../../utilities.html#qnetvo.settings_to_list">[docs]</a><span class="k">def</span> <span class="nf">settings_to_list</span><span class="p">(</span><span class="n">np_network_settings</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts the numpy array in scenario settings to lists.</span>
-<span class="sd">    This function is intended for printing purposes.</span>
-
-<span class="sd">    :param np_network_settings: The scenario settings structure for a `NetworkAnsatz`.</span>
-
-<span class="sd">    :returns: The same nested array elements and structure using lists.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">list_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_settings</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">np_network_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">list_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_settings</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">np_network_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-
-    <span class="k">return</span> <span class="p">[</span><span class="n">list_prep_settings</span><span class="p">,</span> <span class="n">list_meas_settings</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="settings_to_np"><a class="viewcode-back" href="../../utilities.html#qnetvo.settings_to_np">[docs]</a><span class="k">def</span> <span class="nf">settings_to_np</span><span class="p">(</span><span class="n">list_network_settings</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts the nested list elements in the scenario settings to numpy arrays.</span>
-<span class="sd">    This function is intended for printing purposes.</span>
-
-<span class="sd">    :param list_network_settings: The scenario settings structure for a `NetworkAnsatz`.</span>
-
-<span class="sd">    :returns: The same nested array elements and structure using numpy arrays.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">np_prep_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">qnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_network_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">np_meas_settings</span> <span class="o">=</span> <span class="p">[</span><span class="n">qnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_settings</span><span class="p">)</span> <span class="k">for</span> <span class="n">node_settings</span> <span class="ow">in</span> <span class="n">list_network_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-
-    <span class="k">return</span> <span class="p">[</span><span class="n">np_prep_settings</span><span class="p">,</span> <span class="n">np_meas_settings</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="mixed_base_num"><a class="viewcode-back" href="../../utilities.html#qnetvo.mixed_base_num">[docs]</a><span class="k">def</span> <span class="nf">mixed_base_num</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">base_digits</span><span class="p">):</span>
