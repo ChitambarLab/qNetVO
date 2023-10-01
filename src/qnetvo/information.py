@@ -1,6 +1,6 @@
 from pennylane import math
 from .qnodes import joint_probs_qnode
-from .utilities import mixed_base_num
+from .utilities import mixed_base_num, ragged_reshape
 from pennylane import numpy as np
 
 
@@ -43,11 +43,22 @@ def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
               behavior matrix for a given set of settings.
     :rtype: function
     """
-    num_in_prep_nodes = [node.num_in for node in network_ansatz.layers[0]]
-    num_in_meas_nodes = [node.num_in for node in network_ansatz.layers[-1]]
+    # num_in_prep_nodes = [node.num_in for node in network_ansatz.layers[0]]
+    # num_in_meas_nodes = [node.num_in for node in network_ansatz.layers[-1]]
 
-    base_digits = num_in_prep_nodes + num_in_meas_nodes
-    net_num_in = math.prod(base_digits)
+    # base_digits = num_in_prep_nodes + num_in_meas_nodes
+    # net_num_in = math.prod(base_digits)
+
+    # raw_net_num_out = 2 ** len(network_ansatz.layers_wires[-1])
+
+    probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
+
+    net_num_in = math.prod(network_ansatz.layers_total_num_in)
+    num_inputs_list = math.concatenate(network_ansatz.layers_node_num_in).tolist()
+    node_input_ids = [
+        ragged_reshape(mixed_base_num(i, num_inputs_list), network_ansatz.layers_num_nodes)
+        for i in range(net_num_in)
+    ]
 
     raw_net_num_out = 2 ** len(network_ansatz.layers_wires[-1])
 
@@ -56,18 +67,14 @@ def behavior_fn(network_ansatz, postmap=np.array([]), qnode_kwargs={}):
         if postmap.shape[1] != raw_net_num_out:
             raise ValueError("The `postmap` must have " + str(raw_net_num_out) + " columns.")
 
-    node_input_ids = [mixed_base_num(i, base_digits) for i in range(net_num_in)]
+    # node_input_ids = [mixed_base_num(i, base_digits) for i in range(net_num_in)]
 
-    probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
+    # probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)
 
     def behavior(network_settings):
         raw_behavior = np.zeros((raw_net_num_out, net_num_in))
         for i, input_id_set in enumerate(node_input_ids):
-            settings = network_ansatz.qnode_settings(
-                network_settings,
-                [input_id_set[0 : len(num_in_prep_nodes)], input_id_set[len(num_in_prep_nodes) :]],
-            )
-
+            settings = network_ansatz.qnode_settings(network_settings, input_id_set)
             raw_behavior[:, i] += probs_qnode(settings)
 
         return postmap @ raw_behavior if has_postmap else raw_behavior

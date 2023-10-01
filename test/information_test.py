@@ -8,12 +8,16 @@ import qnetvo as qnet
 class TestBehaviorFn:
     def test_simple_settings(self):
         prep_nodes = [
-            qnet.PrepareNode(2, [0], qnet.local_RY, 1),
-            qnet.PrepareNode(2, [1], qnet.local_RY, 1),
+            qnet.PrepareNode(num_in=2, wires=[0], ansatz_fn=qnet.local_RY, num_settings=1),
+            qnet.PrepareNode(num_in=2, wires=[1], ansatz_fn=qnet.local_RY, num_settings=1),
         ]
         meas_nodes = [
-            qnet.MeasureNode(2, 2, [0], qnet.local_RY, 1),
-            qnet.MeasureNode(2, 2, [1], qnet.local_RY, 1),
+            qnet.MeasureNode(
+                num_in=2, num_out=2, wires=[0], ansatz_fn=qnet.local_RY, num_settings=1
+            ),
+            qnet.MeasureNode(
+                num_in=2, num_out=2, wires=[1], ansatz_fn=qnet.local_RY, num_settings=1
+            ),
         ]
         ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
         P_Net = qnet.behavior_fn(ansatz)
@@ -121,6 +125,61 @@ class TestBehaviorFn:
 
         assert P_Net.shape == (16, 288)
         assert np.allclose(np.ones(288), [np.sum(P_Net[:, i]) for i in range(288)])
+
+    def test_inputs_from_multiple_layers(self):
+        prep_nodes_a = [
+            qnet.PrepareNode(num_in=2, wires=[0], ansatz_fn=qnet.local_RY, num_settings=1),
+        ]
+        prep_nodes_b = [
+            qnet.PrepareNode(num_in=2, wires=[1], ansatz_fn=qnet.local_RY, num_settings=1),
+        ]
+
+        meas_nodes = [
+            qnet.MeasureNode(
+                num_in=2, num_out=2, wires=[0], ansatz_fn=qnet.local_RY, num_settings=1
+            ),
+            qnet.MeasureNode(
+                num_in=2, num_out=2, wires=[1], ansatz_fn=qnet.local_RY, num_settings=1
+            ),
+        ]
+        ansatz = qnet.NetworkAnsatz(prep_nodes_a, prep_nodes_b, meas_nodes)
+        P_Net = qnet.behavior_fn(ansatz)
+        zero_settings = ansatz.zero_network_settings()
+
+        assert np.all(
+            P_Net(zero_settings)
+            == [
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            ]
+        )
+
+        settings = zero_settings
+        settings[1] = np.pi
+
+        assert np.allclose(
+            P_Net(settings),
+            [
+                [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            ],
+        )
+
+        settings[7] = np.pi / 2
+
+        assert np.allclose(
+            P_Net(settings),
+            [
+                [1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0.5, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0.5],
+            ],
+        )
 
 
 class TestShannonEntropy:

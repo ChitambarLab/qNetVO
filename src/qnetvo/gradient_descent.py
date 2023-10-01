@@ -12,6 +12,8 @@ def gradient_descent(
     grad_fn=None,
     verbose=True,
     interface="autograd",
+    optimizer=None,
+    optimizer_kwargs={},
 ):
     """Performs a numerical gradient descent optimization on the provided ``cost`` function.
     The optimization is seeded with (random) ``init_settings`` which are then varied to
@@ -42,6 +44,13 @@ def gradient_descent(
     :param interface: Specifies the optimizer software either ``"autograd"`` or ``"tf"`` (TensorFlow).
     :type interface: string, default ``"autograd``"
 
+    :param optimizer: Specifies the PennyLane optimizer to use. Default ``qml.GradientDescentOptimizer``.
+                      Set to ``"adam"`` to use the ``qml.AdamOptimizer``, note that ``interface="autograd"`` must be set.
+    :type optimizer: String
+
+    :param optimizer_kwargs: Keyword arguments to pass to the specified optimizer.
+    :type optimizer_kwargs: Dict
+
     :return: Data regarding the gradient descent optimization.
     :rtype: dictionary, contains the following keys:
 
@@ -69,7 +78,10 @@ def gradient_descent(
     """
 
     if interface == "autograd":
-        opt = qml.GradientDescentOptimizer(stepsize=step_size)
+        if optimizer == "adam":
+            opt = qml.AdamOptimizer(stepsize=step_size, **optimizer_kwargs)
+        else:
+            opt = qml.GradientDescentOptimizer(stepsize=step_size)
     elif interface == "tf":
         from .lazy_tensorflow_import import tensorflow as tf
 
