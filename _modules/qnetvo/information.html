@@ -244,7 +244,7 @@
           <h1>Source code for qnetvo.information</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">math</span>
 <span class="kn">from</span> <span class="nn">.qnodes</span> <span class="kn">import</span> <span class="n">joint_probs_qnode</span>
-<span class="kn">from</span> <span class="nn">.utilities</span> <span class="kn">import</span> <span class="n">mixed_base_num</span>
+<span class="kn">from</span> <span class="nn">.utilities</span> <span class="kn">import</span> <span class="n">mixed_base_num</span><span class="p">,</span> <span class="n">ragged_reshape</span>
 <span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
 
 
@@ -287,11 +287,22 @@
 <span class="sd">              behavior matrix for a given set of settings.</span>
 <span class="sd">    :rtype: function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_in_prep_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">num_in</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">num_in_meas_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">num_in</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="c1"># num_in_prep_nodes = [node.num_in for node in network_ansatz.layers[0]]</span>
+    <span class="c1"># num_in_meas_nodes = [node.num_in for node in network_ansatz.layers[-1]]</span>
 
-    <span class="n">base_digits</span> <span class="o">=</span> <span class="n">num_in_prep_nodes</span> <span class="o">+</span> <span class="n">num_in_meas_nodes</span>
-    <span class="n">net_num_in</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">base_digits</span><span class="p">)</span>
+    <span class="c1"># base_digits = num_in_prep_nodes + num_in_meas_nodes</span>
+    <span class="c1"># net_num_in = math.prod(base_digits)</span>
+
+    <span class="c1"># raw_net_num_out = 2 ** len(network_ansatz.layers_wires[-1])</span>
+
+    <span class="n">probs_qnode</span> <span class="o">=</span> <span class="n">joint_probs_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
+
+    <span class="n">net_num_in</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers_total_num_in</span><span class="p">)</span>
+    <span class="n">num_inputs_list</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers_node_num_in</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">node_input_ids</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">ragged_reshape</span><span class="p">(</span><span class="n">mixed_base_num</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">num_inputs_list</span><span class="p">),</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers_num_nodes</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">net_num_in</span><span class="p">)</span>
+    <span class="p">]</span>
 
     <span class="n">raw_net_num_out</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">len</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers_wires</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
@@ -300,18 +311,14 @@
         <span class="k">if</span> <span class="n">postmap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">raw_net_num_out</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The `postmap` must have &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_net_num_out</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; columns.&quot;</span><span class="p">)</span>
 
-    <span class="n">node_input_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">mixed_base_num</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">base_digits</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">net_num_in</span><span class="p">)]</span>
+    <span class="c1"># node_input_ids = [mixed_base_num(i, base_digits) for i in range(net_num_in)]</span>
 
-    <span class="n">probs_qnode</span> <span class="o">=</span> <span class="n">joint_probs_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
+    <span class="c1"># probs_qnode = joint_probs_qnode(network_ansatz, **qnode_kwargs)</span>
 
     <span class="k">def</span> <span class="nf">behavior</span><span class="p">(</span><span class="n">network_settings</span><span class="p">):</span>
         <span class="n">raw_behavior</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">raw_net_num_out</span><span class="p">,</span> <span class="n">net_num_in</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">input_id_set</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_input_ids</span><span class="p">):</span>
-            <span class="n">settings</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span>
-                <span class="n">network_settings</span><span class="p">,</span>
-                <span class="p">[</span><span class="n">input_id_set</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">num_in_prep_nodes</span><span class="p">)],</span> <span class="n">input_id_set</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">num_in_prep_nodes</span><span class="p">)</span> <span class="p">:]],</span>
-            <span class="p">)</span>
-
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">qnode_settings</span><span class="p">(</span><span class="n">network_settings</span><span class="p">,</span> <span class="n">input_id_set</span><span class="p">)</span>
             <span class="n">raw_behavior</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">probs_qnode</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">postmap</span> <span class="o">@</span> <span class="n">raw_behavior</span> <span class="k">if</span> <span class="n">has_postmap</span> <span class="k">else</span> <span class="n">raw_behavior</span>

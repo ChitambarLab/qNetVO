@@ -256,6 +256,8 @@
     <span class="n">grad_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">interface</span><span class="o">=</span><span class="s2">&quot;autograd&quot;</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">optimizer_kwargs</span><span class="o">=</span><span class="p">{},</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs a numerical gradient descent optimization on the provided ``cost`` function.</span>
 <span class="sd">    The optimization is seeded with (random) ``init_settings`` which are then varied to</span>
@@ -286,6 +288,13 @@
 <span class="sd">    :param interface: Specifies the optimizer software either ``&quot;autograd&quot;`` or ``&quot;tf&quot;`` (TensorFlow).</span>
 <span class="sd">    :type interface: string, default ``&quot;autograd``&quot;</span>
 
+<span class="sd">    :param optimizer: Specifies the PennyLane optimizer to use. Default ``qml.GradientDescentOptimizer``.</span>
+<span class="sd">                      Set to ``&quot;adam&quot;`` to use the ``qml.AdamOptimizer``, note that ``interface=&quot;autograd&quot;`` must be set.</span>
+<span class="sd">    :type optimizer: String</span>
+
+<span class="sd">    :param optimizer_kwargs: Keyword arguments to pass to the specified optimizer.</span>
+<span class="sd">    :type optimizer_kwargs: Dict</span>
+
 <span class="sd">    :return: Data regarding the gradient descent optimization.</span>
 <span class="sd">    :rtype: dictionary, contains the following keys:</span>
 
@@ -313,7 +322,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">interface</span> <span class="o">==</span> <span class="s2">&quot;autograd&quot;</span><span class="p">:</span>
-        <span class="n">opt</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">stepsize</span><span class="o">=</span><span class="n">step_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;adam&quot;</span><span class="p">:</span>
+            <span class="n">opt</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">AdamOptimizer</span><span class="p">(</span><span class="n">stepsize</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="o">**</span><span class="n">optimizer_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">opt</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">stepsize</span><span class="o">=</span><span class="n">step_size</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">interface</span> <span class="o">==</span> <span class="s2">&quot;tf&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.lazy_tensorflow_import</span> <span class="kn">import</span> <span class="n">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
 
