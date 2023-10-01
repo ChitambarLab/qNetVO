@@ -68,7 +68,8 @@ See [CITATION.bib](https://github.com/ChitambarLab/qNetVO/blob/main/CITATION.bib
 
 QNetVO is free and open-source.
 The software is released under the Apache License, Version 2.0.
-See [LICENSE](https://github.com/ChitambarLab/qNetVO/blob/main/LICENSE) for details.
+See [LICENSE](https://github.com/ChitambarLab/qNetVO/blob/main/LICENSE) for details and
+[Notice](https://github.com/ChitambarLab/qNetVO/blob/main/NOTICE.txt) for copyright information.
 
 ## Acknowledgments
 
