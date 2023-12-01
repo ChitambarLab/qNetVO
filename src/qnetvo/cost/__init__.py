@@ -6,3 +6,4 @@ from .magic_squares_game import *
 from .chsh_inequality import *
 from .linear_inequalities import *
 from .mutual_info import *
+from .negativity import *
