@@ -83,15 +83,26 @@ class TestShannonEntropy:
     def test_shannon_entropy_pure_state(self):
         np.random.seed(123)
 
-        prep_node = [qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0)]
-        meas_node = [qnet.MeasureNode(1, 4, [0, 1], qml.ArbitraryUnitary, 4**2 - 1)]
+        def test_meas_circ(settings, wires):
+            qml.CNOT(wires=wires[0:2])
+            qml.RZ(settings[0], wires=wires[0])
+            qml.RY(settings[1], wires=wires[0])
+
+        prep_node = [qnet.PrepareNode(wires=[0, 1], ansatz_fn=qnet.ghz_state)]
+        meas_node = [
+            qnet.MeasureNode(num_out=4, wires=[0, 1], ansatz_fn=test_meas_circ, num_settings=2)
+        ]
 
         ansatz = qnet.NetworkAnsatz(prep_node, meas_node)
         shannon_entropy = qnet.shannon_entropy_cost_fn(ansatz)
 
         settings = ansatz.rand_network_settings()
         opt_dict = qnet.gradient_descent(
-            shannon_entropy, settings, step_size=0.08, sample_width=5, num_steps=30
+            shannon_entropy,
+            settings,
+            step_size=0.15,
+            sample_width=5,
+            num_steps=35,
         )
 
         assert np.isclose(opt_dict["scores"][-1], 0, atol=0.0005)
