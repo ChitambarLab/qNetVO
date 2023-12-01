@@ -95,3 +95,46 @@ def joint_probs_qnode(network_ansatz, **qnode_kwargs):
         return qml.probs(wires=network_ansatz.layers_wires[-1])
 
     return circuit
+
+
+def density_matrix_qnode(network_ansatz, **qnode_kwargs):
+    """Constructs a qnode that computes the density matrix in the computational basis
+    across all wires.
+
+    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
+    :type network_ansatz: NetworkAnsatz
+
+    :returns: A qnode called as ``qnode(settings)`` for evaluating the density matrix of the
+              network ansatz.
+    :rtype: ``pennylane.QNode``
+    """
+
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
+    def circuit(settings):
+        network_ansatz.fn(settings)
+        return qml.density_matrix(wires=network_ansatz.network_wires)
+
+    return circuit
+
+
+def reduced_density_matrix_qnode(network_ansatz, wires, **qnode_kwargs):
+    """Constructs a qnode that computes the density matrix in the computational basis
+    across all specified wires.
+
+    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
+    :type network_ansatz: NetworkAnsatz
+
+    :param wires: The wires on which the node operates.
+    :type wires: list[int]
+
+    :returns: A qnode called as ``qnode(settings)`` for evaluating the reduced density matrix of the
+              network ansatz.
+    :rtype: ``pennylane.QNode``
+    """
+
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
+    def circuit(settings):
+        network_ansatz.fn(settings)
+        return qml.density_matrix(wires)
+
+    return circuit
