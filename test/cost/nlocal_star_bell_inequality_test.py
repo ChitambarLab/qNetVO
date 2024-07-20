@@ -99,9 +99,9 @@ class TestNlocalStar22CostFn:
             num_steps=10,
             step_size=2,
             sample_width=10,
-            grad_fn=qnet.parallel_nlocal_star_grad_fn(bilocal_star_ansatz)
-            if parallel_flag
-            else None,
+            grad_fn=(
+                qnet.parallel_nlocal_star_grad_fn(bilocal_star_ansatz) if parallel_flag else None
+            ),
         )
 
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)
@@ -118,9 +118,9 @@ class TestNlocalStar22CostFn:
             num_steps=8,
             step_size=2,
             sample_width=10,
-            grad_fn=qnet.parallel_nlocal_star_grad_fn(trilocal_star_ansatz)
-            if parallel_flag
-            else None,
+            grad_fn=(
+                qnet.parallel_nlocal_star_grad_fn(trilocal_star_ansatz) if parallel_flag else None
+            ),
         )
 
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=0.0001)

@@ -2,6 +2,7 @@
 Lazily imports tensorflow when needed.
 Throws an error if the user does not have tensorflow installed.
 """
+
 try:
     import tensorflow
 
