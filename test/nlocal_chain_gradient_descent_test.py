@@ -1,5 +1,4 @@
 import pytest
-from flaky import flaky
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -42,7 +41,7 @@ class TestNLocalChainGradientDescent:
 
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=1e-3)
 
-    @flaky(max_runs=5, min_passes=1)
+    @pytest.mark.flaky(5)
     def test_bilocal_chain_parallel_gradient_descent(self, bilocal_chain_ansatz, optimization_args):
         parallel_grad = qnet.parallel_nlocal_chain_grad_fn(bilocal_chain_ansatz)
 
@@ -57,7 +56,7 @@ class TestNLocalChainGradientDescent:
 
         assert np.isclose(opt_dict["opt_score"], np.sqrt(2), atol=1e-3)
 
-    @flaky(max_runs=5, min_passes=1)
+    @pytest.mark.flaky(5)
     def test_bilocal_chain_natural_gradient_descent(self):
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0),

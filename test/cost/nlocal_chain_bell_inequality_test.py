@@ -1,5 +1,4 @@
 import pytest
-from flaky import flaky
 from pennylane import numpy as np
 import pennylane as qml
 
@@ -63,7 +62,7 @@ class TestNLocalChainBellInequality:
             ),
         ],
     )
-    @flaky(max_runs=5, min_passes=1)
+    @pytest.mark.flaky(5)
     def test_parallel_nlocal_chain_grad_fn(self, natural_grad, prep_nodes, meas_nodes):
         chain_ansatz = qnet.NetworkAnsatz(prep_nodes, meas_nodes)
 
@@ -81,7 +80,7 @@ class TestNLocalChainBellInequality:
             assert np.allclose(grad, grad_match)
 
     @pytest.mark.parametrize("parallel_flag", [True, False])
-    @flaky(max_runs=5, min_passes=1)
+    @pytest.mark.flaky(5)
     def test_chain_J22_fn(self, parallel_flag):
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.local_RY, 2),
@@ -132,7 +131,7 @@ class TestNLocalChainBellInequality:
         assert np.isclose(4, J22(*settings))
 
     @pytest.mark.parametrize("parallel_flag", [True, False])
-    @flaky(max_runs=5, min_passes=1)
+    @pytest.mark.flaky(5)
     def test_chain_I22_fn(self, parallel_flag):
         prep_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.local_RY, 2),

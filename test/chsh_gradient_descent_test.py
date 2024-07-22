@@ -1,5 +1,4 @@
 import pytest
-from flaky import flaky
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -81,7 +80,7 @@ class TestCHSHGradientDescent:
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
 
-    @flaky(max_runs=5, min_passes=1)
+    @pytest.mark.flaky(5)
     def test_parallel_chsh_gradient_descent(self):
         prepare_nodes = [
             qnet.PrepareNode(1, [0, 1], self.bell_state_RY, 2),
@@ -108,7 +107,7 @@ class TestCHSHGradientDescent:
 
         assert np.isclose(opt_dict["opt_score"], 2 * np.sqrt(2), atol=1e-3)
 
-    @flaky(max_runs=5, min_passes=1)
+    @pytest.mark.flaky(5)
     def test_parallel_chsh_natural_gradient_descent(self):
         prepare_nodes = [
             qnet.PrepareNode(1, [0, 1], qnet.ghz_state, 0),
