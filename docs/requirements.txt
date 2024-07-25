@@ -1,7 +1,6 @@
 .
-sphinx>=3.0
 Pygments>=2.7.4
-m2r2==0.3.3
+sphinx-mdinclude>=0.6
 sphinxcontrib-email==0.3.5
 furo
-pennylane==0.28
+pennylane==0.37

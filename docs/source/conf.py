@@ -39,7 +39,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    "m2r2",
+    "sphinx_mdinclude",
     "sphinxcontrib.email",
 ]
 source_suffix = [".rst", ".md"]
