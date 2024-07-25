@@ -7,13 +7,10 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.11
-      - uses: actions/checkout@v1
-      - name: Check Documentation Build
-      - uses: ammaraskar/sphinx-action@master
-        with:
-          docs-folder: "docs/"
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+    - uses: ammaraskar/sphinx-action@master
+      with:
+        docs-folder: "docs/"
