@@ -8,11 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-      with:
-        ref: ${{ github.ref }}
     - uses: actions/setup-python@v2
       with:
         python-version: 3.11
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs/"
+        build-command: "sphinx-build -b html docs/source/ docs/build/html"
