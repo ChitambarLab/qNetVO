@@ -34,8 +34,8 @@ def test_network_node():
 
     assert len(tape) == 1
     assert tape.wires.tolist() == [0, 1]
-    assert tape.num_params == 0
-    assert tape.get_parameters() == []
+    assert tape.num_params == 1
+    assert all(tape.get_parameters()[0] == mock_settings)
 
 
 def test_network_node_defaults():
@@ -223,5 +223,5 @@ def test_cc_receiver_node():
 
     assert len(tape) == 1
     assert tape.wires.tolist() == [0, 1]
-    assert tape.num_params == 0
-    assert tape.get_parameters() == []
+    assert tape.num_params == 1
+    assert all(tape.get_parameters()[0] == mock_settings)

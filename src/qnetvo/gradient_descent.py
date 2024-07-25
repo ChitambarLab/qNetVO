@@ -114,9 +114,11 @@ def gradient_descent(
             if not (isinstance(settings, list)):
                 settings = [settings]
         elif interface == "tf":
-            # opt.minimize updates settings in place
-            tf_cost = lambda: cost(*settings)
-            opt.minimize(tf_cost, settings)
+            with tf.GradientTape() as tape:
+                tf_cost = cost(*settings)
+
+            gradients = tape.gradient(tf_cost, settings)
+            opt.apply_gradients(zip(gradients, settings))
 
         elapsed = time.time() - start
 

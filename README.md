@@ -1,4 +1,4 @@
-# qNetVO: The Quantum Network Variational Optimizer
+# qNetVO: Quantum Network Variational Optimizer
 
 *Simulate and optimize quantum communication networks using quantum computers.*
 
@@ -32,7 +32,7 @@ $ pip install qnetvo
 Install PennyLane:
 
 ```
-$ pip install pennylane==0.33
+$ pip install pennylane==0.37
 ```
 
 Import packages:
@@ -48,7 +48,7 @@ Note
 </p>
 <p>
 For optimal use, qNetVO should be used with PennyLane.
-QNetVO is currently compatible with PennyLane v0.33.
+QNetVO is currently compatible with PennyLane v0.37.
 </p>
 </div>
 

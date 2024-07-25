@@ -1,7 +1,7 @@
-pennylane~=0.33
-qiskit==0.34
-pennylane-qiskit==0.20
+pennylane==0.37
+qiskit>=1
+pennylane-qiskit==0.37
 tensorflow>=2.0,<3.0
 dask[delayed]==2022.5
 tensornetwork>=0.3,<0.4
-flaky==3.7
+pytest-rerunfailures

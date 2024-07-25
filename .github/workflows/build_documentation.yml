@@ -7,10 +7,23 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: ammaraskar/sphinx-action@master
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.4.1
       with:
-        docs-folder: "docs/"
+        access_token: ${{ github.token }}
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install .
+        pip install -r docs/requirements.txt
+    - name: Build Documentation
+      run: |
+        sphinx-build -b html docs/source/ docs/build/html
     - name: Commit documentation changes
       run: |
         git clone https://github.com/ChitambarLab/qNetVO.git --branch gh-pages --single-branch gh-pages
