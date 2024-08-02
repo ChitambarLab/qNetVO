@@ -187,3 +187,39 @@ def ragged_reshape(input_list, list_dims):
         start_id = end_id
 
     return output_list
+
+
+def partial_transpose(dm, d1, d2):
+    """
+    Computes the partial transpose of a density matrix with respect to the second subsystem.
+
+    :param dm: The density matrix to be partially transposed.
+    :type dm: np.array
+
+    :param d1: The dimension of the first subsystem (e.g., 2^m where m is the number of qubits in the first subsystem).
+    :type d1: int
+
+    :param d2: The dimension of the second subsystem (e.g., 2^n where n is the number of qubits in the second subsystem).
+    :type d2: int
+
+    :returns: The partially transposed density matrix.
+    :rtype: np.array
+
+    :raises ValueError: If the product of `d1` and `d2` does not match the size of the density matrix.
+    """
+
+    if d1 * d2 != dm.shape[0]:
+        raise ValueError(
+            "The dimensions of the subsystems do not match the size of the density matrix."
+        )
+
+    bfm = np.empty((d2, d2), dtype=dm.dtype)
+    trm = np.empty((d2, d2), dtype=dm.dtype)
+
+    for i in range(d1):
+        for j in range(d1):
+            bfm = dm[i * d2 : (i + 1) * d2, j * d2 : (j + 1) * d2]
+            np.copyto(trm, bfm.T)
+            dm[i * d2 : (i + 1) * d2, j * d2 : (j + 1) * d2] = trm
+
+    return dm

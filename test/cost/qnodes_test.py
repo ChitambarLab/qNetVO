@@ -101,3 +101,46 @@ class TestQNodes:
         assert np.allclose(qnode([np.pi, 0, 0]), [0, 0, 0, 0, 1, 0, 0, 0])
         assert np.allclose(qnode([0, np.pi, 0]), [0, 0, 1, 0, 0, 0, 0, 0])
         assert np.allclose(qnode([0, 0, np.pi]), [0, 1, 0, 0, 0, 0, 0, 0])
+
+    def test_density_matrix_qnode(self):
+        prep_nodes = [
+            qnet.PrepareNode(1, [0, 1, 2], qnet.W_state, 3),
+        ]
+
+        ansatz = qnet.NetworkAnsatz(prep_nodes)
+        qnode = qnet.density_matrix_qnode(ansatz)
+
+        zero_settings = ansatz.zero_network_settings()
+        density_matrix = qnode(zero_settings)
+
+        expected_density_matrix = np.array(
+            [
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 1 / 3, 1 / 3, 0, 1 / 3, 0, 0, 0],
+                [0, 1 / 3, 1 / 3, 0, 1 / 3, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 1 / 3, 1 / 3, 0, 1 / 3, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+            ],
+            dtype=np.complex128,
+        )
+
+        assert np.allclose(
+            density_matrix, expected_density_matrix
+        ), "Density matrix did not match expected Bell state density matrix."
+
+        qnode_subset_wires = qnet.density_matrix_qnode(ansatz, wires=[0])
+
+        density_matrix_subset = qnode_subset_wires(zero_settings)
+        expected_density_matrix_subset = np.array([[2 / 3, 0], [0, 1 / 3]])
+
+        assert np.allclose(
+            density_matrix_subset, expected_density_matrix_subset
+        ), "Reduced density matrix did not match expected result for wire 0."
+
+        with pytest.raises(
+            ValueError, match="Specified wires must be a subset of the wires in the network ansatz."
+        ):
+            qnet.density_matrix_qnode(ansatz, wires=[3])

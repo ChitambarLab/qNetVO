@@ -309,3 +309,59 @@ class TestOptimzationFileIO:
             match=r"`len\(input_list\)` must match the sum of `list_dims`\.",
         ):
             qnetvo.ragged_reshape(input, list_dims)
+
+    def test_partial_transpose(self):
+        dm = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
+
+        expected_result = np.array([[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0], [1, 0, 0, 1]])
+
+        result = qnetvo.partial_transpose(dm, d1=2, d2=2)
+        assert np.allclose(
+            result, expected_result
+        ), "Partial transpose did not return the expected result."
+
+        dm = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
+
+        expected_result = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
+
+        result = qnetvo.partial_transpose(dm, d1=1, d2=4)
+        assert np.allclose(
+            result, expected_result
+        ), "Partial transpose did not return the expected result."
+
+        dm = np.array(
+            [
+                [0, 1, 2, 3, 4, 5, 6, 7],
+                [8, 9, 10, 11, 12, 13, 14, 15],
+                [16, 17, 18, 19, 20, 21, 22, 23],
+                [24, 25, 26, 27, 28, 29, 30, 31],
+                [32, 33, 34, 35, 36, 37, 38, 39],
+                [40, 41, 42, 43, 44, 45, 46, 47],
+                [48, 49, 50, 51, 52, 53, 54, 55],
+                [56, 57, 58, 59, 60, 61, 62, 63],
+            ]
+        )
+
+        expected_result = np.array(
+            [
+                [0, 8, 16, 24, 4, 12, 20, 28],
+                [1, 9, 17, 25, 5, 13, 21, 29],
+                [2, 10, 18, 26, 6, 14, 22, 30],
+                [3, 11, 19, 27, 7, 15, 23, 31],
+                [32, 40, 48, 56, 36, 44, 52, 60],
+                [33, 41, 49, 57, 37, 45, 53, 61],
+                [34, 42, 50, 58, 38, 46, 54, 62],
+                [35, 43, 51, 59, 39, 47, 55, 63],
+            ]
+        )
+
+        result = qnetvo.partial_transpose(dm, d1=2, d2=4)
+        assert np.allclose(
+            result, expected_result
+        ), "Partial transpose did not return the expected result."
+
+        with pytest.raises(
+            ValueError,
+            match="The dimensions of the subsystems do not match the size of the density matrix.",
+        ):
+            qnetvo.partial_transpose(dm, d1=3, d2=3)
