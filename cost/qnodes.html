@@ -229,6 +229,7 @@
 <li class="toctree-l2"><a class="reference internal" href="linear_inequalities.html">Linear Cost Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="entropic_quantities.html">Entropic Quantities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="magic_squares_game.html">The Magic Squares Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="negativity.html">Partial Transpose Negativity</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="nonlocality_witnesses/index.html">Nonlocality Witnesses</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Nonlocality Witnesses</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="nonlocality_witnesses/chsh_inequality.html">CHSH Inequality</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nonlocality_witnesses/I_3322_inequality.html">I-3322 Inequality</a></li>
@@ -306,6 +307,35 @@ network ansatz.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pennylane.QNode</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="density-matrix-qnodes">
+<h2>Density Matrix QNodes<a class="headerlink" href="#density-matrix-qnodes" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qnetvo.density_matrix_qnode">
+<span class="sig-prename descclassname"><span class="pre">qnetvo.</span></span><span class="sig-name descname"><span class="pre">density_matrix_qnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">qnode_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qnetvo/qnodes.html#density_matrix_qnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qnetvo.density_matrix_qnode" title="Link to this definition">¶</a></dt>
+<dd><p>Constructs a qnode that computes the density matrix in the computational basis
+across specified wires, or across all wires if no specific wires are provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_ansatz</strong> (<a class="reference internal" href="../quantum_networks/network_ansatzes.html#qnetvo.NetworkAnsatz" title="qnetvo.NetworkAnsatz"><em>NetworkAnsatz</em></a>) – A <code class="docutils literal notranslate"><span class="pre">NetworkAnsatz</span></code> class specifying the quantum network simulation.</p></li>
+<li><p><strong>wires</strong> (<em>list</em><em>[</em><em>int</em><em>] or </em><em>None</em>) – The wires on which the node operates. If None, the density matrix will be
+computed across all wires in the network ansatz.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A qnode called as <code class="docutils literal notranslate"><span class="pre">qnode(settings)</span></code> for evaluating the (reduced) density matrix
+of the network ansatz.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pennylane.QNode</span></code></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the specified wires are not a subset of the wires in the network ansatz.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -466,6 +496,10 @@ to the vector returned by <code class="docutils literal notranslate"><span class
 <li><a class="reference internal" href="#">QNodes</a><ul>
 <li><a class="reference internal" href="#probability-qnodes">Probability QNodes</a><ul>
 <li><a class="reference internal" href="#qnetvo.joint_probs_qnode"><code class="docutils literal notranslate"><span class="pre">joint_probs_qnode()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#density-matrix-qnodes">Density Matrix QNodes</a><ul>
+<li><a class="reference internal" href="#qnetvo.density_matrix_qnode"><code class="docutils literal notranslate"><span class="pre">density_matrix_qnode()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#parity-observable-qnodes">Parity Observable QNodes</a><ul>

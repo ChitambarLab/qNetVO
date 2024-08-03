@@ -228,6 +228,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cost/linear_inequalities.html">Linear Cost Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cost/entropic_quantities.html">Entropic Quantities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cost/magic_squares_game.html">The Magic Squares Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cost/negativity.html">Partial Transpose Negativity</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../cost/nonlocality_witnesses/index.html">Nonlocality Witnesses</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Nonlocality Witnesses</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../cost/nonlocality_witnesses/chsh_inequality.html">CHSH Inequality</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../cost/nonlocality_witnesses/I_3322_inequality.html">I-3322 Inequality</a></li>
@@ -392,6 +393,41 @@
         <span class="n">network_ansatz</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">probs</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers_wires</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">circuit</span></div>
+
+
+
+<div class="viewcode-block" id="density_matrix_qnode">
+<a class="viewcode-back" href="../../cost/qnodes.html#qnetvo.density_matrix_qnode">[docs]</a>
+<span class="k">def</span> <span class="nf">density_matrix_qnode</span><span class="p">(</span><span class="n">network_ansatz</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constructs a qnode that computes the density matrix in the computational basis</span>
+<span class="sd">    across specified wires, or across all wires if no specific wires are provided.</span>
+
+<span class="sd">    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.</span>
+<span class="sd">    :type network_ansatz: NetworkAnsatz</span>
+
+<span class="sd">    :param wires: The wires on which the node operates. If None, the density matrix will be</span>
+<span class="sd">                  computed across all wires in the network ansatz.</span>
+<span class="sd">    :type wires: list[int] or None</span>
+
+<span class="sd">    :returns: A qnode called as ``qnode(settings)`` for evaluating the (reduced) density matrix</span>
+<span class="sd">              of the network ansatz.</span>
+<span class="sd">    :rtype: ``pennylane.QNode``</span>
+
+<span class="sd">    :raises ValueError: If the specified wires are not a subset of the wires in the network ansatz.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">wires</span> <span class="o">=</span> <span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers_wires</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">wires</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">wires</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">wires</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">layers_wires</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Specified wires must be a subset of the wires in the network ansatz.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="o">**</span><span class="n">network_ansatz</span><span class="o">.</span><span class="n">dev_kwargs</span><span class="p">),</span> <span class="o">**</span><span class="n">qnode_kwargs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
+        <span class="n">network_ansatz</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">density_matrix</span><span class="p">(</span><span class="n">wires</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">circuit</span></div>
 
