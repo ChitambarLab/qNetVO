@@ -21,7 +21,7 @@ def negativity_cost_fn(network_ansatz, m, n, wires, qnode_kwargs={}):
     the :math:`B` party, and :math:`\\lambda_i` are all of the eigenvalues of :math:`\\rho^{\\Gamma_B}`.
 
     For more information on negativity and its applications in quantum information theory,
-    see [Vidal and Werner (2001)](https://arxiv.org/pdf/quant-ph/0102117).
+    (see `Vidal and Werner, 2001 <https://arxiv.org/pdf/quant-ph/0102117>`_).
 
     :param ansatz: The ansatz circuit on which the negativity is evaluated.
     :type ansatz: NetworkAnsatz

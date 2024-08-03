@@ -3,6 +3,12 @@ Utilities
 
 .. currentmodule:: qnetvo
 
+
+Mathematical Operations
+-----------------------
+
+.. autofunction:: partial_transpose
+
 Circuit Tomography
 ------------------
 

@@ -19,4 +19,5 @@ Custom cost functions can be implemented using PennyLane.
    linear_inequalities
    entropic_quantities
    magic_squares_game
+   negativity
    nonlocality_witnesses/index
