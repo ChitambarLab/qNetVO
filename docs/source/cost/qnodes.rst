@@ -14,6 +14,11 @@ Probability QNodes
 
 .. autofunction:: joint_probs_qnode
 
+Density Matrix QNodes
+---------------------
+
+.. autofunction:: density_matrix_qnode
+
 Parity Observable QNodes
 ------------------------
 

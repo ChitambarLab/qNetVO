@@ -95,3 +95,35 @@ def joint_probs_qnode(network_ansatz, **qnode_kwargs):
         return qml.probs(wires=network_ansatz.layers_wires[-1])
 
     return circuit
+
+
+def density_matrix_qnode(network_ansatz, wires=None, **qnode_kwargs):
+    """
+    Constructs a qnode that computes the density matrix in the computational basis
+    across specified wires, or across all wires if no specific wires are provided.
+
+    :param network_ansatz: A ``NetworkAnsatz`` class specifying the quantum network simulation.
+    :type network_ansatz: NetworkAnsatz
+
+    :param wires: The wires on which the node operates. If None, the density matrix will be
+                  computed across all wires in the network ansatz.
+    :type wires: list[int] or None
+
+    :returns: A qnode called as ``qnode(settings)`` for evaluating the (reduced) density matrix
+              of the network ansatz.
+    :rtype: ``pennylane.QNode``
+
+    :raises ValueError: If the specified wires are not a subset of the wires in the network ansatz.
+    """
+
+    wires = network_ansatz.layers_wires[-1] if wires is None else wires
+
+    if not set(wires).issubset(network_ansatz.layers_wires[-1]):
+        raise ValueError("Specified wires must be a subset of the wires in the network ansatz.")
+
+    @qml.qnode(qml.device(**network_ansatz.dev_kwargs), **qnode_kwargs)
+    def circuit(settings):
+        network_ansatz.fn(settings)
+        return qml.density_matrix(wires)
+
+    return circuit
